@@ -1,7 +1,7 @@
 {
   "select-instance": "tomo pi ilo [_a _mi _o _ni _ilo] sina",
   "login-register-text": "kama ni",
-  "official": "ma pi toki [_a _mi _o _ni _ilo] lawa",
+  "official": "tomo pi ilo [_a _mi _o _ni _ilo] lawa",
   "custom": "tomo pi ilo [_a _mi _o _ni _ilo] seme",
   "custom-server-field": "nimi [_tomo _o _mi _ilo _ni] pi ilo [_a _mi _o _ni _ilo] ona",
   "custom-server-label": "nimi pi ilo [_a _mi _o _ni _ilo] ona",
