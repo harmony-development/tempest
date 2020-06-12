@@ -4,11 +4,11 @@
   "official": "ma pi toki Hamoni lawa",
   "custom": "ma pi toki Hamoni pi sin",
   "custom-server-field": "nimi ma pi toki Hamoni",
-  "custom-server-label": "nimi"
+  "custom-server-label": "nimi",
   "add-server": "pali e ma pi toki Hamoni sin",
-  "cancel": "Cancel",
-  "back": "tawa e monsi",
-  "next": "tawa e sinpin",
+  "cancel": "pini",
+  "back": "monsi",
+  "next": "sinpin",
   "finish": "pali e ale",
   "add": "sin",
   "login-register": {
