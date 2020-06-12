@@ -1,0 +1,7 @@
+{
+  "select-instance": "Select A Server",
+  "official": "Official",
+  "custom": "Custom Server",
+  "custom-server-field": "Server Domain",
+  "custom-server-label": "Label"
+}
