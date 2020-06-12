@@ -1,7 +1,18 @@
 {
   "select-instance": "kama jo e ma pi toki Hamoni",
+  "login-register-text": "kepeken e jan lon/pali e jan sin",
   "official": "ma pi toki Hamoni lawa",
   "custom": "ma pi toki Hamoni pi sin",
   "custom-server-field": "nimi ma pi toki Hamoni",
   "custom-server-label": "nimi"
+  "add-server": "pali e ma pi toki Hamoni sin",
+  "cancel": "Cancel",
+  "back": "tawa e monsi",
+  "next": "tawa e sinpin",
+  "finish": "pali e ale",
+  "add": "sin",
+  "login-register": {
+    "new-user": "jan sin?",
+    "sign-in-instead": "kepeken e jan lon"
+  }
 }
