@@ -1,0 +1,18 @@
+{
+  "select-server": "Выбор Сервера",
+  "login-register-text": "Логин/Регистрация",
+  "official": "Официальный",
+  "custom": "Пользовательский Сервер",
+  "custom-server-field": "Домен Сервера",
+  "custom-server-label": "Имя",
+  "add-server": "Добавить Сервер",
+  "cancel": "Отмена",
+  "back": "Назад",
+  "next": "Далее",
+  "finish": "Завершить",
+  "add": "Добавить",
+  "login-register": {
+    "new-user": "Новый Пользователь?",
+    "sign-in-instead": "Войти в систему?"
+  }
+}
