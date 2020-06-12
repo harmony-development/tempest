@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   makeStyles,
   Paper,
@@ -10,6 +10,7 @@ import {
 } from "@material-ui/core";
 import { ChevronRight, ChevronLeft } from "@material-ui/icons";
 import { useTranslation } from "react-i18next";
+import { useParams } from "react-router";
 
 import { HarmonyDark } from "../../HarmonyDark";
 
@@ -50,9 +51,14 @@ const steps = 2;
 export const Entry = React.memo(() => {
   const classes = entryStyles();
   const i18n = useTranslation(["entry"]);
+  const { type } = useParams();
   const [selectedServer, setSelectedServer] = useState("");
   const [stepComplete, setStepComplete] = useState(false);
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(0);
+
+  useEffect(() => {
+    if (type) setStep(1);
+  }, []);
 
   const getStepContent = () => {
     switch (step) {
