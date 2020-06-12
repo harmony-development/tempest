@@ -9,6 +9,7 @@ import {
   StepLabel,
 } from "@material-ui/core";
 import { ChevronRight, ChevronLeft } from "@material-ui/icons";
+import { useTranslation } from "react-i18next";
 
 import { HarmonyDark } from "../../HarmonyDark";
 
@@ -48,6 +49,7 @@ const steps = 2;
 
 export const Entry = React.memo(() => {
   const classes = entryStyles();
+  const i18n = useTranslation(["entry"]);
   const [selectedServer, setSelectedServer] = useState("");
   const [stepComplete, setStepComplete] = useState(false);
   const [step, setStep] = useState(1);
@@ -85,10 +87,10 @@ export const Entry = React.memo(() => {
         <Paper className={classes.entryBody} elevation={5}>
           <Stepper activeStep={step}>
             <Step>
-              <StepLabel>Select Server</StepLabel>
+              <StepLabel>{i18n.t("entry:select-server")}</StepLabel>
             </Step>
             <Step>
-              <StepLabel>Login/Register</StepLabel>
+              <StepLabel>{i18n.t("entry:login-register-text")}</StepLabel>
             </Step>
           </Stepper>
           {getStepContent()}
@@ -100,7 +102,7 @@ export const Entry = React.memo(() => {
               onClick={backward}
             >
               <ChevronLeft />
-              Back
+              {i18n.t("entry:back")}
             </Button>
             <Button
               disabled={!stepComplete}
@@ -108,7 +110,9 @@ export const Entry = React.memo(() => {
               color="primary"
               onClick={forward}
             >
-              {step === steps - 1 ? "Finish" : "Next"}
+              {step === steps - 1
+                ? i18n.t("entry:finish")
+                : i18n.t("entry:next")}
               <ChevronRight />
             </Button>
           </div>

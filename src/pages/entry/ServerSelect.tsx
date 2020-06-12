@@ -9,6 +9,7 @@ import {
   Button,
 } from "@material-ui/core";
 import { Delete } from "@material-ui/icons";
+import { useTranslation } from "react-i18next";
 
 import { IServerList } from "./Entry";
 import { AddServerDialog } from "./AddServerDialog";
@@ -44,6 +45,7 @@ export const ServerSelect = React.memo(
     setStepComplete: (value: boolean) => void;
   }) => {
     const classes = serverSelectStyles();
+    const i18n = useTranslation(["entry"]);
     const [servers, setServers] = useState(defaultServers);
     const [addingServer, setAddingServer] = useState(false);
     const { selectedServer, setStepComplete } = props;
@@ -106,7 +108,7 @@ export const ServerSelect = React.memo(
             color="primary"
             onClick={() => setAddingServer(true)}
           >
-            Add Server
+            {i18n.t("entry.add-server")}
           </Button>
         </div>
       </>

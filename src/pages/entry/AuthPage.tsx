@@ -1,7 +1,11 @@
 import React, { useState } from "react";
-import { Grid, TextField, makeStyles, Link } from "@material-ui/core";
+import { Grid, makeStyles, Link } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
 
 import { RaisedPaper } from "../../components/RaisedPaper";
+
+import { Login } from "./Login";
+import { Register } from "./Register";
 
 const authPageStyles = makeStyles((theme) => ({
   formBody: {
@@ -20,6 +24,7 @@ const authPageStyles = makeStyles((theme) => ({
 
 export const AuthPage = React.memo(() => {
   const classes = authPageStyles();
+  const i18n = useTranslation(["entry"]);
   const [mode, setMode] = useState<"login" | "register">("login");
 
   const onModeLinkClick = () =>
@@ -29,16 +34,12 @@ export const AuthPage = React.memo(() => {
     <Grid container spacing={3}>
       <Grid item xs>
         <RaisedPaper className={classes.formBody}>
-          <TextField variant="outlined" label="Email" fullWidth />
-          {mode === "register" ? (
-            <TextField variant="outlined" label="Username" fullWidth />
-          ) : undefined}
-          <TextField variant="outlined" label="Password" fullWidth />
-          {mode === "register" ? (
-            <TextField variant="outlined" label="Confirm Password" fullWidth />
-          ) : undefined}
+          {mode === "login" ? <Login /> : undefined}
+          {mode === "register" ? <Register /> : undefined}
           <Link className={classes.createAccountLink} onClick={onModeLinkClick}>
-            {mode === "login" ? "New User?" : "Sign In Instead?"}
+            {mode === "login"
+              ? i18n.t("entry:login-register.new-user")
+              : i18n.t("entry:login-register.sign-in-instead")}
           </Link>
         </RaisedPaper>
       </Grid>

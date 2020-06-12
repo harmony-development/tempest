@@ -8,6 +8,7 @@ import {
   TextField,
   makeStyles,
 } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
 
 const addServerDialogStyles = makeStyles((theme) => ({
   dialogContent: {
@@ -24,6 +25,7 @@ export const AddServerDialog = React.memo(
     open: boolean;
   }) => {
     const classes = addServerDialogStyles();
+    const i18n = useTranslation(["entry"]);
     const [label, setLabel] = useState("");
     const [hostname, setHostName] = useState("");
 
@@ -37,7 +39,7 @@ export const AddServerDialog = React.memo(
 
     return (
       <Dialog open={props.open} onClose={props.cancel}>
-        <DialogTitle>Add Server</DialogTitle>
+        <DialogTitle>{i18n.t("entry:add-server")}</DialogTitle>
         <DialogContent className={classes.dialogContent}>
           <TextField
             label="Label"
@@ -53,12 +55,12 @@ export const AddServerDialog = React.memo(
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={props.cancel}>Cancel</Button>
+          <Button onClick={props.cancel}>{i18n.t("entry:cancel")}</Button>
           <Button
             onClick={() => props.serverAdded(label, hostname)}
             disabled={!hostname || !label}
           >
-            Add
+            {i18n.t("entry:add")}
           </Button>
         </DialogActions>
       </Dialog>
