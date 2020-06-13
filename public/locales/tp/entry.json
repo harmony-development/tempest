@@ -1,0 +1,18 @@
+{
+  "select-instance": "tomo pi ilo Amoni sina",
+  "login-register-text": "kama ni",
+  "official": "tomo pi ilo Amoni lawa",
+  "custom": "tomo pi ilo Amoni seme",
+  "custom-server-field": "nimi Tomin pi ilo Amoni ona",
+  "custom-server-label": "nimi pi ilo Amoni ona",
+  "add-server": "pali e tomo sin pi ilo Amoni",
+  "cancel": "weka",
+  "back": "tawa pini",
+  "next": "tawa kama",
+  "finish": "pali e ale",
+  "add": "sin",
+  "login-register": {
+    "new-user": "sina jan sin ala sin? ona la tawa ni",
+    "sign-in-instead": "kepeken e jan lon"
+  }
+}

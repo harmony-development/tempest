@@ -1,0 +1,18 @@
+{
+  "select-server": "Selecter servitor",
+  "login-register-text": "Intrar/registrar se",
+  "official": "Oficial",
+  "custom": "Servitor personalisat",
+  "custom-server-field": "Dominia de servitor",
+  "custom-server-label": "Afiche",
+  "add-server": "Adjunter servitor",
+  "cancel": "Anullar",
+  "back": "Retro",
+  "next": "Sequent",
+  "finish": "Finir",
+  "add": "Adjunter",
+  "login-register": {
+    "new-user": "Nov usator?",
+    "sign-in-instead": "Plutost intrar?"
+  }
+}
