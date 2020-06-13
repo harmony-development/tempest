@@ -1,0 +1,19 @@
+
+{
+  "select-server": "Elekti Servilon",
+  "login-register-text": "Ensaluti/Registriĝi",
+  "official": "Oficiala",
+  "custom": "Speciala Servilo",
+  "custom-server-field": "Domajno de Servilo",
+  "custom-server-label": "Etiketo",
+  "add-server": "Aldoni Servilon",
+  "cancel": "Nuligi",
+  "back": "Malantaŭigi",
+  "next": "Antaŭigi",
+  "finish": "Fini",
+  "add": "Aldoni",
+  "login-register": {
+    "new-user": "Nova Uzanto?",
+    "sign-in-instead": "Ensaluti Anstataŭ?"
+  }
+}
