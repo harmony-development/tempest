@@ -1,0 +1,18 @@
+{
+  "select-server": "cilo govas",
+  "login-register-text": "minno/ianno",
+  "official": "bail",
+  "custom": "covas *thraid",
+  "custom-server-field": "sad covas",
+  "custom-server-label": "eneth",
+  "add-server": "anno govas",
+  "cancel": "avo",
+  "back": "dan",
+  "next": "*rû",
+  "finish": "telo",
+  "add": "anno",
+  "login-register": {
+    "new-user": "*covon 'wain?",
+    "sign-in-instead": "egor vinno?"
+  }
+}
