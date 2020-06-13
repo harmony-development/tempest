@@ -1,0 +1,18 @@
+{
+  "select-server": "Sélectionner un Serveur",
+  "login-register-text": "S'identifier/S'inscrire",
+  "official": "Officiel",
+  "custom": "Serveur Personnalisé",
+  "custom-server-field": "Domaine du Serveur",
+  "custom-server-label": "Étiquette",
+  "add-server": "Ajouter un Serveur",
+  "cancel": "Annuler",
+  "back": "Retour",
+  "next": "Suivant",
+  "finish": "Finir",
+  "add": "Ajouter",
+  "login-register": {
+    "new-user": "Nouvel Utilisateur?",
+    "sign-in-instead": "Se connecter à la place?"
+  }
+}
