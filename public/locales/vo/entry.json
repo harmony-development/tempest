@@ -1,0 +1,18 @@
+{
+  "select-server": "Välolös düniani",
+  "login-register-text": " Nunädolös oki/Registarolös oki",
+  "official": "Calöfik",
+  "custom": "Dünian patöfik",
+  "custom-server-field": "Dünianaräyun",
+  "custom-server-label": "Klebazöt",
+  "add-server": "Layümolös düniani",
+  "cancel": "Nosükolös",
+  "back": "Gegololös",
+  "next": "Fovololös",
+  "finish": "Finükolös",
+  "add": "Layümolös",
+  "login-register": {
+    "new-user": "Geban nulik-li?",
+    "sign-in-instead": "Nunädolös-li plaädo?"
+  }
+}
