@@ -1,0 +1,18 @@
+{
+  "select-server": "Vyberte Server",
+  "login-register-text": "Přihlášení/Registrace",
+  "official": "Oficiální",
+  "custom": "Vlastní server",
+  "custom-server-field": "Doména serveru",
+  "custom-server-label": "Označení",
+  "add-server": "Přidat server",
+  "cancel": "Zrušit",
+  "back": "Zpátky",
+  "next": "Další",
+  "finish": "Skončit",
+  "add": "Přidat",
+  "login-register": {
+    "new-user": "Nový uživatel?",
+    "sign-in-instead": "Místo toho se přihlásit"
+  }
+}

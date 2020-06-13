@@ -52,6 +52,7 @@ export const ServerSelect = React.memo(
 
     useEffect(() => {
       if (selectedServer) {
+        window.location.hash = servers[selectedServer].ip;
         setStepComplete(true);
       }
       // eslint-disable-next-line
@@ -108,7 +109,7 @@ export const ServerSelect = React.memo(
             color="primary"
             onClick={() => setAddingServer(true)}
           >
-            {i18n.t("entry.add-server")}
+            {i18n.t("entry:add-server")}
           </Button>
         </div>
       </>

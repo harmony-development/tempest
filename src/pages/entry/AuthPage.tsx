@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { Grid, makeStyles, Link } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
+import { useParams, useNavigate } from "react-router";
 
 import { RaisedPaper } from "../../components/RaisedPaper";
 
@@ -25,19 +26,20 @@ const authPageStyles = makeStyles((theme) => ({
 export const AuthPage = React.memo(() => {
   const classes = authPageStyles();
   const i18n = useTranslation(["entry"]);
-  const [mode, setMode] = useState<"login" | "register">("login");
+  const { type } = useParams();
+  const nav = useNavigate();
 
   const onModeLinkClick = () =>
-    setMode((old) => (old === "login" ? "register" : "login"));
+    nav(`/entry/${type === "register" ? "login" : "register"}`);
 
   return (
     <Grid container spacing={3}>
       <Grid item xs>
         <RaisedPaper className={classes.formBody}>
-          {mode === "login" ? <Login /> : undefined}
-          {mode === "register" ? <Register /> : undefined}
+          {type === "login" ? <Login /> : undefined}
+          {type === "register" ? <Register /> : undefined}
           <Link className={classes.createAccountLink} onClick={onModeLinkClick}>
-            {mode === "login"
+            {type === "login"
               ? i18n.t("entry:login-register.new-user")
               : i18n.t("entry:login-register.sign-in-instead")}
           </Link>
