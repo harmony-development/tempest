@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   makeStyles,
   Paper,
@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import { ChevronRight, ChevronLeft } from "@material-ui/icons";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router";
+import { useParams, Route, Switch, useHistory } from "react-router";
 
 import { HarmonyDark } from "../../HarmonyDark";
 
@@ -46,44 +46,35 @@ export interface IServerList {
   };
 }
 
-const steps = 2;
+const entrySteps: {
+  [key: string]: number;
+} = {
+  serverselect: 0,
+  auth: 1,
+};
+const entryStepsArr = ["serverselect", "auth"];
 
 export const Entry = React.memo(() => {
   const classes = entryStyles();
   const i18n = useTranslation(["entry"]);
-  const { type } = useParams();
+  const { step = "serverselect" } = useParams<{
+    step: string | undefined;
+  }>();
+  const history = useHistory();
   const [selectedServer, setSelectedServer] = useState("");
   const [stepComplete, setStepComplete] = useState(false);
-  const [step, setStep] = useState(0);
-
-  useEffect(() => {
-    if (type) setStep(1);
-  }, []);
-
-  const getStepContent = () => {
-    switch (step) {
-      case 0: {
-        return (
-          <ServerSelect
-            setSelectedServer={setSelectedServer}
-            selectedServer={selectedServer}
-            setStepComplete={setStepComplete}
-          />
-        );
-      }
-      case 1: {
-        return <AuthPage />;
-      }
-    }
-  };
 
   const forward = () => {
-    setStep((old) => old + 1);
+    history.push(
+      `/entry/${entryStepsArr[entrySteps[step] + 1] || "serverselect"}`
+    );
     setStepComplete(false);
   };
 
   const backward = () => {
-    setStep((old) => old - 1);
+    history.push(
+      `/entry/${entryStepsArr[entrySteps[step] - 1] || "serverselect"}`
+    );
     setStepComplete(false);
   };
 
@@ -91,7 +82,7 @@ export const Entry = React.memo(() => {
     <div className={classes.root}>
       <Container maxWidth="sm">
         <Paper className={classes.entryBody} elevation={5}>
-          <Stepper activeStep={step}>
+          <Stepper activeStep={entrySteps[step]}>
             <Step>
               <StepLabel>{i18n.t("entry:select-server")}</StepLabel>
             </Step>
@@ -99,10 +90,34 @@ export const Entry = React.memo(() => {
               <StepLabel>{i18n.t("entry:login-register-text")}</StepLabel>
             </Step>
           </Stepper>
-          {getStepContent()}
+          <Switch>
+            <Route
+              path="/entry/serverselect"
+              render={(props) => (
+                <ServerSelect
+                  {...props}
+                  setSelectedServer={setSelectedServer}
+                  selectedServer={selectedServer}
+                  setStepComplete={setStepComplete}
+                />
+              )}
+            />
+            <Route path="/entry/auth/:type?" component={AuthPage} />
+            <Route
+              path="/entry/"
+              render={(props) => (
+                <ServerSelect
+                  {...props}
+                  setSelectedServer={setSelectedServer}
+                  selectedServer={selectedServer}
+                  setStepComplete={setStepComplete}
+                />
+              )}
+            />
+          </Switch>
           <div className={classes.entryFooter}>
             <Button
-              disabled={step < 1}
+              disabled={entrySteps[step] < 1}
               variant="contained"
               color="primary"
               onClick={backward}
@@ -116,7 +131,7 @@ export const Entry = React.memo(() => {
               color="primary"
               onClick={forward}
             >
-              {step === steps - 1
+              {entrySteps[step] === entryStepsArr.length - 1
                 ? i18n.t("entry:finish")
                 : i18n.t("entry:next")}
               <ChevronRight />

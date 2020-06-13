@@ -1,7 +1,7 @@
 import React from "react";
 import { Grid, makeStyles, Link } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
-import { useParams, useNavigate } from "react-router";
+import { useParams, useHistory } from "react-router";
 
 import { RaisedPaper } from "../../components/RaisedPaper";
 
@@ -26,11 +26,13 @@ const authPageStyles = makeStyles((theme) => ({
 export const AuthPage = React.memo(() => {
   const classes = authPageStyles();
   const i18n = useTranslation(["entry"]);
-  const { type } = useParams();
-  const nav = useNavigate();
+  const { type = "login" } = useParams<{
+    type: string | undefined;
+  }>();
+  const history = useHistory();
 
   const onModeLinkClick = () =>
-    nav(`/entry/${type === "register" ? "login" : "register"}`);
+    history.push(`/entry/auth/${type === "register" ? "login" : "register"}`);
 
   return (
     <Grid container spacing={3}>

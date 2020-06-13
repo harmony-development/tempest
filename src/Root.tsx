@@ -1,7 +1,7 @@
 import React, { lazy, Suspense } from "react";
 import { useSelector } from "react-redux";
 import { createMuiTheme, ThemeProvider, CssBaseline } from "@material-ui/core";
-import { Routes, Route } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 
 import { RootState } from "./redux/redux";
 import { Loading } from "./components/Loading";
@@ -30,10 +30,9 @@ export const Root = React.memo(() => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Suspense fallback={<Loading />}>
-        <Routes>
-          <Route path="/entry/:type" element={<EntryPage />} />
-          <Route path="/entry/" element={<EntryPage />} />
-        </Routes>
+        <Switch>
+          <Route path="/entry/:step?" component={EntryPage} />
+        </Switch>
       </Suspense>
     </ThemeProvider>
   );
