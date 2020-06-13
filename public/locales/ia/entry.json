@@ -1,0 +1,18 @@
+{
+  "select-server": "Selectionar servitor",
+  "login-register-text": "Entrar/registrar",
+  "official": "Officialmente",
+  "custom": "Servitor adaptate",
+  "custom-server-field": "Dominio de servitor",
+  "custom-server-label": "Etiquetta",
+  "add-server": "Adjunger servitor",
+  "cancel": "Annullar",
+  "back": "Retro",
+  "next": "Proxime",
+  "finish": "Finir",
+  "add": "Adjunger",
+  "login-register": {
+    "new-user": "Usator nove?",
+    "sign-in-instead": "Entrar?"
+  }
+}
