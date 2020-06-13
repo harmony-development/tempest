@@ -1,0 +1,18 @@
+{
+  "select-server": "Server auswählen",
+  "login-register-text": "Einloggen/Registrieren",
+  "official": "Offiziel",
+  "custom": "Benutzerdefinierter Server",
+  "custom-server-field": "Server Domain",
+  "custom-server-label": "Name",
+  "add-server": "Server hinzufügen",
+  "cancel": "Widerrufen",
+  "back": "Zurück",
+  "next": "Nächster Schritt",
+  "finish": "Beenden",
+  "add": "Hinzufügen",
+  "login-register": {
+    "new-user": "Neuer User?",
+    "sign-in-instead": "Stattdessen anmelden?"
+  }
+}
