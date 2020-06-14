@@ -73,7 +73,8 @@ export const Entry = React.memo(() => {
 
   const backward = () => {
     history.push(
-      `/entry/${entryStepsArr[entrySteps[step] - 1] || "serverselect"}`
+      `/entry/${entryStepsArr[entrySteps[step] - 1] || "serverselect"}`,
+      {}
     );
     setStepComplete(false);
   };

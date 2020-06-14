@@ -6,6 +6,8 @@
   "custom-server-field": "Server Domain",
   "custom-server-label": "Label",
   "add-server": "Add Server",
+  "login-to-instance": "Login to {{ host }}",
+  "register-to-instance": "Register to {{ host }}",
   "cancel": "Cancel",
   "back": "Back",
   "next": "Next",

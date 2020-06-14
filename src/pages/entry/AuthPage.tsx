@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, makeStyles, Link } from "@material-ui/core";
+import { Grid, makeStyles, Link, Typography } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import { useParams, useHistory } from "react-router";
 
@@ -38,6 +38,14 @@ export const AuthPage = React.memo(() => {
     <Grid container spacing={3}>
       <Grid item xs>
         <RaisedPaper className={classes.formBody}>
+          <Typography variant="h5">
+            {i18n.t(
+              type === "login"
+                ? "entry:login-to-instance"
+                : "entry:register-to-instance",
+              { host: localStorage.getItem("entry_selectedserver") }
+            )}
+          </Typography>
           {type === "login" ? <Login /> : undefined}
           {type === "register" ? <Register /> : undefined}
           <Link className={classes.createAccountLink} onClick={onModeLinkClick}>
