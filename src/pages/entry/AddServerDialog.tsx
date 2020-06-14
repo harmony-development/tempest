@@ -7,6 +7,7 @@ import {
   DialogContent,
   TextField,
   makeStyles,
+  Grow,
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 
@@ -38,7 +39,11 @@ export const AddServerDialog = React.memo(
     };
 
     return (
-      <Dialog open={props.open} onClose={props.cancel}>
+      <Dialog
+        open={props.open}
+        onClose={props.cancel}
+        TransitionComponent={Grow}
+      >
         <DialogTitle>{i18n.t("entry:add-server")}</DialogTitle>
         <DialogContent className={classes.dialogContent}>
           <TextField
