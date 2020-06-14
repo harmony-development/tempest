@@ -1,0 +1,18 @@
+{
+  "select-server": "Selecte Server",
+  "login-register-text": "Locte in/Registert vos",
+  "official": "Official",
+  "custom": "Customiset Server",
+  "custom-server-field": "Server Xeitel",
+  "custom-server-label": "Label",
+  "add-server": "Addeihte Server",
+  "cancel": "Bataleihte",
+  "back": "Retro",
+  "next": "Niebst",
+  "finish": "Fin",
+  "add": "Addeihte",
+  "login-register": {
+    "new-user": "Nov Neuder?",
+    "sign-in-instead": "Inscripte vos petis?"
+  }
+}

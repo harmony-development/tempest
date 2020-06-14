@@ -1,0 +1,18 @@
+{
+  "select-server": "Gage Zake",
+  "login-register-text": "Gepa/Ka Sage",
+  "official": "Keko Vazo",
+  "custom": "Sigu Zake",
+  "custom-server-field": "Zake Papo Saka",
+  "custom-server-label": "Zavo",
+  "add-server": "Teko Zake",
+  "cancel": "Tu Deka",
+  "back": "Pako",
+  "next": "Zeso",
+  "finish": "Safo",
+  "add": "Teko",
+  "login-register": {
+    "new-user": "Taza Peka?",
+    "sign-in-instead": "Gepa Zepo?"
+  }
+}
