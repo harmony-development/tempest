@@ -11,6 +11,10 @@
   "next": "下一个",
   "finish": "结束",
   "add": "添加",
+  "server-select": {
+    "remove-server-title": "移除服务器",
+    "remove-server-description": "你确定要移除这个服务器吗？此服务器将会被删除"
+  },
   "login-register": {
     "new-user": "新用户？",
     "sign-in-instead": "已有账号？点这里登录"
