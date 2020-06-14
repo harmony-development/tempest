@@ -10,12 +10,20 @@ import {
 } from "@material-ui/core";
 import { ChevronRight, ChevronLeft } from "@material-ui/icons";
 import { useTranslation } from "react-i18next";
-import { useParams, Route, Switch, useHistory } from "react-router";
+import {
+  useParams,
+  Route,
+  Switch,
+  useHistory,
+  useLocation,
+} from "react-router";
+import { TransitionGroup, CSSTransition } from "react-transition-group";
 
 import { HarmonyDark } from "../../HarmonyDark";
 
 import { ServerSelect } from "./ServerSelect";
 import { AuthPage } from "./AuthPage";
+import "./Entry.css";
 
 const entryStyles = makeStyles((theme) => ({
   root: {
@@ -61,6 +69,7 @@ export const Entry = React.memo(() => {
     step: string | undefined;
   }>();
   const history = useHistory();
+  const location = useLocation();
   const [selectedServer, setSelectedServer] = useState("");
   const [stepComplete, setStepComplete] = useState(false);
 
@@ -91,31 +100,35 @@ export const Entry = React.memo(() => {
               <StepLabel>{i18n.t("entry:login-register-text")}</StepLabel>
             </Step>
           </Stepper>
-          <Switch>
-            <Route
-              path="/entry/serverselect"
-              render={(props) => (
-                <ServerSelect
-                  {...props}
-                  setSelectedServer={setSelectedServer}
-                  selectedServer={selectedServer}
-                  setStepComplete={setStepComplete}
+          <TransitionGroup>
+            <CSSTransition key={location.key} classNames="step" timeout={300}>
+              <Switch location={location}>
+                <Route
+                  path="/entry/serverselect"
+                  render={(props) => (
+                    <ServerSelect
+                      {...props}
+                      setSelectedServer={setSelectedServer}
+                      selectedServer={selectedServer}
+                      setStepComplete={setStepComplete}
+                    />
+                  )}
                 />
-              )}
-            />
-            <Route path="/entry/auth/:type?" component={AuthPage} />
-            <Route
-              path="/entry/"
-              render={(props) => (
-                <ServerSelect
-                  {...props}
-                  setSelectedServer={setSelectedServer}
-                  selectedServer={selectedServer}
-                  setStepComplete={setStepComplete}
+                <Route path="/entry/auth/:type?" component={AuthPage} />
+                <Route
+                  path="/entry/"
+                  render={(props) => (
+                    <ServerSelect
+                      {...props}
+                      setSelectedServer={setSelectedServer}
+                      selectedServer={selectedServer}
+                      setStepComplete={setStepComplete}
+                    />
+                  )}
                 />
-              )}
-            />
-          </Switch>
+              </Switch>
+            </CSSTransition>
+          </TransitionGroup>
           <div className={classes.entryFooter}>
             <Button
               disabled={entrySteps[step] < 1}

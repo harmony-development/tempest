@@ -77,7 +77,7 @@ export const ServerSelect = React.memo(
     };
 
     return (
-      <>
+      <div>
         <List className={classes.serverList}>
           {Object.keys(servers).map((name) => {
             return (
@@ -115,7 +115,7 @@ export const ServerSelect = React.memo(
             {i18n.t("entry:add-server")}
           </Button>
         </div>
-      </>
+      </div>
     );
   }
 );
