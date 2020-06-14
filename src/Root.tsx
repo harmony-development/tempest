@@ -6,6 +6,7 @@ import { Switch, Route } from "react-router-dom";
 import { RootState } from "./redux/redux";
 import { Loading } from "./components/Loading";
 import { HarmonyDark } from "./HarmonyDark";
+import { CommonDialogContextProvider } from "./components/dialog/CommonDialogContext";
 
 const EntryPage = lazy(async () => ({
   default: await (await import("./pages/entry/Entry")).Entry,
@@ -30,9 +31,11 @@ export const Root = React.memo(() => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Suspense fallback={<Loading />}>
-        <Switch>
-          <Route path="/entry/:step?" component={EntryPage} />
-        </Switch>
+        <CommonDialogContextProvider>
+          <Switch>
+            <Route path="/entry/:step?" component={EntryPage} />
+          </Switch>
+        </CommonDialogContextProvider>
       </Suspense>
     </ThemeProvider>
   );

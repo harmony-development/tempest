@@ -13,6 +13,7 @@ import { useTranslation } from "react-i18next";
 
 import { IServerList } from "./Entry";
 import { AddServerDialog } from "./AddServerDialog";
+import { useDialog } from "../../components/dialog/CommonDialogContext";
 
 const serverSelectStyles = makeStyles((theme) => ({
   serverListItem: {
@@ -38,6 +39,14 @@ const defaultServers: IServerList = {
   },
 };
 
+const tryParse = (jsonString: string): any => {
+  try {
+    return JSON.parse(jsonString);
+  } catch (e) {
+    return null;
+  }
+};
+
 export const ServerSelect = React.memo(
   (props: {
     setSelectedServer: (value: string) => void;
@@ -45,8 +54,11 @@ export const ServerSelect = React.memo(
     setStepComplete: (value: boolean) => void;
   }) => {
     const classes = serverSelectStyles();
+    const dialog = useDialog();
     const i18n = useTranslation(["entry"]);
-    const [servers, setServers] = useState(defaultServers);
+    const [servers, setServers] = useState<IServerList>(
+      tryParse(localStorage.getItem("entry_serverlist") || "") || defaultServers
+    );
     const [addingServer, setAddingServer] = useState(false);
     const { selectedServer, setStepComplete } = props;
 
@@ -61,6 +73,11 @@ export const ServerSelect = React.memo(
       // eslint-disable-next-line
     }, [selectedServer]);
 
+    useEffect(() => {
+      if (servers)
+        localStorage.setItem("entry_serverlist", JSON.stringify(servers));
+    }, [servers]);
+
     const onServerAdded = (label: string, ip: string) => {
       setServers({
         ...servers,
@@ -72,8 +89,14 @@ export const ServerSelect = React.memo(
     };
 
     const removeServer = (label: string) => {
-      const { [label]: _, ...remaining } = servers;
-      setServers(remaining);
+      dialog({
+        type: "confirm",
+        title: i18n.t("entry:server-select.remove-server-title"),
+        description: i18n.t("entry:server-select.remove-server-description"),
+      }).then(() => {
+        const { [label]: _, ...remaining } = servers;
+        setServers(remaining);
+      });
     };
 
     return (

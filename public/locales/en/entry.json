@@ -13,6 +13,10 @@
   "next": "Next",
   "finish": "Finish",
   "add": "Add",
+  "server-select": {
+    "remove-server-title": "Remove Server",
+    "remove-server-description": "Are you sure you would like to remove this server from your list? This cannot be undone."
+  },
   "login-register": {
     "new-user": "New User?",
     "sign-in-instead": "Sign In Instead?"
