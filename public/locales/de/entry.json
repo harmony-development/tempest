@@ -11,6 +11,10 @@
   "next": "Nächster Schritt",
   "finish": "Beenden",
   "add": "Hinzufügen",
+  "server-select": {
+    "remove-server-title": "Server löschen.",
+    "remove-server-description": "Bist du dir sicher dass du diesen Server aus deiner Liste entfernen möchtest? Dieser Vorgang kann nicht rückgängig gemacht werden."
+  },
   "login-register": {
     "new-user": "Neuer User?",
     "sign-in-instead": "Stattdessen anmelden?"
