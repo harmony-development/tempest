@@ -1,24 +1,24 @@
 {
-  "select-server": "Select Server",
-  "login-register-text": "Login/Register",
-  "official": "Official",
-  "custom": "Custom Server",
-  "custom-server-field": "Server Domain",
-  "custom-server-label": "Label",
-  "add-server": "Add Server",
-  "login-to-instance": "Login to {{ host }}",
-  "register-to-instance": "Register to {{ host }}",
-  "cancel": "Cancel",
-  "back": "Back",
-  "next": "Next",
-  "finish": "Finish",
-  "add": "Add",
+  "select-server": "Виберіть сервер",
+  "login-register-text": "Увійти/Реєстрація",
+  "official": "Офіційний",
+  "custom": "Сервер користувача",
+  "custom-server-field": "Домен сервера",
+  "custom-server-label": "Мітка",
+  "add-server": "Додати сервер",
+  "login-to-instance": "Вхід до {{ host }}",
+  "register-to-instance": "Зареєструватися на {{ host }}",
+  "cancel": "Скасувати",
+  "back": "Відмінити",
+  "next": "Уперед",
+  "finish": "Закінчити",
+  "add": "Додати",
   "server-select": {
-    "remove-server-title": "Remove Server",
-    "remove-server-description": "Are you sure you would like to remove this server from your list? This cannot be undone."
+    "remove-server-title": "Видалити сервер",
+    "remove-server-description": "Ви впевнені, що хочете видалити цей сервер зі свого списку? Цю дію неможливо скасувати."
   },
   "login-register": {
-    "new-user": "New User?",
-    "sign-in-instead": "Sign In Instead?"
+    "new-user": "Новий Користувач?",
+    "sign-in-instead": "Увійти Натомість Натомість реклама?"
   }
 }
