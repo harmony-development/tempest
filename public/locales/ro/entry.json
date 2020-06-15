@@ -1,24 +1,24 @@
 {
-  "select-server": "Select Server",
-  "login-register-text": "Login/Register",
-  "official": "Official",
-  "custom": "Custom Server",
-  "custom-server-field": "Server Domain",
-  "custom-server-label": "Label",
-  "add-server": "Add Server",
-  "login-to-instance": "Login to {{ host }}",
-  "register-to-instance": "Register to {{ host }}",
-  "cancel": "Cancel",
-  "back": "Back",
-  "next": "Next",
-  "finish": "Finish",
-  "add": "Add",
+  "select-server": "Selectare server",
+  "login-register-text": "Autentificare/Înregistrează-te",
+  "official": "Oficial",
+  "custom": "Server personalizat",
+  "custom-server-field": "Domeniu server",
+  "custom-server-label": "Etichetă",
+  "add-server": "Adaugă server",
+  "login-to-instance": "Autentificare în {{ host }}",
+  "register-to-instance": "Înregistrează-te în {{ host }}",
+  "cancel": "Anulează",
+  "back": "Înapoi",
+  "next": "Următoarea",
+  "finish": "Terminare",
+  "add": "Adăugare",
   "server-select": {
-    "remove-server-title": "Remove Server",
-    "remove-server-description": "Are you sure you would like to remove this server from your list? This cannot be undone."
+    "remove-server-title": "Elimină server",
+    "remove-server-description": "Sunteţi sigur că doriţi să eliminaţi acest server din lista dumneavoastră? Acest lucru nu poate fi anulat."
   },
   "login-register": {
-    "new-user": "New User?",
-    "sign-in-instead": "Sign In Instead?"
+    "new-user": "Utilizator nou?",
+    "sign-in-instead": "Conectează-te în schimb?"
   }
 }
