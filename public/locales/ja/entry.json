@@ -1,24 +1,24 @@
 {
-  "select-server": "Select Server",
-  "login-register-text": "Login/Register",
-  "official": "Official",
-  "custom": "Custom Server",
-  "custom-server-field": "Server Domain",
-  "custom-server-label": "Label",
-  "add-server": "Add Server",
-  "login-to-instance": "Login to {{ host }}",
-  "register-to-instance": "Register to {{ host }}",
-  "cancel": "Cancel",
-  "back": "Back",
-  "next": "Next",
-  "finish": "Finish",
-  "add": "Add",
+  "select-server": "サーバーを選択",
+  "login-register-text": "ログイン/登録",
+  "official": "オフィシャル",
+  "custom": "カスタムサーバー",
+  "custom-server-field": "サーバードメイン",
+  "custom-server-label": "ラベル",
+  "add-server": "サーバーを追加",
+  "login-to-instance": "{{ host }} にログイン",
+  "register-to-instance": "{{ host }} に登録する",
+  "cancel": "キャンセル",
+  "back": "戻る",
+  "next": "次へ",
+  "finish": "完了",
+  "add": "追加",
   "server-select": {
-    "remove-server-title": "Remove Server",
-    "remove-server-description": "Are you sure you would like to remove this server from your list? This cannot be undone."
+    "remove-server-title": "サーバーを削除",
+    "remove-server-description": "このサーバーをリストから削除してもよろしいですか？元に戻すことはできません。"
   },
   "login-register": {
-    "new-user": "New User?",
-    "sign-in-instead": "Sign In Instead?"
+    "new-user": "新しいユーザーですか？",
+    "sign-in-instead": "サインインしますか？"
   }
 }
