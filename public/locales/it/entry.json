@@ -1,24 +1,24 @@
 {
-  "select-server": "Select Server",
+  "select-server": "Seleziona Server",
   "login-register-text": "Login/Register",
-  "official": "Official",
-  "custom": "Custom Server",
-  "custom-server-field": "Server Domain",
-  "custom-server-label": "Label",
-  "add-server": "Add Server",
-  "login-to-instance": "Login to {{ host }}",
-  "register-to-instance": "Register to {{ host }}",
-  "cancel": "Cancel",
-  "back": "Back",
-  "next": "Next",
-  "finish": "Finish",
-  "add": "Add",
+  "official": "Ufficiale",
+  "custom": "Server Personalizzato",
+  "custom-server-field": "Dominio Server",
+  "custom-server-label": "Etichetta",
+  "add-server": "Aggiungi Server",
+  "login-to-instance": "Accedi a {{ host }}",
+  "register-to-instance": "Registrati a {{ host }}",
+  "cancel": "Annulla",
+  "back": "Indietro",
+  "next": "Successivo",
+  "finish": "Termina",
+  "add": "Aggiungi",
   "server-select": {
-    "remove-server-title": "Remove Server",
-    "remove-server-description": "Are you sure you would like to remove this server from your list? This cannot be undone."
+    "remove-server-title": "Rimuovi Server",
+    "remove-server-description": "Sei sicuro di voler rimuovere questo server dalla tua lista? Questo non può essere annullato."
   },
   "login-register": {
-    "new-user": "New User?",
-    "sign-in-instead": "Sign In Instead?"
+    "new-user": "Nuovo Utente?",
+    "sign-in-instead": "Accedi Instabile?"
   }
 }
