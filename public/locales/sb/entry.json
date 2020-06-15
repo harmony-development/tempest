@@ -1,24 +1,24 @@
 {
-  "select-server": "Select Server",
-  "login-register-text": "Login/Register",
+  "select-server": "Selecte Server",
+  "login-register-text": "Locte in/Registert vos",
   "official": "Official",
-  "custom": "Custom Server",
-  "custom-server-field": "Server Domain",
+  "custom": "Customiset Server",
+  "custom-server-field": "Server Xeitel",
   "custom-server-label": "Label",
-  "add-server": "Add Server",
+  "add-server": "Addeihte Server",
   "login-to-instance": "Login to {{ host }}",
   "register-to-instance": "Register to {{ host }}",
-  "cancel": "Cancel",
-  "back": "Back",
-  "next": "Next",
-  "finish": "Finish",
-  "add": "Add",
+  "cancel": "Bataleihte",
+  "back": "Retro",
+  "next": "Niebst",
+  "finish": "Fin",
+  "add": "Addeihte",
   "server-select": {
     "remove-server-title": "Remove Server",
     "remove-server-description": "Are you sure you would like to remove this server from your list? This cannot be undone."
   },
   "login-register": {
-    "new-user": "New User?",
-    "sign-in-instead": "Sign In Instead?"
+    "new-user": "Nov Neuder?",
+    "sign-in-instead": "Inscripte vos petis?"
   }
 }
