@@ -1,0 +1,24 @@
+{
+  "select-server": "Виберіть сервер",
+  "login-register-text": "Увійти/Реєстрація",
+  "official": "Офіційний",
+  "custom": "Сервер користувача",
+  "custom-server-field": "Домен сервера",
+  "custom-server-label": "Мітка",
+  "add-server": "Додати сервер",
+  "login-to-instance": "Вхід до {{ host }}",
+  "register-to-instance": "Зареєструватися на {{ host }}",
+  "cancel": "Скасувати",
+  "back": "Відмінити",
+  "next": "Уперед",
+  "finish": "Закінчити",
+  "add": "Додати",
+  "server-select": {
+    "remove-server-title": "Видалити сервер",
+    "remove-server-description": "Ви впевнені, що хочете видалити цей сервер зі свого списку? Цю дію неможливо скасувати."
+  },
+  "login-register": {
+    "new-user": "Новий Користувач?",
+    "sign-in-instead": "Увійти Натомість Натомість реклама?"
+  }
+}

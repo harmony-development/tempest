@@ -1,4 +1,3 @@
-
 {
   "select-server": "Elekti Servilon",
   "login-register-text": "Ensaluti/Registriĝi",
@@ -7,6 +6,8 @@
   "custom-server-field": "Domajno de Servilo",
   "custom-server-label": "Etiketo",
   "add-server": "Aldoni Servilon",
+  "login-to-instance": "Login to {{ host }}",
+  "register-to-instance": "Register to {{ host }}",
   "cancel": "Nuligi",
   "back": "Malantaŭigi",
   "next": "Antaŭigi",

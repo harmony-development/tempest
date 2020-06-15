@@ -1,0 +1,24 @@
+{
+  "select-server": "Välj server",
+  "login-register-text": "Logga in/Registrera",
+  "official": "Officiell",
+  "custom": "Anpassad server",
+  "custom-server-field": "Server domän",
+  "custom-server-label": "Etikett",
+  "add-server": "Lägg till server",
+  "login-to-instance": "Logga in till {{ host }}",
+  "register-to-instance": "Registrera dig på {{ host }}",
+  "cancel": "Avbryt",
+  "back": "Tillbaka",
+  "next": "Nästa",
+  "finish": "Avsluta",
+  "add": "Lägg till",
+  "server-select": {
+    "remove-server-title": "Ta bort server",
+    "remove-server-description": "Är du säker på att du vill ta bort denna server från din lista? Detta kan inte ångras."
+  },
+  "login-register": {
+    "new-user": "Ny användare?",
+    "sign-in-instead": "Logga in <unk> ad?"
+  }
+}

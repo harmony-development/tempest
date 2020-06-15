@@ -6,11 +6,17 @@
   "custom-server-field": "Dominia de servitor",
   "custom-server-label": "Afiche",
   "add-server": "Adjunter servitor",
+  "login-to-instance": "Login to {{ host }}",
+  "register-to-instance": "Register to {{ host }}",
   "cancel": "Anullar",
   "back": "Retro",
   "next": "Sequent",
   "finish": "Finir",
   "add": "Adjunter",
+  "server-select": {
+    "remove-server-title": "Remove Server",
+    "remove-server-description": "Are you sure you would like to remove this server from your list? This cannot be undone."
+  },
   "login-register": {
     "new-user": "Nov usator?",
     "sign-in-instead": "Plutost intrar?"

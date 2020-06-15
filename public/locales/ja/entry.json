@@ -1,0 +1,24 @@
+{
+  "select-server": "サーバーを選択",
+  "login-register-text": "ログイン/登録",
+  "official": "オフィシャル",
+  "custom": "カスタムサーバー",
+  "custom-server-field": "サーバードメイン",
+  "custom-server-label": "ラベル",
+  "add-server": "サーバーを追加",
+  "login-to-instance": "{{ host }} にログイン",
+  "register-to-instance": "{{ host }} に登録する",
+  "cancel": "キャンセル",
+  "back": "戻る",
+  "next": "次へ",
+  "finish": "完了",
+  "add": "追加",
+  "server-select": {
+    "remove-server-title": "サーバーを削除",
+    "remove-server-description": "このサーバーをリストから削除してもよろしいですか？元に戻すことはできません。"
+  },
+  "login-register": {
+    "new-user": "新しいユーザーですか？",
+    "sign-in-instead": "サインインしますか？"
+  }
+}

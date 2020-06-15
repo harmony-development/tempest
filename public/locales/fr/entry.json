@@ -6,11 +6,17 @@
   "custom-server-field": "Domaine du Serveur",
   "custom-server-label": "Étiquette",
   "add-server": "Ajouter un Serveur",
+  "login-to-instance": "Se connecter à {{ host }}",
+  "register-to-instance": "S'inscrire à {{ host }}",
   "cancel": "Annuler",
   "back": "Retour",
   "next": "Suivant",
   "finish": "Finir",
   "add": "Ajouter",
+  "server-select": {
+    "remove-server-title": "Supprimer le serveur",
+    "remove-server-description": "Êtes-vous sûr de vouloir supprimer ce serveur de votre liste ? Cette action est irréversible."
+  },
   "login-register": {
     "new-user": "Nouvel Utilisateur?",
     "sign-in-instead": "Se connecter à la place?"

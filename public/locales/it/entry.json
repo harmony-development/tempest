@@ -1,0 +1,24 @@
+{
+  "select-server": "Seleziona Server",
+  "login-register-text": "Login/Register",
+  "official": "Ufficiale",
+  "custom": "Server Personalizzato",
+  "custom-server-field": "Dominio Server",
+  "custom-server-label": "Etichetta",
+  "add-server": "Aggiungi Server",
+  "login-to-instance": "Accedi a {{ host }}",
+  "register-to-instance": "Registrati a {{ host }}",
+  "cancel": "Annulla",
+  "back": "Indietro",
+  "next": "Successivo",
+  "finish": "Termina",
+  "add": "Aggiungi",
+  "server-select": {
+    "remove-server-title": "Rimuovi Server",
+    "remove-server-description": "Sei sicuro di voler rimuovere questo server dalla tua lista? Questo non può essere annullato."
+  },
+  "login-register": {
+    "new-user": "Nuovo Utente?",
+    "sign-in-instead": "Accedi Instabile?"
+  }
+}

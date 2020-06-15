@@ -6,11 +6,17 @@
   "custom-server-field": "مجال ال حاسوب",
   "custom-server-label": "ضع الكلمة المناسبة",
   "add-server": "إضافة  حاسوب",
+  "login-to-instance": "Login to {{ host }}",
+  "register-to-instance": "Register to {{ host }}",
   "cancel": "إلغاء",
   "back": "عودة",
   "next": "التالى",
   "finish": "إنهاء",
   "add": "أضف",
+  "server-select": {
+    "remove-server-title": "Remove Server",
+    "remove-server-description": "Are you sure you would like to remove this server from your list? This cannot be undone."
+  },
   "login-register": {
     "new-user": "مستخدم جديد؟",
     "sign-in-instead": "تسجيل الدخول بدلاً من ذلك؟"
