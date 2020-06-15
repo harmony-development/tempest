@@ -1,24 +1,24 @@
 {
-  "select-server": "Select Server",
-  "login-register-text": "Login/Register",
-  "official": "Official",
-  "custom": "Custom Server",
-  "custom-server-field": "Server Domain",
-  "custom-server-label": "Label",
-  "add-server": "Add Server",
-  "login-to-instance": "Login to {{ host }}",
-  "register-to-instance": "Register to {{ host }}",
-  "cancel": "Cancel",
-  "back": "Back",
-  "next": "Next",
-  "finish": "Finish",
-  "add": "Add",
+  "select-server": "Выбор Сервера",
+  "login-register-text": "Логин/Регистрация",
+  "official": "Официальный",
+  "custom": "Пользовательский Сервер",
+  "custom-server-field": "Домен Сервера",
+  "custom-server-label": "Имя",
+  "add-server": "Добавить Сервер",
+  "login-to-instance": "Войти в {{ host }}",
+  "register-to-instance": "Зарегистрироваться в {{ host }}",
+  "cancel": "Отмена",
+  "back": "Назад",
+  "next": "Далее",
+  "finish": "Завершить",
+  "add": "Добавить",
   "server-select": {
-    "remove-server-title": "Remove Server",
-    "remove-server-description": "Are you sure you would like to remove this server from your list? This cannot be undone."
+    "remove-server-title": "Удалить сервер",
+    "remove-server-description": "Вы уверены, что хотите удалить этот сервер из вашего списка? Это действие не может быть отменено."
   },
   "login-register": {
-    "new-user": "New User?",
-    "sign-in-instead": "Sign In Instead?"
+    "new-user": "Новый Пользователь?",
+    "sign-in-instead": "Войти в систему?"
   }
 }
