@@ -6,16 +6,16 @@
   "custom-server-field": "Server Xeitel",
   "custom-server-label": "Label",
   "add-server": "Addeihte Server",
-  "login-to-instance": "Login to {{ host }}",
-  "register-to-instance": "Register to {{ host }}",
+  "login-to-instance": "Locte in {{ host }}",
+  "register-to-instance": "Registert vos {{ host }}",
   "cancel": "Bataleihte",
   "back": "Retro",
   "next": "Niebst",
   "finish": "Fin",
   "add": "Addeihte",
   "server-select": {
-    "remove-server-title": "Remove Server",
-    "remove-server-description": "Are you sure you would like to remove this server from your list? This cannot be undone."
+    "remove-server-title": "Stracte Server.",
+    "remove-server-description": "Ste yu yakin yu stracskwte tod server ex vies daftar? To est neremeidet."
   },
   "login-register": {
     "new-user": "Nov Neuder?",

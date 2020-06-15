@@ -1,0 +1,24 @@
+{
+  "select-server": "서버 선택",
+  "login-register-text": "로그인/계정 등록",
+  "official": "직원",
+  "custom": "커스텀 서버",
+  "custom-server-field": "서버 도메인",
+  "custom-server-label": "라벨",
+  "add-server": "서버 추가",
+  "login-to-instance": "로그인 {{ host }}",
+  "register-to-instance": "레지스터 {{ host }}",
+  "cancel": "취소",
+  "back": "뒤로가기",
+  "next": "다음",
+  "finish": "끝내기",
+  "add": "추가",
+  "server-select": {
+    "remove-server-title": "서버 제거",
+    "remove-server-description": "이 서버를 목록에서 제거 하시겠습니까? 이 취소 할 수 없습니다."
+  },
+  "login-register": {
+    "new-user": "New User?",
+    "sign-in-instead": "Sign In Instead?"
+  }
+}
