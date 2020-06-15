@@ -1,24 +1,24 @@
 {
-  "select-server": "Select Server",
-  "login-register-text": "Login/Register",
-  "official": "Official",
-  "custom": "Custom Server",
-  "custom-server-field": "Server Domain",
-  "custom-server-label": "Label",
-  "add-server": "Add Server",
-  "login-to-instance": "Login to {{ host }}",
-  "register-to-instance": "Register to {{ host }}",
-  "cancel": "Cancel",
-  "back": "Back",
-  "next": "Next",
-  "finish": "Finish",
-  "add": "Add",
+  "select-server": "Vyberte Server",
+  "login-register-text": "Přihlášení/Registrace",
+  "official": "Oficiální",
+  "custom": "Vlastní server",
+  "custom-server-field": "Doména serveru",
+  "custom-server-label": "Označení",
+  "add-server": "Přidat server",
+  "login-to-instance": "Přihlásit se k {{ host }}",
+  "register-to-instance": "Zaregistrovat se na {{ host }}",
+  "cancel": "Zrušit",
+  "back": "Zpátky",
+  "next": "Další",
+  "finish": "Skončit",
+  "add": "Přidat",
   "server-select": {
-    "remove-server-title": "Remove Server",
-    "remove-server-description": "Are you sure you would like to remove this server from your list? This cannot be undone."
+    "remove-server-title": "Odstranit server",
+    "remove-server-description": "Jste si jisti, že chcete odstranit tento server ze seznamu? Tuto akci nelze vrátit zpět."
   },
   "login-register": {
-    "new-user": "New User?",
-    "sign-in-instead": "Sign In Instead?"
+    "new-user": "Nový uživatel?",
+    "sign-in-instead": "Místo toho se přihlásit"
   }
 }
