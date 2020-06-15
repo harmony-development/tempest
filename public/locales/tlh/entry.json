@@ -6,11 +6,17 @@
   "custom-server-field": "turwI' wo'",
   "custom-server-label": "per",
   "add-server": "turwI' chel",
+  "login-to-instance": "Login to {{ host }}",
+  "register-to-instance": "Register to {{ host }}",
   "cancel": "qIl",
   "back": "chegh",
   "next": "veb",
   "finish": "rIn",
   "add": "chel",
+  "server-select": {
+    "remove-server-title": "Remove Server",
+    "remove-server-description": "Are you sure you would like to remove this server from your list? This cannot be undone."
+  },
   "login-register": {
     "new-user": "ta' chu' chenmoH?",
     "sign-in-instead": "'el?"

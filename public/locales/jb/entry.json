@@ -6,11 +6,17 @@
   "custom-server-field": "seltcana urli",
   "custom-server-label": "tcita",
   "add-server": "jmina lo seltcana",
+  "login-to-instance": "Login to {{ host }}",
+  "register-to-instance": "Register to {{ host }}",
   "cancel": "fanta",
   "back": "xruti",
   "next": "za'umoi",
   "finish": "fanmo",
   "add": "jmina",
+  "server-select": {
+    "remove-server-title": "Remove Server",
+    "remove-server-description": "Are you sure you would like to remove this server from your list? This cannot be undone."
+  },
   "login-register": {
     "new-user": "xu jmina nitcu?",
     "sign-in-instead": "de'a se jaspo?"

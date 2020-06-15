@@ -1,0 +1,24 @@
+{
+  "select-server": "Seleccionar Servidor",
+  "login-register-text": "Ingresar/Registrarse",
+  "official": "Oficial",
+  "custom": "Servidor personalizado",
+  "custom-server-field": "Dominio del Servidor",
+  "custom-server-label": "Etiqueta",
+  "add-server": "Añadir Servidor",
+  "login-to-instance": "Iniciar sesión en {{ host }}",
+  "register-to-instance": "Registrarse en {{ host }}",
+  "cancel": "Cancelar",
+  "back": "Atrás",
+  "next": "Siguiente",
+  "finish": "Finalizar",
+  "add": "Añadir",
+  "server-select": {
+    "remove-server-title": "Eliminar servidor",
+    "remove-server-description": "¿Está seguro de que desea eliminar este servidor de su lista? Esto no se puede deshacer."
+  },
+  "login-register": {
+    "new-user": "¿Nuevo usuario?",
+    "sign-in-instead": "¿Iniciar sesión en su lugar?"
+  }
+}

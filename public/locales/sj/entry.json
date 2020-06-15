@@ -6,11 +6,17 @@
   "custom-server-field": "sad covas",
   "custom-server-label": "eneth",
   "add-server": "anno govas",
+  "login-to-instance": "Login to {{ host }}",
+  "register-to-instance": "Register to {{ host }}",
   "cancel": "avo",
   "back": "dan",
   "next": "*rû",
   "finish": "telo",
   "add": "anno",
+  "server-select": {
+    "remove-server-title": "Remove Server",
+    "remove-server-description": "Are you sure you would like to remove this server from your list? This cannot be undone."
+  },
   "login-register": {
     "new-user": "*covon 'wain?",
     "sign-in-instead": "egor vinno?"
