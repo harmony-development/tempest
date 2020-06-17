@@ -54,37 +54,28 @@ export interface IServerList {
   };
 }
 
-const entrySteps: {
-  [key: string]: number;
-} = {
-  serverselect: 0,
-  auth: 1,
-};
-const entryStepsArr = ["serverselect", "auth"];
+const steps = 2;
 
 export const Entry = React.memo(() => {
   const classes = entryStyles();
   const i18n = useTranslation(["entry"]);
-  const { step = "serverselect" } = useParams<{
+  const { step = "0" } = useParams<{
     step: string | undefined;
   }>();
+  const numStep = Number.parseInt(step) || 0;
   const history = useHistory();
   const location = useLocation();
+
   const [selectedServer, setSelectedServer] = useState("");
   const [stepComplete, setStepComplete] = useState(false);
 
   const forward = () => {
-    history.push(
-      `/entry/${entryStepsArr[entrySteps[step] + 1] || "serverselect"}`
-    );
+    history.push(`/entry/${numStep + 1}`);
     setStepComplete(false);
   };
 
   const backward = () => {
-    history.push(
-      `/entry/${entryStepsArr[entrySteps[step] - 1] || "serverselect"}`,
-      {}
-    );
+    history.push(`/entry/${numStep - 1}`);
     setStepComplete(false);
   };
 
@@ -92,7 +83,7 @@ export const Entry = React.memo(() => {
     <div className={classes.root}>
       <Container maxWidth="sm">
         <Paper className={classes.entryBody} elevation={5}>
-          <Stepper activeStep={entrySteps[step]}>
+          <Stepper activeStep={numStep}>
             <Step>
               <StepLabel>{i18n.t("entry:select-server")}</StepLabel>
             </Step>
@@ -104,7 +95,7 @@ export const Entry = React.memo(() => {
             <CSSTransition key={location.key} classNames="step" timeout={300}>
               <Switch location={location}>
                 <Route
-                  path="/entry/serverselect"
+                  path="/entry/0"
                   render={(props) => (
                     <ServerSelect
                       {...props}
@@ -114,7 +105,7 @@ export const Entry = React.memo(() => {
                     />
                   )}
                 />
-                <Route path="/entry/auth/:type?" component={AuthPage} />
+                <Route path="/entry/1/:type?" component={AuthPage} />
                 <Route
                   path="/entry/"
                   render={(props) => (
@@ -131,7 +122,7 @@ export const Entry = React.memo(() => {
           </TransitionGroup>
           <div className={classes.entryFooter}>
             <Button
-              disabled={entrySteps[step] < 1}
+              disabled={numStep < 1}
               variant="contained"
               color="primary"
               onClick={backward}
@@ -145,7 +136,7 @@ export const Entry = React.memo(() => {
               color="primary"
               onClick={forward}
             >
-              {entrySteps[step] === entryStepsArr.length - 1
+              {numStep === steps - 1
                 ? i18n.t("entry:finish")
                 : i18n.t("entry:next")}
               <ChevronRight />
