@@ -76,7 +76,7 @@ export interface IEntryForm {
 
 const steps = ["serverselect", "auth"];
 
-const Entry = () => {
+const _Entry = () => {
   const classes = entryStyles();
   const i18n = useTranslation(["entry"]);
   const { step = "serverselect" } = useParams<{
@@ -192,4 +192,4 @@ const Entry = () => {
   );
 };
 
-export const MemoEntry = React.memo(Entry);
+export const Entry = React.memo(_Entry);

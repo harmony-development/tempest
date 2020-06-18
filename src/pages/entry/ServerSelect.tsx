@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   List,
   ListItem,
@@ -65,15 +65,20 @@ const _ServerSelect = (props: {
       localStorage.setItem("entry_serverlist", JSON.stringify(servers));
   }, [servers]);
 
-  const onServerAdded = (label: string, ip: string) => {
-    setServers({
-      ...servers,
-      [label]: {
-        ip,
-      },
-    });
-    setAddingServer(false);
-  };
+  const addServerDialogCancel = useCallback(() => setAddingServer(false), []);
+
+  const onServerAdded = useCallback(
+    (label: string, ip: string) => {
+      setServers({
+        ...servers,
+        [label]: {
+          ip,
+        },
+      });
+      setAddingServer(false);
+    },
+    [servers]
+  );
 
   const removeServer = (label: string) => {
     dialog({
@@ -112,7 +117,7 @@ const _ServerSelect = (props: {
         <AddServerDialog
           open={addingServer}
           serverAdded={onServerAdded}
-          cancel={() => setAddingServer(false)}
+          cancel={addServerDialogCancel}
         />
       </List>
       <div className={classes.serverListFooter}>

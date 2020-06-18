@@ -1,7 +1,7 @@
 import React, { lazy, Suspense } from "react";
 import { useSelector } from "react-redux";
 import { createMuiTheme, ThemeProvider, CssBaseline } from "@material-ui/core";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 
 import { RootState } from "./redux/redux";
 import { Loading } from "./components/Loading";
@@ -9,7 +9,7 @@ import { HarmonyDark } from "./HarmonyDark";
 import { CommonDialogContextProvider } from "./components/dialog/CommonDialogContext";
 
 const EntryPage = lazy(async () => ({
-  default: await (await import("./pages/entry/Entry")).MemoEntry,
+  default: await (await import("./pages/entry/Entry")).Entry,
 }));
 
 const _Root = () => {
@@ -34,6 +34,7 @@ const _Root = () => {
         <CommonDialogContextProvider>
           <Switch>
             <Route path="/entry/:step?" component={EntryPage} />
+            <Redirect to="/entry/serverselect" />
           </Switch>
         </CommonDialogContextProvider>
       </Suspense>

@@ -10,7 +10,7 @@ export interface IRootState {
   };
 }
 
-const initialState: IRootState = {
+export const initialState: IRootState = {
   theme: {
     type: "dark",
     primary: {
