@@ -1,24 +1,24 @@
 {
   "select-server": "Server auswählen",
-  "login-register-text": "Einloggen/Registrieren",
-  "official": "Offiziel",
-  "custom": "Benutzerdefinierter Server",
-  "custom-server-field": "Serverdomäne",
+  "login-register-text": "Anmelden/Registrieren",
+  "official": "Offiziell",
+  "custom": "Eigener Server",
+  "custom-server-field": "Server-Domain",
   "custom-server-label": "Name",
   "add-server": "Server hinzufügen",
-  "login-to-instance": "Bei {{ host }} anmelden",
+  "login-to-instance": "Anmelden bei {{ host }}",
   "register-to-instance": "Registrieren bei {{ host }}",
-  "cancel": "Widerrufen",
+  "cancel": "Abbrechen",
   "back": "Zurück",
-  "next": "Nächster Schritt",
+  "next": "Weiter",
   "finish": "Beenden",
-  "add": "Hinzufügen",
+  "add": "Neu",
   "server-select": {
-    "remove-server-title": "Server löschen.",
+    "remove-server-title": "Server löschen",
     "remove-server-description": "Bist du dir sicher dass du diesen Server aus deiner Liste entfernen möchtest? Dieser Vorgang kann nicht rückgängig gemacht werden."
   },
   "login-register": {
-    "new-user": "Neuer User?",
+    "new-user": "Neuer Benutzer?",
     "sign-in-instead": "Stattdessen anmelden?"
   }
 }
