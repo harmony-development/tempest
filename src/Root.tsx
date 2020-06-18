@@ -9,10 +9,10 @@ import { HarmonyDark } from "./HarmonyDark";
 import { CommonDialogContextProvider } from "./components/dialog/CommonDialogContext";
 
 const EntryPage = lazy(async () => ({
-  default: await (await import("./pages/entry/Entry")).Entry,
+  default: await (await import("./pages/entry/Entry")).MemoEntry,
 }));
 
-export const Root = React.memo(() => {
+const _Root = () => {
   const themeState = useSelector((state: RootState) => state.theme);
 
   const theme = createMuiTheme({
@@ -39,4 +39,6 @@ export const Root = React.memo(() => {
       </Suspense>
     </ThemeProvider>
   );
-});
+};
+
+export const Root = React.memo(_Root);

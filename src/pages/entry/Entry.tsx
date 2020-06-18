@@ -16,6 +16,7 @@ import {
   Switch,
   useHistory,
   useLocation,
+  Redirect,
 } from "react-router";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 
@@ -54,36 +55,80 @@ export interface IServerList {
   };
 }
 
-const steps = 2;
+export interface ILoginForm {
+  email: string;
+  password: string;
+}
 
-export const Entry = React.memo(() => {
+export interface IRegisterForm {
+  email: string;
+  username: string;
+  password: string;
+  confirmPassword: string;
+}
+
+export interface IEntryForm {
+  selectedServer: string;
+  selectedForm: "register" | "login";
+  loginForm: ILoginForm;
+  registerForm: IRegisterForm;
+}
+
+const steps = ["serverselect", "auth"];
+
+const Entry = () => {
   const classes = entryStyles();
   const i18n = useTranslation(["entry"]);
-  const { step = "0" } = useParams<{
+  const { step = "serverselect" } = useParams<{
     step: string | undefined;
   }>();
-  const numStep = Number.parseInt(step) || 0;
+  const currentStep = steps.indexOf(step);
   const history = useHistory();
   const location = useLocation();
-
+  const [selectedForm, setSelectedForm] = useState<"login" | "register">();
   const [selectedServer, setSelectedServer] = useState("");
-  const [stepComplete, setStepComplete] = useState(false);
+  const [loginForm, setLoginForm] = useState<ILoginForm>({
+    email: "",
+    password: "",
+  });
+  const [registerForm, setRegisterForm] = useState<IRegisterForm>({
+    email: "",
+    username: "",
+    password: "",
+    confirmPassword: "",
+  });
 
   const forward = () => {
-    history.push(`/entry/${numStep + 1}`);
-    setStepComplete(false);
+    history.push(`/entry/${steps[currentStep + 1]}`);
   };
 
   const backward = () => {
-    history.push(`/entry/${numStep - 1}`);
-    setStepComplete(false);
+    history.push(`/entry/${steps[currentStep - 1]}`);
   };
+
+  const isFormComplete = () => {
+    switch (currentStep) {
+      case 0:
+        return !!selectedServer;
+      case 1:
+        return selectedForm === "login"
+          ? !!loginForm.email && !!loginForm.password
+          : !!registerForm.email &&
+              !!registerForm.username &&
+              !!registerForm.password &&
+              !!registerForm.confirmPassword;
+      default:
+        return false;
+    }
+  };
+
+  console.log(new Date().getTime());
 
   return (
     <div className={classes.root}>
       <Container maxWidth="sm">
         <Paper className={classes.entryBody} elevation={5}>
-          <Stepper activeStep={numStep}>
+          <Stepper activeStep={currentStep}>
             <Step>
               <StepLabel>{i18n.t("entry:select-server")}</StepLabel>
             </Step>
@@ -95,34 +140,33 @@ export const Entry = React.memo(() => {
             <CSSTransition key={location.key} classNames="step" timeout={300}>
               <Switch location={location}>
                 <Route
-                  path="/entry/0"
-                  render={(props) => (
+                  path="/entry/serverselect"
+                  render={() => (
                     <ServerSelect
-                      {...props}
-                      setSelectedServer={setSelectedServer}
                       selectedServer={selectedServer}
-                      setStepComplete={setStepComplete}
+                      setSelectedServer={setSelectedServer}
                     />
                   )}
                 />
-                <Route path="/entry/1/:type?" component={AuthPage} />
                 <Route
-                  path="/entry/"
-                  render={(props) => (
-                    <ServerSelect
-                      {...props}
-                      setSelectedServer={setSelectedServer}
-                      selectedServer={selectedServer}
-                      setStepComplete={setStepComplete}
+                  path="/entry/auth/:type?"
+                  render={() => (
+                    <AuthPage
+                      setSelectedForm={setSelectedForm}
+                      setLoginForm={setLoginForm}
+                      setRegisterForm={setRegisterForm}
+                      loginForm={loginForm}
+                      registerForm={registerForm}
                     />
                   )}
                 />
+                <Redirect to="/entry/serverselect" />
               </Switch>
             </CSSTransition>
           </TransitionGroup>
           <div className={classes.entryFooter}>
             <Button
-              disabled={numStep < 1}
+              disabled={currentStep < 1}
               variant="contained"
               color="primary"
               onClick={backward}
@@ -131,12 +175,12 @@ export const Entry = React.memo(() => {
               {i18n.t("entry:back")}
             </Button>
             <Button
-              disabled={!stepComplete}
+              disabled={!isFormComplete()}
               variant="contained"
               color="primary"
               onClick={forward}
             >
-              {numStep === steps - 1
+              {currentStep === steps.length - 1
                 ? i18n.t("entry:finish")
                 : i18n.t("entry:next")}
               <ChevronRight />
@@ -146,4 +190,6 @@ export const Entry = React.memo(() => {
       </Container>
     </div>
   );
-});
+};
+
+export const MemoEntry = React.memo(Entry);

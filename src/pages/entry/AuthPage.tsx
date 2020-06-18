@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Grid, makeStyles, Link, Typography } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import { useParams, useHistory } from "react-router";
@@ -7,6 +7,7 @@ import { RaisedPaper } from "../../components/RaisedPaper";
 
 import { Login } from "./Login";
 import { Register } from "./Register";
+import { ILoginForm, IRegisterForm } from "./Entry";
 
 const authPageStyles = makeStyles((theme) => ({
   formBody: {
@@ -23,7 +24,13 @@ const authPageStyles = makeStyles((theme) => ({
   },
 }));
 
-export const AuthPage = React.memo(() => {
+const _AuthPage = (props: {
+  setSelectedForm: (form: "login" | "register") => void;
+  setLoginForm: (form: ILoginForm) => void;
+  setRegisterForm: (form: IRegisterForm) => void;
+  loginForm: ILoginForm;
+  registerForm: IRegisterForm;
+}) => {
   const classes = authPageStyles();
   const i18n = useTranslation(["entry"]);
   const { type = "login" } = useParams<{
@@ -31,8 +38,16 @@ export const AuthPage = React.memo(() => {
   }>();
   const history = useHistory();
 
-  const onModeLinkClick = () =>
+  useEffect(
+    () => props.setSelectedForm(type as "login" | "register"),
+    // eslint-disable-next-line
+    []
+  );
+
+  const onModeLinkClick = () => {
     history.push(`/entry/auth/${type === "register" ? "login" : "register"}`);
+    props.setSelectedForm(type === "register" ? "login" : "register");
+  };
 
   return (
     <Grid container spacing={3}>
@@ -46,8 +61,8 @@ export const AuthPage = React.memo(() => {
               { host: localStorage.getItem("entry_selectedserver") }
             )}
           </Typography>
-          {type === "login" ? <Login /> : undefined}
-          {type === "register" ? <Register /> : undefined}
+          {type === "login" ? <Login {...props} /> : undefined}
+          {type === "register" ? <Register {...props} /> : undefined}
           <Link className={classes.createAccountLink} onClick={onModeLinkClick}>
             {type === "login"
               ? i18n.t("entry:login-register.new-user")
@@ -57,4 +72,6 @@ export const AuthPage = React.memo(() => {
       </Grid>
     </Grid>
   );
-});
+};
+
+export const AuthPage = React.memo(_AuthPage);

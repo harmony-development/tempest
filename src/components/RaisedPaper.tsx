@@ -7,18 +7,16 @@ const raisedPaperStyles = makeStyles((theme) => ({
   },
 }));
 
-export const RaisedPaper = React.memo(
-  (
-    props: {
-      children: React.ReactNode;
-    } & PaperProps
-  ) => {
-    const classes = raisedPaperStyles();
+export const RaisedPaper = (
+  props: {
+    children: React.ReactNode;
+  } & PaperProps
+) => {
+  const classes = raisedPaperStyles();
 
-    return (
-      <Paper {...props} className={`${props.className} ${classes.raisedPaper}`}>
-        {props.children}
-      </Paper>
-    );
-  }
-);
+  return (
+    <Paper {...props} className={`${props.className} ${classes.raisedPaper}`}>
+      {props.children}
+    </Paper>
+  );
+};

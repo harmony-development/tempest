@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import "./index.css";
+import "./wdyr";
 import "./i18n";
 import "typeface-roboto";
 import { Provider } from "react-redux";
@@ -10,7 +11,7 @@ import { Root } from "./Root";
 import * as serviceWorker from "./serviceWorker";
 import { store } from "./redux/redux";
 
-const Index = React.memo(() => {
+const _Index = () => {
   return (
     <Provider store={store}>
       <BrowserRouter>
@@ -18,7 +19,9 @@ const Index = React.memo(() => {
       </BrowserRouter>
     </Provider>
   );
-});
+};
+
+const Index = React.memo(_Index);
 
 ReactDOM.render(
   <React.StrictMode>
