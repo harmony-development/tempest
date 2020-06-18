@@ -1,11 +1,11 @@
 {
-  "select-server": "Seleccionar Servidor",
-  "login-register-text": "Ingresar/Registrarse",
+  "select-server": "Seleccionar un servidor",
+  "login-register-text": "Acceder/Registrarse",
   "official": "Oficial",
   "custom": "Servidor personalizado",
-  "custom-server-field": "Dominio del Servidor",
+  "custom-server-field": "Dominio del servidor",
   "custom-server-label": "Etiqueta",
-  "add-server": "Añadir Servidor",
+  "add-server": "Añadir un servidor",
   "login-to-instance": "Iniciar sesión en {{ host }}",
   "register-to-instance": "Registrarse en {{ host }}",
   "cancel": "Cancelar",
@@ -15,10 +15,10 @@
   "add": "Añadir",
   "server-select": {
     "remove-server-title": "Eliminar servidor",
-    "remove-server-description": "¿Está seguro de que desea eliminar este servidor de su lista? Esto no se puede deshacer."
+    "remove-server-description": "¿Estás seguro de que quieres eliminar este servidor de tu lista? Esto no puede deshacerse."
   },
   "login-register": {
-    "new-user": "¿Nuevo usuario?",
-    "sign-in-instead": "¿Iniciar sesión en su lugar?"
+    "new-user": "¿Eres nuevo?",
+    "sign-in-instead": "Volver a Acceder"
   }
 }
