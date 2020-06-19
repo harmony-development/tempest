@@ -5,9 +5,8 @@ import { useParams, useHistory } from "react-router";
 
 import { RaisedPaper } from "../../components/RaisedPaper";
 
-import { Login } from "./Login";
-import { Register } from "./Register";
-import { ILoginForm, IRegisterForm } from "./Entry";
+import { Login, ILoginForm } from "./Login";
+import { Register, IRegisterForm } from "./Register";
 
 const authPageStyles = makeStyles((theme) => ({
   formBody: {

@@ -1,7 +1,10 @@
 import React from "react";
 import { TextField } from "@material-ui/core";
 
-import { ILoginForm } from "./Entry";
+export interface ILoginForm {
+  email: string;
+  password: string;
+}
 
 const _Login = (props: {
   loginForm: ILoginForm;

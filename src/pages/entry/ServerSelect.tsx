@@ -13,8 +13,13 @@ import { useTranslation } from "react-i18next";
 
 import { useDialog } from "../../components/dialog/CommonDialogContext";
 
-import { IServerList, IEntryForm } from "./Entry";
 import { AddServerDialog } from "./AddServerDialog";
+
+export interface IServerList {
+  [key: string]: {
+    ip: string;
+  };
+}
 
 const serverSelectStyles = makeStyles((theme) => ({
   serverListItem: {
@@ -100,9 +105,13 @@ const _ServerSelect = (props: {
               button
               className={classes.serverListItem}
               key={name}
-              selected={props.selectedServer === name}
+              selected={
+                Object.keys(servers).filter(
+                  (v) => v === name && props.selectedServer === servers[v].ip
+                ).length > 0
+              }
               onClick={() => {
-                props.setSelectedServer(name);
+                props.setSelectedServer(servers[name].ip);
               }}
             >
               <ListItemText primary={name} secondary={servers[name].ip} />

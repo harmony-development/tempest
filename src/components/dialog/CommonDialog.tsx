@@ -5,31 +5,45 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Grow,
 } from "@material-ui/core";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
 interface IProps {
   open: boolean;
-  title?: string;
-  description?: string;
-  type?: "confirm" | "alert";
   onSubmit?: () => void;
   onClose?: () => void;
   onExited?: () => void;
 }
 
-export const CommonDialog = (props: IProps) => {
+export interface IAlertProps {
+  title: string;
+  description: string;
+  type: "alert";
+}
+
+export interface IConfirmProps {
+  title: string;
+  description: string;
+  type: "confirm";
+}
+
+export interface IErrorProps {
+  error: Error;
+  type: "error";
+}
+
+export type CommonDialogProps = (IAlertProps | IConfirmProps | IErrorProps) &
+  IProps;
+
+export const CommonDialog = (props: CommonDialogProps) => {
   const { t } = useTranslation(["common"]);
 
-  return (
-    <Dialog open={props.open} onClose={props.onClose} onExited={props.onExited}>
-      <DialogTitle>{props.title}</DialogTitle>
-      <DialogContent>
-        <DialogContentText>{props.description}</DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        {props.type === "confirm" ? (
+  const getDialogActions = () => {
+    switch (props.type) {
+      case "confirm": {
+        return (
           <>
             <Button
               color="primary"
@@ -47,12 +61,59 @@ export const CommonDialog = (props: IProps) => {
               {t("common:yes")}
             </Button>
           </>
-        ) : (
+        );
+      }
+      case "alert": {
+        return (
           <Button color="primary" variant="contained" onClick={props.onSubmit}>
             {t("common:ok")}
           </Button>
-        )}
-      </DialogActions>
+        );
+      }
+      case "error": {
+        return (
+          <Button color="primary" variant="contained" onClick={props.onSubmit}>
+            {t("common:ok")}
+          </Button>
+        );
+      }
+    }
+  };
+
+  const getDialogTitle = () => {
+    switch (props.type) {
+      case "error":
+        return t("common:error");
+      case "alert":
+        return props.title;
+      case "confirm":
+        return props.title;
+    }
+  };
+
+  const getDialogDesc = () => {
+    switch (props.type) {
+      case "error":
+        return props.error.message;
+      case "alert":
+        return props.description;
+      case "confirm":
+        return props.description;
+    }
+  };
+
+  return (
+    <Dialog
+      open={props.open}
+      onClose={props.onClose}
+      onExited={props.onExited}
+      TransitionComponent={Grow}
+    >
+      <DialogTitle>{getDialogTitle()}</DialogTitle>
+      <DialogContent>
+        <DialogContentText>{getDialogDesc()}</DialogContentText>
+      </DialogContent>
+      <DialogActions>{getDialogActions()}</DialogActions>
     </Dialog>
   );
 };

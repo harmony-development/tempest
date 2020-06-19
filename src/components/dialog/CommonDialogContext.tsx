@@ -1,14 +1,15 @@
 // partially derived from https://dev.to/dmtrkovalenko/the-neatest-way-to-handle-alert-dialogs-in-react-1aoe
 
-import React from "react";
+import React, { useCallback } from "react";
 
-import { CommonDialog } from "./CommonDialog";
+import {
+  CommonDialog,
+  IAlertProps,
+  IConfirmProps,
+  IErrorProps,
+} from "./CommonDialog";
 
-interface IDialogOptions {
-  title: string;
-  description: string;
-  type: "confirm" | "alert";
-}
+type IDialogOptions = IAlertProps | IConfirmProps | IErrorProps;
 
 interface IProps {
   children: JSX.Element;
@@ -20,23 +21,24 @@ const CommonDialogContext = React.createContext<
 
 export const CommonDialogContextProvider = React.memo(
   ({ children }: IProps) => {
-    const [
-      dialogState,
-      setConfirmState,
-    ] = React.useState<IDialogOptions | null>(null);
+    const [dialogState, setConfirmState] = React.useState<IDialogOptions>({
+      type: "alert",
+      title: "",
+      description: "",
+    });
     const [dialogOpen, setDialogOpen] = React.useState(false);
     const pendingDialogRef = React.useRef<{
       resolve: () => void;
       reject: () => void;
     }>();
 
-    const openDialog = (options: IDialogOptions) => {
+    const openDialog = useCallback((options: IDialogOptions) => {
       setConfirmState(options);
       setDialogOpen(true);
       return new Promise<void>((resolve, reject) => {
         pendingDialogRef.current = { resolve, reject };
       });
-    };
+    }, []);
 
     const cancelHandler = () => {
       if (pendingDialogRef.current) {
@@ -56,7 +58,11 @@ export const CommonDialogContextProvider = React.memo(
     };
 
     const exitHandler = () => {
-      setConfirmState(null);
+      setConfirmState({
+        type: "alert",
+        title: "",
+        description: "",
+      });
     };
 
     return (

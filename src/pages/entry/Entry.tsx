@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   makeStyles,
   Paper,
@@ -19,12 +19,16 @@ import {
   Redirect,
 } from "react-router";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
+import { HomeServer } from "@harmony-dev/harmony-node-sdk";
 
 import { HarmonyDark } from "../../HarmonyDark";
+import { useDialog } from "../../components/dialog/CommonDialogContext";
 
 import { ServerSelect } from "./ServerSelect";
 import { AuthPage } from "./AuthPage";
 import "./Entry.css";
+import { ILoginForm } from "./Login";
+import { IRegisterForm } from "./Register";
 
 const entryStyles = makeStyles((theme) => ({
   root: {
@@ -33,9 +37,9 @@ const entryStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    background: `radial-gradient(circle at 50% 10%,
+    background: `radial-gradient(circle at 50% 20%,
       ${HarmonyDark[700]},
-      ${HarmonyDark[800]} 70.71%)`,
+      ${HarmonyDark[900]} 100%)`,
   },
   entryBody: {
     padding: theme.spacing(2),
@@ -49,31 +53,6 @@ const entryStyles = makeStyles((theme) => ({
   },
 }));
 
-export interface IServerList {
-  [key: string]: {
-    ip: string;
-  };
-}
-
-export interface ILoginForm {
-  email: string;
-  password: string;
-}
-
-export interface IRegisterForm {
-  email: string;
-  username: string;
-  password: string;
-  confirmPassword: string;
-}
-
-export interface IEntryForm {
-  selectedServer: string;
-  selectedForm: "register" | "login";
-  loginForm: ILoginForm;
-  registerForm: IRegisterForm;
-}
-
 const steps = ["serverselect", "auth"];
 
 const _Entry = () => {
@@ -85,8 +64,11 @@ const _Entry = () => {
   const currentStep = steps.indexOf(step);
   const history = useHistory();
   const location = useLocation();
+  const dialog = useDialog();
   const [selectedForm, setSelectedForm] = useState<"login" | "register">();
-  const [selectedServer, setSelectedServer] = useState("");
+  const [selectedServer, setSelectedServer] = useState(
+    localStorage.getItem("entry_selectedserver") || ""
+  );
   const [loginForm, setLoginForm] = useState<ILoginForm>({
     email: "",
     password: "",
@@ -98,13 +80,43 @@ const _Entry = () => {
     confirmPassword: "",
   });
 
+  const loginFormSubmit = async () => {
+    try {
+      const connecting = new HomeServer(selectedServer);
+    } catch (e) {
+      dialog({
+        type: "error",
+        error: e as Error,
+      });
+    }
+  };
+
+  const registerFormSubmit = async () => {};
+
   const forward = () => {
-    history.push(`/entry/${steps[currentStep + 1]}`);
+    if (currentStep !== steps.length - 1)
+      history.push(`/entry/${steps[currentStep + 1]}`);
+    else {
+      switch (selectedForm) {
+        case "login": {
+          loginFormSubmit();
+          break;
+        }
+        case "register": {
+          registerFormSubmit();
+          break;
+        }
+      }
+    }
   };
 
   const backward = () => {
     history.push(`/entry/${steps[currentStep - 1]}`);
   };
+
+  useEffect(() => {
+    localStorage.setItem("entry_selectedserver", selectedServer);
+  }, [selectedServer]);
 
   const isFormComplete = () => {
     switch (currentStep) {
@@ -121,8 +133,6 @@ const _Entry = () => {
         return false;
     }
   };
-
-  console.log(new Date().getTime());
 
   return (
     <div className={classes.root}>
