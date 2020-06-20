@@ -30,7 +30,7 @@ export interface IConfirmProps {
 }
 
 export interface IErrorProps {
-  error: Error;
+  error: any;
   type: "error";
 }
 
@@ -38,7 +38,7 @@ export type CommonDialogProps = (IAlertProps | IConfirmProps | IErrorProps) &
   IProps;
 
 export const CommonDialog = (props: CommonDialogProps) => {
-  const { t } = useTranslation(["common"]);
+  const { t } = useTranslation(["common", "errors"]);
 
   const getDialogActions = () => {
     switch (props.type) {
@@ -93,8 +93,10 @@ export const CommonDialog = (props: CommonDialogProps) => {
 
   const getDialogDesc = () => {
     switch (props.type) {
-      case "error":
-        return props.error.message;
+      case "error": {
+        console.log(props.error);
+        return t(`errors:${props.error["message"]}`, props.error["fields"]);
+      }
       case "alert":
         return props.description;
       case "confirm":

@@ -28,6 +28,7 @@ const _Register = (props: {
         type="email"
         name="email"
         onChange={textFieldChange}
+        value={props.registerForm.email}
       />
       <TextField
         variant="outlined"
@@ -36,6 +37,7 @@ const _Register = (props: {
         type="username"
         name="username"
         onChange={textFieldChange}
+        value={props.registerForm.username}
       />
       <TextField
         variant="outlined"
@@ -44,6 +46,7 @@ const _Register = (props: {
         type="password"
         name="password"
         onChange={textFieldChange}
+        value={props.registerForm.password}
       />
       <TextField
         variant="outlined"
@@ -52,6 +55,7 @@ const _Register = (props: {
         type="password"
         name="confirmPassword"
         onChange={textFieldChange}
+        value={props.registerForm.confirmPassword}
       />
     </div>
   );

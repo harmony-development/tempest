@@ -82,16 +82,34 @@ const _Entry = () => {
 
   const loginFormSubmit = async () => {
     try {
-      const connecting = new HomeServer(selectedServer);
+      const target = new HomeServer(selectedServer);
+      const loginResp = await target.loginWithEmail(
+        loginForm.email,
+        loginForm.password
+      );
     } catch (e) {
       dialog({
         type: "error",
-        error: e as Error,
+        error: e,
       });
     }
   };
 
-  const registerFormSubmit = async () => {};
+  const registerFormSubmit = async () => {
+    try {
+      const target = new HomeServer(selectedServer);
+      const registerResp = await target.register(
+        registerForm.email,
+        registerForm.username,
+        registerForm.password
+      );
+    } catch (e) {
+      dialog({
+        type: "error",
+        error: e,
+      });
+    }
+  };
 
   const forward = () => {
     if (currentStep !== steps.length - 1)
@@ -128,7 +146,7 @@ const _Entry = () => {
           : !!registerForm.email &&
               !!registerForm.username &&
               !!registerForm.password &&
-              !!registerForm.confirmPassword;
+              registerForm.confirmPassword === registerForm.password;
       default:
         return false;
     }
