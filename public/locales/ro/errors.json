@@ -1,11 +1,11 @@
 {
   "auth": {
     "invalid-email": "E-mail invalid",
-    "already-registered": "Email already registered",
-    "invalid-password": "Invalid password"
+    "already-registered": "E-mailul deja înregistrat",
+    "invalid-password": "Parolă invalidă"
   },
   "register": {
-    "password-length": "Password must be between {{ minLength }} and {{ maxLength }}",
-    "password-policy": "Password must have at least: {{ minLower }} lowercase, {{ minUpper }} uppercase, {{ minNumbers }} numbers, and {{ minSpecial }} special characters"
+    "password-length": "Parola trebuie să fie în intervalul {{ minLength }}-{{ maxLength }}",
+    "password-policy": "Parola trebuie să conțină cel puțin: {{ minLower }} minuscule, {{ minUpper }} majuscule, {{ minNumbers }} numere, și {{ minSpecial }} caractere speciale"
   }
 }
