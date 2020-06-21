@@ -6,6 +6,6 @@
   },
   "register": {
     "password-length": "Parola trebuie să fie în intervalul {{ minLength }}-{{ maxLength }}",
-    "password-policy": "Parola trebuie să conțină cel puțin: {{ minLower }} minuscule, {{ minUpper }} majuscule, {{ minNumbers }} numere, și {{ minSpecial }} caractere speciale"
+    "password-policy": "Parola trebuie să conțină cel puțin {{ minLower }} letere minuscule, {{ minUpper }} majuscule, {{ minNumbers }} numere și {{ minSpecial }} caractere speciale"
   }
 }
