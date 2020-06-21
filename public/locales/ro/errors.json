@@ -1,6 +1,6 @@
 {
   "auth": {
-    "invalid-email": "Invalid email",
+    "invalid-email": "E-mail invalid",
     "already-registered": "Email already registered",
     "invalid-password": "Invalid password"
   },
