@@ -6,6 +6,6 @@
   },
   "register": {
     "password-length": "La contraseña debe contener entre {{ minLength }} y {{ maxLength }} caracteres",
-    "password-policy": "Password must have at least: {{ minLower }} lowercase, {{ minUpper }} uppercase, {{ minNumbers }} numbers, and {{ minSpecial }} special characters"
+    "password-policy": "La contraseña debe tener al menos {{ minLower }} letras minúsculas, {{ minUpper }} mayúsculas, {{ minNumbers }} números y {{ minSpecial }} caracteres especiales"
   }
 }
