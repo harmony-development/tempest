@@ -1,11 +1,11 @@
 {
   "auth": {
-    "invalid-email": "Invalid email",
-    "already-registered": "Email already registered",
-    "invalid-password": "Invalid password"
+    "invalid-email": "Dirección e-mail inválida",
+    "already-registered": "E-mail ya registrado",
+    "invalid-password": "Contraseña incorrecta"
   },
   "register": {
-    "password-length": "Password must be between {{ minLength }} and {{ maxLength }}",
+    "password-length": "La contraseña debe contener entre {{ minLength }} y {{ maxLength }} caracteres",
     "password-policy": "Password must have at least: {{ minLower }} lowercase, {{ minUpper }} uppercase, {{ minNumbers }} numbers, and {{ minSpecial }} special characters"
   }
 }
