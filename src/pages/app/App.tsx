@@ -15,8 +15,10 @@ const _App = () => {
       history.push("/entry/serverselect");
       return;
     }
-    const server = new HomeServer(homeserver);
-    Comms.connection = new HarmonyConnection(server, session);
+    Comms.connection = new HarmonyConnection(
+      new HomeServer(homeserver),
+      session
+    );
     // eslint-disable-next-line
   }, []);
 

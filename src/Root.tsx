@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react";
+import React, { lazy, Suspense, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { createMuiTheme, ThemeProvider, CssBaseline } from "@material-ui/core";
 import { Switch, Route, Redirect } from "react-router-dom";
@@ -7,6 +7,7 @@ import { RootState } from "./redux/redux";
 import { Loading } from "./components/Loading";
 import { HarmonyDark } from "./HarmonyDark";
 import { CommonDialogContextProvider } from "./components/dialog/CommonDialogContext";
+import { HarmonyStorage } from "./storage/HarmonyStorage";
 
 const EntryPage = lazy(async () => ({
   default: await (await import("./pages/entry/Entry")).Entry,
@@ -30,6 +31,10 @@ const _Root = () => {
       },
     },
   });
+
+  useEffect(() => {
+    HarmonyStorage.checkExecuteMessageCode();
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>

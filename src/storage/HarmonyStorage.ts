@@ -6,4 +6,21 @@ export class HarmonyStorage {
   static getSession() {
     return localStorage.getItem("session");
   }
+
+  /**
+   * Sets the executeMessageCode flag to the default if it's not set
+   */
+  static checkExecuteMessageCode() {
+    if (localStorage.getItem("executeMessageCode") === null) {
+      localStorage.setItem(
+        "executeMessageCode",
+        "DANGEROUS! USE AT YOUR OWN RISK!"
+      );
+    }
+  }
+
+  static executeMessageCode() {
+    const flag = localStorage.getItem("executeMessageCode");
+    return flag === "true";
+  }
 }
