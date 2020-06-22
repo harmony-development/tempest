@@ -83,10 +83,13 @@ const _Entry = () => {
   const loginFormSubmit = async () => {
     try {
       const target = new HomeServer(selectedServer);
-      const loginResp = await target.loginWithEmail(
+      const resp = await target.loginWithEmail(
         loginForm.email,
         loginForm.password
       );
+      localStorage.setItem("homeserver", selectedServer);
+      localStorage.setItem("session", resp.session);
+      history.push("/app");
     } catch (e) {
       dialog({
         type: "error",
@@ -98,11 +101,14 @@ const _Entry = () => {
   const registerFormSubmit = async () => {
     try {
       const target = new HomeServer(selectedServer);
-      const registerResp = await target.register(
+      const resp = await target.register(
         registerForm.email,
         registerForm.username,
         registerForm.password
       );
+      localStorage.setItem("homeserver", selectedServer);
+      localStorage.setItem("session", resp.session);
+      history.push("/app");
     } catch (e) {
       dialog({
         type: "error",

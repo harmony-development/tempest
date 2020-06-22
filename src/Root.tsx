@@ -12,6 +12,10 @@ const EntryPage = lazy(async () => ({
   default: await (await import("./pages/entry/Entry")).Entry,
 }));
 
+const AppPage = lazy(async () => ({
+  default: await (await import("./pages/app/App")).App,
+}));
+
 const _Root = () => {
   const themeState = useSelector((state: RootState) => state.theme);
 
@@ -34,6 +38,7 @@ const _Root = () => {
         <CommonDialogContextProvider>
           <Switch>
             <Route path="/entry/:step?" component={EntryPage} />
+            <Route path="/app" component={AppPage} />
             <Redirect to="/entry/serverselect" />
           </Switch>
         </CommonDialogContextProvider>
