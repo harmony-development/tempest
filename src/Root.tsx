@@ -8,6 +8,7 @@ import { Loading } from "./components/Loading";
 import { HarmonyDark } from "./HarmonyDark";
 import { CommonDialogContextProvider } from "./components/dialog/CommonDialogContext";
 import { HarmonyStorage } from "./storage/HarmonyStorage";
+import { ToastContextProvider } from "./components/toast/SnackbarContext";
 
 const EntryPage = lazy(async () => ({
   default: await (await import("./pages/entry/Entry")).Entry,
@@ -18,7 +19,7 @@ const AppPage = lazy(async () => ({
 }));
 
 const _Root = () => {
-  const themeState = useSelector((state: RootState) => state.theme);
+  const themeState = useSelector((state: RootState) => state.rootReducer.theme);
 
   const theme = createMuiTheme({
     palette: {
@@ -41,11 +42,13 @@ const _Root = () => {
       <CssBaseline />
       <Suspense fallback={<Loading />}>
         <CommonDialogContextProvider>
-          <Switch>
-            <Route path="/entry/:step?" component={EntryPage} />
-            <Route path="/app" component={AppPage} />
-            <Redirect to="/entry/serverselect" />
-          </Switch>
+          <ToastContextProvider>
+            <Switch>
+              <Route path="/entry/:step?" component={EntryPage} />
+              <Route path="/app/:guildid?/:channelid?" component={AppPage} />
+              <Redirect to="/entry/serverselect" />
+            </Switch>
+          </ToastContextProvider>
         </CommonDialogContextProvider>
       </Suspense>
     </ThemeProvider>

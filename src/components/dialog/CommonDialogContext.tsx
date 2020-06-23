@@ -11,16 +11,12 @@ import {
 
 type IDialogOptions = IAlertProps | IConfirmProps | IErrorProps;
 
-interface IProps {
-  children: JSX.Element;
-}
-
 const CommonDialogContext = React.createContext<
   (options: IDialogOptions) => Promise<void>
 >(Promise.reject);
 
 export const CommonDialogContextProvider = React.memo(
-  ({ children }: IProps) => {
+  ({ children }: { children: JSX.Element }) => {
     const [dialogState, setConfirmState] = React.useState<IDialogOptions>({
       type: "alert",
       title: "",
