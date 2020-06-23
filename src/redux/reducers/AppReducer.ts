@@ -12,10 +12,13 @@ export const initialAppState: IAppState = {
   channelID: undefined,
 };
 
-export const setGuildID = createAction("SET_GUILD_ID", withPayload<string>());
+export const setGuildID = createAction(
+  "SET_GUILD_ID",
+  withPayload<string | undefined>()
+);
 export const setChannelID = createAction(
   "SET_CHANNEL_ID",
-  withPayload<string>()
+  withPayload<string | undefined>()
 );
 
 export const appReducer = createReducer(initialAppState, (builder) =>

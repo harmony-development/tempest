@@ -1,29 +1,57 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { useHistory, useParams } from "react-router";
 import {
   HarmonyConnection,
   HomeServer,
   SocketEvent,
 } from "@harmony-dev/harmony-node-sdk";
-import { makeStyles, Theme } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
+import { useDispatch } from "react-redux";
+import { makeStyles, Theme, darken } from "@material-ui/core";
 
 import { Comms } from "../../comms/Comms";
 import { HarmonyStorage } from "../../storage/HarmonyStorage";
 import { useToast } from "../../components/toast/SnackbarContext";
+import { setGuildID, setChannelID } from "../../redux/reducers/AppReducer";
+
+/**
+ * If this value is true, that means that the user got disconnected for the first time.
+ * That means that he should be shown the 'disconnected' alert.
+ * Without this, the alert would get spammed constantly because of the reconnects.
+ */
+let firstDisconnect = true;
 
 const appStyles = makeStyles((theme: Theme) => ({
   root: {
-    display: "flex",
+    width: "100%",
     height: "100%",
-    flexDirection: "column",
+    display: "flex",
+    flexDirection: "row",
+    overflow: "auto",
   },
-  navSpacer: {
-    ...theme.mixins.toolbar,
+  guildlist: {
+    padding: "8px",
+    backgroundColor: darken(theme.palette.background.default, 0.5),
+    borderRight: "1px solid grey",
+  },
+  channellist: {
+    width: "300px",
+    overflowY: "auto",
+    backgroundColor: darken(theme.palette.background.default, 0.25),
+  },
+  memberlist: {
+    width: "400px",
+    overflowY: "auto",
+    backgroundColor: darken(theme.palette.background.default, 0.25),
+  },
+  chat: {
+    display: "flex",
+    flexDirection: "column",
+    flexFlow: "column",
+    width: "100%",
+    height: "100%",
   },
 }));
-
-let firstDisconnect = true;
 
 const _App = () => {
   const { guildid, channelid } = useParams<{
@@ -31,9 +59,35 @@ const _App = () => {
     channelid?: string;
   }>();
   const i18n = useTranslation(["network"]);
+  const classes = appStyles();
+  const dispatch = useDispatch();
   const toast = useToast();
   const history = useHistory();
-  const classes = appStyles();
+
+  const disconnectEvent = useCallback(() => {
+    if (firstDisconnect) {
+      toast({
+        severity: "error",
+        message: i18n.t("network:disconnected"),
+      });
+      firstDisconnect = false;
+    }
+    setTimeout(() => {
+      Comms.connection?.reconnect();
+    }, 4000);
+    // eslint-disable-next-line
+  }, []);
+
+  const connectEvent = useCallback(() => {
+    if (!firstDisconnect) {
+      toast({
+        severity: "success",
+        message: i18n.t("network:reconnected"),
+      });
+      firstDisconnect = true;
+    }
+    // eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
     const homeserver = HarmonyStorage.getHomeserver();
@@ -46,45 +100,28 @@ const _App = () => {
       new HomeServer(homeserver),
       session
     );
-    Comms.connection.events.on(SocketEvent.SOCKET_CLOSE, (_) => {
-      if (firstDisconnect) {
-        toast({
-          severity: "error",
-          message: i18n.t("network:disconnected"),
-        });
-        firstDisconnect = false;
-      }
-      setTimeout(() => {
-        Comms.connection?.reconnect();
-      }, 5000);
-    });
-    Comms.connection.events.on(SocketEvent.SOCKET_ERROR, (err) => {
-      if (firstDisconnect) {
-        toast({
-          severity: "error",
-          message: err.message,
-        });
-        firstDisconnect = false;
-      }
-      setTimeout(() => {
-        Comms.connection?.reconnect();
-      });
-    });
-    Comms.connection.events.on(SocketEvent.SOCKET_OPEN, (_) => {
-      if (!firstDisconnect) {
-        toast({
-          severity: "success",
-          message: i18n.t("network:reconnected"),
-        });
-      }
-    });
+    Comms.connection.events.on(SocketEvent.SOCKET_CLOSE, disconnectEvent);
+    Comms.connection.events.on(SocketEvent.SOCKET_ERROR, disconnectEvent);
+    Comms.connection.events.on(SocketEvent.SOCKET_OPEN, connectEvent);
     // eslint-disable-next-line
   }, []);
 
+  useEffect(() => {
+    dispatch(setGuildID(guildid));
+    // eslint-disable-next-line
+  }, [guildid]);
+
+  useEffect(() => {
+    dispatch(setChannelID(channelid));
+    // eslint-disable-next-line
+  }, [channelid]);
+
   return (
     <div className={classes.root}>
-      {/* this fills in the space where the navbar is to prevent dumbness™ */}
-      <div className={classes.navSpacer}></div>
+      <div className={classes.guildlist}></div>
+      <div className={classes.channellist}></div>
+      <div className={classes.chat}></div>
+      <div className={classes.memberlist}></div>
     </div>
   );
 };

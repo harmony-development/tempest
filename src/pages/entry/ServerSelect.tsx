@@ -38,10 +38,10 @@ const serverSelectStyles = makeStyles((theme) => ({
 
 const defaultServers: IServerList = {
   official: {
-    ip: "127.0.0.1:2289",
+    ip: "http://127.0.0.1:2289",
   },
   KDE: {
-    ip: "harmony.kde.org:2289",
+    ip: "http://harmony.kde.org:2289",
   },
 };
 
