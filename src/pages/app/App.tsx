@@ -14,6 +14,8 @@ import { HarmonyStorage } from "../../storage/HarmonyStorage";
 import { useToast } from "../../components/toast/SnackbarContext";
 import { setGuildID, setChannelID } from "../../redux/reducers/AppReducer";
 
+import { GuildList } from "./guildlist/GuildList";
+
 /**
  * If this value is true, that means that the user got disconnected for the first time.
  * That means that he should be shown the 'disconnected' alert.
@@ -118,7 +120,9 @@ const _App = () => {
 
   return (
     <div className={classes.root}>
-      <div className={classes.guildlist}></div>
+      <div className={classes.guildlist}>
+        <GuildList />
+      </div>
       <div className={classes.channellist}></div>
       <div className={classes.chat}></div>
       <div className={classes.memberlist}></div>
