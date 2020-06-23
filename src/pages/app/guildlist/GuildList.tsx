@@ -9,14 +9,16 @@ const _GuildList = () => {
   const i18n = useTranslation(["ui"]);
 
   return (
-    <Tooltip
-      title={i18n.t("ui:add-guild-button-tooltip") || ""}
-      placement="right"
-    >
-      <ButtonBase className={classes.guildicon}>
-        <GroupAdd />
-      </ButtonBase>
-    </Tooltip>
+    <>
+      <Tooltip
+        title={i18n.t("ui:add-guild-button-tooltip") || ""}
+        placement="right"
+      >
+        <ButtonBase className={classes.guildicon}>
+          <GroupAdd />
+        </ButtonBase>
+      </Tooltip>
+    </>
   );
 };
 

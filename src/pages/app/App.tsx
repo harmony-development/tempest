@@ -35,6 +35,8 @@ const appStyles = makeStyles((theme: Theme) => ({
     padding: "8px",
     backgroundColor: darken(theme.palette.background.default, 0.5),
     borderRight: "1px solid grey",
+    display: "flex",
+    flexDirection: "column",
   },
   channellist: {
     width: "300px",
