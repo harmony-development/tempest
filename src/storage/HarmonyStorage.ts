@@ -7,6 +7,10 @@ export class HarmonyStorage {
     return localStorage.getItem("session");
   }
 
+  static getUserID() {
+    return localStorage.getItem("userid");
+  }
+
   /**
    * Sets the executeMessageCode flag to the default if it's not set
    */

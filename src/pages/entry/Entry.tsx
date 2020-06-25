@@ -89,6 +89,7 @@ const _Entry = () => {
       );
       localStorage.setItem("homeserver", selectedServer);
       localStorage.setItem("session", resp.session);
+      localStorage.setItem("userid", resp.user_id);
       history.push("/app");
     } catch (e) {
       dialog({
@@ -108,6 +109,7 @@ const _Entry = () => {
       );
       localStorage.setItem("homeserver", selectedServer);
       localStorage.setItem("session", resp.session);
+      localStorage.setItem("userid", resp.user_id);
       history.push("/app");
     } catch (e) {
       dialog({

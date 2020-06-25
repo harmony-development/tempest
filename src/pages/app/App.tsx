@@ -13,6 +13,7 @@ import { Comms } from "../../comms/Comms";
 import { HarmonyStorage } from "../../storage/HarmonyStorage";
 import { useToast } from "../../components/toast/SnackbarContext";
 import { setGuildID, setChannelID } from "../../redux/reducers/AppReducer";
+import { useDialog } from "../../components/dialog/CommonDialogContext";
 
 import { GuildList } from "./guildlist/GuildList";
 
@@ -22,6 +23,13 @@ import { GuildList } from "./guildlist/GuildList";
  * Without this, the alert would get spammed constantly because of the reconnects.
  */
 let firstDisconnect = true;
+
+/**
+ * This prevents what I like to call the 'JS Fork Bomb'
+ * basically if the error and close event fire at the same time (which happens if the host is offline),
+ * the number of error events will double every time
+ */
+let isReconnecting = false;
 
 const appStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -66,6 +74,7 @@ const _App = () => {
   const classes = appStyles();
   const dispatch = useDispatch();
   const toast = useToast();
+  const dialog = useDialog();
   const history = useHistory();
 
   const disconnectEvent = useCallback(() => {
@@ -76,9 +85,13 @@ const _App = () => {
       });
       firstDisconnect = false;
     }
-    setTimeout(() => {
-      Comms.connection?.reconnect();
-    }, 4000);
+    if (!isReconnecting) {
+      isReconnecting = true;
+      setTimeout(() => {
+        Comms.connection?.reconnect();
+        isReconnecting = false;
+      }, 4000);
+    }
     // eslint-disable-next-line
   }, []);
 
@@ -96,7 +109,8 @@ const _App = () => {
   useEffect(() => {
     const homeserver = HarmonyStorage.getHomeserver();
     const session = HarmonyStorage.getSession();
-    if (!homeserver || !session) {
+    const userid = HarmonyStorage.getUserID();
+    if (!homeserver || !session || !userid) {
       history.push("/entry/serverselect");
       return;
     }
@@ -104,9 +118,26 @@ const _App = () => {
       new HomeServer(homeserver),
       session
     );
-    Comms.connection.events.on(SocketEvent.SOCKET_CLOSE, disconnectEvent);
-    Comms.connection.events.on(SocketEvent.SOCKET_ERROR, disconnectEvent);
-    Comms.connection.events.on(SocketEvent.SOCKET_OPEN, connectEvent);
+    Comms.connection.events.addListener(
+      SocketEvent.SOCKET_CLOSE,
+      disconnectEvent
+    );
+    Comms.connection.events.addListener(
+      SocketEvent.SOCKET_ERROR,
+      disconnectEvent
+    );
+    Comms.connection.events.addListener(SocketEvent.SOCKET_OPEN, connectEvent);
+
+    (async () => {
+      try {
+        await Comms.connection?.getUser(userid);
+      } catch (e) {
+        dialog({
+          type: "error",
+          error: e,
+        });
+      }
+    })();
     // eslint-disable-next-line
   }, []);
 
