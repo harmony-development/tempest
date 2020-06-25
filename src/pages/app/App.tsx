@@ -12,10 +12,15 @@ import { makeStyles, Theme, darken } from "@material-ui/core";
 import { Comms } from "../../comms/Comms";
 import { HarmonyStorage } from "../../storage/HarmonyStorage";
 import { useToast } from "../../components/toast/SnackbarContext";
-import { setGuildID, setChannelID } from "../../redux/reducers/AppReducer";
+import {
+  setGuildID,
+  setChannelID,
+  setGuildsList,
+} from "../../redux/reducers/AppReducer";
 import { useDialog } from "../../components/dialog/CommonDialogContext";
 
 import { GuildList } from "./guildlist/GuildList";
+import { GuildDialog } from "./guilddialog/GuildDialog";
 
 /**
  * If this value is true, that means that the user got disconnected for the first time.
@@ -130,7 +135,14 @@ const _App = () => {
 
     (async () => {
       try {
-        await Comms.connection?.getUser(userid);
+        const data = await Comms.connection?.getUser(userid);
+        if (data?.guild_list) {
+          try {
+            dispatch(setGuildsList(JSON.parse(data.guild_list)));
+          } catch {
+            dispatch(setGuildsList([]));
+          }
+        }
       } catch (e) {
         dialog({
           type: "error",
@@ -152,14 +164,17 @@ const _App = () => {
   }, [channelid]);
 
   return (
-    <div className={classes.root}>
-      <div className={classes.guildlist}>
-        <GuildList />
+    <>
+      <div className={classes.root}>
+        <div className={classes.guildlist}>
+          <GuildList />
+        </div>
+        <div className={classes.channellist}></div>
+        <div className={classes.chat}></div>
+        <div className={classes.memberlist}></div>
       </div>
-      <div className={classes.channellist}></div>
-      <div className={classes.chat}></div>
-      <div className={classes.memberlist}></div>
-    </div>
+      <GuildDialog />
+    </>
   );
 };
 

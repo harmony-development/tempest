@@ -3,7 +3,9 @@ import { createAction, createReducer } from "@reduxjs/toolkit";
 import { withPayloadType as withPayload, withPayloadType } from "./common";
 
 export interface IGuild {
+  id: string;
   name: string;
+  picture: string;
   host: string;
 }
 
@@ -20,6 +22,7 @@ export interface IAppState {
   channels: {
     [key: string]: IChannel;
   };
+  guildsList: IGuild[];
 }
 
 export const initialAppState: IAppState = {
@@ -27,6 +30,14 @@ export const initialAppState: IAppState = {
   channelID: undefined,
   guilds: {},
   channels: {},
+  guildsList: [
+    {
+      id: "asdfasfd",
+      name: "Harmony Dev",
+      picture: "as",
+      host: "127.0.0.1",
+    },
+  ],
 };
 
 export const setGuildID = createAction(
@@ -68,6 +79,11 @@ export const addChannel = createAction(
   }>()
 );
 
+export const setGuildsList = createAction(
+  "SET_GUILDS_LIST",
+  withPayload<IGuild[]>()
+);
+
 export const appReducer = createReducer(initialAppState, (builder) =>
   builder
     .addCase(setGuildID, (state, action) => ({
@@ -89,5 +105,9 @@ export const appReducer = createReducer(initialAppState, (builder) =>
         // lol composite key to prevent people from having meme duplicate guild IDs
         [`${action.payload.id},${action.payload.guild}`]: action.payload.guild,
       },
+    }))
+    .addCase(setGuildsList, (state, action) => ({
+      ...state,
+      guildsList: action.payload,
     }))
 );
