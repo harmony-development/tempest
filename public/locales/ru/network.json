@@ -1,4 +1,4 @@
 {
-  "reconnected": "You have reconnected to the server",
-  "disconnected": "You have lost connection to the server"
+  "reconnected": "Вы снова подключены к серверу",
+  "disconnected": "Вы потеряли соединение с сервером"
 }
