@@ -1,11 +1,11 @@
 {
   "auth": {
-    "invalid-email": "Invalid email",
-    "already-registered": "Email already registered",
-    "invalid-password": "Invalid password"
+    "invalid-email": "Неверный адрес электронной почты",
+    "already-registered": "Адрес электронной почты уже зарегистрирован",
+    "invalid-password": "Неверный пароль"
   },
   "register": {
-    "password-length": "Password must be between {{ minLength }} and {{ maxLength }}",
-    "password-policy": "Password must have at least: {{ minLower }} lowercase, {{ minUpper }} uppercase, {{ minNumbers }} numbers, and {{ minSpecial }} special characters"
+    "password-length": "Пароль должен содержать от {{ minLength }} до {{ maxLength }} символов",
+    "password-policy": "Пароль должен иметь по крайней мере {{ minLower }} строчные буквы, {{ minUpper }} заглавные буквы, {{ minNumbers }} цифры и {{ minSpecial }} специальные символы"
   }
 }
