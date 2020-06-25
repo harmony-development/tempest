@@ -1,44 +1,23 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<h1 align=center>
+ <a href="https://github.com/harmony-development"><img align=center width="15%" src="https://i.imgur.com/lx2RCZj.png" /></a> Harmony
+</h1>
+A free and open source communications platform.
+<br>Designed as an open source Discord replacement; with messaging, guilds, roles, voice chat and rich presence. 
+<br>Join our <a href="https://discord.gg/jypXPA4">project chat</a> for keks, announcements, support and contribution.
 
-## Available Scripts
+# Staccato
+Frontend for Harmony protocol written in React. Help us translate this project by visiting our [Crowdin](https://harmony.crowdin.com/).
 
-In the project directory, you can run:
+## Screenshots
 
-### `npm start`
+### App preview
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+<img src="https://i.imgur.com/GHZN7BD.png" style="width:70%; text-align: center;">
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+### Cool theming
 
-### `npm test`
+<img src="https://i.imgur.com/namHS1j.png" style="width:70%; text-align: center;">
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Login screen
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+<img src="https://i.imgur.com/6YmxSDO.png" style="width:70%; text-align: center;">
