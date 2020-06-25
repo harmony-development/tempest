@@ -1,6 +1,6 @@
 {
-  "error": "Error",
+  "error": "Ошибка",
   "ok": "OK",
-  "no": "No",
-  "yes": "Yes"
+  "no": "Нет",
+  "yes": "Да"
 }
