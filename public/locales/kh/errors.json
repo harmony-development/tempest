@@ -1,11 +1,11 @@
 {
   "auth": {
-    "invalid-email": "Invalid email",
-    "already-registered": "Email already registered",
-    "invalid-password": "Invalid password"
+    "invalid-email": "akova hovang",
+    "already-registered": "kovaka oboko",
+    "invalid-password": "deshoka hovang"
   },
   "register": {
-    "password-length": "Password must be between {{ minLength }} and {{ maxLength }}",
+    "password-length": "deshoko tim chu {{ minLength }} de {{ maxLength }}",
     "password-policy": "Password must have at least: {{ minLower }} lowercase, {{ minUpper }} uppercase, {{ minNumbers }} numbers, and {{ minSpecial }} special characters"
   }
 }
