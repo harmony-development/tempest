@@ -6,6 +6,6 @@
   },
   "register": {
     "password-length": "deshoko tim chu {{ minLength }} de {{ maxLength }}",
-    "password-policy": "Password must have at least: {{ minLower }} lowercase, {{ minUpper }} uppercase, {{ minNumbers }} numbers, and {{ minSpecial }} special characters"
+    "password-policy": "deshoko tim le wivu kotan na vu {{ minLower }} ai kotan na ti {{ minUpper }} ai dau {{ minNumbers }} ai kotan yinza {{ minSpecial }}"
   }
 }
