@@ -1,6 +1,6 @@
 {
-  "error": "Error",
+  "error": "Fehler",
   "ok": "OK",
-  "no": "No",
-  "yes": "Yes"
+  "no": "Nein",
+  "yes": "Ja"
 }
