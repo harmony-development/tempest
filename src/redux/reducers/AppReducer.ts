@@ -1,113 +1,96 @@
 import { createAction, createReducer } from "@reduxjs/toolkit";
 
-import { withPayloadType as withPayload, withPayloadType } from "./common";
+import { withPayload } from "./common";
 
+/**
+ * Data describing a guild
+ */
 export interface IGuild {
-  id: string;
-  name: string;
-  picture: string;
+  name?: string;
+  picture?: string;
+  owner?: string;
+}
+
+/**
+ * An entry in the guild list.
+ */
+export interface IListEntry {
   host: string;
+  guildID: string;
 }
 
-export interface IChannel {
-  name: string;
+/**
+ * We don't want to run the risk of colliding snoflakes between homeservers, so we need to use a composite key to keep them distinct
+ * @param entry a list entry that you want to turn into a composite key
+ * @returns a composite key with the guild ID and the host
+ */
+export function compositeKey(entry: IListEntry) {
+  return `${entry.guildID}|${entry.host}`;
 }
 
+/**
+ * The app reducer's state type
+ */
 export interface IAppState {
+  host?: string;
   guildID?: string;
   channelID?: string;
   guilds: {
     [key: string]: IGuild;
   };
-  channels: {
-    [key: string]: IChannel;
-  };
-  guildsList: IGuild[];
+  guildsList: IListEntry[];
 }
 
+/**
+ * The app reducer's state when the site loads
+ */
 export const initialAppState: IAppState = {
   guildID: undefined,
   channelID: undefined,
   guilds: {},
-  channels: {},
-  guildsList: [
-    {
-      id: "asdfasfd",
-      name: "Harmony Dev",
-      picture: "as",
-      host: "127.0.0.1",
-    },
-  ],
+  guildsList: [],
 };
 
-export const setGuildID = createAction(
-  "SET_GUILD_ID",
-  withPayload<string | undefined>()
-);
-export const setChannelID = createAction(
-  "SET_CHANNEL_ID",
-  withPayload<string | undefined>()
-);
-
-export const setGuilds = createAction(
-  "SET_GUILDS",
-  withPayloadType<{
-    [key: string]: IGuild;
-  }>()
-);
-
-export const addGuild = createAction(
-  "ADD_GUILD",
-  withPayload<{
-    id: string;
-    guild: IGuild;
-  }>()
-);
-
-export const setChannels = createAction(
-  "SET_GUILDS",
-  withPayloadType<{
-    [key: string]: IChannel;
-  }>()
-);
-
-export const addChannel = createAction(
-  "ADD_GUILD",
-  withPayload<{
-    id: string;
-    channel: IChannel;
-  }>()
+export const addGuildToList = createAction(
+  "ADD_GUILD_TO_LIST",
+  withPayload<IListEntry>()
 );
 
 export const setGuildsList = createAction(
   "SET_GUILDS_LIST",
-  withPayload<IGuild[]>()
+  withPayload<IListEntry[]>()
+);
+
+export const setGuild = createAction(
+  "SET_GUILD",
+  withPayload<{
+    entry: IListEntry;
+    guild: IGuild;
+  }>()
+);
+
+export const setCurrentGuildID = createAction<string | undefined>(
+  "SET_CURRENT_GUILD_ID"
+);
+
+export const setCurrentChannelID = createAction<string | undefined>(
+  "SET_CURRENT_CHANNEL_ID"
 );
 
 export const appReducer = createReducer(initialAppState, (builder) =>
   builder
-    .addCase(setGuildID, (state, action) => ({
+    .addCase(addGuildToList, (state, action) => ({
       ...state,
-      guildID: action.payload,
-    }))
-    .addCase(setChannelID, (state, action) => ({
-      ...state,
-      channelID: action.payload,
-    }))
-    .addCase(setGuilds, (state, action) => ({
-      ...state,
-      guilds: action.payload,
-    }))
-    .addCase(addGuild, (state, action) => ({
-      ...state,
-      guilds: {
-        ...state.guilds,
-        // lol composite key to prevent people from having meme duplicate guild IDs
-        [`${action.payload.id},${action.payload.guild}`]: action.payload.guild,
-      },
+      guildsList: [...state.guildsList, action.payload],
     }))
     .addCase(setGuildsList, (state, action) => ({
       ...state,
       guildsList: action.payload,
+    }))
+    .addCase(setGuild, (state, action) => ({
+      ...state,
+      guilds: {
+        [compositeKey(action.payload.entry)]: action.payload.guild,
+      },
     }))
 );

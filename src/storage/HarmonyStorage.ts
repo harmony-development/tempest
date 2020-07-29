@@ -1,14 +1,30 @@
+const HOMESERVER_KEY = "homeserver";
+const SESSION_KEY = "session";
+const USER_ID_KEY = "userid";
+
 export class HarmonyStorage {
   static getHomeserver() {
-    return localStorage.getItem("homeserver");
+    return localStorage.getItem(HOMESERVER_KEY);
+  }
+
+  static setHomeserver(value: string) {
+    return localStorage.setItem(HOMESERVER_KEY, value);
   }
 
   static getSession() {
-    return localStorage.getItem("session");
+    return localStorage.getItem(SESSION_KEY);
+  }
+
+  static setSession(value: string) {
+    return localStorage.setItem(SESSION_KEY, value);
   }
 
   static getUserID() {
-    return localStorage.getItem("userid");
+    return localStorage.getItem(USER_ID_KEY);
+  }
+
+  static setUserID(value: string) {
+    return localStorage.setItem(USER_ID_KEY, value);
   }
 
   /**
@@ -23,7 +39,7 @@ export class HarmonyStorage {
     }
   }
 
-  static executeMessageCode() {
+  static canExecuteMessageCode() {
     const flag = localStorage.getItem("executeMessageCode");
     return flag === "true";
   }

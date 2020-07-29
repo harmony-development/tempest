@@ -1,5 +1,8 @@
-import { HarmonyConnection } from "@harmony-dev/harmony-node-sdk";
+import { Connection } from "@harmony-dev/harmony-web-sdk";
 
 export class Comms {
-  static connection?: HarmonyConnection;
+  static homeserverConn: Connection;
+  static foreignConns: {
+    [host: string]: Connection;
+  };
 }

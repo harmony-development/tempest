@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   makeStyles,
   Paper,
@@ -19,7 +19,8 @@ import {
   Redirect,
 } from "react-router";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-import { HomeServer } from "@harmony-dev/harmony-node-sdk";
+import { Connection } from "@harmony-dev/harmony-web-sdk";
+import { UnaryOutput } from "@improbable-eng/grpc-web/dist/typings/unary";
 
 import { HarmonyDark } from "../../HarmonyDark";
 import { useDialog } from "../../components/dialog/CommonDialogContext";
@@ -29,6 +30,11 @@ import { AuthPage } from "./AuthPage";
 import "./Entry.css";
 import { ILoginForm } from "./Login";
 import { IRegisterForm } from "./Register";
+
+import { Session } from "inspector";
+
+import { Comms } from "../../comms/Comms";
+import { HarmonyStorage } from "../../storage/HarmonyStorage";
 
 const entryStyles = makeStyles((theme) => ({
   root: {
@@ -80,44 +86,47 @@ const _Entry = () => {
     confirmPassword: "",
   });
 
-  const loginFormSubmit = async () => {
+  const loginFormSubmit = useCallback(async () => {
     try {
-      const target = new HomeServer(selectedServer);
-      const resp = await target.loginWithEmail(
-        loginForm.email,
-        loginForm.password
-      );
-      localStorage.setItem("homeserver", selectedServer);
-      localStorage.setItem("session", resp.session);
-      localStorage.setItem("userid", resp.user_id);
+      const c = new Connection(selectedServer);
+      const resp = await c.loginLocal(loginForm.email, loginForm.password);
+      HarmonyStorage.setHomeserver(selectedServer);
+      HarmonyStorage.setSession(resp.message!.getSessionToken());
+      HarmonyStorage.setUserID(resp.message!.getUserId());
       history.push("/app");
     } catch (e) {
+      const castE = e as UnaryOutput<Session>;
       dialog({
         type: "error",
-        error: e,
+        error: castE.statusMessage,
       });
     }
-  };
+    // eslint-disable-next-line
+  }, [loginForm, selectedServer]);
 
-  const registerFormSubmit = async () => {
+  const registerFormSubmit = useCallback(async () => {
+    const c = new Connection(selectedServer);
     try {
-      const target = new HomeServer(selectedServer);
-      const resp = await target.register(
+      const resp = await c.register(
         registerForm.email,
         registerForm.username,
         registerForm.password
       );
-      localStorage.setItem("homeserver", selectedServer);
-      localStorage.setItem("session", resp.session);
-      localStorage.setItem("userid", resp.user_id);
+      c.session = resp.message?.getSessionToken();
+      Comms.homeserverConn = c;
+      HarmonyStorage.setHomeserver(selectedServer);
+      HarmonyStorage.setSession(resp.message!.getSessionToken());
+      HarmonyStorage.setUserID(resp.message!.getUserId());
       history.push("/app");
     } catch (e) {
+      const castE = e as UnaryOutput<Session>;
       dialog({
         type: "error",
-        error: e,
+        error: new Error(castE.statusMessage),
       });
     }
-  };
+    // eslint-disable-next-line
+  }, [selectedServer, registerForm]);
 
   const forward = () => {
     if (currentStep !== steps.length - 1)

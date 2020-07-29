@@ -1,3 +1,3 @@
-export const withPayloadType = <T>() => {
+export const withPayload = <T>() => {
   return (t: T) => ({ payload: t });
 };

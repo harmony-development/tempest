@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../redux/redux";
 import { HarmonyStorage } from "../../../storage/HarmonyStorage";
 import { setGuildDialogOpen } from "../../../redux/reducers/UIReducer";
+import { compositeKey } from "../../../redux/reducers/AppReducer";
 
 import classes from "./GuildList.module.css";
 
@@ -14,6 +15,7 @@ const _GuildList = () => {
   const guildsList = useSelector(
     (state: RootState) => state.appReducer.guildsList
   );
+  const guilds = useSelector((state: RootState) => state.appReducer.guilds);
   const i18n = useTranslation(["ui"]);
   const dispatch = useDispatch();
 
@@ -24,15 +26,13 @@ const _GuildList = () => {
   return (
     <>
       {guildsList.map((guild) => (
-        <Tooltip
-          title={guild.name}
-          placement="right"
-          key={`${guild.id}.${guild.host}`}
-        >
+        <Tooltip title={guild.host} placement="right" key={compositeKey(guild)}>
           <ButtonBase className={classes.guildiconroot}>
             <img
               className={classes.guildicon}
-              src={`${HarmonyStorage.getHomeserver}/pictures/${guild.picture}`}
+              src={`${HarmonyStorage.getHomeserver}/pictures/${
+                guilds[compositeKey(guild)].picture || "default"
+              }`}
               alt={""}
               draggable={false}
             />
