@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { TextField, Button } from "@material-ui/core";
+
+import { Comms } from "../../../comms/Comms";
 
 import classes from "./GuildDialog.module.css";
 
@@ -10,7 +12,10 @@ const _CreateGuildForm = () => {
     setGuildName(e.currentTarget.value);
   };
 
-  const createGuildClicked = () => {};
+  const createGuildClicked = useCallback(async () => {
+    const resp = await Comms.getHomeserverConn().createGuild(guildName, "");
+    console.log(resp);
+  }, [guildName]);
 
   return (
     <div>

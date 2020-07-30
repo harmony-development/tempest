@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Dialog, DialogContent, Tabs, Tab } from "@material-ui/core";
+import { Dialog, DialogContent, Tabs, Tab, Grow } from "@material-ui/core";
 
 import { RootState } from "../../../redux/redux";
 import { setGuildDialogOpen } from "../../../redux/reducers/UIReducer";
@@ -36,7 +36,13 @@ const _GuildDialog = () => {
   }, [tab]);
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth={true} maxWidth="sm">
+    <Dialog
+      open={open}
+      onClose={onClose}
+      fullWidth={true}
+      maxWidth="sm"
+      TransitionComponent={Grow}
+    >
       <DialogContent>
         <Tabs value={tab} variant="fullWidth" onChange={handleTabChange}>
           <Tab label="Join Guild" />

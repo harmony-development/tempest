@@ -113,7 +113,8 @@ const _Entry = () => {
         registerForm.password
       );
       c.session = resp.message?.getSessionToken();
-      Comms.homeserverConn = c;
+      Comms.connections[selectedServer] = c;
+      Comms.homeserver = selectedServer;
       HarmonyStorage.setHomeserver(selectedServer);
       HarmonyStorage.setSession(resp.message!.getSessionToken());
       HarmonyStorage.setUserID(resp.message!.getUserId());

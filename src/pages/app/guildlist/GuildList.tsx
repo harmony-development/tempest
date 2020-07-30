@@ -26,12 +26,16 @@ const _GuildList = () => {
   return (
     <>
       {guildsList.map((guild) => (
-        <Tooltip title={guild.host} placement="right" key={compositeKey(guild)}>
+        <Tooltip
+          title={guilds[compositeKey(guild)]?.name || guild.guildID}
+          placement="right"
+          key={compositeKey(guild)}
+        >
           <ButtonBase className={classes.guildiconroot}>
             <img
               className={classes.guildicon}
               src={`${HarmonyStorage.getHomeserver}/pictures/${
-                guilds[compositeKey(guild)].picture || "default"
+                guilds[compositeKey(guild)]?.picture || "default"
               }`}
               alt={""}
               draggable={false}

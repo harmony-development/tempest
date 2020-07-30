@@ -11,6 +11,7 @@ import {
   setGuildsList,
   setCurrentGuildID,
   setCurrentChannelID,
+  setGuild,
 } from "../../redux/reducers/AppReducer";
 import { Comms } from "../../comms/Comms";
 import { useDialog } from "../../components/dialog/CommonDialogContext";
@@ -70,22 +71,46 @@ const _App = () => {
       history.push("/entry/serverselect");
       return;
     }
-    if (!Comms.homeserverConn) {
-      Comms.homeserverConn = new Connection(homeserver);
-      Comms.homeserverConn.session = session;
+    if (!Comms.homeserver) {
+      Comms.homeserver = homeserver;
+      Comms.connections[homeserver] = new Connection(homeserver);
+      Comms.connections[homeserver].session = session;
     }
     (async () => {
       try {
-        const resp = await Comms.homeserverConn.getGuildList();
-        dispatch(
-          setGuildsList(
-            resp.message!.toObject().guildsList.map((v) => ({
-              guildID: v.guildId,
-              host: v.host,
-            }))
-          )
-        );
-        console.log(resp.message?.getGuildsList());
+        const resp = await Comms.getHomeserverConn().getGuildList();
+        const guildsList = resp.message?.toObject().guildsList;
+        if (guildsList) {
+          dispatch(
+            setGuildsList(
+              guildsList.map((v) => ({
+                guildID: v.guildId,
+                host: v.host,
+              }))
+            )
+          );
+          guildsList.forEach(async (guild) => {
+            if (!Comms.connections[guild.host]) {
+              Comms.connections[guild.host] = new Connection(guild.host);
+            }
+            const resp = (
+              await Comms.connections[guild.host].getGuild(guild.guildId)
+            ).message?.toObject();
+            dispatch(
+              setGuild({
+                entry: {
+                  guildID: guild.guildId,
+                  host: guild.host,
+                },
+                guild: {
+                  name: resp?.guildName,
+                  owner: resp?.guildOwner,
+                  picture: resp?.guildPicture,
+                },
+              })
+            );
+          });
+        }
       } catch (ex) {
         const err = ex as UnaryOutput<ProtobufMessage>;
         dialog({
