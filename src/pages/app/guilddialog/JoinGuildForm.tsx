@@ -1,9 +1,14 @@
 import React, { useState } from "react";
-import { TextField, Button } from "@material-ui/core";
+import { TextField, Button, makeStyles, Theme } from "@material-ui/core";
 
-import classes from "./GuildDialog.module.css";
+const joinGuildFormStyles = makeStyles((theme: Theme) => ({
+  submitBtn: {
+    marginTop: theme.spacing(1),
+  },
+}));
 
 const _JoinGuildForm = () => {
+  const classes = joinGuildFormStyles();
   const [joinCode, setJoinCode] = useState("");
 
   const joinCodeFieldChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,7 +26,7 @@ const _JoinGuildForm = () => {
         value={joinCode}
         onChange={joinCodeFieldChanged}
       />
-      <Button onClick={joinGuildClicked} className={classes.submitbtn}>
+      <Button onClick={joinGuildClicked} className={classes.submitBtn}>
         Join Guild
       </Button>
     </div>

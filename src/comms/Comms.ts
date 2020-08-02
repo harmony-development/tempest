@@ -9,4 +9,13 @@ export class Comms {
   static getHomeserverConn() {
     return this.connections[this.homeserver];
   }
+
+  static async getOrFederate(host: string) {
+    if (!this.connections[host]) {
+      const resp = await this.getHomeserverConn().federate(host);
+      const newConn = new Connection(host);
+      newConn.loginFederated(resp.message?.getToken() || "", host);
+    }
+    return this.connections[host];
+  }
 }

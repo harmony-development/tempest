@@ -12,6 +12,8 @@ import {
   setCurrentGuildID,
   setCurrentChannelID,
   setGuild,
+  setHosts,
+  Set,
 } from "../../redux/reducers/AppReducer";
 import { Comms } from "../../comms/Comms";
 import { useDialog } from "../../components/dialog/CommonDialogContext";
@@ -87,6 +89,14 @@ const _App = () => {
                 guildID: v.guildId,
                 host: v.host,
               }))
+            )
+          );
+          dispatch(
+            setHosts(
+              guildsList.reduce<Set>((current, g) => {
+                current[g.host] = true;
+                return current;
+              }, {})
             )
           );
           guildsList.forEach(async (guild) => {

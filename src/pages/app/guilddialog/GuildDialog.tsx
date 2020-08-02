@@ -1,16 +1,29 @@
 import React, { useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Dialog, DialogContent, Tabs, Tab, Grow } from "@material-ui/core";
+import {
+  Dialog,
+  DialogContent,
+  Tabs,
+  Tab,
+  makeStyles,
+  Theme,
+} from "@material-ui/core";
 
 import { RootState } from "../../../redux/redux";
 import { setGuildDialogOpen } from "../../../redux/reducers/UIReducer";
 
 import { JoinGuildForm } from "./JoinGuildForm";
 import { CreateGuildForm } from "./CreateGuildForm";
-import classes from "./GuildDialog.module.css";
+
+const guildDialogStyles = makeStyles((theme: Theme) => ({
+  dialogParent: {
+    margin: theme.spacing(2),
+  },
+}));
 
 const _GuildDialog = () => {
   const open = useSelector((state: RootState) => state.UIReducer.guildDialog);
+  const classes = guildDialogStyles();
   const [tab, setTab] = useState(0);
   const dispatch = useDispatch();
 
@@ -36,19 +49,13 @@ const _GuildDialog = () => {
   }, [tab]);
 
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      fullWidth={true}
-      maxWidth="sm"
-      TransitionComponent={Grow}
-    >
+    <Dialog open={open} onClose={onClose} fullWidth={true} maxWidth="sm">
       <DialogContent>
         <Tabs value={tab} variant="fullWidth" onChange={handleTabChange}>
           <Tab label="Join Guild" />
           <Tab label="Create Guild" />
         </Tabs>
-        <div className={classes.dialogparent}>{getDialogContents()}</div>
+        <div className={classes.dialogParent}>{getDialogContents()}</div>
       </DialogContent>
     </Dialog>
   );

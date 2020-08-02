@@ -20,7 +20,14 @@ export interface IListEntry {
 }
 
 /**
- * We don't want to run the risk of colliding snoflakes between homeservers, so we need to use a composite key to keep them distinct
+ * Sets aren't serializable in redux. gotta make our own.
+ */
+export interface Set {
+  [key: string]: true;
+}
+
+/**
+ * We don't want to run the risk of colliding snowflakes between homeservers, so we need to use a composite key to keep them distinct
  * @param entry a list entry that you want to turn into a composite key
  * @returns a composite key with the guild ID and the host
  */
@@ -35,6 +42,7 @@ export interface IAppState {
   host?: string;
   guildID?: string;
   channelID?: string;
+  hosts: Set;
   guilds: {
     [key: string]: IGuild;
   };
@@ -48,6 +56,7 @@ export const initialAppState: IAppState = {
   guildID: undefined,
   channelID: undefined,
   guilds: {},
+  hosts: {},
   guildsList: [],
 };
 
@@ -60,6 +69,8 @@ export const setGuildsList = createAction(
   "SET_GUILDS_LIST",
   withPayload<IListEntry[]>()
 );
+
+export const setHosts = createAction<Set>("SET_HOSTS");
 
 export const setGuild = createAction(
   "SET_GUILD",
@@ -92,5 +103,9 @@ export const appReducer = createReducer(initialAppState, (builder) =>
       guilds: {
         [compositeKey(action.payload.entry)]: action.payload.guild,
       },
+    }))
+    .addCase(setHosts, (state, action) => ({
+      ...state,
+      hosts: action.payload,
     }))
 );
