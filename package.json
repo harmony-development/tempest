@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@harmony-dev/harmony-web-sdk": "^1.4.8",
+    "@harmony-dev/harmony-web-sdk": "^1.4.9",
     "@improbable-eng/grpc-web": "^0.13.0",
     "@material-ui/core": "^4.10.0",
     "@material-ui/icons": "^4.9.1",
@@ -14,7 +14,7 @@
     "@testing-library/user-event": "^7.2.1",
     "@types/jest": "^24.9.1",
     "@types/node": "^12.12.53",
-    "@types/react": "^16.9.41",
+    "@types/react": "^16.9.44",
     "@types/react-dom": "^16.9.8",
     "@types/react-redux": "^7.1.9",
     "@types/react-router": "^5.1.8",

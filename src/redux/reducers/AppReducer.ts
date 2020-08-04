@@ -101,6 +101,7 @@ export const appReducer = createReducer(initialAppState, (builder) =>
     .addCase(setGuild, (state, action) => ({
       ...state,
       guilds: {
+        ...state.guilds,
         [compositeKey(action.payload.entry)]: action.payload.guild,
       },
     }))
