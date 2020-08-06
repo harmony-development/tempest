@@ -6,11 +6,11 @@ import { Connection } from "@harmony-dev/harmony-web-sdk";
 
 import { HarmonyStorage } from "../../storage/HarmonyStorage";
 import {
-  setCurrentGuildID,
+  setCurrentGuild,
   setCurrentChannelID,
+  compositeKey,
 } from "../../redux/reducers/AppReducer";
 import { Comms } from "../../comms/Comms";
-import { useDialog } from "../../components/dialog/CommonDialogContext";
 
 import { GuildList } from "./guildlist/GuildList";
 import { GuildDialog } from "./guilddialog/GuildDialog";
@@ -73,11 +73,6 @@ const _App = () => {
     }
     // eslint-disable-next-line
   }, []);
-
-  useEffect(() => {
-    dispatch(setCurrentGuildID(guildid));
-    // eslint-disable-next-line
-  }, [guildid]);
 
   useEffect(() => {
     dispatch(setCurrentChannelID(channelid));

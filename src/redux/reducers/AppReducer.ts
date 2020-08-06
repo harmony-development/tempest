@@ -80,8 +80,8 @@ export const setGuild = createAction(
   }>()
 );
 
-export const setCurrentGuildID = createAction<string | undefined>(
-  "SET_CURRENT_GUILD_ID"
+export const setCurrentGuild = createAction<string | undefined>(
+  "SET_CURRENT_GUILD"
 );
 
 export const setCurrentChannelID = createAction<string | undefined>(

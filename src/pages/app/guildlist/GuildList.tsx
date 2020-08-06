@@ -65,10 +65,13 @@ const _GuildList = () => {
           );
           dispatch(
             setHosts(
-              guildsList.reduce<Set>((current, g) => {
-                current[g.host] = true;
-                return current;
-              }, {})
+              guildsList.reduce<Set>(
+                (current, g) => {
+                  current[g.host] = true;
+                  return current;
+                },
+                { [Comms.homeserver]: true }
+              )
             )
           );
           guildsList.forEach(async (guild) => {
