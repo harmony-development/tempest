@@ -7,5 +7,6 @@
   "register": {
     "password-length": "Password must be between {{ minLength }} and {{ maxLength }}",
     "password-policy": "Password must have at least: {{ minLower }} lowercase, {{ minUpper }} uppercase, {{ minNumbers }} numbers, and {{ minSpecial }} special characters"
-  }
+  },
+  "invalid-session": "Invalid session. Please re-login"
 }
