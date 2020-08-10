@@ -7,5 +7,6 @@
   "register": {
     "password-length": "deshoko tim chu {{ minLength }} de {{ maxLength }}",
     "password-policy": "deshoko tim le wivu kotan na vu {{ minLower }} ai kotan na ti {{ minUpper }} ai dau {{ minNumbers }} ai kotan yinza {{ minSpecial }}"
-  }
+  },
+  "invalid-session": "Invalid session. Please re-login"
 }
