@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { ButtonBase, Tooltip, makeStyles, Theme } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import { GroupAdd } from "@material-ui/icons";
@@ -10,15 +10,10 @@ import { ProtobufMessage } from "@improbable-eng/grpc-web/dist/typings/message";
 import { RootState } from "../../../redux/redux";
 import { HarmonyStorage } from "../../../storage/HarmonyStorage";
 import { setGuildDialogOpen } from "../../../redux/reducers/UIReducer";
-import {
-  compositeKey,
-  setGuildsList,
-  setHosts,
-  setGuild,
-  Set,
-} from "../../../redux/reducers/AppReducer";
+import { setGuildsList, setGuild } from "../../../redux/reducers/AppReducer";
 import { Comms } from "../../../comms/Comms";
 import { useDialog } from "../../../components/dialog/CommonDialogContext";
+import { useHistory, useParams } from "react-router";
 
 const guildListStyles = makeStyles((theme: Theme) => ({
   guildIcon: {
@@ -43,11 +38,18 @@ const _GuildList = () => {
   const guildsList = useSelector(
     (state: RootState) => state.appReducer.guildsList
   );
-  const guilds = useSelector((state: RootState) => state.appReducer.guilds);
+  const hosts = useSelector((state: RootState) => state.appReducer.hosts);
+  const { guildid, channelid } = useParams<{
+    host?: string;
+    guildid?: string;
+    channelid?: string;
+  }>();
+  const host = window.location.hash.substr(1);
   const i18n = useTranslation(["ui"]);
   const dispatch = useDispatch();
   const classes = guildListStyles();
   const dialog = useDialog();
+  const history = useHistory();
 
   useEffect(() => {
     (async () => {
@@ -63,17 +65,6 @@ const _GuildList = () => {
               }))
             )
           );
-          dispatch(
-            setHosts(
-              guildsList.reduce<Set>(
-                (current, g) => {
-                  current[g.host] = true;
-                  return current;
-                },
-                { [Comms.homeserver]: true }
-              )
-            )
-          );
           guildsList.forEach(async (guild) => {
             if (!Comms.connections[guild.host]) {
               Comms.connections[guild.host] = new Connection(guild.host);
@@ -83,10 +74,8 @@ const _GuildList = () => {
             ).message?.toObject();
             dispatch(
               setGuild({
-                entry: {
-                  guildID: guild.guildId,
-                  host: guild.host,
-                },
+                guildID: guild.guildId,
+                host: guild.host,
                 guild: {
                   name: resp?.guildName,
                   owner: resp?.guildOwner,
@@ -104,27 +93,40 @@ const _GuildList = () => {
         });
       }
     })();
-  }, [dialog, dispatch]);
+    // eslint-disable-next-line
+  }, []);
 
-  const onGuildButtonClick = () => {
+  const onGuildDialogButtonClick = useCallback(() => {
     dispatch(setGuildDialogOpen(true));
-  };
+  }, [dispatch]);
 
   return (
     <>
       {guildsList.map((guild) => (
         <Tooltip
-          title={guilds[compositeKey(guild)]?.name || guild.guildID}
+          title={
+            hosts[guild.host]?.guilds?.[guild.guildID]?.name || guild.guildID
+          }
           placement="right"
-          key={compositeKey(guild)}
+          key={`${guild.host}|${guild.guildID}`}
         >
           <ButtonBase
-            className={`${classes.guildIconRoot} ${classes.selectedGuild}`}
+            className={`${classes.guildIconRoot} ${
+              host === guild.host && guildid === guild.guildID
+                ? classes.selectedGuild
+                : undefined
+            }`}
+            onClick={() =>
+              history.push({
+                pathname: `/app/${guild.guildID}/${channelid}`,
+                hash: guild.host,
+              })
+            }
           >
             <img
               className={classes.guildIcon}
               src={`${HarmonyStorage.getHomeserver}/pictures/${
-                guilds[compositeKey(guild)]?.picture || "default"
+                hosts[guild.host]?.guilds?.[guild.guildID]?.picture || "default"
               }`}
               alt={""}
               draggable={false}
@@ -138,7 +140,7 @@ const _GuildList = () => {
       >
         <ButtonBase
           className={`${classes.guildIcon} ${classes.guildIconRoot}`}
-          onClick={onGuildButtonClick}
+          onClick={onGuildDialogButtonClick}
         >
           <GroupAdd />
         </ButtonBase>

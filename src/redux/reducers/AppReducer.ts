@@ -3,15 +3,6 @@ import { createAction, createReducer } from "@reduxjs/toolkit";
 import { withPayload } from "./common";
 
 /**
- * Data describing a guild
- */
-export interface IGuild {
-  name?: string;
-  picture?: string;
-  owner?: string;
-}
-
-/**
  * An entry in the guild list.
  */
 export interface IListEntry {
@@ -20,31 +11,37 @@ export interface IListEntry {
 }
 
 /**
- * Sets aren't serializable in redux. gotta make our own.
+ * Data describing a channel
  */
-export interface Set {
-  [key: string]: true;
+export interface IChannel {
+  name: string;
 }
 
 /**
- * We don't want to run the risk of colliding snowflakes between homeservers, so we need to use a composite key to keep them distinct
- * @param entry a list entry that you want to turn into a composite key
- * @returns a composite key with the guild ID and the host
+ * Data describing a guild
  */
-export function compositeKey(entry: IListEntry) {
-  return `${entry.guildID}|${entry.host}`;
+export interface IGuild {
+  name?: string;
+  picture?: string;
+  owner?: string;
+  channels?: {
+    [id: string]: IChannel;
+  };
+  channelsList?: string[];
+}
+
+export interface IHostEntry {
+  guilds?: {
+    [id: string]: IGuild;
+  };
 }
 
 /**
  * The app reducer's state type
  */
 export interface IAppState {
-  host?: string;
-  guildID?: string;
-  channelID?: string;
-  hosts: Set;
-  guilds: {
-    [key: string]: IGuild;
+  hosts: {
+    [host: string]: IHostEntry;
   };
   guildsList: IListEntry[];
 }
@@ -53,39 +50,41 @@ export interface IAppState {
  * The app reducer's state when the site loads
  */
 export const initialAppState: IAppState = {
-  guildID: undefined,
-  channelID: undefined,
-  guilds: {},
   hosts: {},
   guildsList: [],
 };
 
-export const addGuildToList = createAction(
-  "ADD_GUILD_TO_LIST",
-  withPayload<IListEntry>()
-);
+export const addGuildToList = createAction<IListEntry>("ADD_GUILD_TO_LIST");
 
-export const setGuildsList = createAction(
-  "SET_GUILDS_LIST",
-  withPayload<IListEntry[]>()
-);
-
-export const setHosts = createAction<Set>("SET_HOSTS");
+export const setGuildsList = createAction<IListEntry[]>("SET_GUILDS_LIST");
 
 export const setGuild = createAction(
   "SET_GUILD",
   withPayload<{
-    entry: IListEntry;
+    host: string;
+    guildID: string;
     guild: IGuild;
   }>()
 );
 
-export const setCurrentGuild = createAction<string | undefined>(
-  "SET_CURRENT_GUILD"
+export const setChannelsList = createAction(
+  "SET_CHANNELS_LIST",
+  withPayload<{
+    host: string;
+    guildID: string;
+    channelList: string[];
+  }>()
 );
 
-export const setCurrentChannelID = createAction<string | undefined>(
-  "SET_CURRENT_CHANNEL_ID"
+export const setChannels = createAction(
+  "SET_CHANNEL_DATA",
+  withPayload<{
+    host: string;
+    guildID: string;
+    channels: {
+      [channelID: string]: IChannel;
+    };
+  }>()
 );
 
 export const appReducer = createReducer(initialAppState, (builder) =>
@@ -100,13 +99,56 @@ export const appReducer = createReducer(initialAppState, (builder) =>
     }))
     .addCase(setGuild, (state, action) => ({
       ...state,
-      guilds: {
-        ...state.guilds,
-        [compositeKey(action.payload.entry)]: action.payload.guild,
+      hosts: {
+        ...state.hosts,
+        [action.payload.host]: {
+          ...state.hosts[action.payload.host],
+          guilds: {
+            ...state.hosts[action.payload.host]?.guilds,
+            [action.payload.guildID]: {
+              ...state.hosts[action.payload.host]?.guilds?.[
+                action.payload.guildID
+              ],
+              ...action.payload.guild,
+            },
+          },
+        },
       },
     }))
-    .addCase(setHosts, (state, action) => ({
+    .addCase(setChannelsList, (state, action) => ({
       ...state,
-      hosts: action.payload,
+      hosts: {
+        ...state.hosts,
+        [action.payload.host]: {
+          ...state.hosts[action.payload.host],
+          guilds: {
+            ...state.hosts[action.payload.host]?.guilds,
+            [action.payload.guildID]: {
+              ...state.hosts[action.payload.host]?.guilds?.[
+                action.payload.guildID
+              ],
+              channelsList: action.payload.channelList,
+            },
+          },
+        },
+      },
+    }))
+    .addCase(setChannels, (state, action) => ({
+      ...state,
+      hosts: {
+        ...state.hosts,
+        [action.payload.host]: {
+          ...state.hosts[action.payload.host],
+          guilds: {
+            ...state.hosts[action.payload.host]?.guilds,
+            [action.payload.guildID]: {
+              ...state.hosts[action.payload.host]?.guilds?.[
+                action.payload.guildID
+              ],
+              channels: action.payload.channels,
+            },
+          },
+        },
+      },
     }))
 );

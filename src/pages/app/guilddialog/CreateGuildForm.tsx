@@ -46,10 +46,8 @@ const _CreateGuildForm = () => {
       const guildInfoResp = await Comms.getHomeserverConn().getGuild(guildID);
       dispatch(
         setGuild({
-          entry: {
-            guildID,
-            host: Comms.homeserver,
-          },
+          guildID: guildID,
+          host: Comms.homeserver,
           guild: {
             name: guildInfoResp.message?.getGuildName(),
             owner: guildInfoResp.message?.getGuildOwner(),

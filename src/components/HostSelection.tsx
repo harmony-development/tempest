@@ -7,7 +7,7 @@ import {
   Theme,
 } from "@material-ui/core";
 
-import { Set } from "../redux/reducers/AppReducer";
+import { IHostEntry } from "../redux/reducers/AppReducer";
 
 const hostSelectionStyles = makeStyles((theme: Theme) => ({
   menuEntry: {
@@ -20,7 +20,9 @@ const _HostSelection = (props: {
   setHost: (a: string) => void;
   customHost: string;
   setCustomHost: (a: string) => void;
-  hosts: Set;
+  hosts: {
+    [host: string]: IHostEntry;
+  };
 }) => {
   const classes = hostSelectionStyles();
   const [showCustomHostField, setShowCustomHostField] = useState(!props.host);

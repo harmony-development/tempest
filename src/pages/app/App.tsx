@@ -1,19 +1,14 @@
-import React, { useEffect } from "react";
-import { useHistory, useParams } from "react-router";
-import { useDispatch } from "react-redux";
+import React, { useLayoutEffect } from "react";
+import { useHistory } from "react-router";
 import { makeStyles, Theme, darken } from "@material-ui/core";
 import { Connection } from "@harmony-dev/harmony-web-sdk";
 
 import { HarmonyStorage } from "../../storage/HarmonyStorage";
-import {
-  setCurrentGuild,
-  setCurrentChannelID,
-  compositeKey,
-} from "../../redux/reducers/AppReducer";
 import { Comms } from "../../comms/Comms";
 
 import { GuildList } from "./guildlist/GuildList";
 import { GuildDialog } from "./guilddialog/GuildDialog";
+import { ChannelList } from "./channellist/ChannelList";
 
 const appStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -50,15 +45,10 @@ const appStyles = makeStyles((theme: Theme) => ({
 }));
 
 const _App = () => {
-  const { guildid, channelid } = useParams<{
-    guildid?: string;
-    channelid?: string;
-  }>();
   const classes = appStyles();
-  const dispatch = useDispatch();
   const history = useHistory();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const homeserver = HarmonyStorage.getHomeserver();
     const session = HarmonyStorage.getSession();
     const userid = HarmonyStorage.getUserID();
@@ -74,18 +64,15 @@ const _App = () => {
     // eslint-disable-next-line
   }, []);
 
-  useEffect(() => {
-    dispatch(setCurrentChannelID(channelid));
-    // eslint-disable-next-line
-  }, [channelid]);
-
   return (
     <>
       <div className={classes.root}>
         <div className={classes.guildlist}>
           <GuildList />
         </div>
-        <div className={classes.channellist}></div>
+        <div className={classes.channellist}>
+          <ChannelList />
+        </div>
         <div className={classes.chat}></div>
         <div className={classes.memberlist}></div>
       </div>
