@@ -26,12 +26,12 @@ const appStyles = makeStyles((theme: Theme) => ({
     flexDirection: "column",
   },
   channellist: {
-    width: "300px",
+    width: "400px",
     overflowY: "auto",
     backgroundColor: darken(theme.palette.background.default, 0.25),
   },
   memberlist: {
-    width: "400px",
+    width: "350px",
     overflowY: "auto",
     backgroundColor: darken(theme.palette.background.default, 0.25),
   },

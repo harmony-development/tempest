@@ -1,5 +1,12 @@
 import React from "react";
-import { makeStyles, Theme, ListItem, ListItemProps } from "@material-ui/core";
+import {
+  makeStyles,
+  Theme,
+  ListItem,
+  ListItemProps,
+  ListItemText,
+  Typography,
+} from "@material-ui/core";
 
 const channelListItemStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -14,15 +21,34 @@ const channelListItemStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const _ChannelListItem = (props: ListItemProps & { button: any }) => {
+const _ChannelListItem = (props: {
+  displayChannel: string;
+  topic?: string;
+  className?: string;
+  selected?: boolean;
+  onClick?: () => void;
+}) => {
   const classes = channelListItemStyles();
   return (
     <ListItem
-      {...props}
+      button
+      selected={props.selected}
+      onClick={props.onClick}
       className={`${classes.root} ${props.selected ? classes.selected : ""} ${
         props.className
       }`}
-    />
+    >
+      <ListItemText
+        primary={
+          <>
+            {`#${props.displayChannel}`}
+            <Typography component="span" variant="body2" color="textSecondary">
+              {` - ${props.topic}`}
+            </Typography>
+          </>
+        }
+      ></ListItemText>
+    </ListItem>
   );
 };
 

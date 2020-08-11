@@ -10,7 +10,7 @@ import {
   IChannel,
   setSelectedChannel,
 } from "../../../redux/reducers/AppReducer";
-import { List, ListItem } from "@material-ui/core";
+import { List, ListItem, ListItemText, Typography } from "@material-ui/core";
 import { ChannelListItem } from "../../../components/ChannelListItem";
 
 const _ChannelList = () => {
@@ -70,7 +70,6 @@ const _ChannelList = () => {
     <List disablePadding>
       {channelList?.map((c) => (
         <ChannelListItem
-          button
           selected={channelid === c}
           onClick={() => {
             dispatch(
@@ -85,9 +84,9 @@ const _ChannelList = () => {
               hash: window.location.hash,
             });
           }}
-        >
-          {channels?.[c].name || c}
-        </ChannelListItem>
+          displayChannel={channels?.[c].name || c}
+          topic={"Hi this is a sample topic"}
+        />
       ))}
     </List>
   );
