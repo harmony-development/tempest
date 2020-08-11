@@ -116,12 +116,15 @@ const _GuildList = () => {
                 ? classes.selectedGuild
                 : undefined
             }`}
-            onClick={() =>
+            onClick={() => {
               history.push({
-                pathname: `/app/${guild.guildID}/${channelid}`,
+                pathname: `/app/${guild.guildID}/${
+                  hosts[guild.host]?.guilds?.[guild.guildID]?.selectedChannel ||
+                  ""
+                }`,
                 hash: guild.host,
-              })
-            }
+              });
+            }}
           >
             <img
               className={classes.guildIcon}

@@ -24,6 +24,7 @@ export interface IGuild {
   name?: string;
   picture?: string;
   owner?: string;
+  selectedChannel?: string;
   channels?: {
     [id: string]: IChannel;
   };
@@ -64,6 +65,15 @@ export const setGuild = createAction(
     host: string;
     guildID: string;
     guild: IGuild;
+  }>()
+);
+
+export const setSelectedChannel = createAction(
+  "SET_SELECTED_CHANNEL",
+  withPayload<{
+    host: string;
+    guildID: string;
+    channelID: string;
   }>()
 );
 
@@ -110,6 +120,24 @@ export const appReducer = createReducer(initialAppState, (builder) =>
                 action.payload.guildID
               ],
               ...action.payload.guild,
+            },
+          },
+        },
+      },
+    }))
+    .addCase(setSelectedChannel, (state, action) => ({
+      ...state,
+      hosts: {
+        ...state.hosts,
+        [action.payload.host]: {
+          ...state.hosts[action.payload.host],
+          guilds: {
+            ...state.hosts[action.payload.host]?.guilds,
+            [action.payload.guildID]: {
+              ...state.hosts[action.payload.host]?.guilds?.[
+                action.payload.guildID
+              ],
+              selectedChannel: action.payload.channelID,
             },
           },
         },

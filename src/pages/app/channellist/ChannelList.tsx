@@ -3,15 +3,19 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { RootState } from "../../../redux/redux";
 import { Comms } from "../../../comms/Comms";
-import { useParams } from "react-router";
+import { useParams, useHistory } from "react-router";
 import {
   setChannelsList,
   setChannels,
   IChannel,
+  setSelectedChannel,
 } from "../../../redux/reducers/AppReducer";
+import { List, ListItem } from "@material-ui/core";
+import { ChannelListItem } from "../../../components/ChannelListItem";
 
 const _ChannelList = () => {
-  const { guildid } = useParams<{
+  const history = useHistory();
+  const { guildid, channelid } = useParams<{
     guildid?: string;
     channelid?: string;
   }>();
@@ -63,11 +67,29 @@ const _ChannelList = () => {
   }, [host, guildid]);
 
   return (
-    <div>
+    <List disablePadding>
       {channelList?.map((c) => (
-        <h1>{channels?.[c].name || c}</h1>
+        <ChannelListItem
+          button
+          selected={channelid === c}
+          onClick={() => {
+            dispatch(
+              setSelectedChannel({
+                host,
+                guildID: guildid!,
+                channelID: c,
+              })
+            );
+            history.push({
+              pathname: `/app/${guildid}/${c}`,
+              hash: window.location.hash,
+            });
+          }}
+        >
+          {channels?.[c].name || c}
+        </ChannelListItem>
       ))}
-    </div>
+    </List>
   );
 };
 
