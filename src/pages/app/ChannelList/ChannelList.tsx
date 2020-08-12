@@ -36,7 +36,7 @@ const _ChannelList = () => {
       if (!host || !guildid) {
         return;
       }
-      const conn = await Comms.getOrFederate(host);
+      const conn = Comms.connections[host];
       const channelList = (
         await conn.getGuildChannels(guildid)
       ).message?.getChannelsList();
@@ -86,6 +86,7 @@ const _ChannelList = () => {
           }}
           displayChannel={channels?.[c].name || c}
           topic={"Hi this is a sample topic"}
+          key={c}
         />
       ))}
     </List>

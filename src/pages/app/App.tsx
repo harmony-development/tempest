@@ -1,14 +1,15 @@
 import React, { useLayoutEffect } from "react";
-import { useHistory } from "react-router";
+import { useHistory, useLocation } from "react-router";
 import { makeStyles, Theme, darken } from "@material-ui/core";
 import { Connection } from "@harmony-dev/harmony-web-sdk";
 
 import { HarmonyStorage } from "../../storage/HarmonyStorage";
 import { Comms } from "../../comms/Comms";
 
-import { GuildList } from "./guildlist/GuildList";
-import { GuildDialog } from "./guilddialog/GuildDialog";
-import { ChannelList } from "./channellist/ChannelList";
+import { GuildList } from "./GuildList/GuildList";
+import { GuildDialog } from "./GuildDialog/GuildDialog";
+import { ChannelList } from "./ChannelList/ChannelList";
+import { ChatArea } from "./ChatArea/ChatArea";
 
 const appStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -47,6 +48,7 @@ const appStyles = makeStyles((theme: Theme) => ({
 const _App = () => {
   const classes = appStyles();
   const history = useHistory();
+  const { hash } = useLocation();
 
   useLayoutEffect(() => {
     const homeserver = HarmonyStorage.getHomeserver();
@@ -64,6 +66,19 @@ const _App = () => {
     // eslint-disable-next-line
   }, []);
 
+  /**
+   * We want to make sure there's a connection or else there will be problems
+   */
+  useLayoutEffect(() => {
+    (async () => {
+      try {
+        Comms.getOrFederate(hash.substr(1));
+      } catch (e) {
+        console.error(e);
+      }
+    })();
+  }, [hash]);
+
   return (
     <>
       <div className={classes.root}>
@@ -73,7 +88,9 @@ const _App = () => {
         <div className={classes.channellist}>
           <ChannelList />
         </div>
-        <div className={classes.chat}></div>
+        <div className={classes.chat}>
+          <ChatArea />
+        </div>
         <div className={classes.memberlist}></div>
       </div>
       <GuildDialog />
