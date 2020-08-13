@@ -1,10 +1,15 @@
 import React, { useRef, useCallback, useEffect } from "react";
 import { makeStyles, Theme, List } from "@material-ui/core";
-import { useDispatch } from "react-redux";
-import { focusChatInput } from "../../../../redux/reducers/UIReducer";
 import { Comms } from "../../../../comms/Comms";
 import { useLocation, useParams } from "react-router";
 import { Message } from "./Message";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setMessagesList,
+  setMessages,
+  IMessage,
+} from "../../../../redux/reducers/AppReducer";
+import { RootState } from "../../../../redux/redux";
 
 const messagesAreaStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -23,14 +28,18 @@ let scrollTrigger = false;
 
 const _MessagesArea = () => {
   const location = useLocation();
+  const dispatch = useDispatch();
   const { guildid, channelid } = useParams<{
     guildid?: string;
     channelid?: string;
   }>();
-  const dispatch = useDispatch();
   const classes = messagesAreaStyles();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const host = location.hash.substr(1);
+  const messageList = useSelector(
+    (state: RootState) =>
+      state.appReducer.hosts[host]?.channels?.[channelid || ""].messageList
+  );
 
   useEffect(() => {
     (async () => {
@@ -40,16 +49,37 @@ const _MessagesArea = () => {
             guildid,
             channelid
           );
+          const respMsgs = await resp.message?.toObject();
+          respMsgs?.messagesList.reverse();
+          dispatch(
+            setMessagesList({
+              host,
+              channelID: channelid,
+              messageList:
+                respMsgs?.messagesList.map((m) => m.location!.messageId) || [],
+            })
+          );
+          dispatch(
+            setMessages({
+              host,
+              messages:
+                respMsgs?.messagesList.reduce<{
+                  [id: string]: IMessage;
+                }>((obj, m) => {
+                  obj[m.location!.messageId] = {
+                    authorID: m.authorId,
+                    createdAt: m.createdAt?.seconds || 0,
+                    content: m.content,
+                  };
+                  return obj;
+                }, {}) || {},
+            })
+          );
+          console.log();
         } catch (e) {}
       }
     })();
   }, [guildid, channelid, host]);
-
-  const onKeyDown = useCallback((ev: React.KeyboardEvent<HTMLDivElement>) => {
-    if (ev.key !== "Tab") {
-      dispatch(focusChatInput());
-    }
-  }, []);
 
   const onMessageListScroll = useCallback(
     async (event: React.UIEvent<HTMLDivElement>) => {
@@ -66,18 +96,12 @@ const _MessagesArea = () => {
     <div
       className={classes.root}
       ref={containerRef}
-      tabIndex={-1}
-      onKeyDown={onKeyDown}
       onScroll={onMessageListScroll}
     >
       <List>
-        <Message
-          userid="123"
-          messageid="321"
-          username="Blusk"
-          createdAt={0}
-          message="Sample Message"
-        />
+        {messageList?.map((messageID) => (
+          <Message key={messageID} messageID={messageID} />
+        ))}
       </List>
     </div>
   );

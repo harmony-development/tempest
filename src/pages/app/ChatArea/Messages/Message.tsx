@@ -8,6 +8,9 @@ import {
   ListItemText,
   Typography,
 } from "@material-ui/core";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../redux/redux";
+import { useLocation } from "react-router";
 
 const messageStyles = makeStyles((theme: Theme) => ({}));
 
@@ -17,35 +20,31 @@ const UtcEpochToLocalDate = (time: number) => {
   return ` - ${returnDate.toDateString()} at ${returnDate.toLocaleTimeString()}`;
 };
 
-const _Message = (props: {
-  userid: string;
-  messageid: string;
-  username: string;
-  createdAt: number;
-  message: string;
-  avatar?: string;
-}) => {
+const _Message = (props: { messageID: string }) => {
+  const location = useLocation();
   const classes = messageStyles();
+  const host = location.hash.substr(1);
+  const messages = useSelector(
+    (state: RootState) => state.appReducer.hosts[host].messages
+  );
+  const messageData = messages?.[props.messageID];
 
   return (
     <ListItem alignItems="flex-start">
       <ListItemAvatar>
-        <Avatar
-          alt={props.userid}
-          src={props.avatar ? props.avatar : undefined}
-        />
+        <Avatar alt={messageData?.authorID} src={undefined} />
       </ListItemAvatar>
       <ListItemText
         primary={
           <Typography>
-            {props.username || props.userid}{" "}
+            {messageData?.authorID || messageData?.authorID}{" "}
             <Typography component="span" variant="body1" color="textSecondary">
-              {UtcEpochToLocalDate(props.createdAt)}
+              {UtcEpochToLocalDate(messageData?.createdAt || 0)}
             </Typography>
           </Typography>
         }
         disableTypography
-        secondary={<>{<Typography>{props.message}</Typography>}</>}
+        secondary={<>{<Typography>{messageData?.content}</Typography>}</>}
       />
     </ListItem>
   );

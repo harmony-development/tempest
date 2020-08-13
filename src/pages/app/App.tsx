@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useCallback } from "react";
 import { useHistory, useLocation } from "react-router";
 import { makeStyles, Theme, darken } from "@material-ui/core";
 import { Connection } from "@harmony-dev/harmony-web-sdk";
@@ -10,6 +10,8 @@ import { GuildList } from "./GuildList/GuildList";
 import { GuildDialog } from "./GuildDialog/GuildDialog";
 import { ChannelList } from "./ChannelList/ChannelList";
 import { ChatArea } from "./ChatArea/ChatArea";
+import { focusChatInput } from "../../redux/reducers/UIReducer";
+import { useDispatch } from "react-redux";
 
 const appStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -47,6 +49,7 @@ const appStyles = makeStyles((theme: Theme) => ({
 
 const _App = () => {
   const classes = appStyles();
+  const dispatch = useDispatch();
   const history = useHistory();
   const { hash } = useLocation();
 
@@ -79,9 +82,16 @@ const _App = () => {
     })();
   }, [hash]);
 
+  const onKeyDown = useCallback((ev: React.KeyboardEvent<HTMLDivElement>) => {
+    if (ev.key !== "Tab") {
+      dispatch(focusChatInput());
+    }
+    // eslint-disable-next-line
+  }, []);
+
   return (
     <>
-      <div className={classes.root}>
+      <div className={classes.root} onKeyDown={onKeyDown} tabIndex={0}>
         <div className={classes.guildlist}>
           <GuildList />
         </div>

@@ -11,10 +11,20 @@ export interface IListEntry {
 }
 
 /**
+ * Data describing a message
+ */
+export interface IMessage {
+  authorID: string;
+  createdAt: number;
+  content: string;
+}
+
+/**
  * Data describing a channel
  */
 export interface IChannel {
-  name: string;
+  name?: string;
+  messageList?: string[];
 }
 
 /**
@@ -25,15 +35,18 @@ export interface IGuild {
   picture?: string;
   owner?: string;
   selectedChannel?: string;
-  channels?: {
-    [id: string]: IChannel;
-  };
   channelsList?: string[];
 }
 
 export interface IHostEntry {
   guilds?: {
     [id: string]: IGuild;
+  };
+  channels?: {
+    [id: string]: IChannel;
+  };
+  messages?: {
+    [id: string]: IMessage;
   };
 }
 
@@ -93,6 +106,25 @@ export const setChannels = createAction(
     guildID: string;
     channels: {
       [channelID: string]: IChannel;
+    };
+  }>()
+);
+
+export const setMessagesList = createAction(
+  "SET_MESSAGES_LIST",
+  withPayload<{
+    host: string;
+    channelID: string;
+    messageList: string[];
+  }>()
+);
+
+export const setMessages = createAction(
+  "SET_MESSAGES",
+  withPayload<{
+    host: string;
+    messages: {
+      [id: string]: IMessage;
     };
   }>()
 );
@@ -175,6 +207,37 @@ export const appReducer = createReducer(initialAppState, (builder) =>
               ],
               channels: action.payload.channels,
             },
+          },
+        },
+      },
+    }))
+    .addCase(setMessagesList, (state, action) => ({
+      ...state,
+      hosts: {
+        ...state.hosts,
+        [action.payload.host]: {
+          ...state.hosts[action.payload.host],
+          channels: {
+            ...state.hosts[action.payload.host].channels,
+            [action.payload.channelID]: {
+              ...state.hosts[action.payload.host].channels?.[
+                action.payload.channelID
+              ],
+              messageList: action.payload.messageList,
+            },
+          },
+        },
+      },
+    }))
+    .addCase(setMessages, (state, action) => ({
+      ...state,
+      hosts: {
+        ...state.hosts,
+        [action.payload.host]: {
+          ...state.hosts[action.payload.host],
+          messages: {
+            ...state.hosts[action.payload.host]?.messages,
+            ...action.payload.messages,
           },
         },
       },

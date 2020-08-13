@@ -6,6 +6,7 @@ import "./wdyr";
 import "./i18n";
 import "typeface-roboto";
 import { Provider } from "react-redux";
+import { hot } from "react-hot-loader/root";
 
 import { Root } from "./Root";
 import * as serviceWorker from "./serviceWorker";
@@ -21,7 +22,7 @@ const _Index = () => {
   );
 };
 
-const Index = React.memo(_Index);
+const Index = hot(React.memo(_Index));
 
 ReactDOM.render(<Index />, document.getElementById("root"));
 

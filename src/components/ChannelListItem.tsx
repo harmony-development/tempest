@@ -3,7 +3,6 @@ import {
   makeStyles,
   Theme,
   ListItem,
-  ListItemProps,
   ListItemText,
   Typography,
 } from "@material-ui/core";

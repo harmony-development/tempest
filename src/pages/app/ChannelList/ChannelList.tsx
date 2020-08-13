@@ -10,7 +10,7 @@ import {
   IChannel,
   setSelectedChannel,
 } from "../../../redux/reducers/AppReducer";
-import { List, ListItem, ListItemText, Typography } from "@material-ui/core";
+import { List } from "@material-ui/core";
 import { ChannelListItem } from "../../../components/ChannelListItem";
 
 const _ChannelList = () => {
@@ -26,8 +26,7 @@ const _ChannelList = () => {
       root.appReducer.hosts[host]?.guilds?.[guildid || ""]?.channelsList
   );
   const channels = useSelector(
-    (root: RootState) =>
-      root.appReducer.hosts[host]?.guilds?.[guildid || ""]?.channels
+    (root: RootState) => root.appReducer.hosts[host]?.channels
   );
   const dispatch = useDispatch();
 

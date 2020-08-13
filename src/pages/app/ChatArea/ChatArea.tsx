@@ -1,7 +1,5 @@
-import React, { useRef, useMemo, useCallback } from "react";
+import React from "react";
 import { makeStyles, Theme } from "@material-ui/core";
-import { useDispatch } from "react-redux";
-import { focusChatInput } from "../../../redux/reducers/UIReducer";
 import { MessagesArea } from "./Messages/MessagesArea";
 import { Input } from "./Input/Input";
 
