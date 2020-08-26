@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { RootState } from "../../../redux/redux";
@@ -65,25 +65,27 @@ const _ChannelList = () => {
     // eslint-disable-next-line
   }, [host, guildid]);
 
+  const onChannelListItemClick = useCallback((c) => {
+    dispatch(
+      setSelectedChannel({
+        host,
+        guildID: guildid!,
+        channelID: c,
+      })
+    );
+    history.push({
+      pathname: `/app/${guildid}/${c}`,
+      hash: window.location.hash,
+    });
+  }, []);
+
   return (
     <List disablePadding>
       {channelList?.map((c) => (
         <ChannelListItem
           selected={channelid === c}
-          onClick={() => {
-            dispatch(
-              setSelectedChannel({
-                host,
-                guildID: guildid!,
-                channelID: c,
-              })
-            );
-            history.push({
-              pathname: `/app/${guildid}/${c}`,
-              hash: window.location.hash,
-            });
-          }}
-          displayChannel={channels?.[c].name || c}
+          onClick={onChannelListItemClick}
+          displayChannel={channels?.[c]?.name || c}
           topic={"Hi this is a sample topic"}
           key={c}
         />

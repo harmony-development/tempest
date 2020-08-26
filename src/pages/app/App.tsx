@@ -62,9 +62,11 @@ const _App = () => {
       return;
     }
     if (!Comms.homeserver) {
+      const newConn = new Connection(homeserver);
+      newConn.session = session;
+      Comms.bindEvents(newConn);
+      Comms.connections[homeserver] = newConn;
       Comms.homeserver = homeserver;
-      Comms.connections[homeserver] = new Connection(homeserver);
-      Comms.connections[homeserver].session = session;
     }
     // eslint-disable-next-line
   }, []);
@@ -75,7 +77,10 @@ const _App = () => {
   useLayoutEffect(() => {
     (async () => {
       try {
-        Comms.getOrFederate(hash.substr(1));
+        const homeserver = HarmonyStorage.getHomeserver();
+        if (homeserver) {
+          Comms.getOrFederate(homeserver);
+        }
       } catch (e) {
         console.error(e);
       }

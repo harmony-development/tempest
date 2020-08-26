@@ -129,6 +129,16 @@ export const setMessages = createAction(
   }>()
 );
 
+export const addMessage = createAction(
+  "ADD_MESSAGE",
+  withPayload<{
+    host: string;
+    channelID: string;
+    messageID: string;
+    message: IMessage;
+  }>()
+);
+
 export const appReducer = createReducer(initialAppState, (builder) =>
   builder
     .addCase(addGuildToList, (state, action) => ({
@@ -238,6 +248,33 @@ export const appReducer = createReducer(initialAppState, (builder) =>
           messages: {
             ...state.hosts[action.payload.host]?.messages,
             ...action.payload.messages,
+          },
+        },
+      },
+    }))
+    .addCase(addMessage, (state, action) => ({
+      ...state,
+      hosts: {
+        ...state.hosts,
+        [action.payload.host]: {
+          ...state.hosts[action.payload.host],
+          messages: {
+            ...state.hosts[action.payload.host]?.messages,
+            [action.payload.messageID]: action.payload.message,
+          },
+          channels: {
+            ...state.hosts[action.payload.host].channels,
+            [action.payload.channelID]: {
+              ...state.hosts[action.payload.host].channels?.[
+                action.payload.channelID
+              ],
+              messageList: [
+                ...(state.hosts[action.payload.host].channels?.[
+                  action.payload.channelID
+                ]?.messageList || []),
+                action.payload.messageID,
+              ],
+            },
           },
         },
       },

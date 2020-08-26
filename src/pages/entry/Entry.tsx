@@ -91,6 +91,7 @@ const _Entry = () => {
       const c = new Connection(selectedServer);
       const resp = await c.loginLocal(loginForm.email, loginForm.password);
       c.session = resp.message?.getSessionToken();
+      Comms.bindEvents(c);
       Comms.connections[selectedServer] = c;
       Comms.homeserver = selectedServer;
       HarmonyStorage.setHomeserver(selectedServer);
@@ -116,6 +117,7 @@ const _Entry = () => {
         registerForm.password
       );
       c.session = resp.message?.getSessionToken();
+      Comms.bindEvents(c);
       Comms.connections[selectedServer] = c;
       Comms.homeserver = selectedServer;
       HarmonyStorage.setHomeserver(selectedServer);

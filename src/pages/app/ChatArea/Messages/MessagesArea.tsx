@@ -38,7 +38,7 @@ const _MessagesArea = () => {
   const host = location.hash.substr(1);
   const messageList = useSelector(
     (state: RootState) =>
-      state.appReducer.hosts[host]?.channels?.[channelid || ""].messageList
+      state.appReducer.hosts[host]?.channels?.[channelid || ""]?.messageList
   );
 
   useEffect(() => {
@@ -55,24 +55,24 @@ const _MessagesArea = () => {
             setMessagesList({
               host,
               channelID: channelid,
-              messageList:
-                respMsgs?.messagesList.map((m) => m.location!.messageId) || [],
+              messageList: (respMsgs?.messagesList || []).map(
+                (m) => m.location!.messageId
+              ),
             })
           );
           dispatch(
             setMessages({
               host,
-              messages:
-                respMsgs?.messagesList.reduce<{
-                  [id: string]: IMessage;
-                }>((obj, m) => {
-                  obj[m.location!.messageId] = {
-                    authorID: m.authorId,
-                    createdAt: m.createdAt?.seconds || 0,
-                    content: m.content,
-                  };
-                  return obj;
-                }, {}) || {},
+              messages: (respMsgs?.messagesList || []).reduce<{
+                [id: string]: IMessage;
+              }>((obj, m) => {
+                obj[m.location!.messageId] = {
+                  authorID: m.authorId,
+                  createdAt: m.createdAt?.seconds || 0,
+                  content: m.content,
+                };
+                return obj;
+              }, {}),
             })
           );
           console.log();
@@ -80,6 +80,13 @@ const _MessagesArea = () => {
       }
     })();
   }, [guildid, channelid, host]);
+
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+      containerRef.current.scrollLeft = 0;
+    }
+  }, [messageList]);
 
   const onMessageListScroll = useCallback(
     async (event: React.UIEvent<HTMLDivElement>) => {

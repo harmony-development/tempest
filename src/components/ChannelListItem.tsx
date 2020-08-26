@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import {
   makeStyles,
   Theme,
@@ -25,14 +25,20 @@ const _ChannelListItem = (props: {
   topic?: string;
   className?: string;
   selected?: boolean;
-  onClick?: () => void;
+  onClick?: (c: string) => void;
+  key: string;
 }) => {
   const classes = channelListItemStyles();
+
+  const onClickHandler = useCallback(() => {
+    props.onClick!(props.key);
+  }, []);
+
   return (
     <ListItem
       button
       selected={props.selected}
-      onClick={props.onClick}
+      onClick={onClickHandler}
       className={`${classes.root} ${props.selected ? classes.selected : ""} ${
         props.className
       }`}

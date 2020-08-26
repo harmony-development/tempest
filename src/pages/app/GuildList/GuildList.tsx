@@ -68,7 +68,9 @@ const _GuildList = () => {
           guildsList.forEach(async (guild) => {
             if (!Comms.connections[guild.host]) {
               Comms.connections[guild.host] = new Connection(guild.host);
+              Comms.bindEvents(Comms.connections[guild.host]);
             }
+            Comms.connections[guild.host].subscribe(guild.guildId);
             const resp = (
               await Comms.connections[guild.host].getGuild(guild.guildId)
             ).message?.toObject();
