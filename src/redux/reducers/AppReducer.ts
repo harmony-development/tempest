@@ -24,6 +24,7 @@ export interface IMessage {
  */
 export interface IChannel {
   name?: string;
+  reachedTop?: boolean;
   messageList?: string[];
 }
 
@@ -147,6 +148,15 @@ export const addMessages = createAction(
     messages: {
       [messageID: string]: IMessage;
     };
+  }>()
+);
+
+export const setReachedTop = createAction(
+  "SET_REACHED_TOP",
+  withPayload<{
+    host: string;
+    channelID: string;
+    reachedTop: boolean;
   }>()
 );
 
@@ -306,6 +316,24 @@ export const appReducer = createReducer(initialAppState, (builder) =>
               ...state.hosts[action.payload.host].channels?.[
                 action.payload.channelID
               ],
+            },
+          },
+        },
+      },
+    }))
+    .addCase(setReachedTop, (state, action) => ({
+      ...state,
+      hosts: {
+        ...state.hosts,
+        [action.payload.host]: {
+          ...state.hosts[action.payload.host],
+          channels: {
+            ...state.hosts[action.payload.host].channels,
+            [action.payload.channelID]: {
+              ...state.hosts[action.payload.host].channels?.[
+                action.payload.channelID
+              ],
+              reachedTop: action.payload.reachedTop,
             },
           },
         },

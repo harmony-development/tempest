@@ -1,5 +1,11 @@
 import React, { useRef, useCallback, useEffect } from "react";
-import { makeStyles, Theme, List } from "@material-ui/core";
+import {
+  makeStyles,
+  Theme,
+  List,
+  Typography,
+  ListSubheader,
+} from "@material-ui/core";
 import { Comms } from "../../../../comms/Comms";
 import { useLocation, useParams } from "react-router";
 import { Message } from "./Message";
@@ -9,6 +15,7 @@ import {
   setMessages,
   IMessage,
   addMessages,
+  setReachedTop,
 } from "../../../../redux/reducers/AppReducer";
 import { RootState } from "../../../../redux/redux";
 
@@ -40,6 +47,10 @@ const _MessagesArea = () => {
   const messageList = useSelector(
     (state: RootState) =>
       state.appReducer.hosts[host]?.channels?.[channelid || ""]?.messageList
+  );
+  const reachedTop = useSelector(
+    (state: RootState) =>
+      state.appReducer.hosts[host]?.channels?.[channelid || ""]?.reachedTop
   );
 
   useEffect(() => {
@@ -96,6 +107,7 @@ const _MessagesArea = () => {
 
   const onMessageListScroll = useCallback(
     async (event: React.UIEvent<HTMLDivElement>) => {
+      if (reachedTop) return;
       if (event.currentTarget.scrollTop === 0) {
         scrollTrigger = true;
         previousScrollHeight = event.currentTarget.scrollHeight;
@@ -136,11 +148,19 @@ const _MessagesArea = () => {
                 ],
               })
             );
+          } else {
+            dispatch(
+              setReachedTop({
+                host,
+                channelID: channelid,
+                reachedTop: true,
+              })
+            );
           }
         }
       }
     },
-    [guildid, channelid, messageList]
+    [host, guildid, channelid, messageList]
   );
 
   return (
@@ -149,7 +169,15 @@ const _MessagesArea = () => {
       ref={containerRef}
       onScroll={onMessageListScroll}
     >
-      <List>
+      <List
+        subheader={
+          reachedTop ? (
+            <ListSubheader component="div" disableSticky={true}>
+              Welcome to #{channelid}
+            </ListSubheader>
+          ) : undefined
+        }
+      >
         {messageList?.map((messageID) => (
           <Message key={messageID} messageID={messageID} />
         ))}
