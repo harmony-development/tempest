@@ -83,9 +83,14 @@ const _MessagesArea = () => {
   }, [guildid, channelid, host]);
 
   useEffect(() => {
-    if (containerRef.current) {
+    if (!containerRef.current) return;
+    if (!scrollTrigger) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
-      containerRef.current.scrollLeft = 0;
+    } else {
+      containerRef.current.scrollTop =
+        containerRef.current.scrollHeight -
+        previousScrollHeight +
+        previousScrollTop;
     }
   }, [messageList]);
 
@@ -103,7 +108,6 @@ const _MessagesArea = () => {
           );
           const { messagesList: loadedMessages } = resp.message!.toObject();
           if (loadedMessages.length !== 0) {
-            console.log(loadedMessages);
             dispatch(
               addMessages({
                 host,
