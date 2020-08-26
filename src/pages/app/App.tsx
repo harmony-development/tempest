@@ -32,6 +32,7 @@ const appStyles = makeStyles((theme: Theme) => ({
     width: "400px",
     overflowY: "auto",
     backgroundColor: darken(theme.palette.background.default, 0.25),
+    textOverflow: "ellipsis",
   },
   memberlist: {
     width: "350px",

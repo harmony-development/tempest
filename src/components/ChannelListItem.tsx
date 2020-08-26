@@ -18,6 +18,11 @@ const channelListItemStyles = makeStyles((theme: Theme) => ({
   selected: {
     borderLeft: `${theme.palette.secondary.main} 3px solid`,
   },
+  textContent: {
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+  },
 }));
 
 const _ChannelListItem = (props: {
@@ -44,13 +49,14 @@ const _ChannelListItem = (props: {
       }`}
     >
       <ListItemText
+        disableTypography
         primary={
-          <>
-            {`#${props.displayChannel}`}
+          <Typography className={classes.textContent}>
+            #{props.displayChannel}
             <Typography component="span" variant="body2" color="textSecondary">
               {` - ${props.topic}`}
             </Typography>
-          </>
+          </Typography>
         }
       ></ListItemText>
     </ListItem>

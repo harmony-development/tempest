@@ -236,9 +236,9 @@ export const appReducer = createReducer(initialAppState, (builder) =>
               ...state.hosts[action.payload.host]?.guilds?.[
                 action.payload.guildID
               ],
-              channels: action.payload.channels,
             },
           },
+          channels: action.payload.channels,
         },
       },
     }))
