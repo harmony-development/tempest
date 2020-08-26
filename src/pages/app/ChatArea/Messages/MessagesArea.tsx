@@ -8,6 +8,7 @@ import {
   setMessagesList,
   setMessages,
   IMessage,
+  addMessages,
 } from "../../../../redux/reducers/AppReducer";
 import { RootState } from "../../../../redux/redux";
 
@@ -94,9 +95,48 @@ const _MessagesArea = () => {
         scrollTrigger = true;
         previousScrollHeight = event.currentTarget.scrollHeight;
         previousScrollTop = event.currentTarget.scrollTop;
+        if (guildid && channelid && messageList) {
+          const resp = await Comms.connections[host].getChannelMessages(
+            guildid,
+            channelid,
+            messageList[0]
+          );
+          const { messagesList: loadedMessages } = resp.message!.toObject();
+          if (loadedMessages.length !== 0) {
+            console.log(loadedMessages);
+            dispatch(
+              addMessages({
+                host,
+                channelID: channelid,
+                messages: loadedMessages.reduce<{
+                  [messageID: string]: IMessage;
+                }>((obj, m) => {
+                  obj[m.location!.messageId] = {
+                    authorID: m.authorId,
+                    createdAt: m.createdAt?.seconds || 0,
+                    content: m.content,
+                  };
+                  return obj;
+                }, {}),
+              })
+            );
+            dispatch(
+              setMessagesList({
+                host,
+                channelID: channelid,
+                messageList: [
+                  ...(loadedMessages
+                    .map((m) => m.location!.messageId)
+                    .reverse() || []),
+                  ...messageList,
+                ],
+              })
+            );
+          }
+        }
       }
     },
-    []
+    [guildid, channelid, messageList]
   );
 
   return (

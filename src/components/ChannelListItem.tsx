@@ -26,12 +26,12 @@ const _ChannelListItem = (props: {
   className?: string;
   selected?: boolean;
   onClick?: (c: string) => void;
-  key: string;
+  channelID: string;
 }) => {
   const classes = channelListItemStyles();
 
   const onClickHandler = useCallback(() => {
-    props.onClick!(props.key);
+    props.onClick!(props.channelID);
   }, []);
 
   return (
