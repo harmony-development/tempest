@@ -12,9 +12,8 @@ import { Message } from "./Message";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setMessagesList,
-  setMessages,
   IMessage,
-  addMessages,
+  setMessages,
   setReachedTop,
 } from "../../../../redux/reducers/AppReducer";
 import { RootState } from "../../../../redux/redux";
@@ -55,7 +54,7 @@ const _MessagesArea = () => {
 
   useEffect(() => {
     (async () => {
-      if (host && guildid && channelid) {
+      if (host && guildid && channelid && !messageList) {
         try {
           const resp = await Comms.connections[host].getChannelMessages(
             guildid,
@@ -87,11 +86,12 @@ const _MessagesArea = () => {
               }, {}),
             })
           );
-          console.log();
-        } catch (e) {}
+        } catch (e) {
+          console.log(e);
+        }
       }
     })();
-  }, [guildid, channelid, host]);
+  }, [guildid, channelid, host, messageList]);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -102,6 +102,7 @@ const _MessagesArea = () => {
         containerRef.current.scrollHeight -
         previousScrollHeight +
         previousScrollTop;
+      scrollTrigger = false;
     }
   }, [messageList]);
 
@@ -121,9 +122,8 @@ const _MessagesArea = () => {
           const { messagesList: loadedMessages } = resp.message!.toObject();
           if (loadedMessages.length !== 0) {
             dispatch(
-              addMessages({
+              setMessages({
                 host,
-                channelID: channelid,
                 messages: loadedMessages.reduce<{
                   [messageID: string]: IMessage;
                 }>((obj, m) => {

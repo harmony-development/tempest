@@ -140,17 +140,6 @@ export const addMessage = createAction(
   }>()
 );
 
-export const addMessages = createAction(
-  "ADD_MESSAGES",
-  withPayload<{
-    host: string;
-    channelID: string;
-    messages: {
-      [messageID: string]: IMessage;
-    };
-  }>()
-);
-
 export const setReachedTop = createAction(
   "SET_REACHED_TOP",
   withPayload<{
@@ -238,7 +227,10 @@ export const appReducer = createReducer(initialAppState, (builder) =>
               ],
             },
           },
-          channels: action.payload.channels,
+          channels: {
+            ...state.hosts[action.payload.host]?.channels,
+            ...action.payload.channels,
+          },
         },
       },
     }))
@@ -294,27 +286,6 @@ export const appReducer = createReducer(initialAppState, (builder) =>
                   action.payload.channelID
                 ]?.messageList || []),
                 action.payload.messageID,
-              ],
-            },
-          },
-        },
-      },
-    }))
-    .addCase(addMessages, (state, action) => ({
-      ...state,
-      hosts: {
-        ...state.hosts,
-        [action.payload.host]: {
-          ...state.hosts[action.payload.host],
-          messages: {
-            ...state.hosts[action.payload.host]?.messages,
-            ...action.payload.messages,
-          },
-          channels: {
-            ...state.hosts[action.payload.host].channels,
-            [action.payload.channelID]: {
-              ...state.hosts[action.payload.host].channels?.[
-                action.payload.channelID
               ],
             },
           },

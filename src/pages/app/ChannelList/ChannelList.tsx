@@ -35,32 +35,34 @@ const _ChannelList = () => {
       if (!host || !guildid) {
         return;
       }
-      const conn = Comms.connections[host];
-      const channelList = (
-        await conn.getGuildChannels(guildid)
-      ).message?.getChannelsList();
-      dispatch(
-        setChannelsList({
-          host,
-          guildID: guildid,
-          channelList: channelList?.map((c) => c.getChannelId()) || [],
-        })
-      );
-      dispatch(
-        setChannels({
-          host,
-          guildID: guildid,
-          channels:
-            channelList?.reduce<{
-              [id: string]: IChannel;
-            }>((prev, curr) => {
-              prev[curr.getChannelId()] = {
-                name: curr.getChannelName(),
-              };
-              return prev;
-            }, {}) || {},
-        })
-      );
+      if (!channelList) {
+        const conn = Comms.connections[host];
+        const channelList = (
+          await conn.getGuildChannels(guildid)
+        ).message?.getChannelsList();
+        dispatch(
+          setChannelsList({
+            host,
+            guildID: guildid,
+            channelList: channelList?.map((c) => c.getChannelId()) || [],
+          })
+        );
+        dispatch(
+          setChannels({
+            host,
+            guildID: guildid,
+            channels:
+              channelList?.reduce<{
+                [id: string]: IChannel;
+              }>((prev, curr) => {
+                prev[curr.getChannelId()] = {
+                  name: curr.getChannelName(),
+                };
+                return prev;
+              }, {}) || {},
+          })
+        );
+      }
     })();
     // eslint-disable-next-line
   }, [host, guildid]);
