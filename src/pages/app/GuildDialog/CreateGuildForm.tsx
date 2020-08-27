@@ -37,6 +37,7 @@ const _CreateGuildForm = () => {
         guildID,
         "http://127.0.0.1:2290"
       );
+      Comms.getHomeserverConn().subscribe(guildID);
       dispatch(
         addGuildToList({
           guildID,
