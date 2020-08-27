@@ -9,6 +9,7 @@ import { HarmonyDark } from "./HarmonyDark";
 import { CommonDialogContextProvider } from "./components/dialog/CommonDialogContext";
 import { HarmonyStorage } from "./storage/HarmonyStorage";
 import { ToastContextProvider } from "./components/toast/SnackbarContext";
+import { ContextMenuContextProvider } from "./components/contextmenu/ContextMenuContext";
 
 const EntryPage = lazy(async () => ({
   default: await (await import("./pages/entry/Entry")).Entry,
@@ -43,11 +44,13 @@ const _Root = () => {
       <Suspense fallback={<Loading />}>
         <CommonDialogContextProvider>
           <ToastContextProvider>
-            <Switch>
-              <Route path="/entry/:step?" component={EntryPage} />
-              <Route path="/app/:guildid?/:channelid?" component={AppPage} />
-              <Redirect to="/entry/serverselect" />
-            </Switch>
+            <ContextMenuContextProvider>
+              <Switch>
+                <Route path="/entry/:step?" component={EntryPage} />
+                <Route path="/app/:guildid?/:channelid?" component={AppPage} />
+                <Redirect to="/entry/serverselect" />
+              </Switch>
+            </ContextMenuContextProvider>
           </ToastContextProvider>
         </CommonDialogContextProvider>
       </Suspense>

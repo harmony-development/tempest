@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/redux";
 import { Comms } from "../../../../comms/Comms";
 import { useLocation, useParams } from "react-router";
+import { useContextMenu } from "../../../../components/contextmenu/ContextMenuContext";
 
 const inputStyles = makeStyles((theme: Theme) => ({
   inputRoot: {
@@ -20,6 +21,7 @@ const _Input = () => {
     channelid: string;
   }>();
   const { hash } = useLocation();
+  const contextMenu = useContextMenu();
   const focus = useSelector(
     (state: RootState) => state.UIReducer.focusChatArea
   );
@@ -53,11 +55,26 @@ const _Input = () => {
     [channelid, guildid, host]
   );
 
+  const textFieldContextMenu = useCallback(
+    (event: React.MouseEvent<HTMLInputElement>) => {
+      event.preventDefault();
+      contextMenu({
+        entries: {
+          bruh: () => {},
+        },
+        mouseX: event.clientX,
+        mouseY: event.clientY,
+      });
+    },
+    []
+  );
+
   return (
     <div className={classes.inputRoot}>
       <TextField
         inputRef={inputField}
         onKeyPress={onKeyPress}
+        onContextMenu={textFieldContextMenu}
         variant="outlined"
         fullWidth
         multiline
