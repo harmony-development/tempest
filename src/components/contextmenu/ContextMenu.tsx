@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useCallback } from "react";
 import { Menu, MenuItem } from "@material-ui/core";
 
 interface IProps {
@@ -19,6 +19,14 @@ export const ContextMenu = (props: IProps) => {
     [props.mouseX, props.mouseY]
   );
 
+  const handler = useCallback(
+    (e: React.MouseEvent<HTMLLIElement>, entry: string) => {
+      props.entries[entry](e);
+      props.onClose();
+    },
+    [props]
+  );
+
   return (
     <Menu
       keepMounted
@@ -29,7 +37,7 @@ export const ContextMenu = (props: IProps) => {
       anchorPosition={position}
     >
       {Object.keys(props.entries).map((entry) => (
-        <MenuItem onClick={props.entries[entry]} key={entry}>
+        <MenuItem onClick={(e) => handler(e, entry)} key={entry}>
           {entry}
         </MenuItem>
       ))}

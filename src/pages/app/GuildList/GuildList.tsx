@@ -14,6 +14,7 @@ import { setGuildsList, setGuild } from "../../../redux/reducers/AppReducer";
 import { Comms } from "../../../comms/Comms";
 import { useDialog } from "../../../components/dialog/CommonDialogContext";
 import { useHistory, useParams } from "react-router";
+import { useContextMenu } from "../../../components/contextmenu/ContextMenuContext";
 
 const guildListStyles = makeStyles((theme: Theme) => ({
   guildIcon: {
@@ -48,6 +49,7 @@ const _GuildList = () => {
   const i18n = useTranslation(["ui"]);
   const dispatch = useDispatch();
   const classes = guildListStyles();
+  const contextMenu = useContextMenu();
   const dialog = useDialog();
   const history = useHistory();
 
@@ -102,6 +104,20 @@ const _GuildList = () => {
     dispatch(setGuildDialogOpen(true));
   }, [dispatch]);
 
+  const onGuildContextMenu = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      event.preventDefault();
+      contextMenu({
+        entries: {
+          "Leave Server": () => {},
+        },
+        mouseX: event.clientX,
+        mouseY: event.clientY,
+      });
+    },
+    []
+  );
+
   return (
     <>
       {guildsList.map((guild) => (
@@ -127,6 +143,7 @@ const _GuildList = () => {
                 hash: guild.host,
               });
             }}
+            onContextMenu={onGuildContextMenu}
           >
             <img
               className={classes.guildIcon}
