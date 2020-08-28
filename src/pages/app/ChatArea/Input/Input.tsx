@@ -66,6 +66,7 @@ const _Input = () => {
         mouseY: event.clientY,
       });
     },
+    // eslint-disable-next-line
     []
   );
 
