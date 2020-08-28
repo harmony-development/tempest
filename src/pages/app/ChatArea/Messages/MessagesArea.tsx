@@ -1,11 +1,5 @@
 import React, { useRef, useCallback, useEffect } from "react";
-import {
-  makeStyles,
-  Theme,
-  List,
-  Typography,
-  ListSubheader,
-} from "@material-ui/core";
+import { makeStyles, Theme, List, ListSubheader } from "@material-ui/core";
 import { Comms } from "../../../../comms/Comms";
 import { useLocation, useParams } from "react-router";
 import { Message } from "./Message";
@@ -91,6 +85,7 @@ const _MessagesArea = () => {
         }
       }
     })();
+    // eslint-disable-next-line
   }, [guildid, channelid, host, messageList]);
 
   useEffect(() => {
@@ -160,7 +155,8 @@ const _MessagesArea = () => {
         }
       }
     },
-    [host, guildid, channelid, messageList]
+    // eslint-disable-next-line
+    [host, guildid, channelid, messageList, reachedTop]
   );
 
   return (

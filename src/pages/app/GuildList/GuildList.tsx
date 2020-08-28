@@ -40,8 +40,7 @@ const _GuildList = () => {
     (state: RootState) => state.appReducer.guildsList
   );
   const hosts = useSelector((state: RootState) => state.appReducer.hosts);
-  const { guildid, channelid } = useParams<{
-    host?: string;
+  const { guildid } = useParams<{
     guildid?: string;
     channelid?: string;
   }>();
@@ -115,6 +114,7 @@ const _GuildList = () => {
         mouseY: event.clientY,
       });
     },
+    // eslint-disable-next-line
     []
   );
 

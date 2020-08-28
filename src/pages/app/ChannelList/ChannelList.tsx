@@ -81,6 +81,7 @@ const _ChannelList = () => {
         hash: window.location.hash,
       });
     },
+    // eslint-disable-next-line
     [host, guildid]
   );
 

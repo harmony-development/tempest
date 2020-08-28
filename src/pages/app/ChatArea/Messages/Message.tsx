@@ -1,7 +1,5 @@
 import React from "react";
 import {
-  makeStyles,
-  Theme,
   ListItem,
   ListItemAvatar,
   Avatar,
@@ -12,8 +10,6 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/redux";
 import { useLocation } from "react-router";
 
-const messageStyles = makeStyles((theme: Theme) => ({}));
-
 const UtcEpochToLocalDate = (time: number) => {
   const returnDate = new Date(0);
   returnDate.setUTCSeconds(time);
@@ -22,7 +18,6 @@ const UtcEpochToLocalDate = (time: number) => {
 
 const _Message = (props: { messageID: string }) => {
   const location = useLocation();
-  const classes = messageStyles();
   const host = location.hash.substr(1);
   const messages = useSelector(
     (state: RootState) => state.appReducer.hosts[host].messages

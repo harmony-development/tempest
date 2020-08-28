@@ -37,7 +37,7 @@ const _ChannelListItem = (props: {
 
   const onClickHandler = useCallback(() => {
     props.onClick!(props.channelID);
-  }, []);
+  }, [props]);
 
   return (
     <ListItem
