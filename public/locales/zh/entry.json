@@ -1,24 +1,24 @@
 {
-  "select-server": "Select Server",
-  "login-register-text": "Login/Register",
-  "official": "Official",
-  "custom": "Custom Server",
-  "custom-server-field": "Server Domain",
-  "custom-server-label": "Label",
-  "add-server": "Add Server",
+  "select-server": "选择服务器",
+  "login-register-text": "登录/创建账号",
+  "official": "官方",
+  "custom": "自创服务器",
+  "custom-server-field": "服务器域名",
+  "custom-server-label": "标签",
+  "add-server": "添加服务器",
   "login-to-instance": "Login to {{ host }}",
   "register-to-instance": "Register to {{ host }}",
-  "cancel": "Cancel",
-  "back": "Back",
-  "next": "Next",
-  "finish": "Finish",
-  "add": "Add",
+  "cancel": "关闭",
+  "back": "返回",
+  "next": "下一个",
+  "finish": "结束",
+  "add": "添加",
   "server-select": {
     "remove-server-title": "Remove Server",
     "remove-server-description": "Are you sure you would like to remove this server from your list? This cannot be undone."
   },
   "login-register": {
-    "new-user": "New User?",
-    "sign-in-instead": "Sign In Instead?"
+    "new-user": "新用户？",
+    "sign-in-instead": "已有账号？点这里登录"
   }
 }
