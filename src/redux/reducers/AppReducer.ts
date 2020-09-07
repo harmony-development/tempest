@@ -39,6 +39,11 @@ export interface IGuild {
   channelsList?: string[];
 }
 
+export interface IUser {
+  username?: string;
+  avatar?: string;
+}
+
 export interface IHostEntry {
   guilds?: {
     [id: string]: IGuild;
@@ -48,6 +53,9 @@ export interface IHostEntry {
   };
   messages?: {
     [id: string]: IMessage;
+  };
+  users?: {
+    [id: string]: IUser;
   };
 }
 
@@ -130,6 +138,18 @@ export const setMessages = createAction(
   }>()
 );
 
+export const setMessagesListAndSetMessages = createAction(
+  "SET_MESSAGES_LIST_AND_SET_MESSAGES",
+  withPayload<{
+    host: string;
+    channelID: string;
+    messageList: string[];
+    messages: {
+      [id: string]: IMessage;
+    };
+  }>()
+);
+
 export const addMessage = createAction(
   "ADD_MESSAGE",
   withPayload<{
@@ -146,6 +166,16 @@ export const setReachedTop = createAction(
     host: string;
     channelID: string;
     reachedTop: boolean;
+  }>()
+);
+
+export const setUsers = createAction(
+  "SET_USERS",
+  withPayload<{
+    host: string;
+    users: {
+      [id: string]: IUser;
+    };
   }>()
 );
 
@@ -241,9 +271,9 @@ export const appReducer = createReducer(initialAppState, (builder) =>
         [action.payload.host]: {
           ...state.hosts[action.payload.host],
           channels: {
-            ...state.hosts[action.payload.host].channels,
+            ...state.hosts[action.payload.host]?.channels,
             [action.payload.channelID]: {
-              ...state.hosts[action.payload.host].channels?.[
+              ...state.hosts[action.payload.host]?.channels?.[
                 action.payload.channelID
               ],
               messageList: action.payload.messageList,
@@ -258,6 +288,28 @@ export const appReducer = createReducer(initialAppState, (builder) =>
         ...state.hosts,
         [action.payload.host]: {
           ...state.hosts[action.payload.host],
+          messages: {
+            ...state.hosts[action.payload.host]?.messages,
+            ...action.payload.messages,
+          },
+        },
+      },
+    }))
+    .addCase(setMessagesListAndSetMessages, (state, action) => ({
+      ...state,
+      hosts: {
+        ...state.hosts,
+        [action.payload.host]: {
+          ...state.hosts[action.payload.host],
+          channels: {
+            ...state.hosts[action.payload.host]?.channels,
+            [action.payload.channelID]: {
+              ...state.hosts[action.payload.host]?.channels?.[
+                action.payload.channelID
+              ],
+              messageList: action.payload.messageList,
+            },
+          },
           messages: {
             ...state.hosts[action.payload.host]?.messages,
             ...action.payload.messages,
@@ -306,6 +358,19 @@ export const appReducer = createReducer(initialAppState, (builder) =>
               ],
               reachedTop: action.payload.reachedTop,
             },
+          },
+        },
+      },
+    }))
+    .addCase(setUsers, (state, action) => ({
+      ...state,
+      hosts: {
+        ...state.hosts,
+        [action.payload.host]: {
+          ...state.hosts[action.payload.host],
+          users: {
+            ...state.hosts[action.payload.host]?.users,
+            ...action.payload.users,
           },
         },
       },

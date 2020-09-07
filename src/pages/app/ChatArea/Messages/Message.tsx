@@ -22,6 +22,9 @@ const _Message = (props: { messageID: string }) => {
   const messages = useSelector(
     (state: RootState) => state.appReducer.hosts[host].messages
   );
+  const users = useSelector(
+    (state: RootState) => state.appReducer.hosts[host].users
+  );
   const messageData = messages?.[props.messageID];
 
   return (
@@ -32,7 +35,9 @@ const _Message = (props: { messageID: string }) => {
       <ListItemText
         primary={
           <Typography>
-            {messageData?.authorID || messageData?.authorID}{" "}
+            {messageData?.authorID
+              ? users?.[messageData.authorID].username
+              : messageData?.authorID}{" "}
             <Typography component="span" variant="body1" color="textSecondary">
               {UtcEpochToLocalDate(messageData?.createdAt || 0)}
             </Typography>

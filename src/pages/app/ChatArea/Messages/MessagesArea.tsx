@@ -9,8 +9,12 @@ import {
   IMessage,
   setMessages,
   setReachedTop,
+  IUser,
+  setMessagesListAndSetMessages,
+  setUsers,
 } from "../../../../redux/reducers/AppReducer";
 import { RootState } from "../../../../redux/redux";
+import { useIsMount } from "../../../../components/useIsMount";
 
 const messagesAreaStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -30,6 +34,7 @@ let scrollTrigger = false;
 const _MessagesArea = () => {
   const location = useLocation();
   const dispatch = useDispatch();
+  const isMount = useIsMount();
   const { guildid, channelid } = useParams<{
     guildid?: string;
     channelid?: string;
@@ -40,6 +45,12 @@ const _MessagesArea = () => {
   const messageList = useSelector(
     (state: RootState) =>
       state.appReducer.hosts[host]?.channels?.[channelid || ""]?.messageList
+  );
+  const messages = useSelector(
+    (state: RootState) => state.appReducer.hosts[host]?.messages
+  );
+  const users = useSelector(
+    (state: RootState) => state.appReducer.hosts[host]?.users
   );
   const reachedTop = useSelector(
     (state: RootState) =>
@@ -57,17 +68,12 @@ const _MessagesArea = () => {
           const respMsgs = await resp.message?.toObject();
           respMsgs?.messagesList.reverse();
           dispatch(
-            setMessagesList({
+            setMessagesListAndSetMessages({
               host,
               channelID: channelid,
               messageList: (respMsgs?.messagesList || []).map(
                 (m) => m.location!.messageId
               ),
-            })
-          );
-          dispatch(
-            setMessages({
-              host,
               messages: (respMsgs?.messagesList || []).reduce<{
                 [id: string]: IMessage;
               }>((obj, m) => {
@@ -86,19 +92,56 @@ const _MessagesArea = () => {
       }
     })();
     // eslint-disable-next-line
-  }, [guildid, channelid, host, messageList]);
+  }, [guildid, channelid, host]);
 
   useEffect(() => {
-    if (!containerRef.current) return;
-    if (!scrollTrigger) {
-      containerRef.current.scrollTop = containerRef.current.scrollHeight;
-    } else {
-      containerRef.current.scrollTop =
-        containerRef.current.scrollHeight -
-        previousScrollHeight +
-        previousScrollTop;
-      scrollTrigger = false;
+    if (containerRef.current) {
+      if (!scrollTrigger) {
+        containerRef.current.scrollTop = containerRef.current.scrollHeight;
+      } else {
+        containerRef.current.scrollTop =
+          containerRef.current.scrollHeight -
+          previousScrollHeight +
+          previousScrollTop;
+        scrollTrigger = false;
+      }
     }
+  }, []);
+
+  useEffect(() => {
+    if (isMount) return;
+    const userIDs = Array.from(
+      new Set(
+        messageList?.reduce<string[]>((arr, messageID) => {
+          if (messages?.[messageID].authorID) {
+            arr.push(messages?.[messageID].authorID);
+          }
+          return arr;
+        }, [])
+      )
+    );
+    const fetchedUsers: {
+      [id: string]: IUser;
+    } = {};
+    const requestPromises = userIDs.map((id) => {
+      if (!users?.[id]) {
+        return Comms.connections[host].getUser(id).then((resp) => {
+          fetchedUsers[id] = {
+            username: resp.message?.getUserName(),
+            avatar: resp.message?.getUserAvatar(),
+          };
+        });
+      }
+      return undefined;
+    });
+    Promise.all(requestPromises).then(() => {
+      dispatch(
+        setUsers({
+          host,
+          users: fetchedUsers,
+        })
+      );
+    });
   }, [messageList]);
 
   const onMessageListScroll = useCallback(
