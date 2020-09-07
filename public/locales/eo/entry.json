@@ -14,8 +14,8 @@
   "finish": "Fini",
   "add": "Aldoni",
   "server-select": {
-    "remove-server-title": "Forigi Servilon",
-    "remove-server-description": "Ĉu vi certas, ke vi ŝatus forigi ĉi tiun servilon el via listo? Ĉi tio ne povas esti malfarita."
+    "remove-server-title": "Remove Server",
+    "remove-server-description": "Are you sure you would like to remove this server from your list? This cannot be undone."
   },
   "login-register": {
     "new-user": "Nova Uzanto?",
