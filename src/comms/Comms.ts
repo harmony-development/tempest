@@ -3,6 +3,7 @@ import { GuildEvent } from "@harmony-dev/harmony-web-sdk/dist/protocol/core/v1/c
 import { store } from "../redux/redux";
 import { addMessage } from "../redux/reducers/AppReducer";
 import { grpc } from "@improbable-eng/grpc-web";
+import { useQuery } from "react-query";
 
 export class Comms {
   static homeserver: string;
@@ -56,3 +57,24 @@ export class Comms {
     c.events.on("disconnect", this.onDisconnect);
   }
 }
+
+export const useGuildList = () => {
+  return useQuery("guildlist", async () => {
+    const data = await Comms.getHomeserverConn().getGuildList();
+    return data.message?.toObject();
+  });
+};
+
+export const useGuildData = (guildID: string, host: string) => {
+  return useQuery(
+    ["guilddata", guildID, host],
+    async () => {
+      const conn = await Comms.getOrFederate(host);
+      const data = await conn.getGuild(guildID);
+      return data.message?.toObject();
+    },
+    {
+      enabled: guildID && host,
+    }
+  );
+};

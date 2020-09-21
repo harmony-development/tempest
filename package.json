@@ -13,25 +13,27 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "@types/jest": "^24.9.1",
-    "@types/node": "^12.12.54",
-    "@types/react": "^16.9.47",
+    "@types/node": "^12.12.62",
+    "@types/react": "^16.9.49",
     "@types/react-dom": "^16.9.8",
     "@types/react-redux": "^7.1.9",
     "@types/react-router": "^5.1.8",
     "@types/react-router-dom": "^5.1.5",
     "@types/react-transition-group": "^4.4.0",
-    "@welldone-software/why-did-you-render": "^4.3.1",
+    "@welldone-software/why-did-you-render": "^4.3.2",
     "formik": "^2.1.4",
     "i18next": "^19.7.0",
     "i18next-browser-languagedetector": "^4.3.1",
-    "i18next-http-backend": "^1.0.18",
+    "i18next-http-backend": "^1.0.20",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-i18next": "^11.7.1",
+    "react-i18next": "^11.7.2",
+    "react-query": "^2.23.0",
+    "react-query-devtools": "^2.5.0",
     "react-redux": "^7.2.1",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.1",
+    "react-scripts": "^3.4.3",
     "react-transition-group": "^4.4.1",
     "typeface-roboto": "0.0.75",
     "typescript": "^3.7.5"
@@ -60,7 +62,7 @@
   "devDependencies": {
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
-    "prettier": "^2.1.0",
-    "typescript-plugin-css-modules": "^2.3.0"
+    "prettier": "^2.1.2",
+    "typescript-plugin-css-modules": "^2.7.0"
   }
 }

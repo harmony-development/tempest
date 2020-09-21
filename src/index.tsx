@@ -6,18 +6,27 @@ import "./wdyr";
 import "./i18n";
 import "typeface-roboto";
 import { Provider } from "react-redux";
+import { QueryCache, ReactQueryCacheProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query-devtools";
 
 import { Root } from "./Root";
 import * as serviceWorker from "./serviceWorker";
 import { store } from "./redux/redux";
 
+const queryCache = new QueryCache();
+
 const _Index = () => {
   return (
-    <Provider store={store}>
-      <BrowserRouter>
-        <Root />
-      </BrowserRouter>
-    </Provider>
+    <>
+      <Provider store={store}>
+        <ReactQueryCacheProvider queryCache={queryCache}>
+          <BrowserRouter>
+            <Root />
+          </BrowserRouter>
+        </ReactQueryCacheProvider>
+      </Provider>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </>
   );
 };
 
