@@ -1,21 +1,11 @@
-import React, { useEffect, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React from "react";
 
-import { RootState } from "../../../redux/redux";
-import { Comms, useChannelList } from "../../../comms/Comms";
-import { useParams, useHistory } from "react-router";
-import {
-  setChannelsList,
-  setChannels,
-  IChannel,
-  setSelectedChannel,
-} from "../../../redux/reducers/AppReducer";
+import { useChannelList } from "../../../comms/Comms";
+import { useParams } from "react-router";
 import { List } from "@material-ui/core";
-import { ChannelListItem } from "../../../components/ChannelListItem";
 import { ChannelEntry } from "./ChannelEntry";
 
 const _ChannelList = () => {
-  const history = useHistory();
   const host = window.location.hash.substr(1);
   const { guildid } = useParams<{
     guildid?: string;

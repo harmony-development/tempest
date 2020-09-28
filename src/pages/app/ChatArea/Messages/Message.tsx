@@ -6,9 +6,6 @@ import {
   ListItemText,
   Typography,
 } from "@material-ui/core";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../../redux/redux";
-import { useLocation } from "react-router";
 import { useUserData } from "../../../../comms/Comms";
 
 const UtcEpochToLocalDate = (time: number) => {

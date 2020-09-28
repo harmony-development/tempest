@@ -1,11 +1,8 @@
-import React, { useRef, useCallback, useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import { makeStyles, Theme, List, ListSubheader } from "@material-ui/core";
-import { Comms, useMessages } from "../../../../comms/Comms";
+import { useMessages } from "../../../../comms/Comms";
 import { useLocation, useParams } from "react-router";
 import { Message } from "./Message";
-import { useDispatch } from "react-redux";
-import { RootState } from "../../../../redux/redux";
-import { useIsMount } from "../../../../components/useIsMount";
 import { useScrollHandler } from "../../../../components/useScrollHandler";
 
 const messagesAreaStyles = makeStyles((theme: Theme) => ({
@@ -21,8 +18,6 @@ const messagesAreaStyles = makeStyles((theme: Theme) => ({
 
 const _MessagesArea = () => {
   const location = useLocation();
-  const dispatch = useDispatch();
-  const isMount = useIsMount();
   const { guildid, channelid } = useParams<{
     guildid?: string;
     channelid?: string;
