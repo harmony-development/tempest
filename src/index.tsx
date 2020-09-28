@@ -13,7 +13,16 @@ import { Root } from "./Root";
 import * as serviceWorker from "./serviceWorker";
 import { store } from "./redux/redux";
 
-const queryCache = new QueryCache();
+const queryCache = new QueryCache({
+  defaultConfig: {
+    queries: {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      retry: false,
+      cacheTime: 0,
+    },
+  },
+});
 
 const _Index = () => {
   return (

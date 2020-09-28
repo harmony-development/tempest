@@ -1,7 +1,6 @@
 import React, { useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 
-import { RootState } from "../../../redux/redux";
 import { setGuildDialogOpen } from "../../../redux/reducers/UIReducer";
 import { GuildListEntry } from "./GuildListEntry";
 import { useGuildList } from "../../../comms/Comms";
@@ -16,7 +15,7 @@ const _GuildList = () => {
 
   return (
     <>
-      {guildsList.data?.guildsList.map((guild) => (
+      {guildsList.data?.map((guild) => (
         <GuildListEntry
           key={`${guild.host}${guild.guildId}`}
           host={guild.host}

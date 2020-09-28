@@ -3,7 +3,7 @@ import { GuildEvent } from "@harmony-dev/harmony-web-sdk/dist/protocol/core/v1/c
 import { store } from "../redux/redux";
 import { addMessage } from "../redux/reducers/AppReducer";
 import { grpc } from "@improbable-eng/grpc-web";
-import { useQuery } from "react-query";
+import { useQuery, useInfiniteQuery } from "react-query";
 
 export class Comms {
   static homeserver: string;
@@ -61,13 +61,13 @@ export class Comms {
 export const useGuildList = () => {
   return useQuery("guildlist", async () => {
     const data = await Comms.getHomeserverConn().getGuildList();
-    return data.message?.toObject();
+    return data.message?.toObject().guildsList;
   });
 };
 
 export const useGuildData = (guildID: string, host: string) => {
   return useQuery(
-    ["guilddata", guildID, host],
+    ["guilddata", host, guildID],
     async () => {
       const conn = await Comms.getOrFederate(host);
       const data = await conn.getGuild(guildID);
@@ -75,6 +75,58 @@ export const useGuildData = (guildID: string, host: string) => {
     },
     {
       enabled: guildID && host,
+    }
+  );
+};
+
+export const useChannelList = (host?: string, guildID?: string) => {
+  return useQuery(["channellist", host, guildID], async () => {
+    if (!host || !guildID) return [];
+    const conn = await Comms.getOrFederate(host);
+    const data = await conn.getGuildChannels(guildID);
+    return data.message?.toObject().channelsList;
+  });
+};
+
+export const useMessages = (
+  host?: string,
+  guildID?: string,
+  channelID?: string
+) => {
+  return useInfiniteQuery(
+    ["messages", host, guildID, channelID],
+    async (key, messageID: string) => {
+      if (!host || !guildID || !channelID) return [];
+      const conn = await Comms.getOrFederate(host);
+      if (messageID) {
+        return (
+          await conn.getChannelMessages(guildID, channelID, messageID)
+        )?.message?.toObject().messagesList;
+      } else {
+        return (
+          await conn.getChannelMessages(guildID, channelID)
+        )?.message?.toObject().messagesList;
+      }
+    },
+    {
+      getFetchMore: (msgs) => {
+        return msgs?.[0]?.location?.messageId;
+      },
+      queryFnParamsFilter: (args) => [[args.slice(0, -1)], args[args.length]],
+    }
+  );
+};
+
+export const useUserData = (userID: string, host: string) => {
+  return useQuery(
+    ["userdata", host, userID],
+    async () => {
+      const conn = await Comms.getOrFederate(host);
+      const data = await conn.getUser(userID);
+      return data.message?.toObject();
+    },
+    {
+      enabled: userID && host,
     }
   );
 };
