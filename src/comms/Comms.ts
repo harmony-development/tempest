@@ -101,11 +101,13 @@ export const useMessages = (
       if (messageID) {
         return (
           await conn.getChannelMessages(guildID, channelID, messageID)
-        )?.message?.toObject().messagesList;
+        )?.message
+          ?.toObject()
+          .messagesList.reverse();
       } else {
-        return (
-          await conn.getChannelMessages(guildID, channelID)
-        )?.message?.toObject().messagesList;
+        return (await conn.getChannelMessages(guildID, channelID))?.message
+          ?.toObject()
+          .messagesList.reverse();
       }
     },
     {

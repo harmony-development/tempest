@@ -6,36 +6,41 @@ import "./wdyr";
 import "./i18n";
 import "typeface-roboto";
 import { Provider } from "react-redux";
-import { QueryCache, ReactQueryCacheProvider } from "react-query";
+import {
+  QueryCache,
+  ReactQueryCacheProvider,
+  ReactQueryConfigProvider,
+  ReactQueryConfig,
+} from "react-query";
 import { ReactQueryDevtools } from "react-query-devtools";
 
 import { Root } from "./Root";
 import * as serviceWorker from "./serviceWorker";
 import { store } from "./redux/redux";
 
-const queryCache = new QueryCache({
-  defaultConfig: {
-    queries: {
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-      retry: false,
-      cacheTime: 0,
-    },
+const queryCache = new QueryCache();
+
+const queryConfig: ReactQueryConfig = {
+  queries: {
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    retry: false,
+    cacheTime: 50000000,
   },
-});
+};
 
 const _Index = () => {
   return (
-    <>
-      <Provider store={store}>
-        <ReactQueryCacheProvider queryCache={queryCache}>
+    <Provider store={store}>
+      <ReactQueryCacheProvider queryCache={queryCache}>
+        <ReactQueryConfigProvider config={queryConfig}>
           <BrowserRouter>
             <Root />
           </BrowserRouter>
-        </ReactQueryCacheProvider>
-      </Provider>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </ReactQueryConfigProvider>
+      </ReactQueryCacheProvider>
+    </Provider>
   );
 };
 
