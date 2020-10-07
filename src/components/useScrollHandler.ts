@@ -1,23 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 export const useScrollHandler = (props: {
   target: React.MutableRefObject<HTMLDivElement | null>;
   onScrollTop: () => void;
   enabled: boolean;
 }) => {
-  const [previousScrollHeight, setPreviousScrollHeight] = useState(0);
-  const [previousScrollTop, setPreviousScrollTop] = useState(0);
-  const [scrollTrigger, setScrollTrigger] = useState(false);
+  const { target, enabled, onScrollTop } = props;
+
+  const onScroll = useCallback(() => {
+    if (!enabled) return; // reached top
+    if (target.current?.scrollTop === 0) {
+      props.onScrollTop();
+    }
+  }, [enabled, target, onScrollTop]);
 
   useEffect(() => {
-    props.target.current?.addEventListener("scroll", () => {
-      if (!props.enabled) return; // reached top presumably
-      if (props.target.current?.scrollTop === 0) {
-        setScrollTrigger(true);
-        setPreviousScrollHeight(props.target.current?.scrollHeight);
-        setPreviousScrollTop(props.target.current.scrollTop);
-        props.onScrollTop();
-      }
-    });
-  }, []);
+    target.current?.addEventListener("scroll", onScroll);
+    return () => {
+      target.current?.removeEventListener("scroll", onScroll);
+    };
+  }, [target, onScroll]);
 };

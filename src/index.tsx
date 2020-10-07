@@ -18,14 +18,14 @@ import { Root } from "./Root";
 import * as serviceWorker from "./serviceWorker";
 import { store } from "./redux/redux";
 
-const queryCache = new QueryCache();
+export const queryCache = new QueryCache();
 
 const queryConfig: ReactQueryConfig = {
   queries: {
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     retry: false,
-    cacheTime: 50000000,
+    cacheTime: 1000 * 60 * 5,
   },
 };
 
@@ -33,12 +33,10 @@ const _Index = () => {
   return (
     <Provider store={store}>
       <ReactQueryCacheProvider queryCache={queryCache}>
-        <ReactQueryConfigProvider config={queryConfig}>
-          <BrowserRouter>
-            <Root />
-          </BrowserRouter>
-          <ReactQueryDevtools initialIsOpen={false} />
-        </ReactQueryConfigProvider>
+        <BrowserRouter>
+          <Root />
+        </BrowserRouter>
+        <ReactQueryDevtools initialIsOpen={false} />
       </ReactQueryCacheProvider>
     </Provider>
   );

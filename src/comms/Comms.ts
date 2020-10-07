@@ -1,9 +1,11 @@
 import { Connection } from "@harmony-dev/harmony-web-sdk";
-import { GuildEvent } from "@harmony-dev/harmony-web-sdk/dist/protocol/core/v1/core_pb";
-import { store } from "../redux/redux";
-import { addMessage } from "../redux/reducers/AppReducer";
+import {
+  GuildEvent,
+  Message,
+} from "@harmony-dev/harmony-web-sdk/dist/protocol/core/v1/core_pb";
 import { grpc } from "@improbable-eng/grpc-web";
-import { useQuery, useInfiniteQuery } from "react-query";
+import { useQuery, useInfiniteQuery, useMutation } from "react-query";
+import { queryCache } from "..";
 
 export class Comms {
   static homeserver: string;
@@ -29,18 +31,7 @@ export class Comms {
   static onMessage(host: string, event: GuildEvent.MessageSent) {
     const { message } = event.toObject();
     if (message?.location && message.createdAt) {
-      store.dispatch(
-        addMessage({
-          host,
-          channelID: message?.location?.channelId,
-          messageID: message?.location?.messageId,
-          message: {
-            authorID: message?.authorId,
-            createdAt: message?.createdAt?.seconds,
-            content: message?.content,
-          },
-        })
-      );
+      console.log("hi");
     }
   }
 
@@ -93,28 +84,24 @@ export const useMessages = (
   guildID?: string,
   channelID?: string
 ) => {
+  let hasReachedTop = false;
+
   return useInfiniteQuery(
     ["messages", host, guildID, channelID],
-    async (key, messageID: string) => {
+    async (key, _host, _guildid, _channelid, messageID: string) => {
+      console.log(key, messageID);
       if (!host || !guildID || !channelID) return [];
       const conn = await Comms.getOrFederate(host);
-      if (messageID) {
-        return (
-          await conn.getChannelMessages(guildID, channelID, messageID)
-        )?.message
-          ?.toObject()
-          .messagesList.reverse();
-      } else {
-        return (await conn.getChannelMessages(guildID, channelID))?.message
-          ?.toObject()
-          .messagesList.reverse();
-      }
+      const msgs = (
+        await conn.getChannelMessages(guildID, channelID, messageID)
+      )?.message
+        ?.toObject()
+        .messagesList.reverse();
+      if (msgs?.length == 0) hasReachedTop = true;
+      return msgs;
     },
     {
-      getFetchMore: (msgs) => {
-        return msgs?.[0]?.location?.messageId;
-      },
-      queryFnParamsFilter: (args) => [[args.slice(0, -1)], args[args.length]],
+      getFetchMore: () => !hasReachedTop,
     }
   );
 };
@@ -129,6 +116,32 @@ export const useUserData = (userID: string, host: string) => {
     },
     {
       enabled: userID && host,
+    }
+  );
+};
+
+export const useDeleteMessage = (
+  host: string,
+  guildID: string,
+  channelID: string,
+  messageID: string,
+  pageIndex: number,
+  messageIndex: number
+) => {
+  const messageListKey = ["messages", host, guildID, channelID];
+  return useMutation(
+    async () => {
+      const conn = await Comms.getOrFederate(host);
+      await conn.deleteMessage(guildID, channelID, messageID);
+    },
+    {
+      onSuccess: () => {
+        const pages = queryCache.getQueryData<Message.AsObject[][]>(
+          messageListKey
+        );
+        pages?.[pageIndex]?.splice(messageIndex, 1);
+        queryCache.setQueryData(messageListKey, pages);
+      },
     }
   );
 };

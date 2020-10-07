@@ -25,14 +25,18 @@ const _MessagesArea = () => {
   const classes = messagesAreaStyles();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const host = location.hash.substr(1);
-  const [reachedTop, setReachedTop] = useState(false);
   const messages = useMessages(host, guildid, channelid);
 
-  const onScrollTop = () => {};
+  const onScrollTop = () => {
+    const lastPage = messages.data?.[0];
+    messages.fetchMore(lastPage?.[0]?.location?.messageId, {
+      previous: true,
+    });
+  };
 
   useScrollHandler({
     target: containerRef,
-    enabled: reachedTop,
+    enabled: messages.canFetchMore || false,
     onScrollTop: onScrollTop,
   });
 
@@ -40,7 +44,7 @@ const _MessagesArea = () => {
     <div className={classes.root} ref={containerRef}>
       <List
         subheader={
-          reachedTop ? (
+          !messages.canFetchMore ? (
             <ListSubheader component="div" disableSticky={true}>
               Welcome to #{channelid}
             </ListSubheader>
@@ -49,13 +53,15 @@ const _MessagesArea = () => {
       >
         {messages.data?.map((page, i) => (
           <React.Fragment key={i}>
-            {page?.map((msg) => (
+            {page?.map((msg, j) => (
               <Message
                 key={msg.location?.messageId}
                 messageID={msg.location!.messageId}
                 authorID={msg.authorId}
                 createdAt={msg.createdAt?.seconds}
                 content={msg.content}
+                pageIndex={i}
+                messageIndex={j}
               />
             ))}
           </React.Fragment>

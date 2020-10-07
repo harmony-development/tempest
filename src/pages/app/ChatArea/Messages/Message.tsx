@@ -10,9 +10,10 @@ import {
   makeStyles,
   Theme,
 } from "@material-ui/core";
-import { useUserData } from "../../../../comms/Comms";
+import { useUserData, useDeleteMessage } from "../../../../comms/Comms";
 import { MoreVert } from "@material-ui/icons";
 import { useContextMenu } from "../../../../components/contextmenu/ContextMenuContext";
+import { useParams } from "react-router";
 
 const UtcEpochToLocalDate = (time: number) => {
   const returnDate = new Date(0);
@@ -38,18 +39,36 @@ const _Message = (props: {
   authorID: string;
   createdAt?: number;
   content: string;
+  pageIndex: number;
+  messageIndex: number;
 }) => {
   const host = window.location.hash.substr(1);
+  const { guildid, channelid } = useParams<{
+    guildid: string;
+    channelid: string;
+  }>();
   const userDataQuery = useUserData(props.authorID, host);
   const contextMenu = useContextMenu();
   const classes = messageStyles();
+  const [deleteMessage] = useDeleteMessage(
+    host,
+    guildid,
+    channelid,
+    props.messageID,
+    props.pageIndex,
+    props.messageIndex
+  );
+
+  const onDeleteClick = useCallback(async () => {
+    await deleteMessage();
+  }, []);
 
   const messageOptions: {
     [name: string]: (
       event: React.MouseEvent<HTMLLIElement, MouseEvent>
     ) => void;
   } = {
-    Delete: () => {},
+    Delete: onDeleteClick,
   };
 
   const onMessageOptionsClick = useCallback(
