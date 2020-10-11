@@ -39,8 +39,8 @@ const _Message = (props: {
   authorID: string;
   createdAt?: number;
   content: string;
-  pageIndex: number;
-  messageIndex: number;
+  index: number;
+  style?: React.CSSProperties;
 }) => {
   const host = window.location.hash.substr(1);
   const { guildid, channelid } = useParams<{
@@ -99,6 +99,7 @@ const _Message = (props: {
       dense
       onContextMenu={onContextMenu}
       button
+      style={props.style}
     >
       <ListItemAvatar>
         <Avatar alt={props.authorID} src={undefined} />

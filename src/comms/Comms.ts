@@ -97,7 +97,7 @@ export const useMessages = (
       )?.message
         ?.toObject()
         .messagesList.reverse();
-      if (msgs?.length == 0) hasReachedTop = true;
+      if (msgs?.length === 0) hasReachedTop = true;
       return msgs;
     },
     {

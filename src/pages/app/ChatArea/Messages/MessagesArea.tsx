@@ -1,9 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useCallback, useMemo } from "react";
 import { makeStyles, Theme, List, ListSubheader } from "@material-ui/core";
 import { useMessages } from "../../../../comms/Comms";
 import { useLocation, useParams } from "react-router";
 import { Message } from "./Message";
 import { useScrollHandler } from "../../../../components/useScrollHandler";
+import AutoSizer from "react-virtualized-auto-sizer";
+import { FixedSizeList } from "react-window";
 
 const messagesAreaStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -13,6 +15,9 @@ const messagesAreaStyles = makeStyles((theme: Theme) => ({
     "&:focus": {
       outline: "none",
     },
+  },
+  list: {
+    height: "100%",
   },
 }));
 
@@ -27,6 +32,8 @@ const _MessagesArea = () => {
   const host = location.hash.substr(1);
   const messages = useMessages(host, guildid, channelid);
 
+  const flatMessages = useMemo(() => messages.data?.flat() || [], [messages]);
+
   const onScrollTop = () => {
     const lastPage = messages.data?.[0];
     messages.fetchMore(lastPage?.[0]?.location?.messageId, {
@@ -40,6 +47,24 @@ const _MessagesArea = () => {
     onScrollTop: onScrollTop,
   });
 
+  const renderMessages = useCallback(
+    (props: { index: number; style: React.CSSProperties }) => {
+      const msg = flatMessages[props.index];
+      return (
+        <Message
+          key={msg?.location?.messageId}
+          messageID={msg?.location!.messageId || ""}
+          authorID={msg?.authorId || ""}
+          createdAt={msg?.createdAt?.seconds}
+          content={msg?.content || ""}
+          style={props.style}
+          index={props.index}
+        />
+      );
+    },
+    [flatMessages]
+  );
+
   return (
     <div className={classes.root} ref={containerRef}>
       <List
@@ -50,22 +75,16 @@ const _MessagesArea = () => {
             </ListSubheader>
           ) : undefined
         }
+        className={classes.list}
       >
-        {messages.data?.map((page, i) => (
-          <React.Fragment key={i}>
-            {page?.map((msg, j) => (
-              <Message
-                key={msg.location?.messageId}
-                messageID={msg.location!.messageId}
-                authorID={msg.authorId}
-                createdAt={msg.createdAt?.seconds}
-                content={msg.content}
-                pageIndex={i}
-                messageIndex={j}
-              />
-            ))}
-          </React.Fragment>
-        ))}
+        <FixedSizeList
+          height={150}
+          itemCount={flatMessages.length}
+          width={300}
+          itemSize={64}
+        >
+          {renderMessages}
+        </FixedSizeList>
       </List>
     </div>
   );
