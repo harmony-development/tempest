@@ -1,4 +1,4 @@
-# staccati-vue
+# staccato-vue
 
 ## Build Setup
 

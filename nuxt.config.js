@@ -6,8 +6,8 @@ export default {
 
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
-    titleTemplate: '%s - staccati-vue',
-    title: 'staccati-vue',
+    titleTemplate: '%s - staccato-vue',
+    title: 'staccato-vue',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
