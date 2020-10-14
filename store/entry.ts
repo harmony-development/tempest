@@ -13,6 +13,7 @@ export const state = () => ({
     },
   ] as IServerEntry[],
   selectedServer: undefined as string | undefined,
+  step: 1,
 })
 
 export const mutations = mutationTree(state, {
@@ -27,5 +28,9 @@ export const mutations = mutationTree(state, {
   },
   removeServerFromList(state, idx: number) {
     state.serverList.splice(idx, 1)
+  },
+
+  setStep(state, step: number) {
+    state.step = step
   },
 })

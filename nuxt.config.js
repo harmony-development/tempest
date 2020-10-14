@@ -20,7 +20,7 @@ export default {
   css: ['@/static/fix.css'],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: [{ src: '~/plugins/localStorage.js', ssr: false }],
+  plugins: [{ src: '~/plugins/localStorage.js', mode: 'client' }],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,

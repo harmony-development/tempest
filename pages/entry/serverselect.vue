@@ -1,5 +1,5 @@
 <template>
-  <fragment>
+  <div>
     <h2 class="mb-2">Select A Server To Login To</h2>
     <v-dialog
       v-model="addServerDialog"
@@ -44,12 +44,8 @@
     </v-dialog>
     <v-sheet class="server-select mb-4">
       <v-list>
-        <v-list-item-group
-          v-model="selected"
-          color="primary"
-          @change="setSelectedServer()"
-        >
-          <v-list-item v-for="(host, idx) in serverList" :key="host">
+        <v-list-item-group v-model="selected" color="primary">
+          <v-list-item v-for="(host, idx) in serverList" :key="host.host">
             <v-list-item-content>
               <v-list-item-title v-text="host.name"></v-list-item-title>
               <v-list-item-subtitle v-text="host.host"></v-list-item-subtitle>
@@ -69,12 +65,12 @@
       >
       <v-btn
         color="primary"
-        :disabled="selected === undefined"
+        :disabled="serverList[selected] === undefined"
         @click="nextPage()"
         >NEXT <v-icon right>mdi-chevron-right</v-icon></v-btn
       >
     </div>
-  </fragment>
+  </div>
 </template>
 
 <style scoped>
@@ -90,18 +86,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Fragment } from 'vue-fragment'
 
 export default Vue.extend({
-  components: {
-    Fragment,
-  },
-  props: {
-    value: {
-      type: Number,
-      default: 0,
-    },
-  },
   data() {
     return {
       selected: 0,
@@ -118,14 +104,10 @@ export default Vue.extend({
       return this.$accessor.entry.serverList
     },
   },
+  mounted() {
+    this.$accessor.entry.setStep(1)
+  },
   methods: {
-    setSelectedServer() {
-      if (this.selected) {
-        this.$accessor.entry.setSelectedServer(
-          this.serverList[this.selected]?.host
-        )
-      }
-    },
     removeServer(idx: number) {
       this.$accessor.entry.removeServerFromList(idx)
     },
@@ -138,10 +120,10 @@ export default Vue.extend({
     },
     nextPage() {
       this.$router.push({
-        path: this.$route.path,
-        hash: this.selectedServer,
+        path: `auth`,
+        hash: this.serverList[this.selected]?.host,
       })
-      this.$emit('input', this.value + 1)
+      this.$accessor.entry.setStep(this.$accessor.entry.step + 1)
     },
   },
 })

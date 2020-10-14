@@ -1,25 +1,7 @@
 <template>
   <div class="root">
     <v-sheet class="body pa-6" rounded>
-      <v-stepper v-model="step" alt-labels>
-        <v-stepper-header>
-          <v-stepper-step :complete="step > 1" step="1">
-            Server Select
-          </v-stepper-step>
-          <v-divider />
-          <v-stepper-step :complete="step > 2" step="2">
-            Login/Register
-          </v-stepper-step>
-        </v-stepper-header>
-        <v-stepper-items>
-          <v-stepper-content step="1">
-            <server-select v-model="step" />
-          </v-stepper-content>
-          <v-stepper-content step="2">
-            <auth />
-          </v-stepper-content>
-        </v-stepper-items>
-      </v-stepper>
+      <nuxt-child />
     </v-sheet>
   </div>
 </template>
@@ -39,17 +21,16 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import ServerSelect from './serverselect.vue'
-import Auth from './auth.vue'
 
 export default Vue.extend({
-  components: {
-    ServerSelect,
-    Auth,
+  computed: {
+    step() {
+      return this.$accessor.entry.step
+    },
   },
-  data() {
-    return {
-      step: 1,
+  beforeCreate() {
+    if (this.$route.fullPath === '/entry') {
+      this.$router.push('/entry/serverselect')
     }
   },
 })

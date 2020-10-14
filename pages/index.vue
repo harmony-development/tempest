@@ -3,8 +3,8 @@ import Vue from 'vue'
 
 export default Vue.extend({
   components: {},
-  created() {
-    this.$router.push('/entry')
+  beforeCreate() {
+    this.$router.push('/entry/serverselect')
   },
 })
 </script>
