@@ -9,7 +9,7 @@
       hide-details="auto"
       class="mb-2"
     ></v-text-field>
-    <a>New User?</a>
+    <a @click="toRegister">New user?</a>
     <v-btn block class="mt-2">Login</v-btn>
   </fragment>
 </template>
@@ -21,6 +21,11 @@ export default Vue.extend({
   computed: {
     host() {
       return this.$route.hash.substr(1)
+    },
+  },
+  methods: {
+    toRegister() {
+      this.$router.push({ path: 'register', hash: this.$route.hash })
     },
   },
 })
