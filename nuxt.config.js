@@ -20,7 +20,10 @@ export default {
   css: ['@/static/fix.css'],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: [{ src: '~/plugins/localStorage.js', mode: 'client' }],
+  plugins: [
+    { src: '~/plugins/localStorage.js', mode: 'client' },
+    { src: '~/plugins/fragments.js', mode: 'client' },
+  ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
@@ -47,7 +50,7 @@ export default {
       dark: true,
       themes: {
         dark: {
-          primary: colors.purple.darken1,
+          primary: colors.blue.lighten2,
           accent: colors.grey.darken3,
           secondary: colors.amber.darken3,
           info: colors.teal.lighten1,

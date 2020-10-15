@@ -120,7 +120,7 @@ export default Vue.extend({
     },
     nextPage() {
       this.$router.push({
-        path: `auth`,
+        path: `auth/login`,
         hash: this.serverList[this.selected]?.host,
       })
       this.$accessor.entry.setStep(this.$accessor.entry.step + 1)
