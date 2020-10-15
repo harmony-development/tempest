@@ -1,7 +1,13 @@
 <template>
   <fragment>
     <h3 class="mb-4">Login To {{ host }}</h3>
-    <v-text-field label="Email" outlined type="email"></v-text-field>
+    <v-text-field
+      label="Email"
+      outlined
+      type="email"
+      hide-details="auto"
+      class="mb-3"
+    ></v-text-field>
     <v-text-field
       label="Password"
       outlined
