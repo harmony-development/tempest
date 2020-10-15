@@ -12,6 +12,21 @@
         <nuxt-child />
       </v-sheet>
     </div>
+    <v-dialog :value="dialogData.open" max-width="290" @input="closeDialog">
+      <v-card>
+        <v-card-title class="headline">
+          {{ dialogData.title }}
+        </v-card-title>
+        <v-card-text>
+          {{ dialogData.description }}
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="red" text @click="closeDialog"> Ok </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </fragment>
 </template>
 
@@ -50,11 +65,19 @@ export default Vue.extend({
     step() {
       return this.$accessor.entry.step
     },
+    dialogData() {
+      return this.$accessor.entry.dialog
+    },
   },
   beforeCreate() {
     if (this.$route.fullPath === '/entry') {
       this.$router.push('/entry/serverselect')
     }
+  },
+  methods: {
+    closeDialog() {
+      this.$accessor.entry.closeDialog()
+    },
   },
 })
 </script>

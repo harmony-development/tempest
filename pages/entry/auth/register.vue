@@ -2,6 +2,7 @@
   <fragment>
     <h3 class="mb-4">Register At {{ host }}</h3>
     <v-text-field
+      v-model="email"
       label="Email"
       type="email"
       outlined
@@ -9,6 +10,7 @@
       class="mb-3"
     ></v-text-field>
     <v-text-field
+      v-model="username"
       label="Username"
       outlined
       type="username"
@@ -16,21 +18,48 @@
       class="mb-3"
     ></v-text-field>
     <v-text-field
+      v-model="password"
       label="Password"
       outlined
       type="password"
       hide-details="auto"
       class="mb-3"
     ></v-text-field>
+    <v-text-field
+      v-model="confirmPassword"
+      label="Confirm Password"
+      outlined
+      type="password"
+      hide-details="auto"
+      class="mb-3"
+      :rules="[validateConfirmPassword]"
+    ></v-text-field>
     <a @click="toLogin">Already have an account?</a>
-    <v-btn block class="mt-2">Register</v-btn>
+    <v-btn
+      block
+      class="mt-2"
+      :disabled="
+        !email || !username || !password || password !== confirmPassword
+      "
+      @click="registerClicked"
+      >Register</v-btn
+    >
   </fragment>
 </template>
 
 <script lang="ts">
+import { Connection } from '@harmony-dev/harmony-web-sdk'
 import Vue from 'vue'
 
 export default Vue.extend({
+  data() {
+    return {
+      email: '',
+      username: '',
+      password: '',
+      confirmPassword: '',
+    }
+  },
   computed: {
     host() {
       return this.$route.hash.substr(1)
@@ -39,6 +68,21 @@ export default Vue.extend({
   methods: {
     toLogin() {
       this.$router.replace({ path: 'login', hash: this.$route.hash })
+    },
+    validateConfirmPassword() {
+      return this.password === this.confirmPassword || 'Passwords do not match'
+    },
+    async registerClicked() {
+      const c = new Connection(this.host)
+      try {
+        const resp = await c.register(this.email, this.username, this.password)
+        console.log(resp.message?.toObject())
+      } catch (e) {
+        this.$accessor.entry.openDialog({
+          title: 'Error',
+          description: e.statusMessage,
+        })
+      }
     },
   },
 })
