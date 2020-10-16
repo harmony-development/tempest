@@ -77,11 +77,11 @@ export default {
     },
   },
   router: {
-    routes: [
-      {
-        path: '/app/:guildid?',
+    extendRoutes(routes) {
+      routes.push({
+        path: '/app/:guildid?/:channelid?/:messageid?',
         component: '~/pages/_app',
-      },
-    ],
+      })
+    },
   },
 }

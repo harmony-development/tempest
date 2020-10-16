@@ -1,11 +1,9 @@
 <template>
   <div class="root">
-    <div class="guild-list"></div>
-    <div class="channel-list"></div>
-    <div class="chat">
-      {{ $route.params['guild_id'] }}
-    </div>
-    <div class="member-list"></div>
+    <guild-list />
+    <channel-list />
+    <chat />
+    <member-list />
   </div>
 </template>
 
@@ -17,32 +15,21 @@
   flex-direction: row;
   overflow: auto;
 }
-
-.guild-list {
-  padding: 8px;
-  display: flex;
-  flex-direction: column;
-  background-color: var(--harmony-dark-800);
-}
-
-.channel-list {
-  width: 400px;
-  overflow-y: auto;
-  text-overflow: ellipsis;
-  background-color: var(--harmony-dark-700);
-}
-
-.chat {
-  display: flex;
-  flex-direction: column;
-  flex-flow: column;
-  width: 100%;
-  height: 100%;
-}
-
-.member-list {
-  width: 350px;
-  overflow-y: auto;
-  background-color: var(--harmony-dark-700);
-}
 </style>
+
+<script lang="ts">
+import Vue from 'vue'
+import GuildList from '@/components/GuildList/index.vue'
+import ChannelList from '@/components/ChannelList.vue'
+import MemberList from '@/components/MemberList.vue'
+import Chat from '@/components/Chat.vue'
+
+export default Vue.extend({
+  components: {
+    GuildList,
+    ChannelList,
+    MemberList,
+    Chat,
+  },
+})
+</script>
