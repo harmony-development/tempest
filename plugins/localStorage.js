@@ -2,7 +2,7 @@ import createPersistedState from 'vuex-persistedstate'
 
 export default ({ store }) => {
   createPersistedState({
-    key: 'serverList',
-    paths: ['entry.serverList'],
+    key: 'staccato',
+    paths: ['entry.serverList', 'app.userID', 'app.session'],
   })(store)
 }

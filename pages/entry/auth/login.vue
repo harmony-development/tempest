@@ -52,7 +52,9 @@ export default Vue.extend({
       const c = new Connection(this.host)
       try {
         const resp = await c.loginLocal(this.email, this.password)
-        console.log(resp.message?.toObject())
+        this.$accessor.app.setUserID(resp.message?.getUserId())
+        this.$accessor.app.setSession(resp.message?.getSessionToken())
+        this.$router.push({ path: '/app' })
       } catch (e) {
         this.$accessor.entry.openDialog({
           title: 'Error',
