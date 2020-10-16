@@ -1,23 +1,20 @@
-<h1 align=center>
- <a href="https://github.com/harmony-development"><img align=center width="15%" src="https://i.imgur.com/lx2RCZj.png" /></a> Harmony
-</h1>
-A free and open source communications platform.
-<br>Designed as an open source Discord replacement; with messaging, guilds, roles, voice chat and rich presence. 
-<br>Join our <a href="https://discord.gg/jypXPA4">project chat</a> for keks, announcements, support and contribution.
+# staccato-vue
 
-# Staccato
-Frontend for Harmony protocol written in React. Help us translate this project by visiting our [Crowdin](https://harmony.crowdin.com/).
+## Build Setup
 
-## Screenshots
+```bash
+# install dependencies
+$ yarn install
 
-### App preview
+# serve with hot reload at localhost:3000
+$ yarn dev
 
-<img src="https://i.imgur.com/GHZN7BD.png" style="width:70%; text-align: center;">
+# build for production and launch server
+$ yarn build
+$ yarn start
 
-### Cool theming
+# generate static project
+$ yarn generate
+```
 
-<img src="https://i.imgur.com/namHS1j.png" style="width:70%; text-align: center;">
-
-### Login screen
-
-<img src="https://i.imgur.com/6YmxSDO.png" style="width:70%; text-align: center;">
+For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).

@@ -1,0 +1,25 @@
+// Ref: https://github.com/nuxt-community/vuetify-module#customvariables
+//
+// The variables you want to modify
+// $font-size-root: 20px;
+
+:root {
+  --harmony-dark-50: #e1e2e2;
+  --harmony-dark-100: #b5b6b7;
+  --harmony-dark-200: #848587;
+  --harmony-dark-300: #535457;
+  --harmony-dark-400: #2e2f33;
+  --harmony-dark-500: #090a0f;
+  --harmony-dark-600: #08090d;
+  --harmony-dark-700: #06070b;
+  --harmony-dark-800: #050508;
+  --harmony-dark-900: #020304;
+  --harmony-dark-A100: #a6a6a6;
+  --harmony-dark-A200: #8c8c8c;
+  --harmony-dark-A400: #737373;
+  --harmony-dark-A700: #666666;
+}
+
+$material-dark: (
+  background: var(--harmony-dark-500),
+);
