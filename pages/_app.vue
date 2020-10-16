@@ -2,7 +2,9 @@
   <div class="root">
     <div class="guild-list"></div>
     <div class="channel-list"></div>
-    <div class="chat"></div>
+    <div class="chat">
+      {{ $route.params['guild_id'] }}
+    </div>
     <div class="member-list"></div>
   </div>
 </template>

@@ -76,4 +76,12 @@ export default {
       devtools: true,
     },
   },
+  router: {
+    routes: [
+      {
+        path: '/app/:guildid?',
+        component: '~/pages/_app',
+      },
+    ],
+  },
 }
