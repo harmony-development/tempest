@@ -1,5 +1,7 @@
 <template>
-  <div class="guild-list"></div>
+  <div class="guild-list">
+    <guild-menu-button />
+  </div>
 </template>
 
 <style scoped>
@@ -10,3 +12,14 @@
   background-color: var(--harmony-dark-800);
 }
 </style>
+
+<script lang="ts">
+import Vue from 'vue'
+import GuildMenuButton from './GuildMenuButton.vue'
+
+export default Vue.extend({
+  components: {
+    GuildMenuButton,
+  },
+})
+</script>
