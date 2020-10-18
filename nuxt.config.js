@@ -23,6 +23,7 @@ export default {
   plugins: [
     { src: '~/plugins/localStorage.js', mode: 'client' },
     { src: '~/plugins/fragments.js', mode: 'client' },
+    { src: '~/plugins/harmonyURIParser.ts', mode: 'client' },
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
@@ -65,7 +66,7 @@ export default {
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
-    extractCSS: true,
+    extractCSS: false,
     babel: {
       plugins: ['@babel/plugin-proposal-optional-chaining'],
     },
