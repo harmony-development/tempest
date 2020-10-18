@@ -1,7 +1,13 @@
 <template>
   <v-card flat>
+    <v-card-title>Join Guild</v-card-title>
     <v-card-text>
-      <v-text-field outlined label="Invite Link" hide-details="auto">
+      <v-text-field
+        outlined
+        label="Invite Link"
+        hide-details="auto"
+        class="mb-2"
+      >
         <template v-slot:append>
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
@@ -14,10 +20,18 @@
           </v-tooltip>
         </template>
       </v-text-field>
-      <div class="mt-3">
+      <div>
+        <a @click="$emit('create-guild-clicked')">Create A Guild?</a>
+      </div>
+      <div class="mt-2">
         <v-btn color="primary">Join Guild</v-btn>
-        <v-btn text>Cancel</v-btn>
+        <v-btn text @click="$emit('cancelled')">Cancel</v-btn>
       </div>
     </v-card-text>
   </v-card>
 </template>
+
+<script lang="ts">
+import Vue from 'vue'
+export default Vue.extend({})
+</script>

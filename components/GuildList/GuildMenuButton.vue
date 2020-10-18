@@ -5,32 +5,33 @@
         <v-icon dark size="24"> mdi-account-multiple-plus </v-icon>
       </v-btn>
     </template>
-    <v-card>
-      <v-tabs fixed-tabs>
-        <v-tab>Join Guild</v-tab>
-        <v-tab>Create Guild</v-tab>
-        <v-tab-item>
-          <join-guild-menu />
-        </v-tab-item>
-        <v-tab-item>
-          <v-card flat> </v-card>
-        </v-tab-item>
-      </v-tabs>
-    </v-card>
+    <join-guild-menu
+      v-if="joinGuildScreen"
+      @cancelled="dialogOpen = false"
+      @create-guild-clicked="joinGuildScreen = false"
+    />
+    <create-guild-menu
+      v-if="!joinGuildScreen"
+      @cancelled="dialogOpen = false"
+      @join-guild-clicked="joinGuildScreen = true"
+    />
   </v-dialog>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import JoinGuildMenu from './GuildMenu/JoinGuild.vue'
+import CreateGuildMenu from './GuildMenu/CreateGuild.vue'
 
 export default Vue.extend({
   components: {
     JoinGuildMenu,
+    CreateGuildMenu,
   },
   data() {
     return {
       dialogOpen: false,
+      joinGuildScreen: true,
     }
   },
 })
