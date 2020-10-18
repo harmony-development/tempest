@@ -2,7 +2,7 @@
   <v-card flat>
     <v-card-title>Create Guild</v-card-title>
     <v-card-text>
-      <host-list class="mb-2" />
+      <host-list v-model="host" class="mb-2" />
       <v-text-field
         outlined
         label="Guild Name"
@@ -27,6 +27,11 @@ import HostList from './HostList.vue'
 export default Vue.extend({
   components: {
     HostList,
+  },
+  data() {
+    return {
+      host: '',
+    }
   },
 })
 </script>
