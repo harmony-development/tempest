@@ -16,7 +16,7 @@
             </template>
             Invites look like this: <br />
             asdf72 <br />
-            harmony://[domain]/[invite]
+            harmony://example.com/asdf72
           </v-tooltip>
         </template>
       </v-text-field>
@@ -43,13 +43,7 @@ export default Vue.extend({
     }
   },
   methods: {
-    joinGuild() {
-      try {
-        console.log(this.$parseHarmonyURI(this.joinCode!))
-      } catch (e) {
-        console.log(e)
-      }
-    },
+    joinGuild() {},
   },
 })
 </script>
