@@ -1,9 +1,22 @@
 <template>
   <v-dialog v-model="dialogOpen" max-width="500">
-    <template v-slot:activator="{ on, attrs }">
-      <v-btn fab text large color="primary" dark v-bind="attrs" v-on="on">
-        <v-icon dark size="24"> mdi-account-multiple-plus </v-icon>
-      </v-btn>
+    <template v-slot:activator="{ on: dialogOn, attrs: dialogAttrs }">
+      <v-tooltip right>
+        <template v-slot:activator="{ on: tooltipOn }">
+          <v-btn
+            fab
+            text
+            large
+            color="primary"
+            dark
+            v-bind="dialogAttrs"
+            v-on="{ ...dialogOn, ...tooltipOn }"
+          >
+            <v-icon dark size="24"> mdi-account-multiple-plus </v-icon>
+          </v-btn>
+        </template>
+        Join/Create Guild
+      </v-tooltip>
     </template>
     <join-guild-menu
       v-if="joinGuildScreen"
