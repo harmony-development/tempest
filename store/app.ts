@@ -1,5 +1,5 @@
 import { Connection } from '@harmony-dev/harmony-web-sdk'
-import { getterTree, mutationTree } from 'nuxt-typed-vuex'
+import { mutationTree } from 'nuxt-typed-vuex'
 
 interface IData {
   messages: {
@@ -37,19 +37,13 @@ export const mutations = mutationTree(state, {
   setHost(state, host?: string) {
     state.host = host
   },
-})
-
-export const getters = getterTree(state, {
-  async getOrFederate(state, host: string) {
-    if (!state.connections[host]) {
-      const federateResp = await state.connections[state.host!].federate(host)
-      state.connections[host] = new Connection(host)
-      const loginResp = await state.connections[host].loginFederated(
-        federateResp.message!.getToken(),
-        state.host!
-      )
-      state.connections[host].session = loginResp.message!.getSessionToken()
+  setConnection(
+    state,
+    data: {
+      host: string
+      connection: Connection
     }
-    return state.connections[host]
+  ) {
+    state.connections[data.host] = data.connection
   },
 })

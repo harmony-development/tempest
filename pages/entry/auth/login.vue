@@ -31,6 +31,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Connection } from '@harmony-dev/harmony-web-sdk'
+import { DialogType } from '~/store/dialog'
 
 export default Vue.extend({
   data() {
@@ -57,9 +58,9 @@ export default Vue.extend({
         this.$accessor.app.setHost(this.host)
         this.$router.push({ path: '/app' })
       } catch (e) {
-        this.$accessor.entry.openDialog({
-          title: 'Error',
-          description: e.statusMessage,
+        this.$accessor.dialog.openDialog({
+          type: DialogType.Error,
+          content: e.statusMessage,
         })
       }
     },

@@ -23,6 +23,7 @@ import GuildList from '@/components/GuildList/index.vue'
 import ChannelList from '@/components/ChannelList.vue'
 import MemberList from '@/components/MemberList.vue'
 import Chat from '@/components/Chat.vue'
+import { Connection } from '@harmony-dev/harmony-web-sdk'
 
 export default Vue.extend({
   components: {
@@ -30,6 +31,18 @@ export default Vue.extend({
     ChannelList,
     MemberList,
     Chat,
+  },
+  mounted() {
+    if (!this.$accessor.app.host || !this.$accessor.app.session) {
+      this.$router.push('entry')
+      return
+    }
+    const conn = new Connection(this.$accessor.app.host)
+    this.$accessor.app.setConnection({
+      host: this.$accessor.app.host,
+      connection: conn,
+    })
+    conn.session = this.$accessor.app.session
   },
 })
 </script>

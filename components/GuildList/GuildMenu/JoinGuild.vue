@@ -43,7 +43,18 @@ export default Vue.extend({
     }
   },
   methods: {
-    joinGuild() {},
+    async joinGuild() {
+      try {
+        this.$parseHarmonyURI(this.joinCode!)
+      } catch (e) {
+        const conn = await this.$getOrFederate(this.$accessor.app.host!)
+        const resp = await conn.joinGuild(this.joinCode!)
+        conn.addGuildToGuildList(
+          resp.message!.toObject().location!.guildId,
+          this.$accessor.app.host!
+        )
+      }
+    },
   },
 })
 </script>

@@ -24,6 +24,7 @@ export default {
     { src: '~/plugins/localStorage.js', mode: 'client' },
     { src: '~/plugins/fragments.js', mode: 'client' },
     { src: '~/plugins/harmonyURIParser.ts', mode: 'client' },
+    { src: '~/plugins/harmonyAPI.ts', mode: 'client' },
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)

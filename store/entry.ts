@@ -1,5 +1,4 @@
 import { mutationTree } from 'nuxt-typed-vuex'
-import Vue from 'vue'
 
 interface IServerEntry {
   name: string
@@ -15,11 +14,6 @@ export const state = () => ({
   ] as IServerEntry[],
   selectedServer: undefined as string | undefined,
   step: 1,
-  dialog: {
-    open: false,
-    title: '',
-    description: '',
-  },
 })
 
 export const mutations = mutationTree(state, {
@@ -37,19 +31,5 @@ export const mutations = mutationTree(state, {
   },
   setStep(state, step: number) {
     state.step = step
-  },
-  openDialog(
-    state,
-    data: {
-      title: string
-      description: string
-    }
-  ) {
-    state.dialog.title = data.title
-    state.dialog.description = data.description
-    state.dialog.open = true
-  },
-  closeDialog(state) {
-    Vue.set(state.dialog, 'open', false)
   },
 })
