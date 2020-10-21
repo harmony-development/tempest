@@ -1,11 +1,13 @@
 <template>
   <div class="guild-list">
-    <guild-icon
-      v-for="entry in guildList"
-      :key="`${entry.guildId}:${entry.host}`"
-      :name="entry.guildId"
-      :icon="entry.host"
-    />
+    <template v-if="guildList">
+      <guild-icon
+        v-for="entry in guildList"
+        :id="entry.guildId"
+        :key="`${entry.guildId}:${entry.host}`"
+        :host="entry.host"
+      />
+    </template>
     <guild-menu-button />
   </div>
 </template>

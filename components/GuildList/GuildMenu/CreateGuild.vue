@@ -47,6 +47,11 @@ export default Vue.extend({
         const conn = await this.$getOrFederate(this.host!)
         const resp = await conn.createGuild(this.guildName!)
         await conn.addGuildToGuildList(resp.message!.getGuildId(), this.host!)
+        this.$accessor.app.addGuildToList({
+          host: this.host!,
+          guildId: resp.message!.getGuildId(),
+        })
+        this.$emit('cancelled')
       } catch (e) {
         this.$showDialog(DialogType.Error, e.statusMessage || e)
       }

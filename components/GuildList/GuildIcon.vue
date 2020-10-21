@@ -3,15 +3,15 @@
     <template v-slot:activator="{ on, attrs }">
       <v-img
         v-ripple
-        :src="icon"
         class="img-content mb-2"
         max-width="64"
         max-height="64"
         v-bind="attrs"
+        :src="picture"
         v-on="on"
       />
     </template>
-    {{ name }}
+    {{ name || id }}
   </v-tooltip>
 </template>
 
@@ -27,16 +27,42 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { DialogType } from '~/store/dialog'
 export default Vue.extend({
   props: {
-    name: {
+    id: {
       type: String,
       default: '',
     },
-    icon: {
+    host: {
       type: String,
       default: '',
     },
+  },
+  computed: {
+    name(): string | undefined {
+      return this.$accessor.app.data[this.host]?.guilds[this.id]?.name
+    },
+    picture(): string | undefined {
+      return this.$accessor.app.data[this.host]?.guilds[this.id]?.picture
+    },
+  },
+  async mounted() {
+    if (!this.name || !this.picture) {
+      try {
+        const conn = await this.$getOrFederate(this.host)
+        const resp = await conn.getGuild(this.id)
+        const asObj = resp.message!.toObject()
+        this.$accessor.app.setGuildData({
+          host: this.host,
+          guildID: this.id,
+          name: asObj.guildName,
+          picture: asObj.guildPicture,
+        })
+      } catch (e) {
+        this.$showDialog(DialogType.Error, e.statusMessage || e)
+      }
+    }
   },
 })
 </script>

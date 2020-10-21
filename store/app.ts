@@ -7,9 +7,17 @@ interface IGuildEntry {
   host: string
 }
 
+export interface IGuildData {
+  name: string
+  picture?: string
+}
+
 interface IData {
   messages: {
     [messageID: string]: string
+  }
+  guilds: {
+    [guildID: string]: IGuildData
   }
 }
 
@@ -35,6 +43,13 @@ export const state = (): IState => ({
   guildsList: undefined,
 })
 
+const addHost = (state: IState, host: string) => {
+  Vue.set(state.data, host, {
+    messages: {},
+    guilds: {},
+  })
+}
+
 export const mutations = mutationTree(state, {
   setUserID(state, userID?: string) {
     state.userID = userID
@@ -57,5 +72,23 @@ export const mutations = mutationTree(state, {
   },
   setGuildList(state, list: IGuildEntry[]) {
     state.guildsList = list
+  },
+  addGuildToList(state, entry: IGuildEntry) {
+    state.guildsList?.push(entry)
+  },
+  setGuildData(
+    state,
+    data: {
+      host: string
+      guildID: string
+      name: string
+      picture?: string
+    }
+  ) {
+    if (!state.data[data.host]) addHost(state, data.host)
+    Vue.set(state.data[data.host].guilds, data.guildID, {
+      name: data.name,
+      picture: data.picture,
+    })
   },
 })
