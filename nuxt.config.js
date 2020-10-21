@@ -62,6 +62,9 @@ export default {
           success: colors.green.accent3,
         },
       },
+      options: {
+        customProperties: true,
+      },
     },
     treeShake: true,
   },
@@ -86,5 +89,8 @@ export default {
         component: '~/pages/_app',
       })
     },
+  },
+  transition: {
+    css: false,
   },
 }

@@ -3,12 +3,13 @@
     <template v-slot:activator="{ on, attrs }">
       <v-img
         v-ripple
-        class="img-content mb-2"
+        :class="iconStyle"
         max-width="64"
         max-height="64"
         v-bind="attrs"
         :src="picture"
         v-on="on"
+        @click="onGuildIconClick"
       />
     </template>
     {{ name || id }}
@@ -22,6 +23,11 @@
   background-color: black;
   border-radius: 100%;
   cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.selected {
+  border: 2px solid var(--v-primary-base);
 }
 </style>
 
@@ -46,6 +52,11 @@ export default Vue.extend({
     picture(): string | undefined {
       return this.$accessor.app.data[this.host]?.guilds[this.id]?.picture
     },
+    iconStyle(): string {
+      return `img-content mb-2 ${
+        this.id === this.$route.params.guildid ? 'selected' : ''
+      }`
+    },
   },
   async mounted() {
     if (!this.name || !this.picture) {
@@ -63,6 +74,14 @@ export default Vue.extend({
         this.$showDialog(DialogType.Error, e.statusMessage || e)
       }
     }
+  },
+  methods: {
+    onGuildIconClick() {
+      this.$router.push({
+        path: `/app/${this.id}`,
+        hash: window.location.hash,
+      })
+    },
   },
 })
 </script>
