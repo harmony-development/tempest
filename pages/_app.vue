@@ -32,7 +32,7 @@ export default Vue.extend({
     MemberList,
     Chat,
   },
-  mounted() {
+  created() {
     if (!this.$accessor.app.host || !this.$accessor.app.session) {
       this.$router.push('entry')
       return

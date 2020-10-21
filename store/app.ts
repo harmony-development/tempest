@@ -1,5 +1,11 @@
 import { Connection } from '@harmony-dev/harmony-web-sdk'
 import { mutationTree } from 'nuxt-typed-vuex'
+import Vue from 'vue'
+
+interface IGuildEntry {
+  guildId: string
+  host: string
+}
 
 interface IData {
   messages: {
@@ -17,6 +23,7 @@ interface IState {
   data: {
     [host: string]: IData
   }
+  guildsList: IGuildEntry[] | undefined
 }
 
 export const state = (): IState => ({
@@ -25,6 +32,7 @@ export const state = (): IState => ({
   host: undefined,
   connections: {},
   data: {},
+  guildsList: undefined,
 })
 
 export const mutations = mutationTree(state, {
@@ -45,5 +53,9 @@ export const mutations = mutationTree(state, {
     }
   ) {
     state.connections[data.host] = data.connection
+    Vue.set(state.connections, data.host, data.connection)
+  },
+  setGuildList(state, list: IGuildEntry[]) {
+    state.guildsList = list
   },
 })

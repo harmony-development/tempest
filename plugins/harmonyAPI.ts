@@ -13,12 +13,16 @@ Vue.prototype.$getOrFederate = async function (this: Vue, host: string) {
     const federateResp = await appState.connections[appState.host!].federate(
       host
     )
-    appState.connections[host] = new Connection(host)
-    const loginResp = await appState.connections[host].loginFederated(
+    const conn = new Connection(host)
+    appState.setConnection({
+      host,
+      connection: conn,
+    })
+    const loginResp = await conn.loginFederated(
       federateResp.message!.getToken(),
       appState.host!
     )
-    appState.connections[host].session = loginResp.message!.getSessionToken()
+    conn.session = loginResp.message!.getSessionToken()
   }
   return appState.connections[host]
 }

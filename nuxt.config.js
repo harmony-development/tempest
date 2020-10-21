@@ -25,6 +25,7 @@ export default {
     { src: '~/plugins/fragments.js', mode: 'client' },
     { src: '~/plugins/harmonyURIParser.ts', mode: 'client' },
     { src: '~/plugins/harmonyAPI.ts', mode: 'client' },
+    { src: '~/plugins/dialogs.ts', mode: 'client' },
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)

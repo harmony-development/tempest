@@ -35,6 +35,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { DialogType } from '~/store/dialog'
 
 export default Vue.extend({
   data() {
@@ -44,15 +45,25 @@ export default Vue.extend({
   },
   methods: {
     async joinGuild() {
+      let targetHost: string
+      let targetCode: string
       try {
-        this.$parseHarmonyURI(this.joinCode!)
+        const result = this.$parseHarmonyURI(this.joinCode!)
+        targetHost = result.host
+        targetCode = result.code
       } catch (e) {
-        const conn = await this.$getOrFederate(this.$accessor.app.host!)
-        const resp = await conn.joinGuild(this.joinCode!)
-        conn.addGuildToGuildList(
+        targetHost = this.$accessor.app.host!
+        targetCode = this.joinCode!
+      }
+      try {
+        const conn = await this.$getOrFederate(targetHost)
+        const resp = await conn.joinGuild(targetCode)
+        await conn.addGuildToGuildList(
           resp.message!.toObject().location!.guildId,
           this.$accessor.app.host!
         )
+      } catch (e) {
+        this.$showDialog(DialogType.Error, e.statusMessage || e)
       }
     },
   },

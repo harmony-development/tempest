@@ -14,7 +14,10 @@
         <a @click="$emit('join-guild-clicked')">Join A Guild?</a>
       </div>
       <div class="mt-2">
-        <v-btn color="primary" :disabled="!host || !guildName"
+        <v-btn
+          color="primary"
+          :disabled="!host || !guildName"
+          @click="createGuild"
           >Create Guild</v-btn
         >
         <v-btn text @click="$emit('cancelled')">Cancel</v-btn>
@@ -26,6 +29,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import HostList from './HostList.vue'
+import { DialogType } from '~/store/dialog'
 
 export default Vue.extend({
   components: {
@@ -36,6 +40,17 @@ export default Vue.extend({
       host: undefined,
       guildName: undefined,
     }
+  },
+  methods: {
+    async createGuild() {
+      try {
+        const conn = await this.$getOrFederate(this.host!)
+        const resp = await conn.createGuild(this.guildName!)
+        await conn.addGuildToGuildList(resp.message!.getGuildId(), this.host!)
+      } catch (e) {
+        this.$showDialog(DialogType.Error, e.statusMessage || e)
+      }
+    },
   },
 })
 </script>

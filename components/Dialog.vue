@@ -1,6 +1,6 @@
 <template>
   <v-dialog
-    v-model="dialogState.open"
+    :value="dialogState.open"
     max-width="290"
     @input="this.$accessor.dialog.closeDialog"
   >
