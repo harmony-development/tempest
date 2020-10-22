@@ -6,13 +6,12 @@ Vue.use(VueRouter);
 const routes: Array<RouteConfig> = [
   {
     path: "/",
-    redirect: '/entry/serverselect'
+    redirect: "/entry/serverselect"
   },
   {
     path: "/about",
     name: "About",
-    component: () =>
-      import("../views/About.vue")
+    component: () => import("../views/About.vue")
   }
 ];
 
