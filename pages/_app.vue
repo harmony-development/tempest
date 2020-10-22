@@ -20,7 +20,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import GuildList from '@/components/GuildList/index.vue'
-import ChannelList from '@/components/ChannelList.vue'
+import ChannelList from '@/components/ChannelList/index.vue'
 import MemberList from '@/components/MemberList.vue'
 import Chat from '@/components/Chat.vue'
 import { Connection } from '@harmony-dev/harmony-web-sdk'
