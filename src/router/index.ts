@@ -8,6 +8,20 @@ const routes: Array<RouteConfig> = [
     path: "/",
     redirect: "/entry/serverselect",
   },
+  {
+    path: "/entry",
+    component: () => import("@/views/Entry.vue"),
+    children: [
+      {
+        path: "",
+        beforeEnter: (to, from, next) => next("/entry/serverselect"),
+      },
+      {
+        path: "serverselect",
+        component: ServerSelect,
+      },
+    ],
+  },
 ];
 
 const router = new VueRouter({
