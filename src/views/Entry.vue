@@ -8,9 +8,7 @@
       </v-btn>
     </v-app-bar>
     <div class="root">
-      <v-sheet class="body pa-6" rounded>
-        <nuxt-child />
-      </v-sheet>
+      <v-sheet class="body pa-6" rounded> <router-view /> </v-sheet>
     </div>
   </fragment>
 </template>
@@ -44,7 +42,11 @@ import Component from "vue-class-component";
 import { Fragment } from "vue-fragment";
 import { getModule } from "vuex-module-decorators";
 
-@Component
+@Component({
+  components: {
+    Fragment,
+  },
+})
 export default class Entry extends Vue {
   beforeCreate() {
     if (this.$route.fullPath === "/entry") {

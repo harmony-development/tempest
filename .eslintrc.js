@@ -20,7 +20,7 @@ module.exports = {
 		"prettier/prettier": [
 			"warn",
 			{
-				"trailingComma": "on"
+				"trailingComma": "all"
 			}
 		]
   }

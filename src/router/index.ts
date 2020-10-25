@@ -14,11 +14,11 @@ const routes: Array<RouteConfig> = [
     children: [
       {
         path: "",
-        beforeEnter: (to, from, next) => next("/entry/serverselect"),
+        redirect: "/entry/serverselect",
       },
       {
         path: "serverselect",
-        component: ServerSelect,
+        component: () => import("@/views/entry/ServerSelect.vue"),
       },
     ],
   },

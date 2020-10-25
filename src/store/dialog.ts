@@ -1,11 +1,12 @@
 import { Module, Mutation, VuexModule } from "vuex-module-decorators";
+import store from "./index";
 
 export enum DialogType {
   ERROR,
   INFO,
 }
 
-@Module({ namespaced: true, name: "dialog" })
+@Module({ namespaced: true, name: "dialog", store })
 export default class Dialog extends VuexModule {
   open = false;
   type = DialogType.INFO;
