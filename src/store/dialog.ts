@@ -1,24 +1,33 @@
-import { Module, Mutation, VuexModule } from "vuex-module-decorators";
-import store from "./index";
+import { mutationTree } from "typed-vuex";
 
 export enum DialogType {
   ERROR,
   INFO,
 }
 
-@Module({ namespaced: true, name: "dialog", store })
-export default class Dialog extends VuexModule {
-  open = false;
-  type = DialogType.INFO;
-  content = "";
-
-  @Mutation openDialog(type: DialogType, content: string) {
-    this.type = type;
-    this.content = content;
-    this.open = true;
-  }
-
-  @Mutation closeDialog() {
-    this.open = false;
-  }
+interface IState {
+  dialog: {
+    open: boolean;
+    type: DialogType;
+    content: string;
+  };
 }
+
+export const state = (): IState => ({
+  dialog: {
+    open: false,
+    type: DialogType.INFO,
+    content: "",
+  },
+});
+
+export const mutations = mutationTree(state, {
+  openDialog(state, data: { type: DialogType; content: string }) {
+    state.dialog.open = true;
+    state.dialog.type = data.type;
+    state.dialog.content = data.content;
+  },
+  closeDialog(state) {
+    state.dialog.open = false;
+  },
+});

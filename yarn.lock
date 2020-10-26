@@ -889,6 +889,23 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
+"@harmony-dev/harmony-web-sdk@^1.4.17":
+  version "1.4.17"
+  resolved "https://registry.yarnpkg.com/@harmony-dev/harmony-web-sdk/-/harmony-web-sdk-1.4.17.tgz#4018d3c5fbba167a3f4b14f762c6364187f5668a"
+  integrity sha512-aHHmMgMGDQLSEUntabL0ARp0B1ZpqZyG35zgKbGwh/H+9R9LX3gI5n0NGkJW9Zq6ExIKkMKOwduc7Uk5FAOFdw==
+  dependencies:
+    "@improbable-eng/grpc-web" "^0.13.0"
+    "@types/google-protobuf" "^3.7.2"
+    eventemitter3 "^4.0.4"
+    google-protobuf "^4.0.0-rc.1"
+
+"@improbable-eng/grpc-web@^0.13.0":
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/@improbable-eng/grpc-web/-/grpc-web-0.13.0.tgz#289e6fc4dafc00b1af8e2b93b970e6892299014d"
+  integrity sha512-vaxxT+Qwb7GPqDQrBV4vAAfH0HywgOLw6xGIKXd9Q8hcV63CQhmS3p4+pZ9/wVvt4Ph3ZDK9fdC983b9aGMUFg==
+  dependencies:
+    browser-headers "^0.4.0"
+
 "@intervolga/optimize-cssnano-plugin@^1.0.5":
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/@intervolga/optimize-cssnano-plugin/-/optimize-cssnano-plugin-1.0.6.tgz#be7c7846128b88f6a9b1d1261a0ad06eb5c0fdf8"
@@ -984,6 +1001,11 @@
   dependencies:
     "@types/minimatch" "*"
     "@types/node" "*"
+
+"@types/google-protobuf@^3.7.2":
+  version "3.7.3"
+  resolved "https://registry.yarnpkg.com/@types/google-protobuf/-/google-protobuf-3.7.3.tgz#429512e541bbd777f2c867692e6335ee08d1f6d4"
+  integrity sha512-FRwj40euE2bYkG+0X5w2nEA8yAzgJRcEa7RBd0Gsdkb9/tPM2pctVVAvnOUTbcXo2VmIHPo0Ae94Gl9vRHfKzg==
 
 "@types/http-proxy-middleware@*":
   version "0.19.3"
@@ -2134,6 +2156,11 @@ brorand@^1.0.1:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/brorand/-/brorand-1.1.0.tgz#12c25efe40a45e3c323eb8675a0a0ce57b22371f"
   integrity sha1-EsJe/kCkXjwyPrhnWgoM5XsiNx8=
+
+browser-headers@^0.4.0:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/browser-headers/-/browser-headers-0.4.1.tgz#4308a7ad3b240f4203dbb45acedb38dc2d65dd02"
+  integrity sha512-CA9hsySZVo9371qEHjHZtYxV2cFtVj5Wj/ZHi8ooEsrtm4vOnl9Y9HmyYWk9q+05d7K3rdoAE0j3MVEFVvtQtg==
 
 browserify-aes@^1.0.0, browserify-aes@^1.0.4:
   version "1.2.0"
@@ -3744,7 +3771,7 @@ event-pubsub@4.3.0:
   resolved "https://registry.yarnpkg.com/event-pubsub/-/event-pubsub-4.3.0.tgz#f68d816bc29f1ec02c539dc58c8dd40ce72cb36e"
   integrity sha512-z7IyloorXvKbFx9Bpie2+vMJKKx1fH1EN5yiTfp8CiLOTptSYy1g8H4yDpGlEdshL1PBiFtBHepF2cNsqeEeFQ==
 
-eventemitter3@^4.0.0:
+eventemitter3@^4.0.0, eventemitter3@^4.0.4:
   version "4.0.7"
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-4.0.7.tgz#2de9b68f6528d5644ef5c59526a1b4a07306169f"
   integrity sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==
@@ -4387,6 +4414,11 @@ globby@^9.2.0:
     ignore "^4.0.3"
     pify "^4.0.1"
     slash "^2.0.0"
+
+google-protobuf@^4.0.0-rc.1:
+  version "4.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/google-protobuf/-/google-protobuf-4.0.0-rc.2.tgz#9fecb748b3e81d7a7a9160f991141f6ef8e9acd8"
+  integrity sha512-KANe0ePi8Uk0m17xvjI1bXrE7LRflSuNczkAlHlOEeqXnSBy96tDS5beKwKOnNr0xYmlbC9XiQsj8fOLLyDp2Q==
 
 graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.2.0, graceful-fs@^4.2.2:
   version "4.2.4"

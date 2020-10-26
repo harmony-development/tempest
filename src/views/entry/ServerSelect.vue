@@ -85,10 +85,8 @@
 </style>
 
 <script lang="ts">
-import Entry from "@/store/entry";
 import Vue from "vue";
 import Component from "vue-class-component";
-import { getModule } from "vuex-module-decorators";
 
 @Component
 export default class ServerSelect extends Vue {
@@ -98,19 +96,19 @@ export default class ServerSelect extends Vue {
   addServerHost = "";
 
   get selectedServer() {
-    return getModule(Entry).selectedServer;
+    return this.$accessor.entry.selectedServer;
   }
 
   get serverList() {
-    return getModule(Entry).serverList;
+    return this.$accessor.entry.serverList;
   }
 
   removeServer(idx: number) {
-    getModule(Entry).serverList.splice(idx, 1);
+    this.$accessor.entry.serverList.splice(idx, 1);
   }
 
   addServer(name: string, host: string) {
-    getModule(Entry).serverList.push({
+    this.$accessor.entry.serverList.push({
       name,
       host,
     });

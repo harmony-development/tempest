@@ -36,11 +36,9 @@
 </style>
 
 <script lang="ts">
-import EntryState from "@/store/entry";
 import Vue from "vue";
 import Component from "vue-class-component";
 import { Fragment } from "vue-fragment";
-import { getModule } from "vuex-module-decorators";
 
 @Component({
   components: {
@@ -52,10 +50,6 @@ export default class Entry extends Vue {
     if (this.$route.fullPath === "/entry") {
       this.$router.push("/entry/serverselect");
     }
-  }
-
-  get step() {
-    return getModule(EntryState).step;
   }
 }
 </script>

@@ -1,13 +1,29 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import Dialog from "./dialog";
-import Entry from "./entry";
+import * as dialog from "./dialog";
+import * as entry from "./entry";
+import * as app from "./app";
+import { useAccessor } from "typed-vuex";
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+const storePattern = {
   modules: {
-    entry: Entry,
-    dialog: Dialog,
+    entry,
+    dialog,
+    app,
   },
-});
+};
+
+const store = new Vuex.Store(storePattern);
+const accessor = useAccessor(store, storePattern);
+
+Vue.prototype.$accessor = useAccessor(store, storePattern);
+
+declare module "vue/types/vue" {
+  interface Vue {
+    $accessor: typeof accessor;
+  }
+}
+
+export default store;
