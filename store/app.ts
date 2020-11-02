@@ -83,7 +83,7 @@ export const mutations = mutationTree(state, {
     data: {
       host: string
       connection: Connection
-    }
+    },
   ) {
     state.connections[data.host] = data.connection
     Vue.set(state.connections, data.host, data.connection)
@@ -101,7 +101,7 @@ export const mutations = mutationTree(state, {
       guildID: string
       name: string
       picture?: string
-    }
+    },
   ) {
     if (!state.data[data.host]) addHost(state, data.host)
     Vue.set(state.data[data.host].guilds, data.guildID, {
@@ -115,7 +115,7 @@ export const mutations = mutationTree(state, {
       host: string
       guildID: string
       channels: string[]
-    }
+    },
   ) {
     if (!state.data[data.host]) addHost(state, data.host)
     if (!state.data[data.guildID]) addGuild(state, data.host, data.guildID)
@@ -129,7 +129,7 @@ export const mutations = mutationTree(state, {
       data: {
         [channelID: string]: IChannelData
       }
-    }
+    },
   ) {
     if (!state.data[data.host]) addHost(state, data.host)
     state.data[data.host].channels = {

@@ -1,5 +1,13 @@
 <template>
-  <div class="channel-list"></div>
+  <div class="channel-list">
+    <v-list dense>
+      <channel-list-item
+        v-for="channel in channelList"
+        :id="channel"
+        :key="channel"
+      />
+    </v-list>
+  </div>
 </template>
 
 <style scoped>
@@ -13,16 +21,29 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import ChannelListItem from './ChannelListItem.vue'
 import { IChannelData } from '~/store/app'
 import { DialogType } from '~/store/dialog'
 export default Vue.extend({
+  components: {
+    ChannelListItem,
+  },
+  computed: {
+    selectedGuildID() {
+      return this.$route.params.guildid
+    },
+    channelList() {
+      return this.$accessor.app.data[window.location.host.substr(1)]?.guilds[
+        this.$route.params.guildid
+      ]?.channels
+    },
+  },
   watch: {
     '$route.params.guildid': {
       handler() {
+        console.log(this.$route.params)
         this.fetchData()
       },
-      deep: true,
-      immediate: true,
     },
   },
   methods: {

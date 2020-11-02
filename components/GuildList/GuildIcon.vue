@@ -79,7 +79,7 @@ export default Vue.extend({
     onGuildIconClick() {
       this.$router.push({
         path: `/app/${this.id}`,
-        hash: '#//',
+        hash: this.host.replace('//', '///'),
       })
     },
   },
