@@ -1,6 +1,6 @@
 <template>
   <v-app dark>
-    <Nuxt keep-alive />
+    <Nuxt />
     <Dialog />
   </v-app>
 </template>

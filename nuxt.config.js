@@ -87,10 +87,8 @@ export default {
       routes.push({
         path: '/app/:guildid?/:channelid?/:messageid?',
         component: '~/pages/_app',
+        name: 'app',
       })
     },
-  },
-  transition: {
-    css: false,
   },
 }

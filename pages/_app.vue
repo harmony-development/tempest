@@ -33,6 +33,7 @@ export default Vue.extend({
     Chat,
   },
   created() {
+    console.warn('_app created')
     if (!this.$accessor.app.host || !this.$accessor.app.session) {
       this.$router.push('entry')
       return
@@ -44,5 +45,9 @@ export default Vue.extend({
     })
     conn.session = this.$accessor.app.session
   },
+  mounted() {
+    console.warn('_app mounted')
+  },
+  key: 'hi',
 })
 </script>

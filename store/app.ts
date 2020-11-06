@@ -118,7 +118,8 @@ export const mutations = mutationTree(state, {
     },
   ) {
     if (!state.data[data.host]) addHost(state, data.host)
-    if (!state.data[data.guildID]) addGuild(state, data.host, data.guildID)
+    if (!state.data[data.host]?.guilds[data.guildID])
+      addGuild(state, data.host, data.guildID)
     state.data[data.host].guilds[data.guildID].channels = data.channels
   },
   setChannelsData(
