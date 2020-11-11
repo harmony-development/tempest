@@ -152,7 +152,7 @@ export const mutations = mutationTree(state, {
     Vue.set(state.pendingFederations, data.host, data.req)
   },
   removePendingFederation(state, host: string) {
-    Vue.delete(state.pendingFederations, data.host)
+    Vue.delete(state.pendingFederations, host)
   },
 })
 
