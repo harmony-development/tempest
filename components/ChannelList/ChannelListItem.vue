@@ -20,7 +20,8 @@ export default Vue.extend({
   },
   computed: {
     name(): string | undefined {
-      return this.$accessor.app.data[window.location.hash.substr(1)]?.channels[
+      console.log(this.$route.hash.substr(1))
+      return this.$accessor.app.data[this.$route.hash.substr(1)]?.channels[
         this.id
       ]?.channelName
     },

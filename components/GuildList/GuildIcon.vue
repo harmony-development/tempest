@@ -27,6 +27,7 @@
 }
 
 .selected {
+  transition: border 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
   border: 2px solid var(--v-primary-base);
 }
 </style>

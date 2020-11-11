@@ -1,6 +1,9 @@
 <template>
   <div class="root">
     <guild-list />
+    <div class="text-center">
+      <v-progress-circular indeterminate color="primary"></v-progress-circular>
+    </div>
     <channel-list />
     <chat />
     <member-list />
@@ -33,7 +36,6 @@ export default Vue.extend({
     Chat,
   },
   created() {
-    console.warn('_app created')
     if (!this.$accessor.app.host || !this.$accessor.app.session) {
       this.$router.push('entry')
       return
@@ -45,9 +47,6 @@ export default Vue.extend({
     })
     conn.session = this.$accessor.app.session
   },
-  mounted() {
-    console.warn('_app mounted')
-  },
-  key: 'hi',
+  key: 'app',
 })
 </script>

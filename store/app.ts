@@ -1,5 +1,5 @@
 import { Connection } from '@harmony-dev/harmony-web-sdk'
-import { mutationTree } from 'nuxt-typed-vuex'
+import { actionTree, mutationTree } from 'nuxt-typed-vuex'
 import Vue from 'vue'
 
 interface IGuildEntry {
@@ -38,6 +38,9 @@ interface IState {
   connections: {
     [host: string]: Connection
   }
+  pendingFederations: {
+    [host: string]: Promise<Connection>
+  }
   data: {
     [host: string]: IData
   }
@@ -49,11 +52,13 @@ export const state = (): IState => ({
   session: undefined,
   host: undefined,
   connections: {},
+  pendingFederations: {},
   data: {},
   guildsList: undefined,
 })
 
-const addHost = (state: IState, host: string) => {
+const ensureHost = (state: IState, host: string) => {
+  if (state.data[host]) return
   Vue.set(state.data, host, {
     messages: {},
     guilds: {},
@@ -61,7 +66,9 @@ const addHost = (state: IState, host: string) => {
   })
 }
 
-const addGuild = (state: IState, host: string, guildID: string) => {
+const ensureGuild = (state: IState, host: string, guildID: string) => {
+  ensureHost(state, host)
+  if (state.data[host].guilds[guildID]) return
   Vue.set(state.data[host].guilds, guildID, {
     name: '',
     channels: [],
@@ -103,7 +110,7 @@ export const mutations = mutationTree(state, {
       picture?: string
     },
   ) {
-    if (!state.data[data.host]) addHost(state, data.host)
+    ensureHost(state, data.host)
     Vue.set(state.data[data.host].guilds, data.guildID, {
       name: data.name,
       picture: data.picture,
@@ -117,25 +124,46 @@ export const mutations = mutationTree(state, {
       channels: string[]
     },
   ) {
-    if (!state.data[data.host]) addHost(state, data.host)
-    if (!state.data[data.host]?.guilds[data.guildID])
-      addGuild(state, data.host, data.guildID)
+    ensureGuild(state, data.host, data.guildID)
     state.data[data.host].guilds[data.guildID].channels = data.channels
   },
   setChannelsData(
     state,
     data: {
       host: string
-      guildID: string
       data: {
         [channelID: string]: IChannelData
       }
     },
   ) {
-    if (!state.data[data.host]) addHost(state, data.host)
+    ensureHost(state, data.host)
     state.data[data.host].channels = {
       ...state.data[data.host].channels,
       ...data.data,
     }
   },
+  setPendingFederation(
+    state,
+    data: {
+      host: string
+      req: Promise<Connection>
+    },
+  ) {
+    Vue.set(state.pendingFederations, data.host, data.req)
+  },
+  removePendingFederation(state, host: string) {
+    Vue.delete(state.pendingFederations, data.host)
+  },
 })
+
+export const actions = actionTree(
+  { state, mutations },
+  {
+    async getGuildList() {
+      if (!this.state.host) return
+      return (
+        await this.state.connections[this.state.host]?.getGuildList()
+      ).message?.toObject()
+    },
+  },
+)

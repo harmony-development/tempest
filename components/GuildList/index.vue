@@ -47,8 +47,5 @@ export default Vue.extend({
       this.$showDialog(DialogType.Error, e.statusMessage || e)
     }
   },
-  mounted() {
-    console.log('PANNN')
-  },
 })
 </script>

@@ -41,7 +41,6 @@ export default Vue.extend({
   watch: {
     '$route.params.guildid': {
       handler() {
-        console.log(this.$route.params)
         this.fetchData()
       },
     },
@@ -72,7 +71,6 @@ export default Vue.extend({
           })
           this.$accessor.app.setChannelsData({
             host: window.location.hash.substr(1),
-            guildID: this.$route.params.guildid,
             data: mapped,
           })
         } catch (e) {
