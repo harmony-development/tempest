@@ -60,7 +60,7 @@ export default Vue.extend({
         const resp = await conn.joinGuild(targetCode)
         await conn.addGuildToGuildList(
           resp.message!.toObject().location!.guildId,
-          this.$accessor.app.host!
+          this.$accessor.app.host!,
         )
       } catch (e) {
         this.$showDialog(DialogType.Error, e.statusMessage || e)
