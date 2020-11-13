@@ -49,7 +49,7 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn text @click="dialog = false"> Cancel </v-btn>
-        <v-btn color="primary " text :disabled="!name" @click="dialog = false">
+        <v-btn color="primary " text :disabled="!name" @click="onCreate">
           Create
         </v-btn>
       </v-card-actions>
@@ -66,6 +66,16 @@ export default Vue.extend({
       channelType: 'text',
       name: '',
     }
+  },
+  methods: {
+    onCreate() {
+      this.$createChannel(
+        this.$getHost(),
+        this.$route.params.guildid,
+        this.name,
+      )
+      this.dialog = false
+    },
   },
 })
 </script>

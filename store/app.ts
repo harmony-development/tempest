@@ -140,6 +140,23 @@ export const mutations = mutationTree(state, {
       ...data.data,
     }
   },
+  addChannel(
+    state,
+    data: {
+      host: string
+      guildID: string
+      channelID: string
+      data: IChannelData
+    },
+  ) {
+    ensureGuild(state, data.host, data.guildID)
+    if (!state.data[data.host].guilds[data.guildID].channels) {
+      state.data[data.host].guilds[data.guildID].channels = [data.channelID]
+      return
+    }
+    state.data[data.host].guilds[data.guildID].channels?.push(data.channelID)
+    state.data[data.host].channels[data.channelID] = data.data
+  },
   setPendingFederation(
     state,
     data: {

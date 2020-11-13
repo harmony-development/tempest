@@ -5,8 +5,9 @@ import { IChannelData } from '~/store/app'
 declare module 'vue/types/vue' {
   interface Vue {
     $getHost(): string
-    $getOrFederate(host: string): Connection
+    $getOrFederate(host: string): Promise<Connection>
     $fetchChannelList(host: string, guildID: string): void
+    $createChannel(host: string, guildID: string, channelName: string): void
   }
 }
 
@@ -72,5 +73,26 @@ Vue.prototype.$fetchChannelList = async function (
   this.$accessor.app.setChannelsData({
     host,
     data: mapped,
+  })
+}
+
+Vue.prototype.$createChannel = async function (
+  this: Vue,
+  host: string,
+  guildID: string,
+  channelName: string,
+) {
+  const conn = await this.$getOrFederate(host)
+  const resp = await conn.createChannel(guildID, channelName)
+  const asObj = resp.message?.toObject()
+  this.$accessor.app.addChannel({
+    host,
+    guildID,
+    channelID: asObj!.channelId,
+    data: {
+      channelName,
+      isCategory: false,
+      isVoice: false,
+    },
   })
 }
