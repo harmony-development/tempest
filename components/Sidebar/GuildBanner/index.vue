@@ -14,6 +14,13 @@
   </v-sheet>
 </template>
 
+<style scoped>
+.guild-title {
+  display: flex;
+  align-items: center;
+}
+</style>
+
 <script lang="ts">
 import Vue from 'vue'
 import AddChannelButton from './AddChannelButton.vue'

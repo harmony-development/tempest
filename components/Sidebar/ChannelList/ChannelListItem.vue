@@ -3,13 +3,25 @@
     :class="{ 'channel-item': true, active: selected }"
     color="primary"
     @click="onClick"
+    @mouseover="hovering = true"
+    @mouseout="hovering = false"
   >
-    <v-list-item-icon>
+    <v-list-item-icon style="align-self: center">
       <v-icon size="24px">mdi-pound</v-icon>
     </v-list-item-icon>
     <v-list-item-content>
       <v-list-item-title v-text="name"></v-list-item-title>
     </v-list-item-content>
+    <v-list-item-action :class="{ 'icon-hidden': !hovering }">
+      <v-btn
+        icon
+        @click.stop="onDeleteClick"
+        @mousedown.stop
+        @touchstart.native.stop
+      >
+        <v-icon color="grey lighten-1">mdi-cog</v-icon>
+      </v-btn>
+    </v-list-item-action>
   </v-list-item>
 </template>
 
@@ -17,6 +29,10 @@
 .active {
   background-color: var(--v-accent-base);
   border-left: 4px solid var(--v-primary-base);
+}
+
+.icon-hidden {
+  visibility: hidden;
 }
 
 .channel-item {
@@ -34,6 +50,11 @@ export default Vue.extend({
       default: '',
     },
   },
+  data() {
+    return {
+      hovering: false,
+    }
+  },
   computed: {
     name(): string | undefined {
       return this.$accessor.app.data[this.$getHost()]?.channels[this.id]
@@ -49,6 +70,7 @@ export default Vue.extend({
         channelid: this.id,
       })
     },
+    onDeleteClick() {},
   },
 })
 </script>

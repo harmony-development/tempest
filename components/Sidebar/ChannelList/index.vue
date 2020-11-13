@@ -1,40 +1,20 @@
 <template>
-  <div class="channel-list">
-    <guild-banner :guildname="guildName" />
-    <v-divider />
-    <v-list v-if="channelList" dense color="#00000000" shaped>
-      <channel-list-item
-        v-for="channel in channelList"
-        :id="channel"
-        :key="channel"
-      />
-    </v-list>
-  </div>
+  <v-list v-if="channelList" dense color="#00000000" shaped>
+    <channel-list-item
+      v-for="channel in channelList"
+      :id="channel"
+      :key="channel"
+    />
+  </v-list>
 </template>
-
-<style scoped>
-.channel-list {
-  width: 400px;
-  overflow-y: auto;
-  text-overflow: ellipsis;
-  background-color: var(--harmony-dark-700);
-}
-
-.guild-title {
-  display: flex;
-  align-items: center;
-}
-</style>
 
 <script lang="ts">
 import Vue from 'vue'
-import GuildBanner from '../GuildBanner/index.vue'
 import ChannelListItem from './ChannelListItem.vue'
 import { DialogType } from '~/store/dialog'
 export default Vue.extend({
   components: {
     ChannelListItem,
-    GuildBanner,
   },
   computed: {
     guildName(): string | undefined {
