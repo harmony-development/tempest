@@ -1,6 +1,6 @@
 <template>
   <fragment>
-    <h3 class="mb-4">Register At {{ host }}</h3>
+    <h3 class="mb-4">Register At {{ $getHost() }}</h3>
     <v-text-field
       v-model="email"
       label="Email"
@@ -61,11 +61,6 @@ export default Vue.extend({
       confirmPassword: '',
     }
   },
-  computed: {
-    host() {
-      return this.$route.hash.substr(1)
-    },
-  },
   methods: {
     toLogin() {
       this.$router.replace({ path: 'login', hash: this.$route.hash })
@@ -74,7 +69,7 @@ export default Vue.extend({
       return this.password === this.confirmPassword || 'Passwords do not match'
     },
     async registerClicked() {
-      const c = new Connection(this.host)
+      const c = new Connection(this.$getHost())
       try {
         const resp = await c.register(this.email, this.username, this.password)
         this.$accessor.app.setUserID(resp.message?.getUserId())

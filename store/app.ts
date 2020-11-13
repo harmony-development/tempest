@@ -8,9 +8,9 @@ interface IGuildEntry {
 }
 
 export interface IGuildData {
-  name: string
+  name?: string
   picture?: string
-  channels: string[]
+  channels?: string[]
 }
 
 export interface IChannelData {
@@ -70,8 +70,8 @@ const ensureGuild = (state: IState, host: string, guildID: string) => {
   ensureHost(state, host)
   if (state.data[host].guilds[guildID]) return
   Vue.set(state.data[host].guilds, guildID, {
-    name: '',
-    channels: [],
+    name: undefined,
+    channels: undefined,
   })
 }
 
@@ -110,11 +110,9 @@ export const mutations = mutationTree(state, {
       picture?: string
     },
   ) {
-    ensureHost(state, data.host)
-    Vue.set(state.data[data.host].guilds, data.guildID, {
-      name: data.name,
-      picture: data.picture,
-    })
+    ensureGuild(state, data.host, data.guildID)
+    state.data[data.host].guilds[data.guildID].name = data.name
+    state.data[data.host].guilds[data.guildID].picture = data.picture
   },
   setGuildChannels(
     state,

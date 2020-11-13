@@ -1,9 +1,6 @@
 <template>
   <div class="root">
     <guild-list />
-    <div class="text-center">
-      <v-progress-circular indeterminate color="primary"></v-progress-circular>
-    </div>
     <channel-list />
     <chat />
     <member-list />

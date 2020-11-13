@@ -1,6 +1,8 @@
 <template>
   <div class="channel-list">
-    <v-list dense>
+    <guild-banner :guildname="guildName" />
+    <v-divider />
+    <v-list v-if="channelList" dense color="#00000000" shaped>
       <channel-list-item
         v-for="channel in channelList"
         :id="channel"
@@ -17,23 +19,34 @@
   text-overflow: ellipsis;
   background-color: var(--harmony-dark-700);
 }
+
+.guild-title {
+  display: flex;
+  align-items: center;
+}
 </style>
 
 <script lang="ts">
 import Vue from 'vue'
+import GuildBanner from '../GuildBanner/index.vue'
 import ChannelListItem from './ChannelListItem.vue'
-import { IChannelData } from '~/store/app'
 import { DialogType } from '~/store/dialog'
 export default Vue.extend({
   components: {
     ChannelListItem,
+    GuildBanner,
   },
   computed: {
+    guildName(): string | undefined {
+      return this.$accessor.app.data[this.$getHost()]?.guilds[
+        this.$route.params.guildid
+      ]?.name
+    },
     selectedGuildID() {
       return this.$route.params.guildid
     },
     channelList() {
-      return this.$accessor.app.data[window.location.host.substr(1)]?.guilds[
+      return this.$accessor.app.data[this.$getHost()]?.guilds[
         this.$route.params.guildid
       ]?.channels
     },
@@ -45,34 +58,17 @@ export default Vue.extend({
       },
     },
   },
+  mounted() {
+    this.fetchData()
+  },
   methods: {
     async fetchData() {
-      if (this.$route.params.guildid) {
+      if (this.$route.params.guildid && !this.channelList) {
         try {
-          const conn = await this.$getOrFederate(this.$accessor.app.host!)
-          const resp = await conn.getGuildChannels(this.$route.params.guildid)
-          const asObj = resp.message?.toObject()
-
-          const mapped = asObj!.channelsList.reduce<{
-            [channelID: string]: IChannelData
-          }>((prev, val) => {
-            Vue.set(prev, val.channelId, {
-              channelName: val.channelName,
-              isCategory: val.isCategory,
-              isVoice: val.isVoice,
-            })
-            return prev
-          }, {})
-
-          this.$accessor.app.setGuildChannels({
-            host: window.location.hash.substr(1),
-            guildID: this.$route.params.guildid,
-            channels: asObj!.channelsList.map((c) => c.channelId),
-          })
-          this.$accessor.app.setChannelsData({
-            host: window.location.hash.substr(1),
-            data: mapped,
-          })
+          await this.$fetchChannelList(
+            this.$getHost(),
+            this.$route.params.guildid,
+          )
         } catch (e) {
           this.$showDialog(DialogType.Error, e.statusMessage || e)
         }

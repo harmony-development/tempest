@@ -21,8 +21,8 @@ export default {
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
-    { src: '~/plugins/localStorage.js', mode: 'client' },
     { src: '~/plugins/fragments.js', mode: 'client' },
+    { src: '~/plugins/routing.ts', mode: 'client' },
     { src: '~/plugins/harmonyURIParser.ts', mode: 'client' },
     { src: '~/plugins/harmonyAPI.ts', mode: 'client' },
     { src: '~/plugins/dialogs.ts', mode: 'client' },

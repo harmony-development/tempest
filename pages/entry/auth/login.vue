@@ -1,6 +1,6 @@
 <template>
   <fragment>
-    <h3 class="mb-4">Login To {{ host }}</h3>
+    <h3 class="mb-4">Login To {{ $getHost() }}</h3>
     <v-text-field
       v-model="email"
       label="Email"
@@ -40,22 +40,17 @@ export default Vue.extend({
       password: '',
     }
   },
-  computed: {
-    host() {
-      return this.$route.hash.substr(1)
-    },
-  },
   methods: {
     toRegister() {
       this.$router.push({ path: 'register', hash: this.$route.hash })
     },
     async loginClicked() {
-      const c = new Connection(this.host)
+      const c = new Connection(this.$getHost())
       try {
         const resp = await c.loginLocal(this.email, this.password)
         this.$accessor.app.setUserID(resp.message?.getUserId())
         this.$accessor.app.setSession(resp.message?.getSessionToken())
-        this.$accessor.app.setHost(this.host)
+        this.$accessor.app.setHost(this.$getHost())
         this.$router.push({ path: '/app' })
       } catch (e) {
         this.$accessor.dialog.openDialog({
