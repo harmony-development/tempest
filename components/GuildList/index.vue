@@ -5,7 +5,7 @@
         v-for="entry in guildList"
         :id="entry.guildId"
         :key="`${entry.guildId}:${entry.host}`"
-        :host="entry.host"
+        :host="entry.host || $accessor.app.host"
       />
     </template>
     <guild-menu-button />

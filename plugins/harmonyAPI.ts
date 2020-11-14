@@ -16,6 +16,7 @@ Vue.prototype.$getHost = function (this: Vue) {
 }
 
 Vue.prototype.$getOrFederate = function (this: Vue, host: string) {
+  if (!host) host = this.$accessor.app.host!
   const appState = this.$accessor.app
   if (appState.connections[host]) return appState.connections[host]
   if (appState.pendingFederations[host])

@@ -9,7 +9,7 @@ export const state = () => ({
   serverList: [
     {
       name: 'Localhost',
-      host: '127.0.0.1:2290',
+      host: '127.0.0.1:2289',
     },
   ] as IServerEntry[],
   selectedServer: undefined as string | undefined,

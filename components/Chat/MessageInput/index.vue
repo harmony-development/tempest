@@ -1,13 +1,13 @@
 <template>
   <div class="ma-2">
     <div class="preview-thumbnails flex-nowrap">
-      <img
+      <v-img
         v-for="img in previewImages"
         :key="img"
         :src="img"
         class="grey lighten-2"
-        height="100"
-        width="177"
+        max-height="100"
+        max-width="177"
       />
     </div>
     <v-text-field
