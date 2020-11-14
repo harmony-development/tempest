@@ -1,5 +1,37 @@
 <template>
-  <div>
+  <div class="ma-2">
+    <v-sheet
+      class="mb-2 preview-thumbnails-sheet"
+      color="var(--harmony-dark-600)"
+    >
+      <div class="preview-thumbnails flex-nowrap">
+        <v-img
+          v-for="img in previewImages"
+          :key="img"
+          :src="img"
+          class="grey lighten-2 preview"
+          max-height="100"
+          max-width="177"
+        />
+      </div>
+    </v-sheet>
+    <v-text-field
+      v-model="message"
+      outlined
+      hide-details="auto"
+      label="Message"
+      append-icon="mdi-emoticon"
+      prepend-icon="mdi-plus"
+      @click:append="toggleEmojiPicker"
+      @click:prepend="selectFileClicked"
+    />
+    <input
+      ref="fileUpload"
+      type="file"
+      hidden
+      multiple
+      @change="selectFileComplete"
+    />
     <v-menu
       v-model="emojiOpen"
       :close-on-content-click="false"
@@ -11,20 +43,43 @@
     >
       <v-emoji-picker :dark="true" @select="pickEmoji" />
     </v-menu>
-    <v-text-field
-      v-model="message"
-      outlined
-      hide-details="auto"
-      label="Message"
-      append-icon="mdi-emoticon"
-      @click:append="toggleEmojiPicker"
-    />
   </div>
 </template>
+
+<style scoped>
+.preview-thumbnails-sheet {
+  flex: 1;
+  display: flex;
+  overflow: auto;
+}
+
+.preview {
+}
+
+.preview-thumbnails {
+  display: flex;
+  min-width: min-content; /* needs vendor prefixes */
+}
+</style>
 
 <script lang="ts">
 import Vue from 'vue'
 import { VEmojiPicker } from 'v-emoji-picker'
+
+const getBase64List = async (list: FileList) => {
+  const promises = Array.from(list).map((file) => {
+    const reader = new FileReader()
+    return new Promise<string>((resolve) => {
+      reader.onload = (ev) => {
+        if (typeof ev.target?.result === 'string') {
+          resolve(ev.target.result)
+        }
+      }
+      reader.readAsDataURL(file)
+    })
+  })
+  return await Promise.all(promises)
+}
 
 export default Vue.extend({
   components: {
@@ -36,6 +91,8 @@ export default Vue.extend({
       emojiOpen: false,
       emojiX: 0,
       emojiY: 0,
+      selectedFiles: null as FileList | null,
+      previewImages: [] as string[],
     }
   },
   methods: {
@@ -46,6 +103,16 @@ export default Vue.extend({
     },
     pickEmoji(emoji: any) {
       this.message += emoji.data
+    },
+    selectFileClicked() {
+      ;(this.$refs.fileUpload as HTMLInputElement).click()
+    },
+    async selectFileComplete(e: Event) {
+      const input = e.target as HTMLInputElement
+      if (input.files) {
+        this.selectedFiles = input.files
+        this.previewImages = await getBase64List(input.files)
+      }
     },
   },
 })
