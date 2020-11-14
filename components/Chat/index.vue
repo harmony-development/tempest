@@ -8,9 +8,10 @@
 <style scoped>
 .chat {
   display: flex;
+  flex: 1 1 100%;
+  min-height: auto;
+  min-width: 0;
   flex-direction: column;
-  flex-flow: column;
-  width: 100%;
   height: 100%;
 }
 </style>

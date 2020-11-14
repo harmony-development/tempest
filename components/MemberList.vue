@@ -4,7 +4,7 @@
 
 <style scoped>
 .member-list {
-  width: 350px;
+  flex: 0 0 200px;
   overflow-y: auto;
   background-color: var(--harmony-dark-700);
 }

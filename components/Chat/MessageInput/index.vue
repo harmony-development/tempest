@@ -1,20 +1,15 @@
 <template>
   <div class="ma-2">
-    <v-sheet
-      class="mb-2 preview-thumbnails-sheet"
-      color="var(--harmony-dark-600)"
-    >
-      <div class="preview-thumbnails flex-nowrap">
-        <v-img
-          v-for="img in previewImages"
-          :key="img"
-          :src="img"
-          class="grey lighten-2 preview"
-          max-height="100"
-          max-width="177"
-        />
-      </div>
-    </v-sheet>
+    <div class="preview-thumbnails flex-nowrap">
+      <img
+        v-for="img in previewImages"
+        :key="img"
+        :src="img"
+        class="grey lighten-2"
+        height="100"
+        width="177"
+      />
+    </div>
     <v-text-field
       v-model="message"
       outlined
@@ -48,17 +43,13 @@
 
 <style scoped>
 .preview-thumbnails-sheet {
-  flex: 1;
-  display: flex;
-  overflow: auto;
-}
-
-.preview {
 }
 
 .preview-thumbnails {
   display: flex;
-  min-width: min-content; /* needs vendor prefixes */
+  flex: 1 0 0;
+  overflow-x: auto;
+  min-width: 0;
 }
 </style>
 

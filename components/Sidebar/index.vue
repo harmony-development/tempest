@@ -10,7 +10,7 @@
 
 <style scoped>
 .sidebar {
-  width: 400px;
+  flex: 0 0 250px;
   overflow-y: auto;
   text-overflow: ellipsis;
   background-color: var(--harmony-dark-700);

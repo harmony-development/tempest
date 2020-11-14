@@ -13,7 +13,6 @@
   height: 100%;
   display: flex;
   flex-direction: row;
-  flex-shrink: 0;
   overflow: auto;
 }
 </style>
