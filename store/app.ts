@@ -1,4 +1,8 @@
 import { Connection } from '@harmony-dev/harmony-web-sdk'
+import {
+  Action,
+  Embed,
+} from '@harmony-dev/harmony-web-sdk/dist/protocol/core/v1/core_pb'
 import { actionTree, mutationTree } from 'nuxt-typed-vuex'
 import Vue from 'vue'
 
@@ -14,14 +18,25 @@ export interface IGuildData {
 }
 
 export interface IChannelData {
-  channelName: string
-  isCategory: boolean
-  isVoice: boolean
+  channelName?: string
+  isCategory?: boolean
+  isVoice?: boolean
+  messages?: string[]
+}
+
+export interface IMessageData {
+  authorID: string
+  createdAt: string
+  editedAt: string
+  content: string
+  embedsList: Embed.AsObject[]
+  actionsList: Action.AsObject[]
+  attachmentsList: string[]
 }
 
 interface IData {
   messages: {
-    [messageID: string]: string
+    [messageID: string]: IMessageData
   }
   guilds: {
     [guildID: string]: IGuildData
@@ -72,6 +87,17 @@ const ensureGuild = (state: IState, host: string, guildID: string) => {
   Vue.set(state.data[host].guilds, guildID, {
     name: undefined,
     channels: undefined,
+  })
+}
+
+const ensureChannel = (state: IState, host: string, channelID: string) => {
+  ensureHost(state, host)
+  if (state.data[host].channels[channelID]) return
+  Vue.set(state.data[host].channels, channelID, {
+    channelName: undefined,
+    isCategory: undefined,
+    isVoice: undefined,
+    messages: undefined,
   })
 }
 
@@ -141,6 +167,49 @@ export const mutations = mutationTree(state, {
     }
   },
   addChannel(
+    state,
+    data: {
+      host: string
+      guildID: string
+      channelID: string
+      data: IChannelData
+    },
+  ) {
+    ensureGuild(state, data.host, data.guildID)
+    if (!state.data[data.host].guilds[data.guildID].channels) {
+      state.data[data.host].guilds[data.guildID].channels = [data.channelID]
+      return
+    }
+    state.data[data.host].guilds[data.guildID].channels?.push(data.channelID)
+    state.data[data.host].channels[data.channelID] = data.data
+  },
+  setChannelMessages(
+    state,
+    data: {
+      host: string
+      channelID: string
+      messages: string[]
+    },
+  ) {
+    ensureChannel(state, data.host, data.channelID)
+    state.data[data.host].channels[data.channelID].messages = data.messages
+  },
+  setMessagesData(
+    state,
+    data: {
+      host: string
+      data: {
+        [messageID: string]: IMessageData
+      }
+    },
+  ) {
+    ensureHost(state, data.host)
+    state.data[data.host].messages = {
+      ...state.data[data.host].messages,
+      ...data.data,
+    }
+  },
+  addMessage(
     state,
     data: {
       host: string

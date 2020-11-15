@@ -44,7 +44,9 @@ export default Vue.extend({
   methods: {
     async createGuild() {
       try {
-        const conn = await this.$getOrFederate(this.host!)
+        const conn = await this.$getOrFederate(
+          this.host === this.$accessor.app.host ? '' : this.host!,
+        )
         const resp = await conn.createGuild(this.guildName!)
         await conn.addGuildToGuildList(resp.message!.getGuildId(), this.host!)
         this.$accessor.app.addGuildToList({

@@ -1,12 +1,13 @@
 import { Connection } from '@harmony-dev/harmony-web-sdk'
 import Vue from 'vue'
-import { IChannelData } from '~/store/app'
+import { IChannelData, IMessageData } from '~/store/app'
 
 declare module 'vue/types/vue' {
   interface Vue {
     $getHost(): string
     $getOrFederate(host: string): Promise<Connection>
     $fetchChannelList(host: string, guildID: string): void
+    $fetchMessageList(host: string, guildID: string, channelID: string): void
     $createChannel(host: string, guildID: string, channelName: string): void
   }
 }
@@ -77,6 +78,42 @@ Vue.prototype.$fetchChannelList = async function (
   })
 }
 
+Vue.prototype.$fetchMessageList = async function (
+  this: Vue,
+  host: string,
+  guildID: string,
+  channelID: string,
+) {
+  const conn = await this.$getOrFederate(host)
+  const resp = await conn.getChannelMessages(guildID, channelID)
+  const asObj = resp.message?.toObject()
+
+  const mapped = asObj!.messagesList.reduce<{
+    [messageID: string]: IMessageData
+  }>((prev, val) => {
+    Vue.set(prev, val.location!.messageId, {
+      authorID: val.authorId,
+      createdAt: val.createdAt?.seconds || '0',
+      editedAt: val.editedAt?.seconds || '0',
+      content: val.content,
+      embedsList: val.embedsList,
+      actionsList: val.actionsList,
+      attachmentsList: val.attachmentsList,
+    })
+    return prev
+  }, {})
+
+  this.$accessor.app.setChannelMessages({
+    host,
+    channelID,
+    messages: asObj!.messagesList.map((c) => c.location!.messageId),
+  })
+  this.$accessor.app.setMessagesData({
+    host,
+    data: mapped,
+  })
+}
+
 Vue.prototype.$createChannel = async function (
   this: Vue,
   host: string,
@@ -94,6 +131,7 @@ Vue.prototype.$createChannel = async function (
       channelName,
       isCategory: false,
       isVoice: false,
+      messages: undefined,
     },
   })
 }

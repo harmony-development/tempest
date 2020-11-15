@@ -13,6 +13,7 @@
     <v-text-field
       v-model="message"
       outlined
+      autocomplete="off"
       hide-details="auto"
       label="Message"
       append-icon="mdi-emoticon"
@@ -42,9 +43,6 @@
 </template>
 
 <style scoped>
-.preview-thumbnails-sheet {
-}
-
 .preview-thumbnails {
   display: flex;
   flex: 1 0 0;
