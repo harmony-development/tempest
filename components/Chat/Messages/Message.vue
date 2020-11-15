@@ -2,7 +2,10 @@
   <v-list-item>
     <v-list-item-avatar color="grey"></v-list-item-avatar>
     <v-list-item-content>
-      <v-list-item-title>{{ username || authorID }}</v-list-item-title>
+      <v-list-item-title
+        >{{ username || authorID }}
+        <span>{{ timeString }}</span></v-list-item-title
+      >
       <v-list-item-subtitle>{{ content }}</v-list-item-subtitle>
     </v-list-item-content>
   </v-list-item>
@@ -10,7 +13,14 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import dayjs from 'dayjs'
+import calendar from 'dayjs/plugin/calendar'
+import UTC from 'dayjs/plugin/utc'
 import { IMessageData } from '~/store/app'
+
+dayjs.extend(calendar)
+dayjs.extend(UTC)
+
 export default Vue.extend({
   props: {
     id: {
@@ -32,6 +42,12 @@ export default Vue.extend({
     },
     content(): string | undefined {
       return this.data?.content
+    },
+    timeString(): string {
+      return ` - ${dayjs
+        .unix(this.data?.createdAt || 0)
+        .utc()
+        .calendar()}`
     },
   },
   mounted() {

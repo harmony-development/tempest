@@ -28,8 +28,8 @@ export interface IChannelData {
 
 export interface IMessageData {
   authorID: string
-  createdAt: string
-  editedAt: string
+  createdAt: number
+  editedAt: number
   content: string
   embedsList: Embed.AsObject[]
   actionsList: Action.AsObject[]
