@@ -3,13 +3,8 @@
     <template v-slot:activator="{ on: dialogOn, attrs }">
       <v-tooltip bottom>
         <template v-slot:activator="{ on: tooltip }">
-          <v-btn icon>
-            <v-icon
-              size="24px"
-              v-bind="attrs"
-              v-on="{ ...tooltip, ...dialogOn }"
-              >mdi-plus</v-icon
-            >
+          <v-btn icon v-on="{ ...tooltip, ...dialogOn }">
+            <v-icon size="24px" v-bind="attrs">mdi-plus</v-icon>
           </v-btn>
         </template>
         Add Channel
