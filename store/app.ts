@@ -2,7 +2,9 @@ import { Connection } from '@harmony-dev/harmony-web-sdk'
 import {
   Action,
   Embed,
+  HomeserverEvent,
 } from '@harmony-dev/harmony-web-sdk/dist/protocol/core/v1/core_pb'
+import { UserStatusMap } from '@harmony-dev/harmony-web-sdk/dist/protocol/profile/v1/profile_pb'
 import { actionTree, mutationTree } from 'nuxt-typed-vuex'
 import Vue from 'vue'
 
@@ -34,6 +36,12 @@ export interface IMessageData {
   attachmentsList: string[]
 }
 
+export interface IUserData {
+  username?: string
+  avatar?: string
+  status?: UserStatusMap[keyof UserStatusMap]
+}
+
 interface IData {
   messages: {
     [messageID: string]: IMessageData
@@ -44,6 +52,9 @@ interface IData {
   channels: {
     [channelID: string]: IChannelData
   }
+  users: {
+    [userID: string]: IUserData
+  }
 }
 
 interface IState {
@@ -52,9 +63,6 @@ interface IState {
   host: string | undefined
   connections: {
     [host: string]: Connection
-  }
-  pendingFederations: {
-    [host: string]: Promise<Connection>
   }
   data: {
     [host: string]: IData
@@ -67,7 +75,6 @@ export const state = (): IState => ({
   session: undefined,
   host: undefined,
   connections: {},
-  pendingFederations: {},
   data: {},
   guildsList: undefined,
 })
@@ -78,6 +85,7 @@ const ensureHost = (state: IState, host: string) => {
     messages: {},
     guilds: {},
     channels: {},
+    users: {},
   })
 }
 
@@ -230,17 +238,16 @@ export const mutations = mutationTree(state, {
     state.data[data.host].guilds[data.guildID].channels?.push(data.channelID)
     state.data[data.host].channels[data.channelID] = data.data
   },
-  setPendingFederation(
+  setUser(
     state,
     data: {
       host: string
-      req: Promise<Connection>
+      userID: string
+      data: IUserData
     },
   ) {
-    Vue.set(state.pendingFederations, data.host, data.req)
-  },
-  removePendingFederation(state, host: string) {
-    Vue.delete(state.pendingFederations, host)
+    ensureHost(state, data.host)
+    Vue.set(state.data[data.host]?.users, data.userID, data.data)
   },
 })
 

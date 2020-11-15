@@ -15,8 +15,17 @@ declare module 'vue/types/vue' {
       channelID: string,
       content?: string,
     ): void
+    $fetchUser(host: string, userID: string): void
   }
 }
+
+const pendingFederations: {
+  [host: string]: Promise<Connection>
+} = {}
+
+const pendingUserFetches: {
+  [userID: string]: boolean
+} = {}
 
 Vue.prototype.$getHost = function (this: Vue) {
   return this.$route.hash.substr(1).replace('///', '//')
@@ -26,8 +35,7 @@ Vue.prototype.$getOrFederate = function (this: Vue, host: string) {
   if (!host) host = this.$accessor.app.host!
   const appState = this.$accessor.app
   if (appState.connections[host]) return appState.connections[host]
-  if (appState.pendingFederations[host])
-    return appState.pendingFederations[host]
+  if (pendingFederations[host]) return pendingFederations[host]
   const process = async () => {
     const federateResp = await appState.connections[appState.host!].federate(
       host,
@@ -46,11 +54,11 @@ Vue.prototype.$getOrFederate = function (this: Vue, host: string) {
       host,
       connection: conn,
     })
-    this.$accessor.app.removePendingFederation(host)
+    delete pendingFederations[host]
     return appState.connections[host]
   }
-  appState.pendingFederations[host] = process()
-  return appState.pendingFederations[host]
+  pendingFederations[host] = process()
+  return pendingFederations[host]
 }
 
 Vue.prototype.$fetchChannelList = async function (
@@ -151,4 +159,24 @@ Vue.prototype.$sendMessage = async function (
 ) {
   const conn = await this.$getOrFederate(host)
   return conn.sendMessage(guildID, channelID, content)
+}
+
+Vue.prototype.$fetchUser = async function (
+  this: Vue,
+  host: string,
+  userID: string,
+) {
+  const conn = await this.$getOrFederate(host)
+  if (pendingUserFetches[userID]) return
+  const resp = await conn.getUser(userID)
+  const asObj = resp.message?.toObject()
+  this.$accessor.app.setUser({
+    host,
+    userID,
+    data: {
+      username: asObj?.userName,
+      avatar: asObj?.userAvatar,
+      status: asObj?.userStatus,
+    },
+  })
 }
