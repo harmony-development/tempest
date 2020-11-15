@@ -9,6 +9,12 @@ declare module 'vue/types/vue' {
     $fetchChannelList(host: string, guildID: string): void
     $fetchMessageList(host: string, guildID: string, channelID: string): void
     $createChannel(host: string, guildID: string, channelName: string): void
+    $sendMessage(
+      host: string,
+      guildID: string,
+      channelID: string,
+      content?: string,
+    ): void
   }
 }
 
@@ -134,4 +140,15 @@ Vue.prototype.$createChannel = async function (
       messages: undefined,
     },
   })
+}
+
+Vue.prototype.$sendMessage = async function (
+  this: Vue,
+  host: string,
+  guildID: string,
+  channelID: string,
+  content?: string,
+) {
+  const conn = await this.$getOrFederate(host)
+  return conn.sendMessage(guildID, channelID, content)
 }

@@ -1,7 +1,11 @@
 <template>
   <div class="chat">
-    <v-list color="#00000000">
-      <message />
+    <v-list v-if="messagesList" color="#00000000">
+      <message
+        v-for="message in messagesList.slice().reverse()"
+        :id="message"
+        :key="message"
+      />
     </v-list>
   </div>
 </template>

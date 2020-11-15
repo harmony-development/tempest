@@ -20,6 +20,7 @@
       prepend-icon="mdi-plus"
       @click:append="toggleEmojiPicker"
       @click:prepend="selectFileClicked"
+      @keypress="onInputKeyPress"
     />
     <input
       ref="fileUpload"
@@ -101,6 +102,17 @@ export default Vue.extend({
       if (input.files) {
         this.selectedFiles = input.files
         this.previewImages = await getBase64List(input.files)
+      }
+    },
+    async onInputKeyPress(e: KeyboardEvent) {
+      if (e.key === 'Enter') {
+        await this.$sendMessage(
+          this.$getHost(),
+          this.$route.params.guildid,
+          this.$route.params.channelid,
+          this.message,
+        )
+        this.message = ''
       }
     },
   },
