@@ -169,10 +169,9 @@ export const mutations = mutationTree(state, {
     },
   ) {
     ensureHost(state, data.host)
-    state.data[data.host].channels = {
-      ...state.data[data.host].channels,
-      ...data.data,
-    }
+    Object.keys(data.data).forEach((key) =>
+      Vue.set(state.data[data.host].channels, key, data.data[key]),
+    )
   },
   addChannel(
     state,

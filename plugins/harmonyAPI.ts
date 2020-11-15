@@ -166,8 +166,9 @@ Vue.prototype.$fetchUser = async function (
   host: string,
   userID: string,
 ) {
-  const conn = await this.$getOrFederate(host)
   if (pendingUserFetches[userID]) return
+  if (this.$accessor.app.data[host].users[userID]) return
+  const conn = await this.$getOrFederate(host)
   const resp = await conn.getUser(userID)
   const asObj = resp.message?.toObject()
   this.$accessor.app.setUser({

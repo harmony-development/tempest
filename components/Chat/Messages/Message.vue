@@ -4,7 +4,9 @@
     <v-list-item-content>
       <v-list-item-title
         >{{ username || authorID }}
-        <span>{{ timeString }}</span></v-list-item-title
+        <span style="color: var(--v-accent-lighten3)">{{
+          timeString
+        }}</span></v-list-item-title
       >
       <v-list-item-subtitle>{{ content }}</v-list-item-subtitle>
     </v-list-item-content>
