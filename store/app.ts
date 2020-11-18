@@ -169,9 +169,27 @@ export const mutations = mutationTree(state, {
     },
   ) {
     ensureHost(state, data.host)
-    Object.keys(data.data).forEach((key) =>
-      Vue.set(state.data[data.host].channels, key, data.data[key]),
-    )
+    Object.keys(data.data).forEach((key) => {
+      if (!state.data[data.host].channels[key]) {
+        Vue.set(state.data[data.host].channels, key, data.data[key])
+        return
+      }
+      Vue.set(
+        state.data[data.host].channels[key],
+        'channelName',
+        data.data[key].channelName,
+      )
+      Vue.set(
+        state.data[data.host].channels[key],
+        'isVoice',
+        data.data[key].isVoice,
+      )
+      Vue.set(
+        state.data[data.host].channels[key],
+        'isCategory',
+        data.data[key].isCategory,
+      )
+    })
   },
   addChannel(
     state,

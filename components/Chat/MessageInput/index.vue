@@ -1,15 +1,31 @@
 <template>
   <div class="ma-2">
-    <div class="preview-thumbnails flex-nowrap">
-      <v-img
-        v-for="img in previewImages"
-        :key="img"
-        :src="img"
-        class="grey lighten-2"
-        max-height="100"
-        max-width="177"
-      />
-    </div>
+    <v-slide-group multiple show-arrows>
+      <v-slide-item v-for="(img, idx) in previewImages" :key="img">
+        <v-hover>
+          <template v-slot:default="{ hover }">
+            <v-img
+              :src="img"
+              class="grey lighten-2 thumbnail"
+              max-height="100"
+              max-width="177"
+            >
+              <v-fade-transition>
+                <v-overlay v-if="hover" absolute color="black">
+                  <v-btn
+                    icon
+                    class="delete-btn"
+                    @click="deleteSelectedFile(idx)"
+                  >
+                    <v-icon> mdi-close </v-icon>
+                  </v-btn>
+                </v-overlay>
+              </v-fade-transition>
+            </v-img>
+          </template>
+        </v-hover>
+      </v-slide-item>
+    </v-slide-group>
     <v-text-field
       v-model="message"
       outlined
@@ -43,14 +59,7 @@
   </div>
 </template>
 
-<style scoped>
-.preview-thumbnails {
-  display: flex;
-  flex: 1 0 0;
-  overflow-x: auto;
-  min-width: 0;
-}
-</style>
+<style scoped></style>
 
 <script lang="ts">
 import Vue from 'vue'
@@ -81,7 +90,7 @@ export default Vue.extend({
       emojiOpen: false,
       emojiX: 0,
       emojiY: 0,
-      selectedFiles: null as FileList | null,
+      selectedFiles: [] as File[] | null,
       previewImages: [] as string[],
     }
   },
@@ -100,7 +109,7 @@ export default Vue.extend({
     async selectFileComplete(e: Event) {
       const input = e.target as HTMLInputElement
       if (input.files) {
-        this.selectedFiles = input.files
+        this.selectedFiles = Array.from(input.files)
         this.previewImages = await getBase64List(input.files)
       }
     },
@@ -113,6 +122,12 @@ export default Vue.extend({
           this.message,
         )
         this.message = ''
+      }
+    },
+    deleteSelectedFile(idx: number) {
+      if (this.selectedFiles) {
+        Vue.delete(this.selectedFiles, idx)
+        Vue.delete(this.previewImages, idx)
       }
     },
   },
