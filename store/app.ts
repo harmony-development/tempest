@@ -252,7 +252,7 @@ export const mutations = mutationTree(state, {
   ) {
     ensureChannel(state, data.host, data.channelID)
     state.data[data.host].messages[data.messageID] = data.data
-    state.data[data.host].channels[data.channelID].messages?.push(
+    state.data[data.host].channels[data.channelID].messages?.unshift(
       data.messageID,
     )
   },

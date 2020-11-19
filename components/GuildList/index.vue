@@ -42,6 +42,7 @@ export default Vue.extend({
       const conn = await this.$getOrFederate(this.$accessor.app.host!)
       const resp = await conn.getGuildList()
       const asObj = resp.message?.toObject()
+
       this.$accessor.app.setGuildList(asObj!.guildsList)
     } catch (e) {
       this.$showDialog(DialogType.Error, e.statusMessage || e)

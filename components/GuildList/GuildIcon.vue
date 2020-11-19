@@ -65,6 +65,7 @@ export default Vue.extend({
         const conn = await this.$getOrFederate(this.host)
         const resp = await conn.getGuild(this.id)
         const asObj = resp.message!.toObject()
+        conn.subscribe(this.id)
         this.$accessor.app.setGuildData({
           host: this.host,
           guildID: this.id,
