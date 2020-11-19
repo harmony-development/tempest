@@ -2,7 +2,6 @@ import { Connection } from '@harmony-dev/harmony-web-sdk'
 import {
   Action,
   Embed,
-  HomeserverEvent,
 } from '@harmony-dev/harmony-web-sdk/dist/protocol/core/v1/core_pb'
 import { UserStatusMap } from '@harmony-dev/harmony-web-sdk/dist/protocol/profile/v1/profile_pb'
 import { actionTree, mutationTree } from 'nuxt-typed-vuex'
@@ -68,6 +67,9 @@ interface IState {
     [host: string]: IData
   }
   guildsList: IGuildEntry[] | undefined
+  disconnections: {
+    [host: string]: string
+  }
 }
 
 export const state = (): IState => ({
@@ -77,6 +79,7 @@ export const state = (): IState => ({
   connections: {},
   data: {},
   guildsList: undefined,
+  disconnections: {},
 })
 
 const ensureHost = (state: IState, host: string) => {
@@ -242,18 +245,16 @@ export const mutations = mutationTree(state, {
     state,
     data: {
       host: string
-      guildID: string
       channelID: string
-      data: IChannelData
+      messageID: string
+      data: IMessageData
     },
   ) {
-    ensureGuild(state, data.host, data.guildID)
-    if (!state.data[data.host].guilds[data.guildID].channels) {
-      state.data[data.host].guilds[data.guildID].channels = [data.channelID]
-      return
-    }
-    state.data[data.host].guilds[data.guildID].channels?.push(data.channelID)
-    state.data[data.host].channels[data.channelID] = data.data
+    ensureChannel(state, data.host, data.channelID)
+    state.data[data.host].messages[data.messageID] = data.data
+    state.data[data.host].channels[data.channelID].messages?.push(
+      data.messageID,
+    )
   },
   setUser(
     state,
@@ -265,6 +266,15 @@ export const mutations = mutationTree(state, {
   ) {
     ensureHost(state, data.host)
     Vue.set(state.data[data.host]?.users, data.userID, data.data)
+  },
+  setDisconnected(
+    state,
+    data: {
+      host: string
+      message: string
+    },
+  ) {
+    Vue.set(state.disconnections, data.host, data.message)
   },
 })
 

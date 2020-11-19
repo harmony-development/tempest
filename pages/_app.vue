@@ -32,17 +32,26 @@ export default Vue.extend({
     MemberList,
     Chat,
   },
+  watch: {
+    '$accessor.app.disconnections': {
+      handler() {
+        console.log('disconnected')
+      },
+    },
+  },
   created() {
     if (!this.$accessor.app.host || !this.$accessor.app.session) {
       this.$router.push('entry')
       return
     }
     const conn = new Connection(this.$accessor.app.host)
+    conn.session = this.$accessor.app.session
+    this.$bindEvents(conn)
+    conn.beginStream()
     this.$accessor.app.setConnection({
       host: this.$accessor.app.host,
       connection: conn,
     })
-    conn.session = this.$accessor.app.session
   },
   key: 'app',
 })

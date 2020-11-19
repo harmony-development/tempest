@@ -55,6 +55,8 @@ Vue.prototype.$getOrFederate = function (this: Vue, host: string) {
       connection: conn,
     })
     delete pendingFederations[host]
+    this.$bindEvents(conn)
+    conn.beginStream()
     return appState.connections[host]
   }
   pendingFederations[host] = process()
@@ -105,7 +107,7 @@ Vue.prototype.$fetchMessageList = async function (
   const mapped = asObj!.messagesList.reduce<{
     [messageID: string]: IMessageData
   }>((prev, val) => {
-    Vue.set(prev, val.location!.messageId, {
+    Vue.set(prev, val.messageId, {
       authorID: val.authorId,
       createdAt: val.createdAt?.seconds || '0',
       editedAt: val.editedAt?.seconds || '0',
@@ -120,7 +122,7 @@ Vue.prototype.$fetchMessageList = async function (
   this.$accessor.app.setChannelMessages({
     host,
     channelID,
-    messages: asObj!.messagesList.map((c) => c.location!.messageId),
+    messages: asObj!.messagesList.map((c) => c.messageId),
   })
   this.$accessor.app.setMessagesData({
     host,

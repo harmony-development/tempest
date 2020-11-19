@@ -59,7 +59,7 @@ export default Vue.extend({
         const conn = await this.$getOrFederate(targetHost)
         const resp = await conn.joinGuild(targetCode)
         await conn.addGuildToGuildList(
-          resp.message!.toObject().location!.guildId,
+          resp.message!.toObject().guildId,
           this.$accessor.app.host!,
         )
       } catch (e) {

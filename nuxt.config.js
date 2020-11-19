@@ -25,6 +25,7 @@ export default {
     { src: '~/plugins/routing.ts', mode: 'client' },
     { src: '~/plugins/harmonyURIParser.ts', mode: 'client' },
     { src: '~/plugins/harmonyAPI.ts', mode: 'client' },
+    { src: '~/plugins/eventHandling.ts', mode: 'client' },
     { src: '~/plugins/dialogs.ts', mode: 'client' },
   ],
 
