@@ -21,8 +21,8 @@ Vue.prototype.$bindEvents = function (this: Vue, conn: Connection) {
   )
   conn.events.on(
     Event.EventCase.SENT_MESSAGE,
-    (host, msg) => {
-      const message = msg?.message
+    (host, event) => {
+      const message = event?.message
       if (message) {
         this.$accessor.app.addMessage({
           host,
@@ -39,6 +39,26 @@ Vue.prototype.$bindEvents = function (this: Vue, conn: Connection) {
           },
         })
       }
+    },
+    {},
+  )
+
+  conn.events.on(
+    Event.EventCase.CREATED_CHANNEL,
+    (host, event) => {
+      this.$accessor.app.addChannel({
+        host,
+        guildID: event.guildId,
+        channelID: event.channelId,
+        previousID: event.previousId,
+        nextID: event.nextId,
+        data: {
+          channelName: event.name,
+          isCategory: event.isCategory,
+          isVoice: false,
+          messages: undefined,
+        },
+      })
     },
     {},
   )

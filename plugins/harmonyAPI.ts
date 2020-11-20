@@ -137,19 +137,7 @@ Vue.prototype.$createChannel = async function (
   channelName: string,
 ) {
   const conn = await this.$getOrFederate(host)
-  const resp = await conn.createChannel(guildID, channelName)
-  const asObj = resp.message?.toObject()
-  this.$accessor.app.addChannel({
-    host,
-    guildID,
-    channelID: asObj!.channelId,
-    data: {
-      channelName,
-      isCategory: false,
-      isVoice: false,
-      messages: undefined,
-    },
-  })
+  await conn.createChannel(guildID, channelName)
 }
 
 Vue.prototype.$sendMessage = async function (

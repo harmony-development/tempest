@@ -200,15 +200,26 @@ export const mutations = mutationTree(state, {
       host: string
       guildID: string
       channelID: string
+      nextID: string
+      previousID: string
       data: IChannelData
     },
   ) {
     ensureGuild(state, data.host, data.guildID)
-    if (!state.data[data.host].guilds[data.guildID].channels) {
-      state.data[data.host].guilds[data.guildID].channels = [data.channelID]
+    const guild = state.data[data.host].guilds[data.guildID]
+    if (!guild.channels) {
+      guild.channels = [data.channelID]
       return
     }
-    state.data[data.host].guilds[data.guildID].channels?.push(data.channelID)
+    if (!data.previousID || data.previousID === '0') {
+      guild.channels.push(data.channelID)
+    } else {
+      guild.channels.splice(
+        guild.channels.indexOf(data.previousID),
+        0,
+        data.channelID,
+      )
+    }
     state.data[data.host].channels[data.channelID] = data.data
   },
   setChannelMessages(
