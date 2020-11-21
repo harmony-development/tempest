@@ -1,17 +1,38 @@
 <template>
-  <v-list-item>
-    <v-list-item-avatar color="grey"></v-list-item-avatar>
-    <v-list-item-content>
+  <div class="root pa-3">
+    <img class="avatar" />
+    <div class="message-body ml-2">
       <v-list-item-title
         >{{ username || authorID }}
         <span style="color: var(--v-accent-lighten3)">{{
           timeString
         }}</span></v-list-item-title
       >
-      <v-list-item-subtitle>{{ content }}</v-list-item-subtitle>
-    </v-list-item-content>
-  </v-list-item>
+      {{ content }}
+    </div>
+  </div>
 </template>
+
+<style scoped>
+.root {
+  width: 100%;
+  display: flex;
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 auto;
+}
+
+.message-body {
+}
+
+.content {
+  text-overflow: unset;
+  white-space: pre-line;
+}
+</style>
 
 <script lang="ts">
 import Vue from 'vue'

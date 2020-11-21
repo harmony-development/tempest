@@ -62,4 +62,15 @@ Vue.prototype.$bindEvents = function (this: Vue, conn: Connection) {
     },
     {},
   )
+
+  conn.events.on(
+    Event.EventCase.EDITED_MESSAGE,
+    (host, event) => {
+      this.$accessor.app.editMessage({
+        host,
+        updateEvent: event,
+      })
+    },
+    {},
+  )
 }

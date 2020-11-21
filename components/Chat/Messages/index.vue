@@ -1,17 +1,34 @@
 <template>
   <div class="chat">
-    <v-list v-if="messagesList" color="#00000000">
-      <message
-        v-for="message in messagesList.slice().reverse()"
-        :id="message"
-        :key="message"
-      />
-    </v-list>
+    <DynamicScroller
+      :items="messagesList || []"
+      :min-item-size="64"
+      class="scroller"
+    >
+      <template v-slot="{ item, active, index }">
+        <DynamicScrollerItem
+          :item="item"
+          :active="active"
+          :size-dependencies="[messages[item].content]"
+          :data-index="index"
+          :data-active="active"
+        >
+          <message :id="item" />
+        </DynamicScrollerItem>
+      </template>
+    </DynamicScroller>
   </div>
 </template>
 
+<style scoped>
+.scroller {
+  height: 100%;
+}
+</style>
+
 <script lang="ts">
 import Vue from 'vue'
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import Message from './Message.vue'
 import { DialogType } from '~/store/dialog'
 
@@ -27,6 +44,9 @@ export default Vue.extend({
       return this.$accessor.app.data[this.$getHost()]?.channels[
         this.$route.params.channelid
       ]?.messages
+    },
+    messages() {
+      return this.$accessor.app.data[this.$getHost()].messages
     },
   },
   watch: {

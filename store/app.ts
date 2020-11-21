@@ -2,6 +2,7 @@ import { Connection } from '@harmony-dev/harmony-web-sdk'
 import {
   Action,
   Embed,
+  Event,
 } from '@harmony-dev/harmony-web-sdk/dist/protocol/core/v1/core_pb'
 import { UserStatusMap } from '@harmony-dev/harmony-web-sdk/dist/protocol/profile/v1/profile_pb'
 import { actionTree, mutationTree } from 'nuxt-typed-vuex'
@@ -234,7 +235,7 @@ export const mutations = mutationTree(state, {
     Vue.set(
       state.data[data.host].channels[data.channelID],
       'messages',
-      data.messages,
+      data.messages.reverse(),
     )
   },
   setMessagesData(
@@ -263,9 +264,30 @@ export const mutations = mutationTree(state, {
   ) {
     ensureChannel(state, data.host, data.channelID)
     state.data[data.host].messages[data.messageID] = data.data
-    state.data[data.host].channels[data.channelID].messages?.unshift(
+    state.data[data.host].channels[data.channelID].messages?.push(
       data.messageID,
     )
+  },
+  editMessage(
+    state,
+    data: {
+      host: string
+      updateEvent: Event.MessageUpdated.AsObject
+    },
+  ) {
+    const message = state.data[data.host].messages[data.updateEvent.messageId]
+    if (message) {
+      if (data.updateEvent.updateContent)
+        Vue.set(message, 'content', data.updateEvent.content)
+      if (data.updateEvent.updateAttachments)
+        Vue.set(message, 'attachmentsList', data.updateEvent.attachmentsList)
+      if (data.updateEvent.updateEmbeds)
+        Vue.set(message, 'embedsList', data.updateEvent.embedsList)
+      if (data.updateEvent.updateOverrides)
+        Vue.set(message, 'overrides', data.updateEvent.overrides)
+      if (data.updateEvent.updateActions)
+        Vue.set(message, 'actionsList', data.updateEvent.actionsList)
+    }
   },
   setUser(
     state,
