@@ -2,20 +2,19 @@
   <div class="chat">
     <infinite-loading @infinite="infiniteScrollHandler"></infinite-loading>
     <DynamicScroller
-      :items="mappedMessages || []"
-      :min-item-size="32"
+      :items="messagesList || []"
+      :min-item-size="64"
       class="scroller"
-      page-mode
     >
       <template v-slot="{ item, active, index }">
         <DynamicScrollerItem
           :item="item"
           :active="active"
-          :size-dependencies="[item.content]"
+          :size-dependencies="[messages[item].content]"
           :data-index="index"
           :data-active="active"
         >
-          <message :id="item.id" :msg-data="item" />
+          <message :id="item" />
         </DynamicScrollerItem>
       </template>
     </DynamicScroller>
@@ -33,9 +32,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
-import Message from '@/components/Chat/Messages/Message.vue'
+import Message from './Message.vue'
 import { DialogType } from '~/store/dialog'
-import { IMessageData } from '~/store/app'
 
 export default Vue.extend({
   components: {
@@ -45,27 +43,13 @@ export default Vue.extend({
     selectedGuildID() {
       return this.$route.params.guildid
     },
-    messagesList(): string[] | undefined {
+    messagesList() {
       return this.$accessor.app.data[this.$getHost()]?.channels[
         this.$route.params.channelid
       ]?.messages
     },
     messages() {
       return this.$accessor.app.data[this.$getHost()].messages
-    },
-    mappedMessages():
-      | ({
-          id: string
-        } & IMessageData)[]
-      | undefined {
-      return this.messagesList?.map<
-        {
-          id: string
-        } & IMessageData
-      >((id) => ({
-        id,
-        ...this.messages[id],
-      }))
     },
   },
   watch: {
