@@ -1,5 +1,6 @@
 <template>
   <div class="chat">
+    <infinite-loading @infinite="infiniteScrollHandler"></infinite-loading>
     <DynamicScroller
       :items="mappedMessages || []"
       :min-item-size="32"
@@ -24,6 +25,8 @@
 <style scoped>
 .scroller {
   height: 100%;
+  flex: 1 0 0;
+  overflow-y: auto;
 }
 </style>
 
@@ -92,6 +95,9 @@ export default Vue.extend({
           this.$showDialog(DialogType.Error, e.statusMessage || e)
         }
       }
+    },
+    infiniteScrollHandler() {
+      console.log('oh hi')
     },
   },
 })

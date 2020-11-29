@@ -22,6 +22,7 @@ export default {
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
     { src: '~/plugins/fragments.js', mode: 'client' },
+    { src: '~/plugins/infiniteScroll.ts', mode: 'client' },
     { src: '~/plugins/virtualScroll.ts', mode: 'client' },
     { src: '~/plugins/routing.ts', mode: 'client' },
     { src: '~/plugins/harmonyURIParser.ts', mode: 'client' },
