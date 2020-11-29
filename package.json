@@ -29,6 +29,7 @@
     "nuxt-typed-vuex": "^0.1.22",
     "v-emoji-picker": "^2.3.1",
     "vue-fragment": "^1.5.1",
+    "vue-typed-mixins": "^0.2.0",
     "vue-virtual-scroller": "^1.0.10",
     "vuex-persistedstate": "^4.0.0-beta.1"
   },

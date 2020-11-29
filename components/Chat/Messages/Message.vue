@@ -39,7 +39,6 @@ import Vue from 'vue'
 import dayjs from 'dayjs'
 import calendar from 'dayjs/plugin/calendar'
 import UTC from 'dayjs/plugin/utc'
-import { IMessageData } from '~/store/app'
 
 dayjs.extend(calendar)
 dayjs.extend(UTC)
@@ -50,13 +49,14 @@ export default Vue.extend({
       type: String,
       default: '',
     },
+    msgData: {
+      type: Object,
+      default: null,
+    },
   },
   computed: {
-    data(): IMessageData | undefined {
-      return this.$accessor.app.data[this.$getHost()]?.messages[this.id]
-    },
     authorID(): string | undefined {
-      return this.data?.authorID
+      return this.msgData?.authorID
     },
     username(): string | undefined {
       if (!this.authorID) return undefined
@@ -64,11 +64,11 @@ export default Vue.extend({
         ?.username
     },
     content(): string | undefined {
-      return this.data?.content
+      return this.msgData?.content
     },
     timeString(): string {
       return ` - ${dayjs
-        .unix(this.data?.createdAt || 0)
+        .unix(this.msgData?.createdAt || 0)
         .utc()
         .calendar()}`
     },
