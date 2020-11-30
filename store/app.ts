@@ -23,6 +23,7 @@ export interface IChannelData {
   channelName?: string
   isCategory?: boolean
   isVoice?: boolean
+  reachedTop?: boolean
   messages?: string[]
 }
 
@@ -238,6 +239,20 @@ export const mutations = mutationTree(state, {
       data.messages.reverse(),
     )
   },
+  prependChannelMessages(
+    state,
+    data: {
+      host: string
+      channelID: string
+      messages: string[]
+    },
+  ) {
+    ensureChannel(state, data.host, data.channelID)
+    Vue.set(state.data[data.host].channels[data.channelID], 'messages', [
+      ...data.messages.reverse(),
+      ...(state.data[data.host].channels[data.channelID].messages || []),
+    ])
+  },
   setMessagesData(
     state,
     data: {
@@ -308,6 +323,21 @@ export const mutations = mutationTree(state, {
     },
   ) {
     Vue.set(state.disconnections, data.host, data.message)
+  },
+  setReachedTop(
+    state,
+    data: {
+      host: string
+      channelID: string
+      reachedTop?: boolean
+    },
+  ) {
+    ensureChannel(state, data.host, data.channelID)
+    Vue.set(
+      state.data[data.host].channels[data.channelID],
+      'reachedTop',
+      data.reachedTop,
+    )
   },
 })
 

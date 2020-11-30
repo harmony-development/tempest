@@ -1,28 +1,26 @@
 <template>
   <div class="chat">
-    <infinite-loading @infinite="infiniteScrollHandler"></infinite-loading>
-    <DynamicScroller
-      :items="messagesList || []"
-      :min-item-size="64"
-      class="scroller"
-    >
-      <template v-slot="{ item, active, index }">
-        <DynamicScrollerItem
-          :item="item"
-          :active="active"
-          :size-dependencies="[messages[item].content]"
-          :data-index="index"
-          :data-active="active"
-        >
-          <message :id="item" />
-        </DynamicScrollerItem>
-      </template>
-    </DynamicScroller>
+    <div ref="messagesList" class="messages-list" @scroll="debouncedScroll">
+      <h3 v-if="reachedTop" class="ma-3 font-weight-regular">
+        Welcome to the start of <strong>#{{ channelName }}</strong>
+      </h3>
+      <div v-else class="ma-3 d-flex justify-center align-center">
+        <v-progress-circular
+          indeterminate
+          color="primary"
+        ></v-progress-circular>
+      </div>
+      <message
+        v-for="message in messagesList || []"
+        :id="message"
+        :key="message"
+      />
+    </div>
   </div>
 </template>
 
 <style scoped>
-.scroller {
+.messages-list {
   height: 100%;
   flex: 1 0 0;
   overflow-y: auto;
@@ -32,6 +30,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
+import { debounce } from 'debounce'
 import Message from './Message.vue'
 import { DialogType } from '~/store/dialog'
 
@@ -49,7 +48,22 @@ export default Vue.extend({
       ]?.messages
     },
     messages() {
-      return this.$accessor.app.data[this.$getHost()].messages
+      return this.$accessor.app.data[this.$getHost()]?.messages
+    },
+    reachedTop() {
+      return this.$accessor.app.data[this.$getHost()]?.channels[
+        this.$route.params.channelid
+      ]?.reachedTop
+    },
+    channelName() {
+      return this.$accessor.app.data[this.$getHost()]?.channels[
+        this.$route.params.channelid
+      ]?.channelName
+    },
+    debouncedScroll(): (() => Promise<void>) & { clear(): void } & {
+      flush(): void
+    } {
+      return debounce(this.onMessagesListScroll, 100)
     },
   },
   watch: {
@@ -59,29 +73,35 @@ export default Vue.extend({
       },
     },
   },
-  mounted() {
-    this.fetchData()
+  async mounted() {
+    const el = this.$refs.messagesList as HTMLDivElement
+    await this.fetchData()
+    el.scrollTop = el.scrollHeight
   },
   methods: {
-    async fetchData() {
-      if (
-        this.$route.params.guildid &&
-        this.$route.params.channelid &&
-        !this.messagesList
-      ) {
+    async fetchData(lastMessageID?: string) {
+      if (this.$route.params.guildid && this.$route.params.channelid) {
         try {
           await this.$fetchMessageList(
             this.$getHost(),
             this.$route.params.guildid,
             this.$route.params.channelid,
+            lastMessageID,
           )
         } catch (e) {
           this.$showDialog(DialogType.Error, e.statusMessage || e)
         }
       }
     },
-    infiniteScrollHandler() {
-      console.log('oh hi')
+    async onMessagesListScroll() {
+      const el = this.$refs.messagesList as HTMLDivElement
+      const oldScrollTop = el.scrollTop
+      const oldScroll = el.scrollHeight - el.clientHeight
+      if (el.scrollTop === 0) {
+        await this.fetchData(this.messagesList?.[0])
+        const newScroll = el.scrollHeight - el.clientHeight
+        el.scrollTop = oldScrollTop + (newScroll - oldScroll)
+      }
     },
   },
 })

@@ -7,7 +7,12 @@ declare module 'vue/types/vue' {
     $getHost(): string
     $getOrFederate(host: string): Promise<Connection>
     $fetchChannelList(host: string, guildID: string): void
-    $fetchMessageList(host: string, guildID: string, channelID: string): void
+    $fetchMessageList(
+      host: string,
+      guildID: string,
+      channelID: string,
+      lastMessageID?: string,
+    ): void
     $createChannel(host: string, guildID: string, channelName: string): void
     $sendMessage(
       host: string,
@@ -99,9 +104,11 @@ Vue.prototype.$fetchMessageList = async function (
   host: string,
   guildID: string,
   channelID: string,
+  lastMessageID?: string,
 ) {
   const conn = await this.$getOrFederate(host)
-  const resp = await conn.getChannelMessages(guildID, channelID)
+
+  const resp = await conn.getChannelMessages(guildID, channelID, lastMessageID)
   const asObj = resp.message?.toObject()
 
   const mapped = asObj!.messagesList.reduce<{
@@ -118,12 +125,26 @@ Vue.prototype.$fetchMessageList = async function (
     })
     return prev
   }, {})
+  const reachedTop = asObj!.reachedTop
 
-  this.$accessor.app.setChannelMessages({
-    host,
-    channelID,
-    messages: asObj!.messagesList.map((c) => c.messageId),
-  })
+  if (lastMessageID) {
+    this.$accessor.app.prependChannelMessages({
+      host,
+      channelID,
+      messages: asObj!.messagesList.map((c) => c.messageId),
+    })
+    this.$accessor.app.setReachedTop({
+      host,
+      channelID,
+      reachedTop,
+    })
+  } else {
+    this.$accessor.app.setChannelMessages({
+      host,
+      channelID,
+      messages: asObj!.messagesList.map((c) => c.messageId),
+    })
+  }
   this.$accessor.app.setMessagesData({
     host,
     data: mapped,
@@ -158,6 +179,7 @@ Vue.prototype.$fetchUser = async function (
 ) {
   if (pendingUserFetches[userID]) return
   if (this.$accessor.app.data[host].users[userID]) return
+  pendingUserFetches[userID] = true
   const conn = await this.$getOrFederate(host)
   const resp = await conn.getUser(userID)
   const asObj = resp.message?.toObject()
@@ -170,4 +192,5 @@ Vue.prototype.$fetchUser = async function (
       status: asObj?.userStatus,
     },
   })
+  delete pendingUserFetches[userID]
 }
