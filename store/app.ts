@@ -17,6 +17,7 @@ export interface IGuildData {
   name?: string
   picture?: string
   channels?: string[]
+  memberList?: string[]
 }
 
 export interface IChannelData {
@@ -337,6 +338,21 @@ export const mutations = mutationTree(state, {
       state.data[data.host].channels[data.channelID],
       'reachedTop',
       data.reachedTop,
+    )
+  },
+  setMemberList(
+    state,
+    data: {
+      host: string
+      guildID: string
+      memberList: string[]
+    },
+  ) {
+    ensureGuild(state, data.host, data.guildID)
+    Vue.set(
+      state.data[data.host].guilds[data.guildID],
+      'memberList',
+      data.memberList,
     )
   },
 })

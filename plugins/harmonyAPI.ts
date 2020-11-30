@@ -21,6 +21,7 @@ declare module 'vue/types/vue' {
       content?: string,
     ): void
     $fetchUser(host: string, userID: string): void
+    $fetchMemberList(host: string, guildID: string): void
   }
 }
 
@@ -193,4 +194,19 @@ Vue.prototype.$fetchUser = async function (
     },
   })
   delete pendingUserFetches[userID]
+}
+
+Vue.prototype.$fetchMemberList = async function (
+  this: Vue,
+  host: string,
+  guildID: string,
+) {
+  const conn = await this.$getOrFederate(host)
+  const resp = await conn.getGuildMembers(guildID)
+  const asObj = resp.message?.toObject()
+  this.$accessor.app.setMemberList({
+    host,
+    guildID,
+    memberList: asObj!.membersList,
+  })
 }

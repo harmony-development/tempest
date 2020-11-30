@@ -21,7 +21,7 @@
 import Vue from 'vue'
 import GuildList from '@/components/GuildList/index.vue'
 import Sidebar from '@/components/Sidebar/index.vue'
-import MemberList from '@/components/MemberList.vue'
+import MemberList from '@/components/MemberList/index.vue'
 import Chat from '@/components/Chat/index.vue'
 import { Connection } from '@harmony-dev/harmony-web-sdk'
 
