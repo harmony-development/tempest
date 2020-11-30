@@ -10,6 +10,7 @@ import Vue from 'vue'
 import Dialog from '@/components/Dialog.vue'
 
 export default Vue.extend({
+  name: 'Default',
   components: { Dialog },
 })
 </script>

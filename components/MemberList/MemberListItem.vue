@@ -1,11 +1,17 @@
 <template>
-  <div
-    :class="{ active: selected, 'member-item': true, 'pa-1': true }"
-    @click="clicked"
-  >
-    <v-img class="avatar mr-2"></v-img>
-    <v-list-item-title>{{ name || id }}</v-list-item-title>
-  </div>
+  <user-popover :id="id" v-model="popoverOpen">
+    <template v-slot:activator="{ on, attrs }">
+      <div
+        :class="{ active: selected, 'member-item': true, 'pa-1': true }"
+        v-bind="attrs"
+        @click="clicked"
+        v-on="on"
+      >
+        <v-img class="avatar mr-2"></v-img>
+        <v-list-item-title>{{ name || id }}</v-list-item-title>
+      </div>
+    </template>
+  </user-popover>
 </template>
 
 <style scoped>
@@ -43,7 +49,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import UserPopover from '../UserPopover.vue'
 export default Vue.extend({
+  components: { UserPopover },
   props: {
     id: {
       type: String,
@@ -53,6 +61,11 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
+  },
+  data() {
+    return {
+      popoverOpen: false,
+    }
   },
   computed: {
     name(): string | undefined {

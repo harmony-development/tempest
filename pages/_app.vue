@@ -4,6 +4,7 @@
     <sidebar />
     <chat />
     <member-list />
+    <user-popover />
   </div>
 </template>
 
@@ -24,6 +25,7 @@ import Sidebar from '@/components/Sidebar/index.vue'
 import MemberList from '@/components/MemberList/index.vue'
 import Chat from '@/components/Chat/index.vue'
 import { Connection } from '@harmony-dev/harmony-web-sdk'
+import UserPopover from '~/components/UserPopover.vue'
 
 export default Vue.extend({
   components: {
@@ -31,6 +33,7 @@ export default Vue.extend({
     Sidebar,
     MemberList,
     Chat,
+    UserPopover,
   },
   watch: {
     '$accessor.app.disconnections': {
