@@ -2,9 +2,8 @@
   <user-popover :id="id" v-model="popoverOpen">
     <template v-slot:activator="{ on, attrs }">
       <div
-        :class="{ active: selected, 'member-item': true, 'pa-1': true }"
+        :class="{ active: popoverOpen, 'member-item': true, 'pa-1': true }"
         v-bind="attrs"
-        @click="clicked"
         v-on="on"
       >
         <v-img class="avatar mr-2"></v-img>
@@ -57,10 +56,6 @@ export default Vue.extend({
       type: String,
       default: '',
     },
-    selected: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     return {
@@ -70,11 +65,6 @@ export default Vue.extend({
   computed: {
     name(): string | undefined {
       return this.$accessor.app.data[this.$getHost()]?.users[this.id]?.username
-    },
-  },
-  methods: {
-    clicked() {
-      this.$emit('memberSelectionChanged', this.id)
     },
   },
 })

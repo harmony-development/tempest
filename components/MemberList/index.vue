@@ -5,8 +5,6 @@
         v-for="member in memberList || []"
         :id="member"
         :key="member"
-        :selected="selectedUser === member"
-        @memberSelectionChanged="memberSelectionChanged"
       />
     </v-list>
   </div>
@@ -60,11 +58,6 @@ import Vue from 'vue'
 import MemberListItem from './MemberListItem.vue'
 export default Vue.extend({
   components: { MemberListItem },
-  data() {
-    return {
-      selectedUser: undefined as string | undefined,
-    }
-  },
   computed: {
     memberList() {
       return this.$accessor.app.data[this.$getHost()]?.guilds[
@@ -79,13 +72,6 @@ export default Vue.extend({
     async fetchData() {
       if (this.$route.params.guildid && !this.memberList) {
         await this.$fetchMemberList(this.$getHost(), this.$route.params.guildid)
-      }
-    },
-    memberSelectionChanged(id: string) {
-      if (this.selectedUser === id) {
-        this.selectedUser = undefined
-      } else {
-        this.selectedUser = id
       }
     },
   },
