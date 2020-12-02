@@ -1,17 +1,20 @@
 <template>
   <v-menu
-    :value="value"
+    :value="open"
     :close-on-content-click="false"
-    left
-    offset-x
-    :nudge-left="10"
     v-bind="$attrs"
-    @input="update"
+    absolute
+    :position-x="x"
+    :position-y="y"
+    :left="position === PositionEnum.LEFT"
+    :right="position === PositionEnum.RIGHT"
+    :bottom="position === PositionEnum.BOTTOM"
+    :top="position === PositionEnum.TOP"
+    origin="bottom right"
+    :transition="transition"
+    @input="closeDialog"
     v-on="$listeners"
   >
-    <template v-for="(_, slot) of $scopedSlots" v-slot:[slot]="scope"
-      ><slot :name="slot" v-bind="scope"
-    /></template>
     <v-card>
       <v-list>
         <v-list-item>
@@ -30,29 +33,40 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { Position } from '~/store/userPopover'
 
 export default Vue.extend({
-  props: {
-    value: {
-      type: Boolean,
-      default: false,
-    },
-    id: {
-      type: String,
-      default: '',
-    },
-  },
   computed: {
-    activatorSlot() {
-      return this.$scopedSlots.activator
+    x(): number {
+      return this.$accessor.userPopover.x
+    },
+    y(): number {
+      return this.$accessor.userPopover.y
+    },
+    id() {
+      return this.$accessor.userPopover.id
+    },
+    open(): boolean {
+      return this.$accessor.userPopover.open
+    },
+    transition(): string {
+      return this.$accessor.userPopover.animationDirection
+    },
+    position(): Position {
+      return this.$accessor.userPopover.position
     },
     username() {
-      return this.$accessor.app.data[this.$getHost()]?.users[this.id]?.username
+      return this.$accessor.app.data[this.$getHost()]?.users[
+        this.$accessor.userPopover.id
+      ]?.username
+    },
+    PositionEnum(): typeof Position {
+      return Position
     },
   },
   methods: {
-    update(newVal: boolean) {
-      this.$emit('input', newVal)
+    closeDialog() {
+      this.$accessor.userPopover.closeDialog()
     },
   },
 })

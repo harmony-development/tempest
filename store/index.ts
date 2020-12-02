@@ -3,9 +3,10 @@ import createPersistedState from 'vuex-persistedstate'
 import * as entry from './entry'
 import * as app from './app'
 import * as dialog from './dialog'
+import * as userPopover from './userPopover'
 
 export const accessorType = getAccessorType({
-  modules: { entry, app, dialog },
+  modules: { entry, app, dialog, userPopover },
 })
 
 export const plugins = [

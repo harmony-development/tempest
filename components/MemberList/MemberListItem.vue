@@ -1,16 +1,11 @@
 <template>
-  <user-popover :id="id" v-model="popoverOpen">
-    <template v-slot:activator="{ on, attrs }">
-      <div
-        :class="{ active: popoverOpen, 'member-item': true, 'pa-1': true }"
-        v-bind="attrs"
-        v-on="on"
-      >
-        <v-img class="avatar mr-2"></v-img>
-        <v-list-item-title>{{ name || id }}</v-list-item-title>
-      </div>
-    </template>
-  </user-popover>
+  <div
+    :class="{ active: popoverOpen, 'member-item': true, 'pa-1': true }"
+    @click="clicked"
+  >
+    <v-img class="avatar mr-2"></v-img>
+    <v-list-item-title>{{ name || id }}</v-list-item-title>
+  </div>
 </template>
 
 <style scoped>
@@ -48,23 +43,31 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import UserPopover from '../UserPopover.vue'
+import { AnimationDirection, Position } from '~/store/userPopover'
 export default Vue.extend({
-  components: { UserPopover },
   props: {
     id: {
       type: String,
       default: '',
     },
   },
-  data() {
-    return {
-      popoverOpen: false,
-    }
-  },
   computed: {
     name(): string | undefined {
       return this.$accessor.app.data[this.$getHost()]?.users[this.id]?.username
+    },
+    popoverOpen(): boolean {
+      return this.$accessor.userPopover.open
+    },
+  },
+  methods: {
+    clicked(ev: MouseEvent) {
+      const el = ev.currentTarget as HTMLDivElement
+      this.$accessor.userPopover.openDialog({
+        id: this.id,
+        element: el,
+        animationDirection: AnimationDirection.xReverse,
+        position: Position.LEFT,
+      })
     },
   },
 })
