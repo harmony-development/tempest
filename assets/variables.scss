@@ -3,6 +3,8 @@
 // The variables you want to modify
 // $font-size-root: 20px;
 
+@import '~vuetify/src/styles/tools/_functions.sass';
+
 :root {
   --harmony-dark-50: #e1e2e2;
   --harmony-dark-100: #b5b6b7;
@@ -22,6 +24,25 @@
 
 $material-dark: (
   background: var(--harmony-dark-500),
+);
+
+$harmony-dark-base: #060608;
+
+$material-dark-elevation-colors: () !default;
+$material-dark-elevation-colors: map-deep-merge(
+  (
+    '0': $harmony-dark-base,
+    '1': lighten($harmony-dark-base, 5%),
+    '2': lighten($harmony-dark-base, 7%),
+    '3': lighten($harmony-dark-base, 8%),
+    '4': lighten($harmony-dark-base, 9%),
+    '6': lighten($harmony-dark-base, 11%),
+    '8': lighten($harmony-dark-base, 12%),
+    '12': lighten($harmony-dark-base, 14%),
+    '16': lighten($harmony-dark-base, 15%),
+    '24': lighten($harmony-dark-base, 16%),
+  ),
+  $material-dark-elevation-colors
 );
 
 $list-item-action-icon-margin: 8px;

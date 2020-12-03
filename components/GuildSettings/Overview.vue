@@ -1,5 +1,5 @@
 <template>
-  <div class="fill-height root">
+  <div class="fill-height">
     <v-row class="mb-2">
       <h1>Overview</h1>
     </v-row>
@@ -32,12 +32,6 @@
     </v-snackbar>
   </div>
 </template>
-
-<style scoped>
-.root {
-  position: relative;
-}
-</style>
 
 <script lang="ts">
 import Vue from 'vue'

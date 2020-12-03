@@ -52,6 +52,7 @@
           <v-col>
             <keep-alive>
               <overview v-if="page === 'overview'" />
+              <roles v-if="page === 'roles'" />
             </keep-alive>
           </v-col>
           <v-col md="1" cols="2">
@@ -88,11 +89,13 @@
 import Vue from 'vue'
 import Overview from '@/components/GuildSettings/Overview.vue'
 import DeleteGuildButton from './DeleteGuildButton.vue'
+import Roles from './Roles.vue'
 
 export default Vue.extend({
   components: {
     Overview,
     DeleteGuildButton,
+    Roles,
   },
   data() {
     return {
