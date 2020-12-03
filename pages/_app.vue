@@ -5,6 +5,7 @@
     <chat />
     <member-list />
     <user-popover />
+    <guild-settings />
   </div>
 </template>
 
@@ -25,6 +26,7 @@ import Sidebar from '@/components/Sidebar/index.vue'
 import MemberList from '@/components/MemberList/index.vue'
 import Chat from '@/components/Chat/index.vue'
 import { Connection } from '@harmony-dev/harmony-web-sdk'
+import GuildSettings from '@/components/GuildSettings/index.vue'
 import UserPopover from '~/components/UserPopover.vue'
 
 export default Vue.extend({
@@ -34,6 +36,7 @@ export default Vue.extend({
     MemberList,
     Chat,
     UserPopover,
+    GuildSettings,
   },
   watch: {
     '$accessor.app.disconnections': {

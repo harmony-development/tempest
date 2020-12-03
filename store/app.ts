@@ -73,6 +73,7 @@ interface IState {
   disconnections: {
     [host: string]: string
   }
+  guildSettingsOpen: boolean
 }
 
 export const state = (): IState => ({
@@ -83,6 +84,7 @@ export const state = (): IState => ({
   data: {},
   guildsList: undefined,
   disconnections: {},
+  guildSettingsOpen: false,
 })
 
 const ensureHost = (state: IState, host: string) => {
@@ -354,6 +356,9 @@ export const mutations = mutationTree(state, {
       'memberList',
       data.memberList,
     )
+  },
+  setGuildSettingsOpen(state, data: boolean) {
+    state.guildSettingsOpen = data
   },
 })
 
