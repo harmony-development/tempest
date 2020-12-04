@@ -9,7 +9,7 @@
     <v-card class="fill-height">
       <v-container fluid class="fill-height">
         <v-row class="fill-height">
-          <v-col cols="4" sm="4" md="3" class="fill-height">
+          <v-col cols="4" sm="4" md="3" lg="2" class="fill-height">
             <div class="sidebar fill-height">
               <v-list-item>
                 <v-list-item-content>

@@ -6,7 +6,7 @@
     <v-row>
       <v-col cols="3">
         <v-list dense nav class="list-root">
-          <v-list-item>
+          <v-list-item v-for="r in rolesList || []" :key="r">
             <v-list-item-icon>
               <div class="role-color red" />
             </v-list-item-icon>
@@ -44,5 +44,16 @@
 
 <script lang="ts">
 import Vue from 'vue'
-export default Vue.extend({})
+export default Vue.extend({
+  computed: {
+    rolesList() {
+      return this.$accessor.app.data[this.$getHost()]?.guilds[
+        this.$route.params.guildid
+      ]?.roles
+    },
+  },
+  async mounted() {
+    await this.$fetchGuildRoles(this.$getHost(), this.$route.params.guildid)
+  },
+})
 </script>

@@ -69,10 +69,6 @@ export default Vue.extend({
   methods: {
     guildNameChange(value: string) {
       this.guildName = value
-      if (this.guildNameChanged) {
-        this.changed = false
-      }
-      this.changed = true
     },
     resetAll() {
       Object.assign(this.$data, (this.$options as any).data())

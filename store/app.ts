@@ -5,7 +5,7 @@ import {
   Event,
 } from '@harmony-dev/harmony-web-sdk/dist/protocol/core/v1/core_pb'
 import { UserStatusMap } from '@harmony-dev/harmony-web-sdk/dist/protocol/profile/v1/profile_pb'
-import { actionTree, mutationTree } from 'nuxt-typed-vuex'
+import { mutationTree } from 'nuxt-typed-vuex'
 import Vue from 'vue'
 
 interface IGuildEntry {
@@ -18,6 +18,7 @@ export interface IGuildData {
   picture?: string
   channels?: string[]
   memberList?: string[]
+  roles?: string[]
 }
 
 export interface IChannelData {
@@ -44,6 +45,13 @@ export interface IUserData {
   status?: UserStatusMap[keyof UserStatusMap]
 }
 
+export interface IRoleData {
+  name: string
+  color: number
+  hoist: boolean
+  pingable: boolean
+}
+
 interface IData {
   messages: {
     [messageID: string]: IMessageData
@@ -56,6 +64,9 @@ interface IData {
   }
   users: {
     [userID: string]: IUserData
+  }
+  roles: {
+    [roleID: string]: IRoleData
   }
 }
 
@@ -360,16 +371,30 @@ export const mutations = mutationTree(state, {
   setGuildSettingsOpen(state, data: boolean) {
     state.guildSettingsOpen = data
   },
-})
-
-export const actions = actionTree(
-  { state, mutations },
-  {
-    async getGuildList() {
-      if (!this.state.host) return
-      return (
-        await this.state.connections[this.state.host]?.getGuildList()
-      ).message?.toObject()
+  setRolesList(
+    state,
+    data: {
+      host: string
+      guildID: string
+      roles: string[]
     },
+  ) {
+    ensureGuild(state, data.host, data.guildID)
+    Vue.set(state.data[data.host].guilds[data.guildID], 'roles', data.roles)
   },
-)
+  setRolesData(
+    state,
+    data: {
+      host: string
+      roles: {
+        [roleID: string]: IRoleData
+      }
+    },
+  ) {
+    ensureHost(state, data.host)
+    state.data[data.host].roles = {
+      ...state.data[data.host].roles,
+      ...data.roles,
+    }
+  },
+})

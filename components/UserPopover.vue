@@ -19,7 +19,11 @@
       <v-list>
         <v-list-item>
           <v-list-item-avatar>
-            <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
+            <v-img
+              :src="`${$getHost()}/_harmony/media/download/${avatar}`"
+              alt="Avatar"
+              class="avatar"
+            />
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>{{ username || id }}</v-list-item-title>
@@ -30,6 +34,16 @@
     </v-card>
   </v-menu>
 </template>
+
+<style scoped>
+.avatar {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 auto;
+  background-color: grey;
+  border-radius: 100%;
+}
+</style>
 
 <script lang="ts">
 import Vue from 'vue'
@@ -59,6 +73,11 @@ export default Vue.extend({
       return this.$accessor.app.data[this.$getHost()]?.users[
         this.$accessor.userPopover.id
       ]?.username
+    },
+    avatar() {
+      return this.$accessor.app.data[this.$getHost()]?.users[
+        this.$accessor.userPopover.id
+      ]?.avatar
     },
     PositionEnum(): typeof Position {
       return Position

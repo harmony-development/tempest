@@ -1,6 +1,6 @@
 import { Connection } from '@harmony-dev/harmony-web-sdk'
 import Vue from 'vue'
-import { IChannelData, IMessageData } from '~/store/app'
+import { IChannelData, IMessageData, IRoleData } from '~/store/app'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -24,6 +24,7 @@ declare module 'vue/types/vue' {
     $uploadFile(host: string, file: File): Promise<string>
     $fetchUser(host: string, userID: string): void
     $fetchMemberList(host: string, guildID: string): void
+    $fetchGuildRoles(host: string, guildID: string): void
   }
 }
 
@@ -220,5 +221,38 @@ Vue.prototype.$fetchMemberList = async function (
     host,
     guildID,
     memberList: asObj!.membersList,
+  })
+}
+
+Vue.prototype.$fetchGuildRoles = async function (
+  this: Vue,
+  host: string,
+  guildID: string,
+) {
+  const conn = await this.$getOrFederate(host)
+  const resp = await conn.getGuildRoles(guildID)
+  const asObj = resp.message?.toObject()
+
+  const mapped = asObj!.rolesList.reduce<{
+    [roleID: string]: IRoleData
+  }>((prev, val) => {
+    Vue.set(prev, val.roleId, {
+      name: val.name,
+      color: val.color,
+      hoist: val.hoist,
+      pingable: val.pingable,
+    })
+    return prev
+  }, {})
+
+  this.$accessor.app.setRolesList({
+    host,
+    guildID,
+    roles: asObj!.rolesList.map((r) => r.roleId),
+  })
+
+  this.$accessor.app.setRolesData({
+    host,
+    roles: mapped,
   })
 }
