@@ -1,8 +1,19 @@
 <template>
   <div class="root">
-    <guild-list />
-    <sidebar />
-    <chat />
+    <v-navigation-drawer
+      app
+      clipped
+      :permanent="$vuetify.breakpoint.mdAndUp"
+      width="350px"
+    >
+      <div class="left-drawer">
+        <guild-list />
+        <sidebar />
+      </div>
+    </v-navigation-drawer>
+    <v-main>
+      <chat />
+    </v-main>
     <member-list />
     <user-popover />
     <guild-settings />
@@ -17,6 +28,13 @@
   display: flex;
   flex-direction: row;
   overflow: auto;
+}
+
+.left-drawer {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-direction: row;
 }
 </style>
 

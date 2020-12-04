@@ -1,5 +1,10 @@
 <template>
-  <div class="member-list pl-3 pr-3">
+  <v-navigation-drawer
+    app
+    right
+    class="pl-3 pr-3"
+    :permanent="$vuetify.breakpoint.mdAndUp"
+  >
     <v-list color="#00000000" class="list-body">
       <member-list-item
         v-for="member in memberList || []"
@@ -7,7 +12,7 @@
         :key="member"
       />
     </v-list>
-  </div>
+  </v-navigation-drawer>
 </template>
 
 <style scoped lang="scss">
