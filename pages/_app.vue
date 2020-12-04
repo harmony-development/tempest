@@ -1,8 +1,8 @@
 <template>
   <div class="root">
     <v-navigation-drawer
+      v-model="leftNav"
       app
-      clipped
       :permanent="$vuetify.breakpoint.mdAndUp"
       width="350px"
     >
@@ -12,9 +12,24 @@
       </div>
     </v-navigation-drawer>
     <v-main>
+      <v-app-bar fixed>
+        <v-app-bar-nav-icon @click="leftNav = !leftNav" />
+        <v-spacer />
+        <v-btn icon @click="rightNav = !rightNav">
+          <v-icon>mdi-account-supervisor</v-icon>
+        </v-btn>
+      </v-app-bar>
       <chat />
     </v-main>
-    <member-list />
+    <v-navigation-drawer
+      v-model="rightNav"
+      app
+      right
+      class="pl-3 pr-3"
+      :permanent="$vuetify.breakpoint.mdAndUp"
+    >
+      <member-list />
+    </v-navigation-drawer>
     <user-popover />
     <guild-settings />
     <image-view />
@@ -58,6 +73,12 @@ export default Vue.extend({
     UserPopover,
     GuildSettings,
     ImageView,
+  },
+  data() {
+    return {
+      leftNav: false,
+      rightNav: false,
+    }
   },
   watch: {
     '$accessor.app.disconnections': {

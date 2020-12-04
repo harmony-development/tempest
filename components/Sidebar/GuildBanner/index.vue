@@ -1,5 +1,5 @@
 <template>
-  <v-sheet class="pl-4 pt-2 pb-2 pr-2 guild-title">
+  <v-sheet class="pl-4 pt-3 pb-3 pr-2 guild-title">
     <h6 class="subtitle-1">{{ guildname }}</h6>
     <v-spacer />
     <guild-settings-button />
@@ -11,6 +11,7 @@
 .guild-title {
   display: flex;
   align-items: center;
+  height: 64px;
 }
 </style>
 

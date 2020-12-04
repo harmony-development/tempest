@@ -1,18 +1,11 @@
 <template>
-  <v-navigation-drawer
-    app
-    right
-    class="pl-3 pr-3"
-    :permanent="$vuetify.breakpoint.mdAndUp"
-  >
-    <v-list color="#00000000" class="list-body">
-      <member-list-item
-        v-for="member in memberList || []"
-        :id="member"
-        :key="member"
-      />
-    </v-list>
-  </v-navigation-drawer>
+  <v-list color="#00000000" class="list-body">
+    <member-list-item
+      v-for="member in memberList || []"
+      :id="member"
+      :key="member"
+    />
+  </v-list>
 </template>
 
 <style scoped lang="scss">
