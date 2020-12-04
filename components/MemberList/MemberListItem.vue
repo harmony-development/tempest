@@ -1,5 +1,6 @@
 <template>
   <div
+    v-ripple
     :class="{ active: popoverOpen, 'member-item': true, 'pa-1': true }"
     @click="clicked"
   >
@@ -22,14 +23,6 @@
 }
 
 .member-item:active {
-  background-color: var(--v-accent-lighten1);
-}
-
-.active {
-  background-color: var(--v-accent-lighten1);
-}
-
-.active:hover {
   background-color: var(--v-accent-lighten1);
 }
 

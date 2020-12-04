@@ -1,6 +1,6 @@
 <template>
   <div class="ma-2">
-    <v-slide-group multiple show-arrows>
+    <v-slide-group multiple show-arrows class="mb-2">
       <v-slide-item v-for="(img, idx) in previewImages" :key="img">
         <v-hover>
           <template v-slot:default="{ hover }">
@@ -115,13 +115,27 @@ export default Vue.extend({
     },
     async onInputKeyPress(e: KeyboardEvent) {
       if (e.key === 'Enter') {
+        let attachments = undefined as string[] | undefined
+        let uploadPromises = [] as Promise<void>[]
+        if (this.selectedFiles && this.selectedFiles.length > 0) {
+          attachments = []
+          uploadPromises = this.selectedFiles.map(async (f) => {
+            const resp = await this.$uploadFile(this.$getHost(), f)
+            attachments?.push(resp)
+          })
+        }
+
+        await Promise.all(uploadPromises)
         await this.$sendMessage(
           this.$getHost(),
           this.$route.params.guildid,
           this.$route.params.channelid,
           this.message,
+          attachments,
         )
         this.message = ''
+        this.selectedFiles = []
+        this.previewImages = []
       }
     },
     deleteSelectedFile(idx: number) {

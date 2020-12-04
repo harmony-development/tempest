@@ -1,36 +1,44 @@
 <template>
-  <div class="fill-height root">
-    <v-row class="mb-2">
+  <v-container class="root fill-height" fluid>
+    <v-row class="flex-grow-0">
       <h1>Roles and Permissions</h1>
     </v-row>
     <v-row>
       <v-col cols="3">
-        <v-card>
-          <v-list dense nav>
-            <v-list-item
-              :class="{ 'sidebar-item': true, active: page === 'overview' }"
-              @click="page = 'overview'"
-            >
-              <v-list-item-icon>
-                <div class="role-color red" />
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title>Sample Role 1</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-        </v-card>
+        <v-list dense nav class="list-root">
+          <v-list-item>
+            <v-list-item-icon>
+              <div class="role-color red" />
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>Sample Role 1</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
       </v-col>
       <v-col> </v-col>
     </v-row>
-  </div>
+  </v-container>
 </template>
 
 <style scoped>
+.list-root {
+  background-color: var(--harmony-dark-600);
+  height: 100%;
+}
 .role-color {
   border-radius: 100%;
   width: 100%;
   height: 100%;
+}
+
+.container.fill-height {
+  flex-direction: column;
+  align-items: initial;
+}
+
+.container.fill-height > .row {
+  flex: 1 1 auto;
 }
 </style>
 

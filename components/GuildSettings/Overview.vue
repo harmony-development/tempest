@@ -23,7 +23,7 @@
         ></v-text-field>
       </v-col>
     </v-row>
-    <v-snackbar :value="changed" :timeout="0">
+    <v-snackbar :value="changed" :timeout="-1">
       You have unsaved changes
       <template>
         <v-btn text class="ml-2 mr-2" @click="resetAll"> Cancel </v-btn>

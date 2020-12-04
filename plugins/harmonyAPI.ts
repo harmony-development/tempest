@@ -19,7 +19,9 @@ declare module 'vue/types/vue' {
       guildID: string,
       channelID: string,
       content?: string,
+      attachments?: string[],
     ): void
+    $uploadFile(host: string, file: File): Promise<string>
     $fetchUser(host: string, userID: string): void
     $fetchMemberList(host: string, guildID: string): void
   }
@@ -168,9 +170,19 @@ Vue.prototype.$sendMessage = async function (
   guildID: string,
   channelID: string,
   content?: string,
+  attachments?: string[],
 ) {
   const conn = await this.$getOrFederate(host)
-  return conn.sendMessage(guildID, channelID, content)
+  return conn.sendMessage(guildID, channelID, content, attachments)
+}
+
+Vue.prototype.$uploadFile = async function (
+  this: Vue,
+  host: string,
+  file: File,
+) {
+  const conn = await this.$getOrFederate(host)
+  return (await conn.uploadFile(file)).id
 }
 
 Vue.prototype.$fetchUser = async function (

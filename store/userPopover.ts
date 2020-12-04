@@ -46,8 +46,10 @@ export const mutations = mutationTree(state, {
     state.open = true
     state.id = data.id
     state.animationDirection =
-      data.animationDirection || AnimationDirection.xReverse
-    state.position = data.position || Position.LEFT
+      data.animationDirection !== undefined
+        ? data.animationDirection
+        : AnimationDirection.xReverse
+    state.position = data.position !== undefined ? data.position : Position.LEFT
     switch (state.position) {
       case Position.LEFT: {
         state.x = boundingBox.left
