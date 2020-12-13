@@ -3,7 +3,7 @@
     <v-avatar v-ripple class="avatar" @click="showProfile">
       <v-img :src="`${$getHost()}/_harmony/media/download/${avatar}`" />
     </v-avatar>
-    <div class="message-body ml-2">
+    <div class="content ml-2">
       <v-list-item-title
         >{{ username || authorID }}
         <span style="color: var(--v-accent-lighten3)">{{
@@ -11,14 +11,8 @@
         }}</span></v-list-item-title
       >
       {{ content }}
-      <div class="attachment-container">
-        <img
-          v-for="a in attachments || []"
-          :key="a"
-          :src="`${$getHost()}/_harmony/media/download/${a}`"
-          class="attachment-img"
-          @click="openImagePreview(a)"
-        />
+      <div class="attachment-container pt-3">
+        <attachment v-for="a in attachments || []" :key="a.id" :data="a" />
       </div>
     </div>
   </div>
@@ -43,20 +37,10 @@
   width: 100%;
 }
 
-.attachment-img {
-  width: 40%;
-  cursor: pointer;
-}
-
 .content {
   text-overflow: unset;
   white-space: pre-line;
-}
-
-@media only screen and (max-width: 1200px) {
-  .attachment-img {
-    width: 66.66%;
-  }
+  width: 100%;
 }
 </style>
 
@@ -65,6 +49,8 @@ import Vue from 'vue'
 import dayjs from 'dayjs'
 import calendar from 'dayjs/plugin/calendar'
 import UTC from 'dayjs/plugin/utc'
+import { Message } from '@harmony-dev/harmony-web-sdk/dist/protocol/core/v1/core_pb'
+import Attachment from './Attachment.vue'
 import { IMessageData } from '~/store/app'
 import { AnimationDirection, Position } from '~/store/userPopover'
 
@@ -72,6 +58,7 @@ dayjs.extend(calendar)
 dayjs.extend(UTC)
 
 export default Vue.extend({
+  components: { Attachment },
   props: {
     id: {
       type: String,
@@ -104,7 +91,7 @@ export default Vue.extend({
         .utc()
         .calendar()}`
     },
-    attachments(): string[] | undefined {
+    attachments(): Message.Attachment.AsObject[] | undefined {
       return this.data?.attachmentsList
     },
   },
@@ -123,9 +110,6 @@ export default Vue.extend({
           animationDirection: AnimationDirection.yReverse,
         })
       }
-    },
-    openImagePreview(id: string) {
-      this.$accessor.imageView.openDialog(id)
     },
   },
 })

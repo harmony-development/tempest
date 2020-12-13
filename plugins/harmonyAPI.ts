@@ -37,7 +37,7 @@ const pendingUserFetches: {
 } = {}
 
 Vue.prototype.$getHost = function (this: Vue) {
-  return this.$route.hash.substr(1).replace('///', '//')
+  return decodeURIComponent(this.$route.hash.substr(1))
 }
 
 Vue.prototype.$getOrFederate = function (this: Vue, host: string) {

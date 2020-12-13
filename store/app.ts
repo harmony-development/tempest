@@ -3,6 +3,7 @@ import {
   Action,
   Embed,
   Event,
+  Message,
 } from '@harmony-dev/harmony-web-sdk/dist/protocol/core/v1/core_pb'
 import { UserStatusMap } from '@harmony-dev/harmony-web-sdk/dist/protocol/profile/v1/profile_pb'
 import { mutationTree } from 'nuxt-typed-vuex'
@@ -36,7 +37,7 @@ export interface IMessageData {
   content: string
   embedsList: Embed.AsObject[]
   actionsList: Action.AsObject[]
-  attachmentsList: string[]
+  attachmentsList: Message.Attachment.AsObject[]
 }
 
 export interface IUserData {

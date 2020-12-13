@@ -79,11 +79,9 @@ export default Vue.extend({
   },
   methods: {
     onGuildIconClick() {
-      this.$router.replace({
-        params: {
-          guildid: this.id,
-        },
-        hash: `#${this.host.replace('//', '///')}`,
+      this.$updateRoute({
+        guildid: this.id,
+        host: this.host,
       })
     },
   },
