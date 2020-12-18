@@ -57,7 +57,7 @@ Vue.prototype.$getOrFederate = function (this: Vue, host: string) {
     })
     const loginResp = await conn.loginFederated(
       federateResp.message!.getToken(),
-      appState.host!.replace('http://', ''),
+      appState.host!.replace('https://', ''),
     )
     conn.session = loginResp.message!.getSessionToken()
     this.$accessor.app.setConnection({

@@ -129,7 +129,7 @@ export default Vue.extend({
       this.$router.push({
         path: `auth/login`,
         hash: encodeURIComponent(
-          `http://${this.serverList[this.selected]?.host}`,
+          `https://${this.serverList[this.selected]?.host}`,
         ),
       })
       this.$accessor.entry.setStep(this.$accessor.entry.step + 1)
