@@ -251,7 +251,7 @@ export const mutations = mutationTree(state, {
     Vue.set(
       state.data[data.host].channels[data.channelID],
       'messages',
-      data.messages.reverse(),
+      data.messages,
     )
   },
   prependChannelMessages(
@@ -264,7 +264,7 @@ export const mutations = mutationTree(state, {
   ) {
     ensureChannel(state, data.host, data.channelID)
     Vue.set(state.data[data.host].channels[data.channelID], 'messages', [
-      ...data.messages.reverse(),
+      ...data.messages,
       ...(state.data[data.host].channels[data.channelID].messages || []),
     ])
   },

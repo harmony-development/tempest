@@ -6,6 +6,7 @@ declare module 'vue/types/vue' {
   interface Vue {
     $getHost(): string
     $getOrFederate(host: string): Promise<Connection>
+    $addGuildToList(host: string, guildID: string): void
     $fetchChannelList(host: string, guildID: string): void
     $fetchMessageList(
       host: string,
@@ -56,7 +57,7 @@ Vue.prototype.$getOrFederate = function (this: Vue, host: string) {
     })
     const loginResp = await conn.loginFederated(
       federateResp.message!.getToken(),
-      appState.host!,
+      appState.host!.replace('http://', ''),
     )
     conn.session = loginResp.message!.getSessionToken()
     this.$accessor.app.setConnection({
@@ -70,6 +71,17 @@ Vue.prototype.$getOrFederate = function (this: Vue, host: string) {
   }
   pendingFederations[host] = process()
   return pendingFederations[host]
+}
+
+Vue.prototype.$addGuildToList = function (
+  this: Vue,
+  host: string,
+  guildID: string,
+) {
+  if (!this.$accessor.app.host) return
+  return this.$accessor.app.connections[
+    this.$accessor.app.host
+  ].addGuildToGuildList(guildID, host)
 }
 
 Vue.prototype.$fetchChannelList = async function (
@@ -146,7 +158,7 @@ Vue.prototype.$fetchMessageList = async function (
     this.$accessor.app.setChannelMessages({
       host,
       channelID,
-      messages: asObj!.messagesList.map((c) => c.messageId),
+      messages: asObj!.messagesList.map((c) => c.messageId).reverse(),
     })
   }
   this.$accessor.app.setMessagesData({

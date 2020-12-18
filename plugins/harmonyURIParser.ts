@@ -16,7 +16,7 @@ Vue.prototype.$parseHarmonyURI = (uri: string) => {
   // browsers are hardcoded to parse HTTP urls 🗿
   const parsed = new URL(uri.replace('harmony://', 'http://'))
   return {
-    host: parsed.host,
+    host: `http://${parsed.host}:${parsed.port || 2289}`,
     code: parsed.pathname.substr(1),
   }
 }

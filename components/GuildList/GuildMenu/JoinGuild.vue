@@ -58,11 +58,16 @@ export default Vue.extend({
       try {
         const conn = await this.$getOrFederate(targetHost)
         const resp = await conn.joinGuild(targetCode)
-        await conn.addGuildToGuildList(
-          resp.message!.toObject().guildId,
-          this.$accessor.app.host!,
-        )
+        if (resp.message!.toObject().guildId) {
+          await this.$addGuildToList(
+            targetHost,
+            resp.message!.toObject().guildId,
+          )
+        } else {
+          console.log('guildID is null')
+        }
       } catch (e) {
+        console.error(e)
         this.$showDialog(DialogType.Error, e.statusMessage || e)
       }
     },

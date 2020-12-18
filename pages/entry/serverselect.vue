@@ -7,8 +7,15 @@
       @keydown.enter="addServer(addServerName, addServerHost)"
       @keydown.esc="addServerDialog = false"
     >
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn v-bind="attrs" class="mb-2" v-on="on">Add Server</v-btn>
+      <template v-slot:activator="{}">
+        <v-btn
+          class="mb-2"
+          @click="
+            $event.target.blur()
+            addServerDialog = true
+          "
+          >Add Server</v-btn
+        >
       </template>
       <v-card>
         <v-card-title> Add Server </v-card-title>
@@ -121,7 +128,9 @@ export default Vue.extend({
     nextPage() {
       this.$router.push({
         path: `auth/login`,
-        hash: `http://${this.serverList[this.selected]?.host}`,
+        hash: encodeURIComponent(
+          `http://${this.serverList[this.selected]?.host}`,
+        ),
       })
       this.$accessor.entry.setStep(this.$accessor.entry.step + 1)
     },

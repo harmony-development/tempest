@@ -76,6 +76,7 @@ export default Vue.extend({
         const resp = await c.register(this.email, this.username, this.password)
         this.$accessor.app.setUserID(resp.message?.getUserId())
         this.$accessor.app.setSession(resp.message?.getSessionToken())
+        this.$accessor.app.setHost(this.$getHost())
         this.$router.push({ path: '/app' })
       } catch (e) {
         this.$accessor.dialog.openDialog({

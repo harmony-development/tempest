@@ -73,6 +73,7 @@ export default Vue.extend({
           picture: asObj.guildPicture,
         })
       } catch (e) {
+        console.log(e)
         this.$showDialog(DialogType.Error, e.statusMessage || e)
       }
     }

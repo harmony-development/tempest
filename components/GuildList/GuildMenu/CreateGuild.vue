@@ -55,6 +55,7 @@ export default Vue.extend({
         })
         this.$emit('cancelled')
       } catch (e) {
+        console.log(e)
         this.$showDialog(DialogType.Error, e.statusMessage || e)
       }
     },

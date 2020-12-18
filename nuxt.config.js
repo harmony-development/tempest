@@ -86,11 +86,12 @@ export default {
     },
   },
   router: {
-    extendRoutes(routes) {
+    extendRoutes(routes, resolve) {
       routes.push({
         path: '/app/:guildid?/:channelid?/:messageid?',
-        component: '~/pages/_app',
+        component: resolve(__dirname, 'pages/_app'),
         name: 'app',
+        chunkName: 'mainapp',
       })
     },
   },

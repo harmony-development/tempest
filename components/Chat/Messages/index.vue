@@ -1,20 +1,22 @@
 <template>
   <div class="chat">
     <div ref="messagesList" class="messages-list" @scroll="debouncedScroll">
-      <h3 v-if="reachedTop" class="ma-3 font-weight-regular">
-        Welcome to the start of <strong>#{{ channelName }}</strong>
-      </h3>
-      <div v-else class="ma-3 d-flex justify-center align-center">
-        <v-progress-circular
-          indeterminate
-          color="primary"
-        ></v-progress-circular>
+      <div>
+        <h3 v-if="reachedTop" class="ma-3 font-weight-regular">
+          Welcome to the start of <strong>#{{ channelName }}</strong>
+        </h3>
+        <div v-else class="ma-3 d-flex justify-center align-center">
+          <v-progress-circular
+            indeterminate
+            color="primary"
+          ></v-progress-circular>
+        </div>
+        <message
+          v-for="message in messagesList || []"
+          :id="message"
+          :key="message"
+        />
       </div>
-      <message
-        v-for="message in messagesList || []"
-        :id="message"
-        :key="message"
-      />
     </div>
   </div>
 </template>
@@ -24,6 +26,8 @@
   height: 100%;
   flex: 1 0 0;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column-reverse;
 }
 
 ::-webkit-scrollbar {

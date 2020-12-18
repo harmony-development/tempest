@@ -6,9 +6,11 @@
     transition="slide-y-transition"
     @input="this.$accessor.imageView.closeDialog"
   >
-    <img :src="src" class="attachment" />
+    <img :src="dialogState.imageID" class="attachment" />
     <div class="footer">
-      <a class="open-original" :href="src" target="_blank">Open Original</a>
+      <a class="open-original" :href="dialogState.imageID" target="_blank"
+        >Open Original</a
+      >
     </div>
   </v-dialog>
 </template>
@@ -33,11 +35,6 @@ export default Vue.extend({
   computed: {
     dialogState() {
       return this.$accessor.imageView
-    },
-    src(): string {
-      return `${this.$getHost()}/_harmony/media/download/${
-        this.dialogState.imageID
-      }`
     },
   },
 })

@@ -50,6 +50,7 @@ export default Vue.extend({
             this.$route.params.guildid,
           )
         } catch (e) {
+          console.log(e)
           this.$showDialog(DialogType.Error, e.statusMessage || e)
         }
       }

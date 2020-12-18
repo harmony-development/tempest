@@ -4,7 +4,7 @@
       v-if="contentType.startsWith('image/')"
       :src="src"
       class="attachment img"
-      @click="openImagePreview(typedData.id)"
+      @click="openImagePreview(src)"
     />
     <video
       v-else-if="contentType.startsWith('video/')"
@@ -87,6 +87,10 @@ export default Vue.extend({
       return this.typedData.name
     },
     src(): string {
+      if (this.typedData.id.startsWith('hmc://')) {
+        const parsed = new URL(this.typedData.id.replace('hmc://', 'http://'))
+        return `http://${parsed.host}/_harmony/media/download${parsed.pathname}`
+      }
       return `${this.$getHost()}/_harmony/media/download/${this.typedData.id}`
     },
   },
