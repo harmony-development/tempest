@@ -21,9 +21,19 @@
       autocomplete="current-password"
     ></v-text-field>
     <a @click="toRegister">New user?</a>
-    <v-btn block class="mt-2" :disabled="!email || !password" type="submit"
-      >Login</v-btn
-    >
+    <div class="d-flex justify-end">
+      <v-btn class="mt-2 mr-2" color="primary" text @click="toServerSelect">
+        Back
+      </v-btn>
+      <v-btn
+        class="mt-2"
+        :disabled="!email || !password"
+        type="submit"
+        color="primary"
+      >
+        Login
+      </v-btn>
+    </div>
   </v-form>
 </template>
 
@@ -42,6 +52,9 @@ export default Vue.extend({
   methods: {
     toRegister() {
       this.$router.push({ path: 'register', hash: this.$route.hash })
+    },
+    toServerSelect() {
+      this.$router.push('/entry/serverselect')
     },
     async loginClicked() {
       const c = new Connection(this.$getHost())

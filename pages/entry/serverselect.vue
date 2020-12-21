@@ -67,9 +67,6 @@
       </v-list>
     </v-sheet>
     <div class="bottom-navigation">
-      <v-btn color="white" text disabled
-        ><v-icon left>mdi-chevron-left</v-icon> BACK</v-btn
-      >
       <v-btn
         color="primary"
         :disabled="serverList[selected] === undefined"

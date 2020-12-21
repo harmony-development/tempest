@@ -38,15 +38,19 @@
       :rules="[validateConfirmPassword]"
     ></v-text-field>
     <a @click="toLogin">Already have an account?</a>
-    <v-btn
-      block
-      class="mt-2"
-      :disabled="
-        !email || !username || !password || password !== confirmPassword
-      "
-      type="submit"
-      >Register</v-btn
-    >
+    <div class="d-flex justify-end">
+      <v-btn class="mt-2 mr-2" color="primary" text @click="toServerSelect">
+        Back
+      </v-btn>
+      <v-btn
+        class="mt-2"
+        :disabled="
+          !email || !username || !password || password !== confirmPassword
+        "
+        type="submit"
+        >Register
+      </v-btn>
+    </div>
   </form>
 </template>
 
@@ -67,6 +71,9 @@ export default Vue.extend({
   methods: {
     toLogin() {
       this.$router.replace({ path: 'login', hash: this.$route.hash })
+    },
+    toServerSelect() {
+      this.$router.push('/entry/serverselect')
     },
     validateConfirmPassword() {
       return this.password === this.confirmPassword || 'Passwords do not match'
