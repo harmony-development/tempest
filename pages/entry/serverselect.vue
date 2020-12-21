@@ -126,10 +126,18 @@ export default Vue.extend({
       this.addServerDialog = false
     },
     nextPage() {
+      let host = this.serverList[this.selected]?.host
+
+      if (host.includes('://'))
+        host = `https${host.substr(host.indexOf('://'))}`
+      else host = `https://${host}`
+
+      const parsed = new URL(host)
+
       this.$router.push({
         path: `auth/login`,
         hash: encodeURIComponent(
-          `https://${this.serverList[this.selected]?.host}`,
+          `https://${parsed.hostname}:${parsed.port || '2289'}`,
         ),
       })
       this.$accessor.entry.setStep(this.$accessor.entry.step + 1)
