@@ -1,5 +1,5 @@
 <template>
-  <div class="root pa-3">
+  <div :class="{ root: true, 'pa-3': true, pending }">
     <v-avatar v-ripple class="avatar" @click="showProfile">
       <v-img :src="`${$getHost()}/_harmony/media/download/${avatar}`" />
     </v-avatar>
@@ -45,6 +45,10 @@
 
 .text {
   line-height: 8px;
+}
+
+.pending {
+  opacity: 0.8;
 }
 </style>
 
@@ -97,6 +101,9 @@ export default Vue.extend({
     },
     attachments(): Message.Attachment.AsObject[] | undefined {
       return this.data?.attachmentsList
+    },
+    pending(): boolean | undefined {
+      return this.data?.pending
     },
   },
   mounted() {

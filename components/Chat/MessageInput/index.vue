@@ -115,6 +115,23 @@ export default Vue.extend({
     },
     async onInputKeyPress(e: KeyboardEvent) {
       if (e.key === 'Enter') {
+        const localID = `local${window.performance.now()}`
+        this.$accessor.app.addMessage({
+          host: this.$getHost(),
+          channelID: this.$route.params.channelid,
+          messageID: localID,
+          data: {
+            authorID: this.$accessor.app.userID || '',
+            createdAt: window.performance.now(),
+            editedAt: 0,
+            content: this.message,
+            pending: true,
+            embedsList: [],
+            actionsList: [],
+            attachmentsList: [],
+          },
+        })
+
         let attachments = undefined as string[] | undefined
         let uploadPromises = [] as Promise<void>[]
         if (this.selectedFiles && this.selectedFiles.length > 0) {
@@ -133,6 +150,11 @@ export default Vue.extend({
           this.message,
           attachments,
         )
+        this.$accessor.app.deleteMessage({
+          host: this.$getHost(),
+          channelID: this.$route.params.channelid,
+          messageID: localID,
+        })
         this.message = ''
         this.selectedFiles = []
         this.previewImages = []

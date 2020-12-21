@@ -138,6 +138,7 @@ Vue.prototype.$fetchMessageList = async function (
       embedsList: val.embedsList,
       actionsList: val.actionsList,
       attachmentsList: val.attachmentsList,
+      pending: false,
     })
     return prev
   }, {})

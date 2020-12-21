@@ -38,6 +38,7 @@ export interface IMessageData {
   embedsList: Embed.AsObject[]
   actionsList: Action.AsObject[]
   attachmentsList: Message.Attachment.AsObject[]
+  pending: boolean
 }
 
 export interface IUserData {
@@ -397,5 +398,20 @@ export const mutations = mutationTree(state, {
       ...state.data[data.host].roles,
       ...data.roles,
     }
+  },
+  deleteMessage(
+    state,
+    data: {
+      host: string
+      channelID: string
+      messageID: string
+    },
+  ) {
+    ensureHost(state, data.host)
+    const msgs = state.data[data.host].channels[data.channelID].messages
+    if (!msgs) return
+
+    Vue.delete(state.data[data.host].messages, data.messageID)
+    msgs.splice(msgs.indexOf(data.messageID), 1)
   },
 })
