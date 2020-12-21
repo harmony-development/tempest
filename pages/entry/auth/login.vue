@@ -1,5 +1,5 @@
 <template>
-  <fragment>
+  <v-form @submit="loginClicked">
     <h3 class="mb-4">Login To {{ $getHost() }}</h3>
     <v-text-field
       v-model="email"
@@ -8,24 +8,23 @@
       type="email"
       hide-details="auto"
       class="mb-3"
+      autocomplete="email"
+      name="email"
     ></v-text-field>
     <v-text-field
       v-model="password"
       label="Password"
       outlined
-      type="password"
       hide-details="auto"
       class="mb-2"
+      type="password"
+      autocomplete="current-password"
     ></v-text-field>
     <a @click="toRegister">New user?</a>
-    <v-btn
-      block
-      class="mt-2"
-      :disabled="!email || !password"
-      @click="loginClicked"
+    <v-btn block class="mt-2" :disabled="!email || !password" type="submit"
       >Login</v-btn
     >
-  </fragment>
+  </v-form>
 </template>
 
 <script lang="ts">

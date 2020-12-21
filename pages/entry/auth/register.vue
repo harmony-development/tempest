@@ -1,5 +1,5 @@
 <template>
-  <fragment>
+  <form @submit="registerClicked">
     <h3 class="mb-4">Register At {{ $getHost() }}</h3>
     <v-text-field
       v-model="email"
@@ -8,6 +8,7 @@
       outlined
       hide-details="auto"
       class="mb-3"
+      autocomplete="email"
     ></v-text-field>
     <v-text-field
       v-model="username"
@@ -24,6 +25,7 @@
       type="password"
       hide-details="auto"
       class="mb-3"
+      autocomplete="new-password"
     ></v-text-field>
     <v-text-field
       v-model="confirmPassword"
@@ -32,6 +34,7 @@
       type="password"
       hide-details="auto"
       class="mb-3"
+      autocomplete="new-password"
       :rules="[validateConfirmPassword]"
     ></v-text-field>
     <a @click="toLogin">Already have an account?</a>
@@ -41,10 +44,10 @@
       :disabled="
         !email || !username || !password || password !== confirmPassword
       "
-      @click="registerClicked"
+      type="submit"
       >Register</v-btn
     >
-  </fragment>
+  </form>
 </template>
 
 <script lang="ts">
