@@ -4,13 +4,13 @@
       <v-img :src="`${$getHost()}/_harmony/media/download/${avatar}`" />
     </v-avatar>
     <div class="content ml-2">
-      <v-list-item-title
-        >{{ username || authorID }}
-        <span style="color: var(--v-accent-lighten3)">{{
-          timeString
-        }}</span></v-list-item-title
-      >
-      {{ content }}
+      <v-list-item-title>
+        {{ username || authorID }}
+        <span style="color: var(--v-accent-lighten3)">{{ timeString }}</span>
+      </v-list-item-title>
+      <p class="text">
+        {{ content }}
+      </p>
       <div class="attachment-container pt-3">
         <attachment v-for="a in attachments || []" :key="a.id" :data="a" />
       </div>
@@ -41,6 +41,10 @@
   text-overflow: unset;
   white-space: pre-line;
   width: 100%;
+}
+
+.text {
+  line-height: 8px;
 }
 </style>
 
