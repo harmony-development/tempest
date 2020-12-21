@@ -71,7 +71,6 @@ export default Vue.extend({
     async registerClicked() {
       const c = new Connection(this.$getHost())
       this.$bindEvents(c)
-      c.beginStream()
       try {
         const resp = await c.register(this.email, this.username, this.password)
         this.$accessor.app.setUserID(resp.message?.getUserId())
