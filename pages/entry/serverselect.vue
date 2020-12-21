@@ -66,10 +66,12 @@
         </v-list-item-group>
       </v-list>
     </v-sheet>
-    <div class="bottom-navigation">
+    <div class="d-flex justify-end">
+      <v-btn class="mt-2 mr-2" color="primary" text disabled> Back </v-btn>
       <v-btn
         color="primary"
         :disabled="serverList[selected] === undefined"
+        class="mt-2"
         @click="nextPage()"
         >NEXT <v-icon right>mdi-chevron-right</v-icon></v-btn
       >
@@ -80,11 +82,6 @@
 <style scoped>
 .server-select {
   width: 100%;
-}
-.bottom-navigation {
-  display: flex;
-  position: relative;
-  justify-content: space-between;
 }
 </style>
 
