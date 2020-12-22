@@ -1,7 +1,11 @@
 <template>
   <div :class="{ root: true, 'pa-3': true, pending }">
     <v-avatar v-ripple class="avatar" @click="showProfile">
-      <v-img :src="`${$getHost()}/_harmony/media/download/${avatar}`" />
+      <v-img
+        :src="
+          avatar ? `${$getHost()}/_harmony/media/download/${avatar}` : undefined
+        "
+      />
     </v-avatar>
     <div class="content ml-2">
       <v-list-item-title>

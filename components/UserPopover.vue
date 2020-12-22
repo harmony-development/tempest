@@ -20,7 +20,11 @@
         <v-list-item>
           <v-list-item-avatar>
             <v-img
-              :src="`${$getHost()}/_harmony/media/download/${avatar}`"
+              :src="
+                avatar
+                  ? `${$getHost()}/_harmony/media/download/${avatar}`
+                  : undefined
+              "
               alt="Avatar"
               class="avatar"
             />
