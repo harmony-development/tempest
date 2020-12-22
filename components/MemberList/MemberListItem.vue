@@ -52,6 +52,11 @@ export default Vue.extend({
       return this.$accessor.userPopover.open
     },
   },
+  mounted() {
+    if (this.id) {
+      this.$fetchUser(this.$getHost(), this.id)
+    }
+  },
   methods: {
     clicked(ev: MouseEvent) {
       const el = ev.currentTarget as HTMLDivElement
