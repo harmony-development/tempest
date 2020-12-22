@@ -27,7 +27,6 @@
   flex: 1 0 0;
   overflow-y: auto;
   display: flex;
-  flex-direction: column-reverse;
 }
 
 ::-webkit-scrollbar {

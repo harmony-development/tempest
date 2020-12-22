@@ -63,6 +63,13 @@ export default Vue.extend({
       ]?.memberList
     },
   },
+  watch: {
+    '$route.params.guildid': {
+      handler() {
+        this.fetchData()
+      },
+    },
+  },
   async mounted() {
     await this.fetchData()
   },
