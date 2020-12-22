@@ -31,7 +31,7 @@ Vue.prototype.$bindEvents = function (this: Vue, conn: Connection) {
           data: {
             authorID: message.authorId,
             createdAt: message.createdAt?.seconds || 0,
-            editedAt: message.createdAt?.seconds || 0,
+            editedAt: message.editedAt?.seconds || 0,
             content: message.content,
             embedsList: message.embedsList,
             actionsList: message.actionsList,
