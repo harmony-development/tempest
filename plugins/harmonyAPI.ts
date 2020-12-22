@@ -132,8 +132,8 @@ Vue.prototype.$fetchMessageList = async function (
   }>((prev, val) => {
     Vue.set(prev, val.messageId, {
       authorID: val.authorId,
-      createdAt: val.createdAt?.seconds || '0',
-      editedAt: val.editedAt?.seconds || '0',
+      createdAt: val.createdAt?.seconds || 0,
+      editedAt: val.editedAt?.seconds || 0,
       content: val.content,
       embedsList: val.embedsList,
       actionsList: val.actionsList,

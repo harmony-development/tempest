@@ -6,10 +6,16 @@
     <div class="content ml-2">
       <v-list-item-title>
         {{ username || authorID }}
-        <span style="color: var(--v-accent-lighten3)">{{ timeString }}</span>
+        <span style="color: var(--v-accent-lighten3)">{{ timeString }} </span>
       </v-list-item-title>
       <p class="text">
         {{ content }}
+        <v-tooltip v-if="edited && edited !== 0" top>
+          <template v-slot:activator="{ on, attrs }">
+            <span class="edited ml-1" v-bind="attrs" v-on="on">(edited)</span>
+          </template>
+          <span>{{ editedString }}</span>
+        </v-tooltip>
       </p>
       <div class="attachment-container pt-3">
         <attachment v-for="a in attachments || []" :key="a.id" :data="a" />
@@ -44,11 +50,21 @@
 }
 
 .text {
-  line-height: 8px;
+  text-overflow: unset;
+  white-space: pre-line;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-all;
+  width: 100%;
 }
 
 .pending {
   opacity: 0.8;
+}
+
+.edited {
+  color: var(--v-accent-lighten3);
+  font-size: 12px;
 }
 </style>
 
@@ -96,6 +112,15 @@ export default Vue.extend({
     timeString(): string {
       return ` - ${dayjs
         .unix(this.data?.createdAt || 0)
+        .utc()
+        .calendar()}`
+    },
+    edited(): number | undefined {
+      return this.data?.editedAt
+    },
+    editedString(): string {
+      return ` - ${dayjs
+        .unix(this.data?.editedAt || 0)
         .utc()
         .calendar()}`
     },

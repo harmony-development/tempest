@@ -78,6 +78,13 @@ export default {
     babel: {
       plugins: ['@babel/plugin-proposal-optional-chaining'],
     },
+    loaders: {
+      vue: {
+        compilerOptions: {
+          whitespace: 'condense',
+        },
+      },
+    },
   },
   vue: {
     config: {
