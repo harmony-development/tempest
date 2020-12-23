@@ -1,5 +1,7 @@
 # staccato-vue
 
+## Check out a live demo at https://staccato.harmonychat.vercel.app
+
 ## Build Setup
 
 ```bash
