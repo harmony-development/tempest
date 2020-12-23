@@ -101,7 +101,13 @@ export default Vue.extend({
   },
   methods: {
     async fetchData(lastMessageID?: string) {
-      if (this.$route.params.guildid && this.$route.params.channelid) {
+      if (
+        this.$route.params.guildid &&
+        this.$route.params.channelid &&
+        !this.$accessor.app.data[this.$getHost()]?.channels[
+          this.$route.params.channelid
+        ]?.messages
+      ) {
         try {
           await this.$fetchMessageList(
             this.$getHost(),

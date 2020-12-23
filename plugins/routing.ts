@@ -17,9 +17,9 @@ Vue.prototype.$updateRoute = function (this: Vue, args: UpdateRouteArgs) {
   const result: {
     [key: string]: string
   } = {}
-  if (args.guildid) result.guildid = args.guildid
-  if (args.channelid) result.channelid = args.channelid
-  if (args.messageid) result.messageid = args.messageid
+  if (args.guildid !== undefined) result.guildid = args.guildid
+  if (args.channelid !== undefined) result.channelid = args.channelid
+  if (args.messageid !== undefined) result.messageid = args.messageid
   this.$router.push({
     params: result,
     hash: `#${encodeURIComponent(args.host || this.$getHost())}`,

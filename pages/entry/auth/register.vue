@@ -1,5 +1,5 @@
 <template>
-  <form @submit="registerClicked">
+  <form @submit.prevent="registerClicked">
     <h3 class="mb-4">Register At {{ $getHost() }}</h3>
     <v-text-field
       v-model="email"

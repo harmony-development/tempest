@@ -33,6 +33,7 @@
     <user-popover />
     <guild-settings />
     <image-view />
+    <user-settings />
   </div>
 </template>
 

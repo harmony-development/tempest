@@ -1,11 +1,12 @@
 <template>
   <div class="ma-2">
     <v-slide-group multiple show-arrows class="mb-2">
-      <v-slide-item v-for="(img, idx) in previewImages" :key="img">
+      <v-slide-item v-for="(a, idx) in attachments" :key="idx">
         <v-hover>
           <template v-slot:default="{ hover }">
             <v-img
-              :src="img"
+              v-if="a.file.type.startsWith('image/')"
+              :src="a.preview"
               class="grey lighten-2 thumbnail"
               max-height="100"
               max-width="177"
@@ -65,19 +66,9 @@
 import Vue from 'vue'
 import { VEmojiPicker } from 'v-emoji-picker'
 
-const getBase64List = async (list: FileList) => {
-  const promises = Array.from(list).map((file) => {
-    const reader = new FileReader()
-    return new Promise<string>((resolve) => {
-      reader.onload = (ev) => {
-        if (typeof ev.target?.result === 'string') {
-          resolve(ev.target.result)
-        }
-      }
-      reader.readAsDataURL(file)
-    })
-  })
-  return await Promise.all(promises)
+interface IAttachment {
+  file: File
+  preview?: string
 }
 
 export default Vue.extend({
@@ -90,8 +81,7 @@ export default Vue.extend({
       emojiOpen: false,
       emojiX: 0,
       emojiY: 0,
-      selectedFiles: [] as File[] | null,
-      previewImages: [] as string[],
+      attachments: [] as IAttachment[],
     }
   },
   methods: {
@@ -106,12 +96,27 @@ export default Vue.extend({
     selectFileClicked() {
       ;(this.$refs.fileUpload as HTMLInputElement).click()
     },
-    async selectFileComplete(e: Event) {
+    selectFileComplete(e: Event) {
       const input = e.target as HTMLInputElement
       if (input.files) {
-        this.selectedFiles = Array.from(input.files)
-        this.previewImages = await getBase64List(input.files)
+        this.attachments = Array.from(input.files).map<IAttachment>((f) => ({
+          file: f,
+        }))
+        this.genPreviews(input.files)
       }
+    },
+    genPreviews(files: FileList) {
+      Array.from(files).forEach((file, idx) => {
+        if (file.type.startsWith('image/')) {
+          const reader = new FileReader()
+          reader.onload = (ev) => {
+            if (typeof ev.target?.result === 'string') {
+              Vue.set(this.attachments[idx], 'preview', ev.target.result)
+            }
+          }
+          reader.readAsDataURL(file)
+        }
+      })
     },
     async onInputKeyPress(e: KeyboardEvent) {
       if (e.key === 'Enter') {
@@ -132,13 +137,13 @@ export default Vue.extend({
           },
         })
 
-        let attachments = undefined as string[] | undefined
+        let uploadAttachments = undefined as string[] | undefined
         let uploadPromises = [] as Promise<void>[]
-        if (this.selectedFiles && this.selectedFiles.length > 0) {
-          attachments = []
-          uploadPromises = this.selectedFiles.map(async (f) => {
-            const resp = await this.$uploadFile(this.$getHost(), f)
-            attachments?.push(resp)
+        if (this.attachments && this.attachments.length > 0) {
+          uploadAttachments = []
+          uploadPromises = this.attachments.map(async (f) => {
+            const resp = await this.$uploadFile(this.$getHost(), f.file)
+            uploadAttachments?.push(resp)
           })
         }
 
@@ -148,7 +153,7 @@ export default Vue.extend({
           this.$route.params.guildid,
           this.$route.params.channelid,
           this.message,
-          attachments,
+          uploadAttachments,
         )
         this.$accessor.app.deleteMessage({
           host: this.$getHost(),
@@ -156,14 +161,12 @@ export default Vue.extend({
           messageID: localID,
         })
         this.message = ''
-        this.selectedFiles = []
-        this.previewImages = []
+        this.attachments = []
       }
     },
     deleteSelectedFile(idx: number) {
-      if (this.selectedFiles) {
-        Vue.delete(this.selectedFiles, idx)
-        Vue.delete(this.previewImages, idx)
+      if (this.attachments) {
+        Vue.delete(this.attachments, idx)
       }
     },
   },

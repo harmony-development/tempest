@@ -1,5 +1,5 @@
 <template>
-  <v-form @submit="loginClicked">
+  <form @submit.prevent="loginClicked">
     <h3 class="mb-4">Login To {{ $getHost() }}</h3>
     <v-text-field
       v-model="email"
@@ -34,7 +34,7 @@
         Login
       </v-btn>
     </div>
-  </v-form>
+  </form>
 </template>
 
 <script lang="ts">

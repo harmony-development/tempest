@@ -102,4 +102,5 @@ export default {
       })
     },
   },
+  telemetry: false,
 }
