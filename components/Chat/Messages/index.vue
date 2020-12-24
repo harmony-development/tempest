@@ -1,22 +1,20 @@
 <template>
   <div class="chat">
     <div ref="messagesList" class="messages-list" @scroll="debouncedScroll">
-      <div>
-        <h3 v-if="reachedTop" class="ma-3 font-weight-regular">
-          Welcome to the start of <strong>#{{ channelName }}</strong>
-        </h3>
-        <div v-else class="ma-3 d-flex justify-center align-center">
-          <v-progress-circular
-            indeterminate
-            color="primary"
-          ></v-progress-circular>
-        </div>
-        <message
-          v-for="message in messagesList || []"
-          :id="message"
-          :key="message"
-        />
+      <h3 v-if="reachedTop" class="ma-3 font-weight-regular">
+        Welcome to the start of <strong>#{{ channelName }}</strong>
+      </h3>
+      <div v-else class="ma-3 d-flex justify-center align-center">
+        <v-progress-circular
+          indeterminate
+          color="primary"
+        ></v-progress-circular>
       </div>
+      <message
+        v-for="message in messagesList || []"
+        :id="message"
+        :key="message"
+      />
     </div>
   </div>
 </template>
@@ -27,6 +25,7 @@
   flex: 1 0 0;
   overflow-y: auto;
   display: flex;
+  flex-direction: column;
 }
 
 ::-webkit-scrollbar {
@@ -93,6 +92,15 @@ export default Vue.extend({
         this.fetchData()
       },
     },
+    messages: {
+      handler() {
+        const el = this.$refs.messagesList as HTMLDivElement
+
+        if ((el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100 >= 90) {
+          el.scrollTop = el.scrollHeight - el.clientHeight
+        }
+      },
+    },
   },
   async mounted() {
     const el = this.$refs.messagesList as HTMLDivElement
@@ -101,12 +109,17 @@ export default Vue.extend({
   },
   methods: {
     async fetchData(lastMessageID?: string) {
+      const firstFetch = !this.$accessor.app.data[this.$getHost()]?.channels[
+        this.$route.params.channelid
+      ]?.messages
+      const el = this.$refs.messagesList as HTMLDivElement
       if (
         this.$route.params.guildid &&
         this.$route.params.channelid &&
-        !this.$accessor.app.data[this.$getHost()]?.channels[
-          this.$route.params.channelid
-        ]?.messages
+        (lastMessageID ||
+          !this.$accessor.app.data[this.$getHost()]?.channels[
+            this.$route.params.channelid
+          ]?.messages)
       ) {
         try {
           await this.$fetchMessageList(
@@ -115,6 +128,9 @@ export default Vue.extend({
             this.$route.params.channelid,
             lastMessageID,
           )
+          if (firstFetch) {
+            el.scrollTop = el.scrollHeight
+          }
         } catch (e) {
           this.$showDialog(DialogType.Error, e.statusMessage || e)
         }

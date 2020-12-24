@@ -24,62 +24,21 @@
         </div>
       </template>
       <v-list subheader>
-        <div class="status-root">
-          <v-sheet
-            v-ripple
-            color="grey"
-            height="60px"
-            class="status-option"
-            @click="setStatus(userStatusMap.USER_STATUS_OFFLINE)"
-          >
-            <v-icon
-              v-if="status === userStatusMap.USER_STATUS_OFFLINE"
-              color="black"
-            >
-              mdi-check
-            </v-icon>
-          </v-sheet>
-          <v-sheet
-            v-ripple
-            color="yellow"
-            class="status-option"
-            @click="setStatus(userStatusMap.USER_STATUS_IDLE)"
-          >
-            <v-icon
-              v-if="status === userStatusMap.USER_STATUS_IDLE"
-              color="black"
-            >
-              mdi-check
-            </v-icon>
-          </v-sheet>
-          <v-sheet
-            v-ripple
-            color="red"
-            class="status-option"
-            @click="setStatus(userStatusMap.USER_STATUS_DO_NOT_DISTURB)"
-          >
-            <v-icon
-              v-if="status === userStatusMap.USER_STATUS_DO_NOT_DISTURB"
-              color="black"
-            >
-              mdi-check
-            </v-icon>
-          </v-sheet>
-          <v-sheet
-            v-ripple
-            :dark="false"
-            color="green"
-            class="status-option"
-            @click="setStatus(userStatusMap.USER_STATUS_ONLINE_UNSPECIFIED)"
-          >
-            <v-icon
-              v-if="status === userStatusMap.USER_STATUS_ONLINE_UNSPECIFIED"
-              color="black"
-            >
-              mdi-check
-            </v-icon>
-          </v-sheet>
-        </div>
+        <v-list-item
+          v-for="s in statuses"
+          :key="s.name"
+          link
+          :class="{ active: s.status === status }"
+          @click="setStatus(s.status)"
+        >
+          <v-list-item-action>
+            <v-badge offset-x="3" offset-y="10" :color="s.color"></v-badge>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title> {{ s.name }} </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-divider></v-divider>
         <v-list-item link @click="openProfileSettings">
           <v-list-item-icon>
             <v-icon> mdi-account-cog </v-icon>
@@ -160,19 +119,8 @@
   border-radius: 48px;
 }
 
-.status-root {
-  display: flex;
-  height: 100%;
-  width: 100%;
-}
-
-.status-option {
-  width: 100%;
-  height: 60px;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.active::before {
+  opacity: 0.24 !important;
 }
 </style>
 
@@ -186,6 +134,36 @@ import MemberListItem from './MemberListItem.vue'
 import { IUserData } from '~/store/app'
 export default Vue.extend({
   components: { MemberListItem },
+  data() {
+    return {
+      statuses: [
+        {
+          status: UserStatus.USER_STATUS_ONLINE_UNSPECIFIED,
+          name: 'Online',
+          color: 'green',
+        },
+        {
+          status: UserStatus.USER_STATUS_DO_NOT_DISTURB,
+          name: 'Do Not Disturb',
+          color: 'red',
+        },
+        {
+          status: UserStatus.USER_STATUS_IDLE,
+          name: 'Idle',
+          color: 'yellow',
+        },
+        {
+          status: UserStatus.USER_STATUS_OFFLINE,
+          name: 'Offline',
+          color: 'grey',
+        },
+      ] as {
+        status: UserStatusMap[keyof UserStatusMap]
+        name: string
+        color: string
+      }[],
+    }
+  },
   computed: {
     memberList() {
       return this.$accessor.app.data[this.$getHost()]?.guilds[
