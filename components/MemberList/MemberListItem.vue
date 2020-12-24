@@ -4,7 +4,9 @@
     :class="{ active: popoverOpen, 'member-item': true, 'pa-1': true }"
     @click="clicked"
   >
-    <v-img class="avatar mr-2" :src="avatar"></v-img>
+    <user-status-indicator :id="id">
+      <v-img class="avatar mr-2" :src="avatar"> </v-img>
+    </user-status-indicator>
     <v-list-item-title>{{ name || id }}</v-list-item-title>
   </div>
 </template>
@@ -36,8 +38,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import UserStatusIndicator from '../UserStatusIndicator.vue'
+import { IUserData } from '~/store/app'
 import { AnimationDirection, Position } from '~/store/userPopover'
 export default Vue.extend({
+  components: {
+    UserStatusIndicator,
+  },
   props: {
     id: {
       type: String,
@@ -45,15 +52,18 @@ export default Vue.extend({
     },
   },
   computed: {
+    profile(): IUserData | undefined {
+      return this.$accessor.app.data[this.$getHost()]?.users[this.id]
+    },
     name(): string | undefined {
-      return this.$accessor.app.data[this.$getHost()]?.users[this.id]?.username
+      return this.profile?.username
     },
     popoverOpen(): boolean {
       return this.$accessor.userPopover.open
     },
     avatar(): string | undefined {
       if (!this.id) return undefined
-      const a = this.$accessor.app.data[this.$getHost()]?.users[this.id]?.avatar
+      const a = this.profile?.avatar
       return a ? `${this.$getHost()}/_harmony/media/download/${a}` : undefined
     },
   },

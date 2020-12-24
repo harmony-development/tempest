@@ -6,7 +6,7 @@
       :key="member"
     />
 
-    <v-menu v-if="ownProfile" top offset-y>
+    <v-menu v-if="ownProfile" top offset-y :close-on-content-click="false">
       <template v-slot:activator="{ on, attrs }">
         <div
           v-ripple
@@ -14,14 +14,72 @@
           v-bind="attrs"
           v-on="on"
         >
-          <v-img class="avatar mr-2" :src="avatar"></v-img>
+          <user-status-indicator :id="$accessor.app.userID">
+            <v-img class="avatar mr-2" :src="avatar"></v-img>
+          </user-status-indicator>
           <v-list-item-title>{{ ownProfile.username }}</v-list-item-title>
           <v-list-item-action>
             <v-icon> mdi-chevron-up </v-icon>
           </v-list-item-action>
         </div>
       </template>
-      <v-list>
+      <v-list subheader>
+        <div class="status-root">
+          <v-sheet
+            v-ripple
+            color="grey"
+            height="60px"
+            class="status-option"
+            @click="setStatus(userStatusMap.USER_STATUS_OFFLINE)"
+          >
+            <v-icon
+              v-if="status === userStatusMap.USER_STATUS_OFFLINE"
+              color="black"
+            >
+              mdi-check
+            </v-icon>
+          </v-sheet>
+          <v-sheet
+            v-ripple
+            color="yellow"
+            class="status-option"
+            @click="setStatus(userStatusMap.USER_STATUS_IDLE)"
+          >
+            <v-icon
+              v-if="status === userStatusMap.USER_STATUS_IDLE"
+              color="black"
+            >
+              mdi-check
+            </v-icon>
+          </v-sheet>
+          <v-sheet
+            v-ripple
+            color="red"
+            class="status-option"
+            @click="setStatus(userStatusMap.USER_STATUS_DO_NOT_DISTURB)"
+          >
+            <v-icon
+              v-if="status === userStatusMap.USER_STATUS_DO_NOT_DISTURB"
+              color="black"
+            >
+              mdi-check
+            </v-icon>
+          </v-sheet>
+          <v-sheet
+            v-ripple
+            :dark="false"
+            color="green"
+            class="status-option"
+            @click="setStatus(userStatusMap.USER_STATUS_ONLINE_UNSPECIFIED)"
+          >
+            <v-icon
+              v-if="status === userStatusMap.USER_STATUS_ONLINE_UNSPECIFIED"
+              color="black"
+            >
+              mdi-check
+            </v-icon>
+          </v-sheet>
+        </div>
         <v-list-item link @click="openProfileSettings">
           <v-list-item-icon>
             <v-icon> mdi-account-cog </v-icon>
@@ -101,10 +159,29 @@
   height: 36px;
   border-radius: 48px;
 }
+
+.status-root {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.status-option {
+  width: 100%;
+  height: 60px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 </style>
 
 <script lang="ts">
 import Vue from 'vue'
+import {
+  UserStatus,
+  UserStatusMap,
+} from '@harmony-dev/harmony-web-sdk/dist/protocol/harmonytypes/v1/types_pb'
 import MemberListItem from './MemberListItem.vue'
 import { IUserData } from '~/store/app'
 export default Vue.extend({
@@ -125,6 +202,12 @@ export default Vue.extend({
       const a = this.ownProfile?.avatar
       return a ? `${this.$getHost()}/_harmony/media/download/${a}` : undefined
     },
+    status(): UserStatusMap[keyof UserStatusMap] {
+      return this.ownProfile?.status ?? UserStatus.USER_STATUS_OFFLINE
+    },
+    userStatusMap(): UserStatusMap {
+      return UserStatus
+    },
   },
   watch: {
     '$route.params.guildid': {
@@ -144,6 +227,11 @@ export default Vue.extend({
     },
     openProfileSettings() {
       this.$accessor.app.setProfileSettingsOpen(true)
+    },
+    async setStatus(newStatus: UserStatusMap[keyof UserStatusMap]) {
+      await this.$updateProfile(this.$getHost(), {
+        newStatus,
+      })
     },
   },
 })

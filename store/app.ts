@@ -432,13 +432,13 @@ export const mutations = mutationTree(state, {
     ensureHost(state, data.host)
     const user = state.data[data.host].users[data.userid]
     if (user) {
-      if (data.username) {
+      if (data.username !== undefined) {
         user.username = data.username
       }
-      if (data.avatar) {
+      if (data.avatar !== undefined) {
         user.avatar = data.avatar
       }
-      if (data.status) {
+      if (data.status !== undefined) {
         user.status = data.status
       }
     }
