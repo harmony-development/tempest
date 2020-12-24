@@ -77,7 +77,7 @@ import Vue from 'vue'
 import dayjs from 'dayjs'
 import calendar from 'dayjs/plugin/calendar'
 import UTC from 'dayjs/plugin/utc'
-import { Message } from '@harmony-dev/harmony-web-sdk/dist/protocol/core/v1/core_pb'
+import { Attachment as MessageAttachment } from '@harmony-dev/harmony-web-sdk/dist/protocol/harmonytypes/v1/types_pb'
 import Attachment from './Attachment.vue'
 import { IMessageData } from '~/store/app'
 import { AnimationDirection, Position } from '~/store/userPopover'
@@ -128,7 +128,7 @@ export default Vue.extend({
         .utc()
         .calendar()}`
     },
-    attachments(): Message.Attachment.AsObject[] | undefined {
+    attachments(): MessageAttachment.AsObject[] | undefined {
       return this.data?.attachmentsList
     },
     pending(): boolean | undefined {

@@ -1,11 +1,11 @@
 import { Connection } from '@harmony-dev/harmony-web-sdk'
+import { Event } from '@harmony-dev/harmony-web-sdk/dist/protocol/chat/v1/streaming_pb'
 import {
   Action,
+  Attachment,
   Embed,
-  Event,
-  Message,
-} from '@harmony-dev/harmony-web-sdk/dist/protocol/core/v1/core_pb'
-import { UserStatusMap } from '@harmony-dev/harmony-web-sdk/dist/protocol/profile/v1/profile_pb'
+  UserStatusMap,
+} from '@harmony-dev/harmony-web-sdk/dist/protocol/harmonytypes/v1/types_pb'
 import { mutationTree } from 'nuxt-typed-vuex'
 import Vue from 'vue'
 
@@ -37,7 +37,7 @@ export interface IMessageData {
   content: string
   embedsList: Embed.AsObject[]
   actionsList: Action.AsObject[]
-  attachmentsList: Message.Attachment.AsObject[]
+  attachmentsList: Attachment.AsObject[]
   pending: boolean
 }
 

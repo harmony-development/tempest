@@ -1,5 +1,5 @@
 import { Connection } from '@harmony-dev/harmony-web-sdk'
-import { Event } from '@harmony-dev/harmony-web-sdk/dist/protocol/core/v1/core_pb'
+import { Event } from '@harmony-dev/harmony-web-sdk/dist/protocol/chat/v1/streaming_pb'
 import Vue from 'vue'
 
 declare module 'vue/types/vue' {

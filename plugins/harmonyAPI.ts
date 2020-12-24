@@ -1,4 +1,5 @@
 import { Connection } from '@harmony-dev/harmony-web-sdk'
+import { UserStatusMap } from '@harmony-dev/harmony-web-sdk/dist/protocol/harmonytypes/v1/types_pb'
 import Vue from 'vue'
 import { IChannelData, IMessageData, IRoleData } from '~/store/app'
 
@@ -100,7 +101,7 @@ Vue.prototype.$fetchChannelList = async function (
     Vue.set(prev, val.channelId, {
       channelName: val.channelName,
       isCategory: val.isCategory,
-      isVoice: val.isVoice,
+      isVoice: false,
     })
     return prev
   }, {})
@@ -274,17 +275,12 @@ Vue.prototype.$fetchGuildRoles = async function (
 Vue.prototype.$updateProfile = async function (
   this: Vue,
   host: string,
-  newUsername: string,
+  data: {
+    newUsername?: string
+    newAvatar?: string
+    newStatus?: UserStatusMap | undefined
+  },
 ) {
   const conn = await this.$getOrFederate(host)
-  return conn.usernameUpdate(newUsername)
-}
-
-Vue.prototype.$updateAvatar = async function (
-  this: Vue,
-  host: string,
-  newAvatar: string,
-) {
-  const conn = await this.$getOrFederate(host)
-  return conn
+  return conn.profileUpdate(data)
 }

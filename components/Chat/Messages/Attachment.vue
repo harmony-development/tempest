@@ -64,7 +64,7 @@
 </style>
 
 <script lang="ts">
-import { Message } from '@harmony-dev/harmony-web-sdk/dist/protocol/core/v1/core_pb'
+import { Attachment as MessageAttachment } from '@harmony-dev/harmony-web-sdk/dist/protocol/harmonytypes/v1/types_pb'
 import Vue from 'vue'
 export default Vue.extend({
   props: {
@@ -74,8 +74,8 @@ export default Vue.extend({
     },
   },
   computed: {
-    typedData(): Message.Attachment.AsObject {
-      return this.data as Message.Attachment.AsObject
+    typedData(): MessageAttachment.AsObject {
+      return this.data as MessageAttachment.AsObject
     },
     contentType(): string {
       return this.typedData.type
