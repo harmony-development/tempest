@@ -1,11 +1,7 @@
 <template>
   <div :class="{ root: true, 'pa-3': true, pending }">
     <v-avatar v-ripple class="avatar" @click="showProfile">
-      <v-img
-        :src="
-          avatar ? `${$getHost()}/_harmony/media/download/${avatar}` : undefined
-        "
-      />
+      <v-img :src="avatar" />
     </v-avatar>
     <div class="content ml-2">
       <v-list-item-title>
@@ -107,8 +103,9 @@ export default Vue.extend({
     },
     avatar(): string | undefined {
       if (!this.authorID) return undefined
-      return this.$accessor.app.data[this.$getHost()]?.users[this.authorID]
+      const a = this.$accessor.app.data[this.$getHost()]?.users[this.authorID]
         ?.avatar
+      return a ? `${this.$getHost()}/_harmony/media/download/${a}` : undefined
     },
     content(): string | undefined {
       return this.data?.content

@@ -74,4 +74,18 @@ Vue.prototype.$bindEvents = function (this: Vue, conn: Connection) {
     },
     {},
   )
+
+  conn.events.on(
+    Event.EventCase.PROFILE_UPDATED,
+    (host, event) => {
+      this.$accessor.app.updateProfile({
+        host,
+        userid: event.userId,
+        username: event.updateUsername ? event.newUsername : undefined,
+        avatar: event.updateAvatar ? event.newAvatar : undefined,
+        status: event.updateStatus ? event.newStatus : undefined,
+      })
+    },
+    {},
+  )
 }

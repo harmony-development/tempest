@@ -9,7 +9,6 @@
   border-radius: 100%;
   background-color: gray;
   width: 100%;
-  padding-bottom: 100%;
 }
 </style>
 

@@ -4,7 +4,7 @@
     :class="{ active: popoverOpen, 'member-item': true, 'pa-1': true }"
     @click="clicked"
   >
-    <v-img class="avatar mr-2"></v-img>
+    <v-img class="avatar mr-2" :src="avatar"></v-img>
     <v-list-item-title>{{ name || id }}</v-list-item-title>
   </div>
 </template>
@@ -50,6 +50,11 @@ export default Vue.extend({
     },
     popoverOpen(): boolean {
       return this.$accessor.userPopover.open
+    },
+    avatar(): string | undefined {
+      if (!this.id) return undefined
+      const a = this.$accessor.app.data[this.$getHost()]?.users[this.id]?.avatar
+      return a ? `${this.$getHost()}/_harmony/media/download/${a}` : undefined
     },
   },
   mounted() {

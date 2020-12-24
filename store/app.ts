@@ -419,4 +419,28 @@ export const mutations = mutationTree(state, {
     Vue.delete(state.data[data.host].messages, data.messageID)
     msgs.splice(msgs.indexOf(data.messageID), 1)
   },
+  updateProfile(
+    state,
+    data: {
+      host: string
+      userid: string
+      username?: string
+      avatar?: string
+      status?: UserStatusMap[keyof UserStatusMap]
+    },
+  ) {
+    ensureHost(state, data.host)
+    const user = state.data[data.host].users[data.userid]
+    if (user) {
+      if (data.username) {
+        user.username = data.username
+      }
+      if (data.avatar) {
+        user.avatar = data.avatar
+      }
+      if (data.status) {
+        user.status = data.status
+      }
+    }
+  },
 })

@@ -867,10 +867,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@harmony-dev/harmony-web-sdk@^2.0.3":
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/@harmony-dev/harmony-web-sdk/-/harmony-web-sdk-2.0.3.tgz#61a9e26078b37b42499b53b0a4ade01372f55282"
-  integrity sha512-jNcZV4yK1oj0aV/32EgQLUSB9+WA0SFLnr8jUNyOic+NS5ygl6k5rs4BJTyPuKLBuUmG5w8deOH4kTKI9Xy7iQ==
+"@harmony-dev/harmony-web-sdk@^2.0.6":
+  version "2.0.8"
+  resolved "https://registry.yarnpkg.com/@harmony-dev/harmony-web-sdk/-/harmony-web-sdk-2.0.8.tgz#8f9380fd221198cd59940325c94a83dc10ba7aee"
+  integrity sha512-Q2ZYVFlaBlyS7fNsuiSRXSKrQo4daUvjJZFKa0HKaGoyK2fv+hedoWZxgTjKD0QCq4nf4L41WXc3WKCjkjSf2g==
   dependencies:
     "@improbable-eng/grpc-web" "^0.13.0"
     "@types/google-protobuf" "^3.7.4"

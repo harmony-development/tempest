@@ -27,7 +27,14 @@ declare module 'vue/types/vue' {
     $fetchUser(host: string, userID: string): void
     $fetchMemberList(host: string, guildID: string): void
     $fetchGuildRoles(host: string, guildID: string): void
-    $updateUsername(host: string, newUsername: string): void
+    $updateProfile(
+      host: string,
+      data: {
+        newUsername?: string
+        newAvatar?: string
+        newStatus?: UserStatusMap[keyof UserStatusMap]
+      },
+    ): void
   }
 }
 
@@ -278,7 +285,7 @@ Vue.prototype.$updateProfile = async function (
   data: {
     newUsername?: string
     newAvatar?: string
-    newStatus?: UserStatusMap | undefined
+    newStatus?: UserStatusMap[keyof UserStatusMap]
   },
 ) {
   const conn = await this.$getOrFederate(host)

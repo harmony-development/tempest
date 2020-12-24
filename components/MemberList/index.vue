@@ -14,7 +14,7 @@
           v-bind="attrs"
           v-on="on"
         >
-          <v-img class="avatar mr-2"></v-img>
+          <v-img class="avatar mr-2" :src="avatar"></v-img>
           <v-list-item-title>{{ ownProfile.username }}</v-list-item-title>
           <v-list-item-action>
             <v-icon> mdi-chevron-up </v-icon>
@@ -119,6 +119,11 @@ export default Vue.extend({
       return this.$accessor.app.data[this.$accessor.app.host!]?.users[
         this.$accessor.app.userID!
       ]
+    },
+    avatar(): string | undefined {
+      if (!this.ownProfile) return undefined
+      const a = this.ownProfile?.avatar
+      return a ? `${this.$getHost()}/_harmony/media/download/${a}` : undefined
     },
   },
   watch: {
