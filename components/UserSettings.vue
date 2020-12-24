@@ -50,7 +50,7 @@
           Cancel
         </v-btn>
         <v-btn color="primary darken-1" text @click="saveChanges">
-          Save Chances
+          Save Changes
         </v-btn>
       </v-card-actions>
     </v-card>

@@ -88,4 +88,15 @@ Vue.prototype.$bindEvents = function (this: Vue, conn: Connection) {
     },
     {},
   )
+
+  conn.events.on(
+    Event.EventCase.GUILD_ADDED_TO_LIST,
+    (_, event) => {
+      this.$accessor.app.addGuildToList({
+        guildId: event.guildId,
+        host: event.homeserver,
+      })
+    },
+    {},
+  )
 }

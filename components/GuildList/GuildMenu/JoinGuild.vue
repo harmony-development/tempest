@@ -63,6 +63,7 @@ export default Vue.extend({
             targetHost,
             resp.message!.toObject().guildId,
           )
+          this.$emit('cancelled')
         } else {
           console.log('guildID is null')
         }
