@@ -101,22 +101,9 @@ export default Vue.extend({
       if (input.files) {
         this.attachments = Array.from(input.files).map<IAttachment>((f) => ({
           file: f,
+          preview: URL.createObjectURL(f),
         }))
-        this.genPreviews(input.files)
       }
-    },
-    genPreviews(files: FileList) {
-      Array.from(files).forEach((file, idx) => {
-        if (file.type.startsWith('image/')) {
-          const reader = new FileReader()
-          reader.onload = (ev) => {
-            if (typeof ev.target?.result === 'string') {
-              Vue.set(this.attachments[idx], 'preview', ev.target.result)
-            }
-          }
-          reader.readAsDataURL(file)
-        }
-      })
     },
     async onInputKeyPress(e: KeyboardEvent) {
       if (e.key === 'Enter') {
@@ -146,6 +133,8 @@ export default Vue.extend({
             uploadAttachments?.push(resp)
           })
         }
+
+        this.attachments = []
 
         await Promise.all(uploadPromises)
         await this.$sendMessage(
