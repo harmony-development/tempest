@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import { DialogType } from '~/store/dialog'
+import '@mdi/font/css/materialdesignicons.css'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -10,7 +11,7 @@ declare module 'vue/types/vue' {
 Vue.prototype.$showDialog = function (
   this: Vue,
   type: DialogType,
-  content: string
+  content: string,
 ) {
   this.$accessor.dialog.openDialog({
     type,

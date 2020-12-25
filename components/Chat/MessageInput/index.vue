@@ -115,7 +115,10 @@ export default Vue.extend({
     },
     async onInputKeyPress(e: KeyboardEvent) {
       if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault()
         const localID = `local${window.performance.now()}`
+        const sendMsg = this.message
+        this.message = ''
         this.$accessor.app.addMessage({
           host: this.$getHost(),
           channelID: this.$route.params.channelid,
@@ -149,7 +152,7 @@ export default Vue.extend({
           this.$getHost(),
           this.$route.params.guildid,
           this.$route.params.channelid,
-          this.message,
+          sendMsg,
           uploadAttachments,
         )
         this.$accessor.app.deleteMessage({
@@ -157,8 +160,6 @@ export default Vue.extend({
           channelID: this.$route.params.channelid,
           messageID: localID,
         })
-        this.message = ''
-        this.attachments = []
       }
     },
     deleteSelectedFile(idx: number) {
