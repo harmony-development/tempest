@@ -69,6 +69,7 @@
   word-wrap: break-word;
   overflow-wrap: break-word;
   word-break: break-all;
+  white-space: pre-wrap;
 }
 
 .content-out >>> .codeblock > code {
