@@ -92,11 +92,13 @@ export default Vue.extend({
         this.fetchData()
       },
     },
-    messages: {
-      handler() {
+    messagesList: {
+      async handler() {
         const el = this.$refs.messagesList as HTMLDivElement
-
-        if ((el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100 >= 90) {
+        const distanceFromBottom =
+          el.scrollHeight - (el.scrollTop + el.clientHeight)
+        await this.$nextTick()
+        if (distanceFromBottom < 200) {
           el.scrollTop = el.scrollHeight - el.clientHeight
         }
       },
