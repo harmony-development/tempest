@@ -117,7 +117,7 @@ export default Vue.extend({
       return a ? `${this.$getHost()}/_harmony/media/download/${a}` : undefined
     },
     content(): string | undefined {
-      return sanitize(conv.makeHtml(this.data?.content), { allowedTags })
+      return sanitize(conv.makeHtml(this.data?.content ?? ''), { allowedTags })
     },
     timeString(): string {
       return ` - ${dayjs
