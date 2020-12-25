@@ -36,6 +36,7 @@ Vue.prototype.$bindEvents = function (this: Vue, conn: Connection) {
             embedsList: message.embedsList,
             actionsList: message.actionsList,
             attachmentsList: message.attachmentsList,
+            overrides: message.overrides,
             pending: false,
           },
         })

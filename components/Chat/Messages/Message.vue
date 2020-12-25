@@ -5,7 +5,7 @@
     </v-avatar>
     <div class="content ml-2">
       <v-list-item-title>
-        {{ username || authorID }}
+        {{ overrideUsername || username || authorID }}
         <span style="color: var(--v-accent-lighten3)">{{ timeString }} </span>
       </v-list-item-title>
       <p class="text">
@@ -66,9 +66,15 @@
 .content-out >>> .codeblock {
   width: 100%;
   display: block;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-all;
 }
 
 .content-out >>> .codeblock > code {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-all;
   width: 100%;
   display: block;
   padding: 8px;
@@ -85,7 +91,7 @@ import { Attachment as MessageAttachment } from '@harmony-dev/harmony-web-sdk/di
 import showdown from 'showdown'
 import DOMPurify from 'dompurify'
 import Attachment from './Attachment.vue'
-import { IMessageData } from '~/store/app'
+import { IMessageData, IUserData } from '~/store/app'
 import { AnimationDirection, Position } from '~/store/userPopover'
 
 const markdownClasses: {
@@ -126,16 +132,26 @@ export default Vue.extend({
     authorID(): string | undefined {
       return this.data?.authorID
     },
-    username(): string | undefined {
+    authorData(): IUserData | undefined {
       if (!this.authorID) return undefined
       return this.$accessor.app.data[this.$getHost()]?.users[this.authorID]
-        ?.username
+    },
+    overrideUsername(): string | undefined {
+      return this.data?.overrides?.name
+    },
+    username(): string | undefined {
+      if (!this.authorID) return undefined
+      return this.authorData?.username
+    },
+    overrideAvatar(): string | undefined {
+      return this.data?.overrides?.avatar
     },
     avatar(): string | undefined {
       if (!this.authorID) return undefined
-      const a = this.$accessor.app.data[this.$getHost()]?.users[this.authorID]
-        ?.avatar
-      return a ? `${this.$getHost()}/_harmony/media/download/${a}` : undefined
+      const a = this.overrideAvatar || this.authorData?.avatar
+      return a
+        ? `${this.$getHost()}/_harmony/media/download/${encodeURIComponent(a)}`
+        : undefined
     },
     content(): string {
       return this.data?.content ?? ''

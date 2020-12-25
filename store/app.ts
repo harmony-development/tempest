@@ -4,6 +4,7 @@ import {
   Action,
   Attachment,
   Embed,
+  Override,
   UserStatusMap,
 } from '@harmony-dev/harmony-web-sdk/dist/protocol/harmonytypes/v1/types_pb'
 import { mutationTree } from 'nuxt-typed-vuex'
@@ -38,6 +39,7 @@ export interface IMessageData {
   embedsList: Embed.AsObject[]
   actionsList: Action.AsObject[]
   attachmentsList: Attachment.AsObject[]
+  overrides?: Override.AsObject
   pending: boolean
 }
 

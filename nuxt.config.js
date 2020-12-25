@@ -98,7 +98,7 @@ export default {
       routes.push({
         path: '/app/:guildid?/:channelid?/:messageid?',
         component: resolve(__dirname, 'pages/_app'),
-        name: 'app',
+        name: 'mainapp',
         chunkName: 'mainapp',
       })
     },
