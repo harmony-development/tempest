@@ -1,5 +1,5 @@
 <template>
-  <div class="ma-2">
+  <div class="ml-2 mr-2 mb-2">
     <v-slide-group multiple show-arrows class="mb-2">
       <v-slide-item v-for="(a, idx) in attachments" :key="idx">
         <v-hover>
@@ -27,7 +27,7 @@
         </v-hover>
       </v-slide-item>
     </v-slide-group>
-    <v-text-field
+    <v-textarea
       v-model="message"
       outlined
       autocomplete="off"
@@ -35,6 +35,9 @@
       label="Message"
       append-icon="mdi-emoticon"
       prepend-icon="mdi-plus"
+      auto-grow
+      :rows="1"
+      class="message-input pt-1"
       @click:append="toggleEmojiPicker"
       @click:prepend="selectFileClicked"
       @keypress="onInputKeyPress"
@@ -60,7 +63,12 @@
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.message-input {
+  max-height: 115px;
+  overflow-y: auto;
+}
+</style>
 
 <script lang="ts">
 import Vue from 'vue'
@@ -106,7 +114,7 @@ export default Vue.extend({
       }
     },
     async onInputKeyPress(e: KeyboardEvent) {
-      if (e.key === 'Enter') {
+      if (e.key === 'Enter' && !e.shiftKey) {
         const localID = `local${window.performance.now()}`
         this.$accessor.app.addMessage({
           host: this.$getHost(),

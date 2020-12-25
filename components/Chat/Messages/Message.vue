@@ -9,7 +9,7 @@
         <span style="color: var(--v-accent-lighten3)">{{ timeString }} </span>
       </v-list-item-title>
       <p class="text">
-        <span v-html="content"></span>
+        <span v-html="formattedContent"></span>
         <v-tooltip v-if="edited && edited !== 0" top>
           <template v-slot:activator="{ on, attrs }">
             <span class="edited ml-1" v-bind="attrs" v-on="on">(edited)</span>
@@ -17,7 +17,7 @@
           <span>{{ editedString }}</span>
         </v-tooltip>
       </p>
-      <div class="attachment-container pt-3">
+      <div v-if="attachments" class="attachment-container pt-3">
         <attachment v-for="a in attachments || []" :key="a.id" :data="a" />
       </div>
     </div>
@@ -44,14 +44,10 @@
 }
 
 .content {
-  text-overflow: unset;
-  white-space: pre-line;
   width: 100%;
 }
 
 .text {
-  text-overflow: unset;
-  white-space: pre-line;
   word-wrap: break-word;
   overflow-wrap: break-word;
   word-break: break-all;
@@ -74,18 +70,11 @@ import dayjs from 'dayjs'
 import calendar from 'dayjs/plugin/calendar'
 import UTC from 'dayjs/plugin/utc'
 import { Attachment as MessageAttachment } from '@harmony-dev/harmony-web-sdk/dist/protocol/harmonytypes/v1/types_pb'
-import showdown from 'showdown'
-import sanitize from 'sanitize-html'
+import marked from 'marked'
+import DOMPurify from 'dompurify'
 import Attachment from './Attachment.vue'
 import { IMessageData } from '~/store/app'
 import { AnimationDirection, Position } from '~/store/userPopover'
-
-const allowedTags = ['em', 'strong', 'i', 'b', 'u', 'a', 'br']
-
-showdown.setOption('simplifiedAutoLink', true)
-showdown.setOption('openLinksInNewWindow', true)
-
-const conv = new showdown.Converter()
 
 dayjs.extend(calendar)
 dayjs.extend(UTC)
@@ -116,8 +105,11 @@ export default Vue.extend({
         ?.avatar
       return a ? `${this.$getHost()}/_harmony/media/download/${a}` : undefined
     },
-    content(): string | undefined {
-      return sanitize(conv.makeHtml(this.data?.content ?? ''), { allowedTags })
+    content(): string {
+      return this.data?.content ?? ''
+    },
+    formattedContent(): string {
+      return DOMPurify.sanitize(marked(this.content))
     },
     timeString(): string {
       return ` - ${dayjs
