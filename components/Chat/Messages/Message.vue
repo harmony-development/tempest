@@ -9,7 +9,7 @@
         <span style="color: var(--v-accent-lighten3)">{{ timeString }} </span>
       </v-list-item-title>
       <p class="text">
-        <span v-html="formattedContent"></span>
+        <span class="content-out" v-html="formattedContent"></span>
         <v-tooltip v-if="edited && edited !== 0" top>
           <template v-slot:activator="{ on, attrs }">
             <span class="edited ml-1" v-bind="attrs" v-on="on">(edited)</span>
@@ -62,6 +62,18 @@
   color: var(--v-accent-lighten3);
   font-size: 12px;
 }
+
+.content-out >>> .codeblock {
+  width: 100%;
+  display: block;
+}
+
+.content-out >>> .codeblock > code {
+  width: 100%;
+  display: block;
+  padding: 8px;
+  padding-left: 12px;
+}
 </style>
 
 <script lang="ts">
@@ -70,14 +82,34 @@ import dayjs from 'dayjs'
 import calendar from 'dayjs/plugin/calendar'
 import UTC from 'dayjs/plugin/utc'
 import { Attachment as MessageAttachment } from '@harmony-dev/harmony-web-sdk/dist/protocol/harmonytypes/v1/types_pb'
-import marked from 'marked'
+import showdown from 'showdown'
 import DOMPurify from 'dompurify'
 import Attachment from './Attachment.vue'
 import { IMessageData } from '~/store/app'
 import { AnimationDirection, Position } from '~/store/userPopover'
 
+const markdownClasses: {
+  [key: string]: string
+} = {
+  pre: 'codeblock',
+}
+
 dayjs.extend(calendar)
 dayjs.extend(UTC)
+
+const conv = new showdown.Converter({
+  simplifiedAutoLink: true,
+  openLinksInNewWindow: true,
+  extensions: [
+    Object.keys(markdownClasses).map((key) => ({
+      type: 'output',
+      regex: new RegExp(`<${key}(.*)>`, 'g'),
+      replace: `<${key} class="${markdownClasses[key]}" $1>`,
+    })),
+  ],
+})
+
+conv.setFlavor('github')
 
 export default Vue.extend({
   components: { Attachment },
@@ -109,7 +141,7 @@ export default Vue.extend({
       return this.data?.content ?? ''
     },
     formattedContent(): string {
-      return DOMPurify.sanitize(marked(this.content))
+      return DOMPurify.sanitize(conv.makeHtml(this.content))
     },
     timeString(): string {
       return ` - ${dayjs
