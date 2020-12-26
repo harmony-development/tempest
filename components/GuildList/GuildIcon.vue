@@ -62,12 +62,12 @@ export default Vue.extend({
   async mounted() {
     if (!this.name || !this.picture) {
       try {
-        const conn = await this.$getOrFederate(this.host)
+        const conn = await this.$getOrFederate(`https://${this.host}`)
         const resp = await conn.getGuild(this.id)
         const asObj = resp.message!.toObject()
         conn.subscribe(this.id)
         this.$accessor.app.setGuildData({
-          host: this.host,
+          host: `https://${this.host}`,
           guildID: this.id,
           name: asObj.guildName,
           picture: asObj.guildPicture,
