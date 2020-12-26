@@ -41,6 +41,7 @@
       @click:append="toggleEmojiPicker"
       @click:prepend="selectFileClicked"
       @keypress="onInputKeyPress"
+      @paste="onPaste"
     />
     <input
       ref="fileUpload"
@@ -141,6 +142,7 @@ export default Vue.extend({
           uploadAttachments = []
           uploadPromises = this.attachments.map(async (f) => {
             const resp = await this.$uploadFile(this.$getHost(), f.file)
+            if (f.preview) URL.revokeObjectURL(f.preview)
             uploadAttachments?.push(resp)
           })
         }
@@ -164,7 +166,26 @@ export default Vue.extend({
     },
     deleteSelectedFile(idx: number) {
       if (this.attachments) {
+        const preview = this.attachments[idx].preview
+        if (preview) URL.revokeObjectURL(preview)
         Vue.delete(this.attachments, idx)
+      }
+    },
+    onPaste(e: ClipboardEvent) {
+      const items = e.clipboardData?.items
+      if (items !== undefined) {
+        this.attachments = [
+          ...Array.from(items).reduce<IAttachment[]>((prev, v) => {
+            const f = v.getAsFile()
+            if (!f) return prev
+            const preview = URL.createObjectURL(f)
+            prev.push({
+              file: f,
+              preview,
+            })
+            return prev
+          }, []),
+        ]
       }
     },
   },
