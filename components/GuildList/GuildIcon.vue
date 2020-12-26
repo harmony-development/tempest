@@ -84,7 +84,7 @@ export default Vue.extend({
         guildid: this.id,
         channelid: this.$accessor.app.data[this.host]?.guilds[this.id]
           ?.channels?.[0],
-        host: this.host,
+        host: `https://${this.host}`,
       })
     },
   },

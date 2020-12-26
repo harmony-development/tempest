@@ -37,7 +37,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      host: undefined,
+      host: undefined as string | undefined,
       guildName: undefined,
     }
   },
@@ -50,7 +50,7 @@ export default Vue.extend({
         const resp = await conn.createGuild(this.guildName!)
         await conn.addGuildToGuildList(resp.message!.getGuildId(), this.host!)
         this.$accessor.app.addGuildToList({
-          host: this.host!,
+          host: this.host!.replace('https://', ''),
           guildId: resp.message!.getGuildId(),
         })
         this.$emit('cancelled')
