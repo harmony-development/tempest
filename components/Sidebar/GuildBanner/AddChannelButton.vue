@@ -44,7 +44,7 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn text @click="dialog = false"> Cancel </v-btn>
-        <v-btn color="primary " text :disabled="!name" @click="onCreate">
+        <v-btn color="primary " text :disabled="!name" @click="onCreateClicked">
           Create
         </v-btn>
       </v-card-actions>
@@ -54,6 +54,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { DialogType } from '~/store/dialog'
 export default Vue.extend({
   data() {
     return {
@@ -63,13 +64,17 @@ export default Vue.extend({
     }
   },
   methods: {
-    onCreate() {
-      this.$createChannel(
-        this.$getHost(),
-        this.$route.params.guildid,
-        this.name,
-      )
-      this.dialog = false
+    async onCreateClicked() {
+      try {
+        await this.$createChannel(
+          this.$getHost(),
+          this.$route.params.guildid,
+          this.name,
+        )
+        this.dialog = false
+      } catch (e) {
+        this.$showDialog(DialogType.Error, e)
+      }
     },
   },
 })

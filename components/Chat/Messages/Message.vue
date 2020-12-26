@@ -52,6 +52,7 @@
 
 .avatar-space {
   width: 48px;
+  min-width: 48px;
 }
 
 .attachment-container {
