@@ -31,6 +31,9 @@
       >
         <attachment v-for="a in attachments || []" :key="a.id" :data="a" />
       </div>
+      <div v-if="embeds && embeds.length > 0">
+        <Embed v-for="(e, idx) in embeds" :key="idx" :body="e.body" />
+      </div>
     </div>
   </div>
 </template>
@@ -110,10 +113,14 @@ import Vue from 'vue'
 import dayjs from 'dayjs'
 import calendar from 'dayjs/plugin/calendar'
 import UTC from 'dayjs/plugin/utc'
-import { Attachment as MessageAttachment } from '@harmony-dev/harmony-web-sdk/dist/protocol/harmonytypes/v1/types_pb'
+import {
+  Attachment as MessageAttachment,
+  Embed as EmbedType,
+} from '@harmony-dev/harmony-web-sdk/dist/protocol/harmonytypes/v1/types_pb'
 import showdown from 'showdown'
 import DOMPurify from 'dompurify'
 import Attachment from './Attachment.vue'
+import Embed from './Embed.vue'
 import { IMessageData, IUserData } from '~/store/app'
 import { AnimationDirection, Position } from '~/store/userPopover'
 
@@ -143,7 +150,7 @@ const conv = new showdown.Converter({
 conv.setFlavor('github')
 
 export default Vue.extend({
-  components: { Attachment },
+  components: { Attachment, Embed },
   props: {
     id: {
       type: String,
@@ -208,6 +215,9 @@ export default Vue.extend({
     },
     pending(): boolean | undefined {
       return this.data?.pending
+    },
+    embeds(): EmbedType.AsObject[] | undefined {
+      return this.data?.embedsList
     },
   },
   mounted() {
