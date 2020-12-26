@@ -91,6 +91,23 @@ Vue.prototype.$bindEvents = function (this: Vue, conn: Connection) {
   )
 
   conn.events.on(
+    Event.EventCase.EDITED_GUILD,
+    (host, event) => {
+      if (event.updateName) this.$accessor.app.setGuildData({
+        host,
+        guildID: event.guildId,
+        name: event.name,
+      })
+      if (event.updatePicture) this.$accessor.app.setGuildData({
+        host,
+        guildID: event.guildId,
+        picture: event.picture
+      })
+    },
+    {}
+  )
+
+  conn.events.on(
     Event.EventCase.GUILD_ADDED_TO_LIST,
     (_, event) => {
       this.$accessor.app.addGuildToList({

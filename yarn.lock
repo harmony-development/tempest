@@ -868,9 +868,9 @@
     strip-json-comments "^3.1.1"
 
 "@harmony-dev/harmony-web-sdk@^2.0.6":
-  version "2.0.9"
-  resolved "https://registry.yarnpkg.com/@harmony-dev/harmony-web-sdk/-/harmony-web-sdk-2.0.9.tgz#b2da620469522c7688f801d0786ddfd0fab6f414"
-  integrity sha512-4Nt3dpWTN2VmbcHe+tb7agl4xOey5cTO/RTko2E1I9E7CLlnSsQQd8n6RUF4J9/4XdBqUfJoAVZcivSd1R+cnw==
+  version "2.0.10"
+  resolved "https://registry.yarnpkg.com/@harmony-dev/harmony-web-sdk/-/harmony-web-sdk-2.0.10.tgz#9431b13c06c0e02b441a6844a6f65c26e13cd591"
+  integrity sha512-Ev50wgjw76I1d11d4ypaNmgfUVo2bXCIvzr78meP6yMTot4FXHOUg6I2uf3cB5jhCNwAn7cw8KwXkKWwMbDyYA==
   dependencies:
     "@improbable-eng/grpc-web" "^0.13.0"
     "@types/google-protobuf" "^3.7.4"
@@ -6425,9 +6425,9 @@ object-copy@^0.1.0:
     kind-of "^3.0.3"
 
 object-hash@^2.0.3:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/object-hash/-/object-hash-2.0.3.tgz#d12db044e03cd2ca3d77c0570d87225b02e1e6ea"
-  integrity sha512-JPKn0GMu+Fa3zt3Bmr66JhokJU5BaNBIh4ZeTlaCBzrBsOeXzwcKKAK1tbLiPKgvwmPXsDvvLHoWh5Bm7ofIYg==
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/object-hash/-/object-hash-2.1.1.tgz#9447d0279b4fcf80cff3259bf66a1dc73afabe09"
+  integrity sha512-VOJmgmS+7wvXf8CjbQmimtCnEx3IAoLxI3fp2fbWehxrWBcAQFbk+vcwb6vzR0VZv/eNCJ/27j151ZTwqW/JeQ==
 
 object-inspect@^1.8.0:
   version "1.9.0"

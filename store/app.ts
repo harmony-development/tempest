@@ -165,13 +165,13 @@ export const mutations = mutationTree(state, {
     data: {
       host: string
       guildID: string
-      name: string
+      name?: string
       picture?: string
     },
   ) {
     ensureGuild(state, data.host, data.guildID)
-    state.data[data.host].guilds[data.guildID].name = data.name
-    state.data[data.host].guilds[data.guildID].picture = data.picture
+    if (data.name != undefined) state.data[data.host].guilds[data.guildID].name = data.name
+    if (data.picture != undefined) state.data[data.host].guilds[data.guildID].picture = data.picture
   },
   setGuildChannels(
     state,
