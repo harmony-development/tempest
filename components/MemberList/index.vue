@@ -45,6 +45,12 @@
           </v-list-item-icon>
           <v-list-item-title>Settings</v-list-item-title>
         </v-list-item>
+        <v-list-item link @click="logout">
+          <v-list-item-icon>
+            <v-icon> mdi-logout-variant </v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>Logout</v-list-item-title>
+        </v-list-item>
       </v-list>
     </v-menu>
   </v-list>
@@ -132,6 +138,7 @@ import {
 } from '@harmony-dev/harmony-web-sdk/dist/protocol/harmonytypes/v1/types_pb'
 import MemberListItem from './MemberListItem.vue'
 import { IUserData } from '~/store/app'
+import { DialogType } from '~/store/dialog'
 export default Vue.extend({
   components: { MemberListItem },
   data() {
@@ -202,6 +209,14 @@ export default Vue.extend({
       if (this.$route.params.guildid && !this.memberList) {
         await this.$fetchMemberList(this.$getHost(), this.$route.params.guildid)
       }
+    },
+    logout() {
+      this.$accessor.app.setSession() // todo: make sure localstorage is cleared correctly
+      Object.values(this.$accessor.app.connections).forEach((conn) =>
+        conn.client?.close(),
+      )
+      this.$router.push('/')
+      this.$showDialog(DialogType.Info, 'Successfully logged out')
     },
     openProfileSettings() {
       this.$accessor.app.setProfileSettingsOpen(true)

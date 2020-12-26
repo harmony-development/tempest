@@ -55,6 +55,7 @@ export default Vue.extend({
     },
   },
   beforeCreate() {
+    if (this.$accessor.app.session !== undefined) this.$router.push('/app')
     if (this.$route.fullPath === '/entry') {
       this.$router.push('/entry/serverselect')
     }
