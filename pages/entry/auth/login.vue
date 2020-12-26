@@ -1,8 +1,6 @@
 <template>
   <form @submit.prevent="loginClicked">
-    <h3 class="mb-4">
-      Login to {{ getHostName() }}
-    </h3>
+    <h3 class="mb-4">Login to {{ hostName }}</h3>
     <v-text-field
       v-model="email"
       label="Email"
@@ -52,10 +50,6 @@ export default Vue.extend({
     }
   },
   methods: {
-    getHostName() {
-      const parsed = new URL(this.$getHost())
-      return parsed.port === '2289' ? parsed.hostname : parsed.host
-    },
     toRegister() {
       this.$router.push({ path: 'register', hash: this.$route.hash })
     },
@@ -78,6 +72,12 @@ export default Vue.extend({
           content: e.statusMessage,
         })
       }
+    },
+  },
+  computed: {
+    hostName() {
+      const parsed = new URL(this.$getHost())
+      return parsed.port === '2289' ? parsed.hostname : parsed.host
     },
   },
 })
