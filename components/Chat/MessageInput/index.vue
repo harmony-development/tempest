@@ -127,7 +127,7 @@ export default Vue.extend({
             authorID: this.$accessor.app.userID || '',
             createdAt: window.performance.now(),
             editedAt: 0,
-            content: this.message,
+            content: sendMsg,
             pending: true,
             embedsList: [],
             actionsList: [],

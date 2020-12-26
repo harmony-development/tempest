@@ -161,7 +161,10 @@ export default Vue.extend({
         return previous.overrides.name === current.overrides.name
       }
 
-      return previous?.authorID === current?.authorID
+      return (
+        previous?.authorID === current?.authorID &&
+        current?.createdAt - previous?.createdAt < 420000
+      )
     },
   },
 })

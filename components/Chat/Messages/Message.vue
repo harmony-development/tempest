@@ -86,6 +86,7 @@
   overflow-wrap: break-word;
   word-break: break-all;
   white-space: pre-wrap;
+  padding-right: 12px;
 }
 
 .content-out >>> .codeblock > code {
@@ -118,8 +119,8 @@ import { AnimationDirection, Position } from '~/store/userPopover'
 const markdownClasses: {
   [key: string]: string
 } = {
-  pre: 'codeblock',
   p: 'msg-p',
+  pre: 'codeblock',
 }
 
 dayjs.extend(calendar)
@@ -132,7 +133,7 @@ const conv = new showdown.Converter({
   extensions: [
     ...Object.keys(markdownClasses).map((key) => ({
       type: 'output',
-      regex: new RegExp(`<${key}(.*)>`, 'g'),
+      regex: new RegExp(`<${key}>`, 'g'),
       replace: `<${key} class="${markdownClasses[key]}" $1>`,
     })),
   ],
