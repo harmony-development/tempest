@@ -1,10 +1,18 @@
 <template>
-  <div :class="{ root: true, 'pa-3': true, pending }">
-    <v-avatar v-ripple class="avatar" @click="showProfile">
+  <div
+    :class="{ root: true, 'pl-3': true, 'pt-3': !collapseUserInfo, pending }"
+  >
+    <v-avatar
+      v-if="!collapseUserInfo"
+      v-ripple
+      class="avatar avatar-space"
+      @click="showProfile"
+    >
       <v-img :src="avatar" />
     </v-avatar>
+    <div v-else class="avatar-space"></div>
     <div class="content ml-2">
-      <v-list-item-title>
+      <v-list-item-title v-if="!collapseUserInfo">
         {{ overrideUsername || username || authorID }}
         <span style="color: var(--v-accent-lighten3)">{{ timeString }} </span>
       </v-list-item-title>
@@ -17,7 +25,10 @@
           <span>{{ editedString }}</span>
         </v-tooltip>
       </p>
-      <div v-if="attachments" class="attachment-container pt-3">
+      <div
+        v-if="attachments && attachments.length > 0"
+        class="attachment-container pt-3"
+      >
         <attachment v-for="a in attachments || []" :key="a.id" :data="a" />
       </div>
     </div>
@@ -39,6 +50,10 @@
   cursor: pointer;
 }
 
+.avatar-space {
+  width: 48px;
+}
+
 .attachment-container {
   width: 100%;
 }
@@ -52,6 +67,7 @@
   overflow-wrap: break-word;
   word-break: break-all;
   width: 100%;
+  margin-bottom: 0px;
 }
 
 .pending {
@@ -81,6 +97,10 @@
   padding: 8px;
   padding-left: 12px;
 }
+
+.content-out >>> .msg-p {
+  margin-bottom: 0px;
+}
 </style>
 
 <script lang="ts">
@@ -99,6 +119,7 @@ const markdownClasses: {
   [key: string]: string
 } = {
   pre: 'codeblock',
+  p: 'msg-p',
 }
 
 dayjs.extend(calendar)
@@ -107,8 +128,9 @@ dayjs.extend(UTC)
 const conv = new showdown.Converter({
   simplifiedAutoLink: true,
   openLinksInNewWindow: true,
+  ghCodeBlocks: true,
   extensions: [
-    Object.keys(markdownClasses).map((key) => ({
+    ...Object.keys(markdownClasses).map((key) => ({
       type: 'output',
       regex: new RegExp(`<${key}(.*)>`, 'g'),
       replace: `<${key} class="${markdownClasses[key]}" $1>`,
@@ -124,6 +146,10 @@ export default Vue.extend({
     id: {
       type: String,
       default: '',
+    },
+    collapseUserInfo: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {

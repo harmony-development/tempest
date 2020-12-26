@@ -7,7 +7,7 @@ import {
   Override,
   UserStatusMap,
 } from '@harmony-dev/harmony-web-sdk/dist/protocol/harmonytypes/v1/types_pb'
-import { mutationTree } from 'nuxt-typed-vuex'
+import { getterTree, mutationTree } from 'nuxt-typed-vuex'
 import Vue from 'vue'
 
 interface IGuildEntry {

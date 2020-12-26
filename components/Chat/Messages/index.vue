@@ -11,9 +11,10 @@
         ></v-progress-circular>
       </div>
       <message
-        v-for="message in messagesList || []"
+        v-for="(message, idx) in messagesList || []"
         :id="message"
         :key="message"
+        :collapse-user-info="getShouldCollapse(message, idx)"
       />
     </div>
   </div>
@@ -147,6 +148,20 @@ export default Vue.extend({
         const newScroll = el.scrollHeight - el.clientHeight
         el.scrollTop = oldScrollTop + (newScroll - oldScroll)
       }
+    },
+    getShouldCollapse(messageID: string, idx: number): boolean {
+      if (!this.messagesList) return false
+
+      const messages = this.$accessor.app.data[this.$getHost()].messages
+
+      const previous = messages[this.messagesList[idx - 1]]
+      const current = messages[messageID]
+
+      if (previous?.overrides && current?.overrides) {
+        return previous.overrides.name === current.overrides.name
+      }
+
+      return previous?.authorID === current?.authorID
     },
   },
 })
