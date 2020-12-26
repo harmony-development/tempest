@@ -108,10 +108,13 @@ export default Vue.extend({
     selectFileComplete(e: Event) {
       const input = e.target as HTMLInputElement
       if (input.files) {
-        this.attachments = Array.from(input.files).map<IAttachment>((f) => ({
-          file: f,
-          preview: URL.createObjectURL(f),
-        }))
+        this.attachments = [
+          ...this.attachments,
+          ...Array.from(input.files).map<IAttachment>((f) => ({
+            file: f,
+            preview: URL.createObjectURL(f),
+          })),
+        ]
       }
     },
     async onInputKeyPress(e: KeyboardEvent) {
@@ -175,6 +178,7 @@ export default Vue.extend({
       const items = e.clipboardData?.items
       if (items !== undefined) {
         this.attachments = [
+          ...this.attachments,
           ...Array.from(items).reduce<IAttachment[]>((prev, v) => {
             const f = v.getAsFile()
             if (!f) return prev
