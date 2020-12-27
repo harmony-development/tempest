@@ -49,6 +49,12 @@ export default Vue.extend({
       password: '',
     }
   },
+  computed: {
+    hostName() {
+      const parsed = new URL(this.$getHost())
+      return parsed.port === '2289' ? parsed.hostname : parsed.host
+    },
+  },
   methods: {
     toRegister() {
       this.$router.push({ path: 'register', hash: this.$route.hash })
@@ -72,12 +78,6 @@ export default Vue.extend({
           content: e.statusMessage,
         })
       }
-    },
-  },
-  computed: {
-    hostName() {
-      const parsed = new URL(this.$getHost())
-      return parsed.port === '2289' ? parsed.hostname : parsed.host
     },
   },
 })
