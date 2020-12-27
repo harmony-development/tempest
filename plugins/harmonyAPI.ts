@@ -56,6 +56,7 @@ declare module 'vue/types/vue' {
       newActions?: Action[],
       newEmbeds?: Embed[],
     ): void
+    $deleteChannel(host: string, guildID: string, channelID: string): void
   }
 }
 
@@ -355,4 +356,14 @@ Vue.prototype.$editMessage = async function (
     newActions,
     newEmbeds,
   )
+}
+
+Vue.prototype.$deleteChannel = async function (
+  this: Vue,
+  host: string,
+  guildID: string,
+  channelID: string,
+) {
+  const conn = await this.$getOrFederate(host)
+  return conn.deleteChannel(guildID, channelID)
 }

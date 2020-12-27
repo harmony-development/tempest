@@ -102,6 +102,13 @@ Vue.prototype.$bindEvents = function (this: Vue, conn: Connection) {
           channelID: deleteMessageEvent.channelId,
           messageID: deleteMessageEvent.messageId,
         })
+      } else if (ev.deletedChannel) {
+        const deleteChannelEvent = ev.deletedChannel
+        this.$accessor.app.deleteChannel({
+          host,
+          guildID: deleteChannelEvent.guildId,
+          channelID: deleteChannelEvent.channelId,
+        })
       } else {
         console.log(`unknown event received: ${JSON.stringify(ev)}`)
       }

@@ -15,11 +15,12 @@
     <v-list-item-action :class="{ 'icon-hidden': !hovering }">
       <v-btn
         icon
+        small
         @click.stop="onDeleteClick"
         @mousedown.stop
         @touchstart.native.stop
       >
-        <v-icon color="grey lighten-1">mdi-cog</v-icon>
+        <v-icon color="grey lighten-1" small>mdi-delete</v-icon>
       </v-btn>
     </v-list-item-action>
   </v-list-item>
@@ -70,7 +71,17 @@ export default Vue.extend({
         channelid: this.id,
       })
     },
-    onDeleteClick() {},
+    async onDeleteClick() {
+      await this.$confirmDialog(
+        'Are you sure you would like to delete this channel?',
+        'Delete',
+      )
+      return this.$deleteChannel(
+        this.$getHost(),
+        this.$route.params.guildid,
+        this.id,
+      )
+    },
   },
 })
 </script>

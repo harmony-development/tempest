@@ -133,7 +133,7 @@ export default Vue.extend({
           messageID: localID.toString(),
           data: {
             authorID: this.$accessor.app.userID || '',
-            createdAt: window.performance.now(),
+            createdAt: Date.now() / 1000,
             editedAt: 0,
             content: sendMsg,
             pending: true,

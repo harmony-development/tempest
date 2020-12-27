@@ -294,13 +294,9 @@ export default Vue.extend({
     },
     async deleteMsg() {
       if (
-        await new Promise((resolve) =>
-          this.$accessor.dialog.openDialog({
-            type: DialogType.Confirmation,
-            content: 'Are you sure you want to delete this message?',
-            action: 'Delete',
-            res: resolve,
-          }),
+        await this.$confirmDialog(
+          'Are you sure you want to delete this message?',
+          'Delete',
         )
       ) {
         try {

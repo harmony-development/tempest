@@ -441,6 +441,20 @@ export const mutations = mutationTree(state, {
     Vue.delete(state.data[data.host].messages, data.messageID)
     msgs.splice(msgs.indexOf(data.messageID), 1)
   },
+  deleteChannel(
+    state,
+    data: {
+      host: string
+      guildID: string
+      channelID: string
+    },
+  ) {
+    const channels = state.data[data.host]?.channels
+    const channelsList = state.data[data.host]?.guilds[data.guildID]?.channels
+    if (!channels || !channelsList) return
+    Vue.delete(channelsList, channelsList.indexOf(data.channelID))
+    Vue.delete(channels, data.channelID)
+  },
   updateProfile(
     state,
     data: {
