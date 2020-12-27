@@ -15,11 +15,15 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn
-          :color="dialogButtonColor"
+          visible="isConfirmation"
+          :color="rejectButtonColor"
           text
-          @click="this.$accessor.dialog.closeDialog"
+          @click="reject"
         >
-          Ok
+          {{ rejectText }}
+        </v-btn>
+        <v-btn :color="confirmButtonColor" text @click="confirm">
+          {{ confirmText }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -32,15 +36,20 @@ import { DialogType } from '@/store/dialog'
 
 export default Vue.extend({
   computed: {
+    confirmText() {
+      return this.$accessor.dialog.dialog.action ?? 'Ok'
+    },
+    rejectText: () => 'Cancel',
     dialogState() {
       return this.$accessor.dialog.dialog
     },
     dialogType() {
       return DialogType
     },
-    dialogButtonColor() {
+    confirmButtonColor() {
       switch (this.$accessor.dialog.dialog.type) {
-        case DialogType.Error: {
+        case DialogType.Error:
+        case DialogType.Confirmation: {
           return 'red'
         }
         case DialogType.Info: {
@@ -49,6 +58,28 @@ export default Vue.extend({
         default: {
           return 'primary'
         }
+      }
+    },
+    rejectButtonColor() {
+      return 'primary'
+    },
+    isConfirmation() {
+      return this.$accessor.dialog.dialog.type === DialogType.Confirmation
+    },
+  },
+  methods: {
+    confirm() {
+      this.$accessor.dialog.closeDialog()
+      if (this.$accessor.dialog.dialog.res !== undefined) {
+        console.log('Confirm')
+        this.$accessor.dialog.dialog.res(true)
+      }
+    },
+    reject() {
+      this.$accessor.dialog.closeDialog()
+      if (this.$accessor.dialog.dialog.res !== undefined) {
+        console.log('Reject')
+        this.$accessor.dialog.dialog.res(false)
       }
     },
   },

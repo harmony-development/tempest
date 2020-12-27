@@ -293,15 +293,26 @@ export default Vue.extend({
       navigator.clipboard.writeText(this.id)
     },
     async deleteMsg() {
-      try {
-        await this.$deleteMessage(
-          this.$getHost(),
-          this.$route.params.guildid,
-          this.$route.params.channelid,
-          this.id,
+      if (
+        await new Promise((resolve) =>
+          this.$accessor.dialog.openDialog({
+            type: DialogType.Confirmation,
+            content: 'Are you sure you want to delete this message?',
+            action: 'Delete',
+            res: resolve,
+          }),
         )
-      } catch (e) {
-        this.$showDialog(DialogType.Error, e.statusMessage)
+      ) {
+        try {
+          await this.$deleteMessage(
+            this.$getHost(),
+            this.$route.params.guildid,
+            this.$route.params.channelid,
+            this.id,
+          )
+        } catch (e) {
+          this.$showDialog(DialogType.Error, e.statusMessage)
+        }
       }
     },
     async editMsg() {
