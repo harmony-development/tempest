@@ -166,11 +166,6 @@ export default Vue.extend({
           uploadAttachments,
           localID,
         )
-        this.$accessor.app.deleteMessage({
-          host: this.$getHost(),
-          channelID: this.$route.params.channelid,
-          messageID: localID.toString(),
-        })
       }
     },
     deleteSelectedFile(idx: number) {

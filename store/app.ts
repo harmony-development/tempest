@@ -324,6 +324,26 @@ export const mutations = mutationTree(state, {
         Vue.set(message, 'actionsList', data.updateEvent.actionsList)
     }
   },
+  messageUnlocal(
+    state,
+    data: {
+      host: string
+      channelID: string
+      messageID: string
+      echoID: string
+      attachments: Attachment.AsObject[]
+    },
+  ) {
+    const msgsList = state.data[data.host]?.channels[data.channelID]?.messages
+    const msgs = state.data[data.host]?.messages
+    if (!msgsList || !msgs) return
+    Vue.set(msgsList, msgsList.indexOf(data.echoID), data.messageID)
+    Vue.set(msgs, data.messageID, {
+      ...msgs[data.echoID],
+      pending: false,
+    })
+    Vue.delete(msgs, data.echoID)
+  },
   setUser(
     state,
     data: {

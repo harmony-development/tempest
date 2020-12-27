@@ -25,22 +25,32 @@ Vue.prototype.$bindEvents = function (this: Vue, conn: Connection) {
       if (ev.sentMessage) {
         const message = ev.sentMessage.message
         if (message) {
-          this.$accessor.app.addMessage({
-            host,
-            channelID: message.channelId,
-            messageID: message.messageId,
-            data: {
-              authorID: message.authorId,
-              createdAt: message.createdAt?.seconds || 0,
-              editedAt: message.editedAt?.seconds || 0,
-              content: message.content,
-              embedsList: message.embedsList,
-              actionsList: message.actionsList,
-              attachmentsList: message.attachmentsList,
-              overrides: message.overrides,
-              pending: false,
-            },
-          })
+          if (ev.sentMessage.echoId) {
+            this.$accessor.app.messageUnlocal({
+              host,
+              channelID: message.channelId,
+              messageID: message.messageId,
+              echoID: ev.sentMessage.echoId.toString(),
+              attachments: message.attachmentsList,
+            })
+          } else {
+            this.$accessor.app.addMessage({
+              host,
+              channelID: message.channelId,
+              messageID: message.messageId,
+              data: {
+                authorID: message.authorId,
+                createdAt: message.createdAt?.seconds || 0,
+                editedAt: message.editedAt?.seconds || 0,
+                content: message.content,
+                embedsList: message.embedsList,
+                actionsList: message.actionsList,
+                attachmentsList: message.attachmentsList,
+                overrides: message.overrides,
+                pending: false,
+              },
+            })
+          }
         }
       } else if (ev.createdChannel) {
         const channelEvent = ev.createdChannel
