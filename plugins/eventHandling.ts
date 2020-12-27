@@ -25,7 +25,12 @@ Vue.prototype.$bindEvents = function (this: Vue, conn: Connection) {
       if (ev.sentMessage) {
         const message = ev.sentMessage.message
         if (message) {
-          if (ev.sentMessage.echoId) {
+          if (
+            ev.sentMessage.echoId &&
+            this.$accessor.app.data[this.$getHost()]?.messages[
+              ev.sentMessage.echoId
+            ]
+          ) {
             this.$accessor.app.messageUnlocal({
               host,
               channelID: message.channelId,
