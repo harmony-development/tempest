@@ -11,7 +11,7 @@
       >
         <template v-slot:append>
           <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
+            <template #activator="{ on }">
               <v-icon v-on="on"> mdi-help-circle-outline </v-icon>
             </template>
             Invites look like this: <br />

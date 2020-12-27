@@ -7,7 +7,7 @@
     />
 
     <v-menu v-if="ownProfile" top offset-y :close-on-content-click="false">
-      <template v-slot:activator="{ on, attrs }">
+      <template #activator="{ on, attrs }">
         <div
           v-ripple
           class="member-item pa-1 my-profile"

@@ -1,5 +1,4 @@
 import { Connection } from '@harmony-dev/harmony-web-sdk'
-import { Event } from '@harmony-dev/harmony-web-sdk/dist/protocol/chat/v1/streaming_pb'
 import Vue from 'vue'
 
 declare module 'vue/types/vue' {
@@ -19,84 +18,83 @@ Vue.prototype.$bindEvents = function (this: Vue, conn: Connection) {
     },
     {},
   )
+
   conn.events.on(
-    Event.EventCase.SENT_MESSAGE,
-    (host, event) => {
-      const message = event?.message
-      if (message) {
-        this.$accessor.app.addMessage({
+    'event',
+    (host, ev) => {
+      if (ev.sentMessage) {
+        const message = ev.sentMessage.message
+        if (message) {
+          this.$accessor.app.addMessage({
+            host,
+            channelID: message.channelId,
+            messageID: message.messageId,
+            data: {
+              authorID: message.authorId,
+              createdAt: message.createdAt?.seconds || 0,
+              editedAt: message.editedAt?.seconds || 0,
+              content: message.content,
+              embedsList: message.embedsList,
+              actionsList: message.actionsList,
+              attachmentsList: message.attachmentsList,
+              overrides: message.overrides,
+              pending: false,
+            },
+          })
+        }
+      } else if (ev.createdChannel) {
+        const channelEvent = ev.createdChannel
+        if (channelEvent) {
+          this.$accessor.app.addChannel({
+            host,
+            guildID: channelEvent.guildId,
+            channelID: channelEvent.channelId,
+            previousID: channelEvent.previousId,
+            nextID: channelEvent.nextId,
+            data: {
+              channelName: channelEvent.name,
+              isCategory: channelEvent.isCategory,
+              isVoice: false,
+              messages: undefined,
+            },
+          })
+        }
+      } else if (ev.editedMessage) {
+        this.$accessor.app.editMessage({
           host,
-          channelID: message.channelId,
-          messageID: message.messageId,
-          data: {
-            authorID: message.authorId,
-            createdAt: message.createdAt?.seconds || 0,
-            editedAt: message.editedAt?.seconds || 0,
-            content: message.content,
-            embedsList: message.embedsList,
-            actionsList: message.actionsList,
-            attachmentsList: message.attachmentsList,
-            overrides: message.overrides,
-            pending: false,
-          },
+          updateEvent: ev.editedMessage,
         })
+      } else if (ev.profileUpdated) {
+        const profileEvent = ev.profileUpdated
+        this.$accessor.app.updateProfile({
+          host,
+          userid: profileEvent.userId,
+          username: profileEvent.updateUsername
+            ? profileEvent.newUsername
+            : undefined,
+          avatar: profileEvent.updateAvatar
+            ? profileEvent.newAvatar
+            : undefined,
+          status: profileEvent.updateStatus
+            ? profileEvent.newStatus
+            : undefined,
+        })
+      } else if (ev.guildAddedToList) {
+        const guildAddedEvent = ev.guildAddedToList
+        this.$accessor.app.addGuildToList({
+          guildId: guildAddedEvent.guildId,
+          host: guildAddedEvent.homeserver,
+        })
+      } else if (ev.deletedMessage) {
+        const deleteMessageEvent = ev.deletedMessage
+        this.$accessor.app.deleteMessage({
+          host,
+          channelID: deleteMessageEvent.channelId,
+          messageID: deleteMessageEvent.messageId,
+        })
+      } else {
+        console.log(`unknown event received: ${JSON.stringify(ev)}`)
       }
-    },
-    {},
-  )
-
-  conn.events.on(
-    Event.EventCase.CREATED_CHANNEL,
-    (host, event) => {
-      this.$accessor.app.addChannel({
-        host,
-        guildID: event.guildId,
-        channelID: event.channelId,
-        previousID: event.previousId,
-        nextID: event.nextId,
-        data: {
-          channelName: event.name,
-          isCategory: event.isCategory,
-          isVoice: false,
-          messages: undefined,
-        },
-      })
-    },
-    {},
-  )
-
-  conn.events.on(
-    Event.EventCase.EDITED_MESSAGE,
-    (host, event) => {
-      this.$accessor.app.editMessage({
-        host,
-        updateEvent: event,
-      })
-    },
-    {},
-  )
-
-  conn.events.on(
-    Event.EventCase.PROFILE_UPDATED,
-    (host, event) => {
-      this.$accessor.app.updateProfile({
-        host,
-        userid: event.userId,
-        username: event.updateUsername ? event.newUsername : undefined,
-        avatar: event.updateAvatar ? event.newAvatar : undefined,
-        status: event.updateStatus ? event.newStatus : undefined,
-      })
-    },
-    {},
-  )
-
-  conn.events.on(
-    Event.EventCase.GUILD_ADDED_TO_LIST,
-    (_, event) => {
-      this.$accessor.app.addGuildToList({
-        guildId: event.guildId,
-        host: event.homeserver,
-      })
     },
     {},
   )

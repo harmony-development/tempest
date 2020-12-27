@@ -1,6 +1,6 @@
 <template>
   <v-tooltip right>
-    <template v-slot:activator="{ on, attrs }">
+    <template #activator="{ on, attrs }">
       <v-img
         v-ripple
         :class="iconStyle"
@@ -48,10 +48,12 @@ export default Vue.extend({
   },
   computed: {
     name(): string | undefined {
-      return this.$accessor.app.data[this.host]?.guilds[this.id]?.name
+      return this.$accessor.app.data[`https://${this.host}`]?.guilds[this.id]
+        ?.name
     },
     picture(): string | undefined {
-      return this.$accessor.app.data[this.host]?.guilds[this.id]?.picture
+      return this.$accessor.app.data[`https://${this.host}`]?.guilds[this.id]
+        ?.picture
     },
     iconStyle(): string {
       return `img-content mb-2 ${

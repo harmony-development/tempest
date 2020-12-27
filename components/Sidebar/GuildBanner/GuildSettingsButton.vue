@@ -1,6 +1,6 @@
 <template>
   <v-tooltip bottom>
-    <template v-slot:activator="{ on }">
+    <template #activator="{ on }">
       <v-btn icon v-on="on" @click="click">
         <v-icon size="24px">mdi-cog</v-icon>
       </v-btn>

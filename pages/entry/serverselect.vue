@@ -7,7 +7,7 @@
       @keydown.enter="addServer(addServerName, addServerHost)"
       @keydown.esc="addServerDialog = false"
     >
-      <template v-slot:activator="{}">
+      <template #activator="{}">
         <v-btn
           class="mb-2"
           @click="

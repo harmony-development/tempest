@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="dialogOpen" max-width="290">
-    <template v-slot:activator="{ on, attrs }">
+    <template #activator="{ on, attrs }">
       <v-list-item class="sidebar-item dangerous" v-bind="attrs" v-on="on">
         <v-list-item-icon>
           <v-icon>mdi-delete</v-icon>

@@ -1,8 +1,8 @@
 <template>
   <v-dialog v-model="dialog" max-width="290">
-    <template v-slot:activator="{ on: dialogOn, attrs }">
+    <template #activator="{ on: dialogOn, attrs }">
       <v-tooltip bottom>
-        <template v-slot:activator="{ on: tooltip }">
+        <template #activator="{ on: tooltip }">
           <v-btn icon v-on="{ ...tooltip, ...dialogOn }">
             <v-icon size="24px" v-bind="attrs">mdi-plus</v-icon>
           </v-btn>

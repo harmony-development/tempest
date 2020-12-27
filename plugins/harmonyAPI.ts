@@ -1,5 +1,9 @@
 import { Connection } from '@harmony-dev/harmony-web-sdk'
-import { UserStatusMap } from '@harmony-dev/harmony-web-sdk/dist/protocol/harmonytypes/v1/types_pb'
+import {
+  Action,
+  Embed,
+  UserStatusMap,
+} from '@harmony-dev/harmony-web-sdk/dist/protocol/harmonytypes/v1/types_pb'
 import Vue from 'vue'
 import { IChannelData, IMessageData, IRoleData } from '~/store/app'
 
@@ -22,6 +26,7 @@ declare module 'vue/types/vue' {
       channelID: string,
       content?: string,
       attachments?: string[],
+      echoID?: number,
     ): void
     $uploadFile(host: string, file: File): Promise<string>
     $fetchUser(host: string, userID: string): void
@@ -34,6 +39,22 @@ declare module 'vue/types/vue' {
         newAvatar?: string
         newStatus?: UserStatusMap[keyof UserStatusMap]
       },
+    ): void
+    $deleteMessage(
+      host: string,
+      guildID: string,
+      channelID: string,
+      messageID: string,
+    ): void
+    $editMessage(
+      host: string,
+      guildID: string,
+      channelID: string,
+      messageID: string,
+      newContent?: string,
+      newAttachments?: string[],
+      newActions?: Action[],
+      newEmbeds?: Embed[],
     ): void
   }
 }
@@ -195,9 +216,18 @@ Vue.prototype.$sendMessage = async function (
   channelID: string,
   content?: string,
   attachments?: string[],
+  echoID?: number,
 ) {
   const conn = await this.$getOrFederate(host)
-  return conn.sendMessage(guildID, channelID, content, attachments)
+  return conn.sendMessage(
+    guildID,
+    channelID,
+    content,
+    attachments,
+    undefined,
+    undefined,
+    echoID,
+  )
 }
 
 Vue.prototype.$uploadFile = async function (
@@ -291,4 +321,38 @@ Vue.prototype.$updateProfile = async function (
 ) {
   const conn = await this.$getOrFederate(host)
   return conn.profileUpdate(data)
+}
+
+Vue.prototype.$deleteMessage = async function (
+  this: Vue,
+  host: string,
+  guildID: string,
+  channelID: string,
+  messageID: string,
+) {
+  const conn = await this.$getOrFederate(host)
+  return conn.deleteMessage(guildID, channelID, messageID)
+}
+
+Vue.prototype.$editMessage = async function (
+  this: Vue,
+  host: string,
+  guildID: string,
+  channelID: string,
+  messageID: string,
+  newContent?: string,
+  newAttachments?: string[],
+  newActions?: Action[],
+  newEmbeds?: Embed[],
+) {
+  const conn = await this.$getOrFederate(host)
+  return conn.updateMessage(
+    guildID,
+    channelID,
+    messageID,
+    newContent,
+    newAttachments,
+    newActions,
+    newEmbeds,
+  )
 }

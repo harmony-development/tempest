@@ -1,8 +1,8 @@
 <template>
   <v-dialog v-model="dialogOpen" max-width="500">
-    <template v-slot:activator="{ on: dialogOn, attrs: dialogAttrs }">
+    <template #activator="{ on: dialogOn, attrs: dialogAttrs }">
       <v-tooltip right>
-        <template v-slot:activator="{ on: tooltipOn }">
+        <template #activator="{ on: tooltipOn }">
           <v-btn
             fab
             text

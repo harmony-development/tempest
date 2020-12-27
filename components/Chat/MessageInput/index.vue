@@ -12,14 +12,16 @@
               max-width="177"
             >
               <v-fade-transition>
-                <v-overlay v-if="hover" absolute color="black">
+                <v-overlay v-if="hover || uploading" absolute color="black">
                   <v-btn
+                    v-if="!uploading"
                     icon
                     class="delete-btn"
                     @click="deleteSelectedFile(idx)"
                   >
                     <v-icon> mdi-close </v-icon>
                   </v-btn>
+                  <v-progress-linear value="15"></v-progress-linear>
                 </v-overlay>
               </v-fade-transition>
             </v-img>
@@ -91,6 +93,7 @@ export default Vue.extend({
       emojiX: 0,
       emojiY: 0,
       attachments: [] as IAttachment[],
+      uploading: false,
     }
   },
   methods: {
@@ -120,13 +123,14 @@ export default Vue.extend({
     async onInputKeyPress(e: KeyboardEvent) {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault()
-        const localID = `local${window.performance.now()}`
+        this.uploading = true
+        const localID = Math.floor(Math.random() * 1000)
         const sendMsg = this.message
         this.message = ''
         this.$accessor.app.addMessage({
           host: this.$getHost(),
           channelID: this.$route.params.channelid,
-          messageID: localID,
+          messageID: localID.toString(),
           data: {
             authorID: this.$accessor.app.userID || '',
             createdAt: window.performance.now(),
@@ -150,20 +154,22 @@ export default Vue.extend({
           })
         }
 
+        await Promise.all(uploadPromises)
+
         this.attachments = []
 
-        await Promise.all(uploadPromises)
         await this.$sendMessage(
           this.$getHost(),
           this.$route.params.guildid,
           this.$route.params.channelid,
           sendMsg,
           uploadAttachments,
+          localID,
         )
         this.$accessor.app.deleteMessage({
           host: this.$getHost(),
           channelID: this.$route.params.channelid,
-          messageID: localID,
+          messageID: localID.toString(),
         })
       }
     },

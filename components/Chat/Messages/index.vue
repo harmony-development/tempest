@@ -10,12 +10,14 @@
           color="primary"
         ></v-progress-circular>
       </div>
-      <message
-        v-for="(message, idx) in messagesList || []"
-        :id="message"
-        :key="message"
-        :collapse-user-info="getShouldCollapse(message, idx)"
-      />
+      <transition-group name="message-transition" tag="p">
+        <message
+          v-for="(message, idx) in messagesList || []"
+          :id="message"
+          :key="message"
+          :collapse-user-info="getShouldCollapse(message, idx)"
+        />
+      </transition-group>
     </div>
   </div>
 </template>
@@ -27,6 +29,15 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+}
+
+.message-transition-enter-active {
+  overflow: hidden;
+  transition: all 1s ease;
+}
+
+.message-transition-enter-from {
+  transform: translateY(200px);
 }
 
 ::-webkit-scrollbar {
@@ -54,6 +65,7 @@ import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import { debounce } from 'debounce'
 import Message from './Message.vue'
 import { DialogType } from '~/store/dialog'
+import { IMessageData } from '~/store/app'
 
 export default Vue.extend({
   components: {
@@ -70,6 +82,9 @@ export default Vue.extend({
     },
     messages() {
       return this.$accessor.app.data[this.$getHost()]?.messages
+    },
+    mappedMessages(): (IMessageData | undefined)[] | undefined {
+      return this.messagesList?.map((m) => this.messages[m])
     },
     reachedTop() {
       return this.$accessor.app.data[this.$getHost()]?.channels[
