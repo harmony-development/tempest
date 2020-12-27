@@ -52,7 +52,7 @@ export default Vue.extend({
         targetHost = result.host
         targetCode = result.code
       } catch (e) {
-        targetHost = this.$accessor.app.host!.replace('https://', '')
+        targetHost = this.$accessor.app.host!
         targetCode = this.joinCode!
       }
       try {
@@ -60,7 +60,7 @@ export default Vue.extend({
         const resp = await conn.joinGuild(targetCode)
         if (resp.message!.toObject().guildId) {
           await this.$addGuildToList(
-            targetHost,
+            targetHost.replace('https://', ''),
             resp.message!.toObject().guildId,
           )
           this.$emit('cancelled')
