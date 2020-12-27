@@ -298,6 +298,7 @@ export default Vue.extend({
           this.$accessor.dialog.openDialog({
             type: DialogType.Confirmation,
             content: 'Are you sure you want to delete this message?',
+            action: 'Delete',
             res: resolve,
           }),
         )

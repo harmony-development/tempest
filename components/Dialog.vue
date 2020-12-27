@@ -36,7 +36,9 @@ import { DialogType } from '@/store/dialog'
 
 export default Vue.extend({
   computed: {
-    confirmText: () => 'Delete',
+    confirmText() {
+      return this.$accessor.dialog.dialog.action ?? 'Ok'
+    },
     rejectText: () => 'Cancel',
     dialogState() {
       return this.$accessor.dialog.dialog
