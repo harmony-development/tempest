@@ -29,6 +29,7 @@
           v-model="editedContent"
           outlined
           auto-grow
+          dense
           :rows="1"
           hide-details="auto"
           @keydown.esc="editing = false"
@@ -160,6 +161,7 @@
 
 .content-out >>> .msg-p {
   margin-bottom: 0px;
+  width: auto;
 }
 </style>
 

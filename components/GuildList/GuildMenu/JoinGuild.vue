@@ -52,7 +52,7 @@ export default Vue.extend({
         targetHost = result.host
         targetCode = result.code
       } catch (e) {
-        targetHost = this.$accessor.app.host!
+        targetHost = this.$accessor.app.host!.replace('https://', '')
         targetCode = this.joinCode!
       }
       try {

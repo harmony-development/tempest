@@ -322,6 +322,7 @@ export const mutations = mutationTree(state, {
         Vue.set(message, 'overrides', data.updateEvent.overrides)
       if (data.updateEvent.updateActions)
         Vue.set(message, 'actionsList', data.updateEvent.actionsList)
+      Vue.set(message, 'editedAt', data.updateEvent.editedAt)
     }
   },
   messageUnlocal(

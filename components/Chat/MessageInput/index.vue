@@ -32,6 +32,7 @@
     <v-textarea
       v-model="message"
       outlined
+      dense
       autocomplete="off"
       hide-details="auto"
       label="Message"

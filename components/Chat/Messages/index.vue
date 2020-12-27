@@ -10,14 +10,14 @@
           color="primary"
         ></v-progress-circular>
       </div>
-      <transition-group name="message-transition" tag="p">
-        <message
-          v-for="(message, idx) in messagesList || []"
-          :id="message"
-          :key="message"
-          :collapse-user-info="getShouldCollapse(message, idx)"
-        />
-      </transition-group>
+      <!-- <transition-group name="message-transition" tag="p"> -->
+      <message
+        v-for="(message, idx) in messagesList || []"
+        :id="message"
+        :key="message"
+        :collapse-user-info="getShouldCollapse(message, idx)"
+      />
+      <!-- </transition-group> -->
     </div>
   </div>
 </template>
