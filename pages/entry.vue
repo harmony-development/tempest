@@ -1,7 +1,7 @@
 <template>
   <fragment>
     <v-app-bar app fixed color="transparent" flat>
-      <v-toolbar-title>Staccato</v-toolbar-title>
+      <v-toolbar-title>Tempest</v-toolbar-title>
       <v-spacer />
       <v-btn text>
         <v-icon> mdi-translate </v-icon>

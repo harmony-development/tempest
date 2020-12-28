@@ -1,6 +1,6 @@
-# staccato-vue
+# Tempest
 
-## Check out a live demo at https://staccato.harmonychat.vercel.app
+## Check out a live demo at https://tempest.harmonychat.vercel.app
 
 ## Build Setup
 
