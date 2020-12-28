@@ -2,6 +2,8 @@
 
 ## Check out a live demo at https://tempest.harmonychat.vercel.app
 
+## A frontend for the Harmony protocol
+
 ## Build Setup
 
 ```bash
