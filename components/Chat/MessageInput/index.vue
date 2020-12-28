@@ -157,6 +157,8 @@ export default Vue.extend({
 
         await Promise.all(uploadPromises)
 
+        this.uploading = false
+
         this.attachments = []
 
         await this.$sendMessage(
