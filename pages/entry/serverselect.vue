@@ -129,7 +129,7 @@ export default Vue.extend({
       const parsed = new URL(host)
 
       this.$router.push({
-        path: `auth/login`,
+        path: `auth`,
         hash: encodeURIComponent(
           `https://${parsed.hostname}:${parsed.port || '2289'}`,
         ),
