@@ -34,6 +34,7 @@
     <guild-settings />
     <image-view />
     <user-settings />
+    <guild-context-menu />
   </div>
 </template>
 
@@ -64,6 +65,7 @@ import { Connection } from '@harmony-dev/harmony-web-sdk'
 import GuildSettings from '@/components/GuildSettings/index.vue'
 import UserPopover from '~/components/UserPopover.vue'
 import ImageView from '~/components/ImageView.vue'
+import GuildContextMenu from '~/components/GuildContextMenu.vue'
 
 export default Vue.extend({
   components: {
@@ -74,6 +76,7 @@ export default Vue.extend({
     UserPopover,
     GuildSettings,
     ImageView,
+    GuildContextMenu,
   },
   data() {
     return {

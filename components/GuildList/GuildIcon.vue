@@ -10,6 +10,7 @@
         :src="picture"
         v-on="on"
         @click="onGuildIconClick"
+        @contextmenu="onContextMenu"
       />
     </template>
     {{ name || id }}
@@ -48,21 +49,19 @@ export default Vue.extend({
   },
   computed: {
     name(): string | undefined {
-      return this.$accessor.app.data[`https://${this.host}`]?.guilds[this.id]
-        ?.name
+      return this.$accessor.app.data[this.$guildIconHost(this.host)]?.guilds[
+        this.id
+      ]?.name
     },
     picture(): string | undefined {
-      const pic = this.$accessor.app.data[`https://${this.host}`]?.guilds[
-        this.id
-      ]?.picture
+      const pic = this.$accessor.app.data[this.$guildIconHost(this.host)]
+        ?.guilds[this.id]?.picture
 
       if (!pic) return undefined
 
-      const parsed = new URL(pic.replace('hmc://', 'https://'))
+      const parsed = this.$parseMediaURI(pic)
 
-      return parsed
-        ? `https://${parsed.host}/_harmony/media/download${parsed.pathname}`
-        : undefined
+      return parsed.download
     },
     iconStyle(): string {
       return `img-content mb-2 ${
@@ -73,12 +72,12 @@ export default Vue.extend({
   async mounted() {
     if (!this.name || !this.picture) {
       try {
-        const conn = await this.$getOrFederate(`https://${this.host}`)
+        const conn = await this.$getOrFederate(this.$guildIconHost(this.host))
         const resp = await conn.getGuild(this.id)
         const asObj = resp.message!.toObject()
         conn.subscribe(this.id)
         this.$accessor.app.setGuildData({
-          host: `https://${this.host}`,
+          host: this.$guildIconHost(this.host),
           guildID: this.id,
           name: asObj.guildName,
           picture: asObj.guildPicture,
@@ -95,7 +94,16 @@ export default Vue.extend({
         guildid: this.id,
         channelid: this.$accessor.app.data[this.host]?.guilds[this.id]
           ?.channels?.[0],
-        host: `https://${this.host}`,
+        host: this.$guildIconHost(this.host),
+      })
+    },
+    onContextMenu(e: MouseEvent) {
+      e.preventDefault()
+      this.$accessor.guildContextMenu.openDialog({
+        guildID: this.id,
+        host: this.host,
+        x: e.clientX,
+        y: e.clientY,
       })
     },
   },

@@ -59,6 +59,7 @@ declare module 'vue/types/vue' {
     ): void
     $deleteChannel(host: string, guildID: string, channelID: string): void
     $sendTyping(host: string, guildID: string, channelID: string): void
+    $leaveGuild(host: string, guildID: string): void
   }
 }
 
@@ -380,4 +381,14 @@ Vue.prototype.$sendTyping = async function (
 ) {
   const conn = await this.$getOrFederate(host)
   return conn.sendTyping(guildID, channelID)
+}
+
+Vue.prototype.$leaveGuild = async function (
+  this: Vue,
+  host: string,
+  guildID: string,
+) {
+  const conn = await this.$getOrFederate(host)
+
+  return conn.leaveGuild(guildID)
 }
