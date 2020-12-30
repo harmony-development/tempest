@@ -42,6 +42,15 @@
               </v-row>
             </v-col>
           </v-row>
+          <v-row no-gutters>
+            <v-col>
+              <v-checkbox
+                v-model="displayIsBot"
+                label="Bot Account"
+                @change="newIsBot = $event"
+              ></v-checkbox>
+            </v-col>
+          </v-row>
         </v-container>
       </v-card-text>
       <v-card-actions>
@@ -66,6 +75,7 @@ export default Vue.extend({
       newUsername: '' as string,
       newAvatarPreview: undefined as string | undefined,
       newAvatarFile: undefined as File | undefined,
+      newIsBot: undefined as boolean | undefined,
     }
   },
   computed: {
@@ -93,6 +103,14 @@ export default Vue.extend({
       }
       return undefined
     },
+    displayIsBot: {
+      get(): boolean {
+        return this.newIsBot ?? this.data?.bot ?? false
+      },
+      set(b): void {
+        this.newIsBot = b as any
+      },
+    },
   },
   methods: {
     closeDialog() {
@@ -104,10 +122,10 @@ export default Vue.extend({
       if (this.newAvatarFile) {
         newAvatar = await this.$uploadFile(host, this.newAvatarFile)
       }
-
       await this.$updateProfile(host, {
         newUsername: this.newUsername || undefined,
         newAvatar,
+        newIsBot: this.newIsBot,
       })
       this.closeDialog()
     },

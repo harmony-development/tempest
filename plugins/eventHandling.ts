@@ -93,6 +93,7 @@ Vue.prototype.$bindEvents = function (this: Vue, conn: Connection) {
           status: profileEvent.updateStatus
             ? profileEvent.newStatus
             : undefined,
+          isBot: profileEvent.updateIsBot ? profileEvent.isBot : undefined,
         })
       } else if (ev.guildAddedToList) {
         const guildAddedEvent = ev.guildAddedToList

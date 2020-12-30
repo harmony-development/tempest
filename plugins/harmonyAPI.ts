@@ -38,6 +38,7 @@ declare module 'vue/types/vue' {
         newUsername?: string
         newAvatar?: string
         newStatus?: UserStatusMap[keyof UserStatusMap]
+        newIsBot?: boolean
       },
     ): void
     $deleteMessage(
@@ -258,6 +259,7 @@ Vue.prototype.$fetchUser = async function (
       username: asObj?.userName,
       avatar: asObj?.userAvatar,
       status: asObj?.userStatus,
+      bot: asObj?.isBot,
     },
   })
   delete pendingUserFetches[userID]
@@ -318,6 +320,7 @@ Vue.prototype.$updateProfile = async function (
     newUsername?: string
     newAvatar?: string
     newStatus?: UserStatusMap[keyof UserStatusMap]
+    newIsBot?: boolean
   },
 ) {
   const conn = await this.$getOrFederate(host)

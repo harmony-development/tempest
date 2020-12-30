@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div v-if="stepType === 'choice'" class="choiceRoot">
+    <div class="loading-root">
+      <v-progress-circular v-if="loading" indeterminate />
+    </div>
+    <div v-if="stepType === 'choice'" class="choice-root">
       <h3>{{ choiceTitle }}</h3>
       <v-list class="mt-2" color="var(--harmony-dark-500)">
         <v-list-item
@@ -12,6 +15,16 @@
           >{{ c }}</v-list-item
         >
       </v-list>
+      <div class="d-flex justify-end">
+        <v-btn
+          class="mt-2"
+          color="primary"
+          text
+          :disabled="!canGoBack"
+          @click="stepBack"
+          >Back</v-btn
+        >
+      </div>
     </div>
     <div v-if="stepType === 'form'" class="formRoot">
       <h3>{{ formTitle }}</h3>
@@ -27,6 +40,14 @@
           class="mt-2"
         ></v-text-field>
         <div class="d-flex justify-end">
+          <v-btn
+            class="mt-2 mr-2"
+            color="primary"
+            text
+            :disabled="!canGoBack"
+            @click="stepBack"
+            >Back</v-btn
+          >
           <v-btn class="mt-2" type="submit" color="primary">Done</v-btn>
         </div>
       </form>
@@ -35,7 +56,14 @@
 </template>
 
 <style scoped>
-.choiceRoot {
+.loading-root {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+.choice-root {
   width: 100%;
 }
 
@@ -55,6 +83,8 @@ import Vue from 'vue'
 export default Vue.extend({
   data() {
     return {
+      loading: true,
+      canGoBack: false,
       conn: undefined as Connection | undefined,
       authID: undefined as string | undefined,
       stepType: undefined as string | undefined,
@@ -74,10 +104,14 @@ export default Vue.extend({
     await this.conn.streamSteps(this.authID)
     const step = await this.conn.nextAuthStep(this.authID)
 
+    this.loading = false
+
     this.onAuthStep(this.conn.host, step.message!.toObject())
   },
   methods: {
     onAuthStep(_: string, ev: AuthStep.AsObject) {
+      this.loading = true
+      this.canGoBack = ev.canGoBack
       if (ev.choice) {
         this.stepType = 'choice'
         this.choiceTitle = ev.choice.title
@@ -95,6 +129,7 @@ export default Vue.extend({
         this.$accessor.app.setHost(this.$getHost())
         this.$router.push({ path: '/app' })
       }
+      this.loading = false
     },
     onAuthDisconnect(_status: number, _message: string, _headers: any) {
       console.log('disconnected')
@@ -130,6 +165,11 @@ export default Vue.extend({
       await this.conn.nextAuthStep(this.authID, {
         form: req,
       })
+    },
+    async stepBack() {
+      if (!this.conn || !this.authID) return
+
+      await this.conn.stepBack(this.authID)
     },
   },
 })

@@ -47,6 +47,7 @@ export interface IUserData {
   username?: string
   avatar?: string
   status?: UserStatusMap[keyof UserStatusMap]
+  bot?: boolean
 }
 
 export interface IRoleData {
@@ -464,6 +465,7 @@ export const mutations = mutationTree(state, {
       username?: string
       avatar?: string
       status?: UserStatusMap[keyof UserStatusMap]
+      isBot?: boolean
     },
   ) {
     ensureHost(state, data.host)
@@ -477,6 +479,9 @@ export const mutations = mutationTree(state, {
       }
       if (data.status !== undefined) {
         user.status = data.status
+      }
+      if (data.isBot !== undefined) {
+        user.bot = data.isBot
       }
     }
   },

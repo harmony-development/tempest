@@ -32,7 +32,10 @@
             </v-list-item-avatar>
           </user-status-indicator>
           <v-list-item-content>
-            <v-list-item-title>{{ username || id }}</v-list-item-title>
+            <v-list-item-title
+              >{{ username || id }}
+              <code v-if="isBot">BOT</code></v-list-item-title
+            >
             <v-list-item-subtitle>{{ statusString }}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
@@ -95,6 +98,9 @@ export default Vue.extend({
     },
     status(): UserStatusMap[keyof UserStatusMap] | undefined {
       return this.profile?.status
+    },
+    isBot(): boolean {
+      return this.profile?.bot || false
     },
     statusString(): string {
       switch (this.status) {

@@ -7,7 +7,9 @@
     <user-status-indicator :id="id">
       <v-img class="avatar mr-2" :src="avatar"> </v-img>
     </user-status-indicator>
-    <v-list-item-title>{{ name || id }}</v-list-item-title>
+    <v-list-item-title
+      >{{ name || id }} <code v-if="isBot">BOT</code></v-list-item-title
+    >
   </div>
 </template>
 
@@ -57,6 +59,9 @@ export default Vue.extend({
     },
     name(): string | undefined {
       return this.profile?.username
+    },
+    isBot(): boolean {
+      return this.profile?.bot || false
     },
     popoverOpen(): boolean {
       return this.$accessor.userPopover.open
