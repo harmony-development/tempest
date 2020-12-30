@@ -7,7 +7,7 @@ import {
   Override,
   UserStatusMap,
 } from '@harmony-dev/harmony-web-sdk/dist/protocol/harmonytypes/v1/types_pb'
-import { getterTree, mutationTree } from 'nuxt-typed-vuex'
+import { mutationTree } from 'nuxt-typed-vuex'
 import Vue from 'vue'
 
 interface IGuildEntry {
@@ -29,6 +29,9 @@ export interface IChannelData {
   isVoice?: boolean
   reachedTop?: boolean
   messages?: string[]
+  typing?: {
+    [userid: string]: Date
+  }
 }
 
 export interface IMessageData {

@@ -1,6 +1,15 @@
 <template>
-  <div class="ml-2 mr-2 mb-2">
-    <v-slide-group multiple show-arrows class="mb-2">
+  <div class="ml-2 mr-2 mb-2 mt-1">
+    <div class="typing-indicator">
+      <v-icon> mdi-dots-horizontal </v-icon>
+      <strong class="ml-2">pontaoski</strong> is typing...
+    </div>
+    <v-slide-group
+      v-if="attachments.length > 0"
+      multiple
+      show-arrows
+      class="mb-2"
+    >
       <v-slide-item v-for="(a, idx) in attachments" :key="idx">
         <v-hover>
           <template v-slot:default="{ hover }">
@@ -71,6 +80,10 @@
 .message-input {
   max-height: 115px;
   overflow-y: auto;
+}
+
+.typing-indicator {
+  width: 100%;
 }
 </style>
 

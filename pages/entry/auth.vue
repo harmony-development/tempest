@@ -29,16 +29,21 @@
     <div v-if="stepType === 'form'" class="formRoot">
       <h3>{{ formTitle }}</h3>
       <form @submit.prevent="formSubmitted">
-        <v-text-field
-          v-for="(f, idx) in formFields || []"
-          :key="f.name"
-          v-model="(formFieldValues || [])[idx]"
-          :label="f.name"
-          :type="f.type"
-          outlined
-          hide-details="auto"
-          class="mt-2"
-        ></v-text-field>
+        <div v-for="(f, idx) in formFields || []" :key="f.name">
+          <new-password
+            v-if="f.type === 'new-password'"
+            v-model="(formFieldValues || [])[idx]"
+          />
+          <v-text-field
+            v-else
+            v-model="(formFieldValues || [])[idx]"
+            outlined
+            :type="f.type"
+            hide-details="auto"
+            :label="f.name"
+            class="mt-2"
+          />
+        </div>
         <div class="d-flex justify-end">
           <v-btn
             class="mt-2 mr-2"
@@ -48,7 +53,13 @@
             @click="stepBack"
             >Back</v-btn
           >
-          <v-btn class="mt-2" type="submit" color="primary">Done</v-btn>
+          <v-btn
+            class="mt-2"
+            type="submit"
+            color="primary"
+            :disabled="!allFieldsFilled"
+            >Done</v-btn
+          >
         </div>
       </form>
     </div>
@@ -79,8 +90,12 @@ import {
   NextStepRequest,
 } from '@harmony-dev/harmony-web-sdk/dist/protocol/auth/v1/auth_pb'
 import Vue from 'vue'
+import NewPassword from '@/components/NewPassword.vue'
 
 export default Vue.extend({
+  components: {
+    NewPassword,
+  },
   data() {
     return {
       loading: true,
@@ -94,6 +109,11 @@ export default Vue.extend({
       formFields: undefined as AuthStep.Form.FormField.AsObject[] | undefined,
       formFieldValues: undefined as (string | number)[] | undefined,
     }
+  },
+  computed: {
+    allFieldsFilled(): boolean {
+      return this.formFieldValues!.every((v) => !!v)
+    },
   },
   async mounted() {
     this.conn = new Connection(this.$getHost())
