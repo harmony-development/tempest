@@ -52,8 +52,17 @@ export default Vue.extend({
         ?.name
     },
     picture(): string | undefined {
-      return this.$accessor.app.data[`https://${this.host}`]?.guilds[this.id]
-        ?.picture
+      const pic = this.$accessor.app.data[`https://${this.host}`]?.guilds[
+        this.id
+      ]?.picture
+
+      if (!pic) return undefined
+
+      const parsed = new URL(pic.replace('hmc://', 'https://'))
+
+      return parsed
+        ? `https://${parsed.host}/_harmony/media/download${parsed.pathname}`
+        : undefined
     },
     iconStyle(): string {
       return `img-content mb-2 ${
