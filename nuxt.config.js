@@ -47,6 +47,7 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
+    'nuxt-i18n',
   ],
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
@@ -104,4 +105,16 @@ export default {
     },
   },
   telemetry: false,
+  i18n: {
+    lazy: true,
+    langDir: 'locales/',
+    defaultLocale: 'en',
+    locales: [
+      {
+        code: 'en',
+        file: 'en-US.js',
+        name: 'English',
+      },
+    ],
+  },
 }

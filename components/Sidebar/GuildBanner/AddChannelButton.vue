@@ -7,7 +7,7 @@
             <v-icon size="24px" v-bind="attrs">mdi-plus</v-icon>
           </v-btn>
         </template>
-        Add Channel
+        {{ $i18n.t('app.add-channel') }}
       </v-tooltip>
     </template>
     <v-card>

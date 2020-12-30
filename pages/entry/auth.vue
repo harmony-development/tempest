@@ -4,7 +4,7 @@
       <v-progress-circular v-if="loading" indeterminate />
     </div>
     <div v-if="stepType === 'choice'" class="choice-root">
-      <h3>{{ choiceTitle }}</h3>
+      <h3>{{ $i18n.t(`auth.${choiceTitle}`) }}</h3>
       <v-list class="mt-2" color="var(--harmony-dark-500)">
         <v-list-item
           v-for="c in choices"
@@ -12,7 +12,7 @@
           link
           class="choice-item mr-2 ml-2"
           @click="selectChoice(c)"
-          >{{ c }}</v-list-item
+          >{{ $i18n.t(`auth.${c}`) }}</v-list-item
         >
       </v-list>
       <div class="d-flex justify-end">
@@ -22,12 +22,12 @@
           text
           :disabled="!canGoBack"
           @click="stepBack"
-          >Back</v-btn
+          >{{ $i18n.t('back') }}</v-btn
         >
       </div>
     </div>
     <div v-if="stepType === 'form'" class="formRoot">
-      <h3>{{ formTitle }}</h3>
+      <h3>{{ $i18n.t(`auth.${formTitle}`) }}</h3>
       <form @submit.prevent="formSubmitted">
         <div v-for="(f, idx) in formFields || []" :key="f.name">
           <new-password
@@ -40,7 +40,7 @@
             outlined
             :type="f.type"
             hide-details="auto"
-            :label="f.name"
+            :label="$i18n.t(`auth.${f.name}`)"
             class="mt-2"
           />
         </div>
@@ -51,14 +51,14 @@
             text
             :disabled="!canGoBack"
             @click="stepBack"
-            >Back</v-btn
+            >{{ $i18n.t('back') }}</v-btn
           >
           <v-btn
             class="mt-2"
             type="submit"
             color="primary"
             :disabled="!allFieldsFilled"
-            >Done</v-btn
+            >{{ $i18n.t('done') }}</v-btn
           >
         </div>
       </form>

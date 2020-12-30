@@ -39,12 +39,14 @@
     "showdown": "^1.9.1",
     "v-emoji-picker": "^2.3.1",
     "vue-fragment": "^1.5.1",
+    "vue-i18n": "^8.22.2",
     "vue-infinite-loading": "^2.4.5",
     "vue-typed-mixins": "^0.2.0",
     "vue-virtual-scroller": "^1.0.10",
     "vuex-persistedstate": "^4.0.0-beta.1"
   },
   "devDependencies": {
+    "@kazupon/vue-i18n-loader": "^0.5.0",
     "@mdi/font": "^5.8.55",
     "@nuxt/types": "^2.14.6",
     "@nuxt/typescript-build": "^2.0.3",
@@ -60,6 +62,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "husky": "^4.3.0",
     "lint-staged": "^10.4.0",
+    "nuxt-i18n": "^6.16.0",
     "prettier": "^2.1.2"
   }
 }

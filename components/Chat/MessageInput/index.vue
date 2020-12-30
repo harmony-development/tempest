@@ -47,7 +47,7 @@
       dense
       autocomplete="off"
       hide-details="auto"
-      label="Message"
+      :label="$i18n.t('app.message-input')"
       append-icon="mdi-emoticon"
       prepend-icon="mdi-plus"
       auto-grow

@@ -116,6 +116,7 @@ Vue.prototype.$bindEvents = function (this: Vue, conn: Connection) {
           channelID: deleteChannelEvent.channelId,
         })
       } else if (ev.typing) {
+        console.log('typing event')
         this.$accessor.app.updateTyping({
           host,
           channelID: ev.typing.channelId,

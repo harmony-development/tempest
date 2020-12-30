@@ -15,7 +15,7 @@
             <v-icon dark size="24"> mdi-account-multiple-plus </v-icon>
           </v-btn>
         </template>
-        Join/Create Guild
+        {{ $i18n.t('app.guild-menu-tooltip') }}
       </v-tooltip>
     </template>
     <join-guild-menu

@@ -1,11 +1,25 @@
 <template>
   <fragment>
     <v-app-bar app fixed color="transparent" flat>
-      <v-toolbar-title>Tempest</v-toolbar-title>
+      <v-toolbar-title>{{ $i18n.t('app-name') }}</v-toolbar-title>
       <v-spacer />
-      <v-btn text>
-        <v-icon> mdi-translate </v-icon>
-      </v-btn>
+      <v-menu>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn text v-bind="attrs" v-on="on">
+            <v-icon> mdi-translate </v-icon>
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item
+            v-for="(lang, idx) in $i18n.locales || []"
+            :key="idx"
+            link
+            @click="$i18n.setLocale(lang.code)"
+          >
+            <v-list-item-title>{{ lang.name }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-app-bar>
     <div class="root">
       <v-sheet class="body pa-6" rounded>

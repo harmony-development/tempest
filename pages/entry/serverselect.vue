@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="mb-2">Select A Server To Login To</h2>
+    <h2 class="mb-2">{{ $i18n.t('server-select.title') }}</h2>
     <v-dialog
       v-model="addServerDialog"
       max-width="290"
@@ -14,22 +14,24 @@
             $event.target.blur()
             addServerDialog = true
           "
-          >Add Server</v-btn
+          >{{ $i18n.t('server-select.add-btn') }}</v-btn
         >
       </template>
       <v-card>
-        <v-card-title> Add Server </v-card-title>
+        <v-card-title>
+          {{ $i18n.t('server-select.add-dialog.title') }}
+        </v-card-title>
         <v-card-text>
           <v-text-field
             v-model="addServerName"
-            label="Server Name"
+            :label="$i18n.t('server-select.add-dialog.name')"
             required
             outlined
             autofocus
           />
           <v-text-field
             v-model="addServerHost"
-            label="Server Host/IP"
+            :label="$i18n.t('server-select.add-dialog.host')"
             required
             outlined
           />
@@ -37,14 +39,14 @@
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="secondary" text @click="addServerDialog = false"
-            >Cancel</v-btn
-          >
+          <v-btn color="secondary" text @click="addServerDialog = false">{{
+            $i18n.t('cancel')
+          }}</v-btn>
           <v-btn
             color="primary"
             text
             @click="addServer(addServerName, addServerHost)"
-            >Done</v-btn
+            >{{ $i18n.t('done') }}</v-btn
           >
         </v-card-actions>
       </v-card>
@@ -67,13 +69,15 @@
       </v-list>
     </v-sheet>
     <div class="d-flex justify-end">
-      <v-btn class="mt-2 mr-2" color="primary" text disabled> Back </v-btn>
+      <v-btn class="mt-2 mr-2" color="primary" text disabled>
+        {{ $i18n.t('back') }}
+      </v-btn>
       <v-btn
         color="primary"
         :disabled="serverList[selected] === undefined"
         class="mt-2"
         @click="nextPage()"
-        >NEXT <v-icon right>mdi-chevron-right</v-icon></v-btn
+        >{{ $i18n.t('next') }} <v-icon right>mdi-chevron-right</v-icon></v-btn
       >
     </div>
   </div>

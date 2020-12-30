@@ -5,7 +5,7 @@
       type="password"
       hide-details="auto"
       outlined
-      label="Password"
+      :label="$i18n.t('auth.password')"
       class="mt-2"
       @input="onEdited"
     />
@@ -14,7 +14,7 @@
       type="password"
       hide-details="auto"
       outlined
-      label="Confirm Password"
+      :label="$i18n.t('auth.confirm-password')"
       class="mt-2"
       @input="onEdited"
     />
