@@ -1,8 +1,11 @@
 <template>
-  <div class="ml-2 mr-2 mb-2 mt-1">
+  <div class="pl-2 pr-2 pb-2 pt-1 root">
     <div class="typing-indicator">
-      <v-icon> mdi-dots-horizontal </v-icon>
-      <strong class="ml-2">pontaoski</strong> is typing...
+      <v-icon :class="{ invisible: !!!typingDisplay }">
+        mdi-dots-horizontal
+      </v-icon>
+      {{ typingDisplay || '&nbsp;' }}
+      &zwnj;
     </div>
     <v-slide-group
       v-if="attachments.length > 0"
@@ -77,6 +80,16 @@
 </template>
 
 <style scoped>
+.invisible {
+  visibility: hidden;
+}
+
+.root {
+  background-color: var(--harmony-dark-800);
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
 .message-input {
   max-height: 115px;
   overflow-y: auto;
@@ -90,10 +103,15 @@
 <script lang="ts">
 import Vue from 'vue'
 import { VEmojiPicker } from 'v-emoji-picker'
+import _, { DebouncedFunc } from 'lodash'
 
 interface IAttachment {
   file: File
   preview?: string
+}
+
+interface TypingMap {
+  [userid: string]: Date
 }
 
 export default Vue.extend({
@@ -108,7 +126,34 @@ export default Vue.extend({
       emojiY: 0,
       attachments: [] as IAttachment[],
       uploading: false,
+      typingInterval: null as any,
     }
+  },
+  computed: {
+    debouncedTyping(): DebouncedFunc<() => void> {
+      return _.debounce(this.sendTyping, 1000, { maxWait: 0, leading: true })
+    },
+    typers(): TypingMap | undefined {
+      return this.$accessor.app.data[this.$getHost()]?.channels[
+        this.$route.params.channelid
+      ]?.typing
+    },
+    typingDisplay(): string {
+      if (!this.typers) return ''
+      return Object.keys(this.typers).reduce((outStr, t) => {
+        const name = this.$accessor.app.data[this.$getHost()].users[t].username
+
+        outStr += `${name} is typing...`
+
+        return outStr
+      }, '')
+    },
+  },
+  mounted() {
+    this.typingInterval = setInterval(this.checkTyping, 1000)
+  },
+  beforeDestroy() {
+    clearInterval(this.typingInterval)
   },
   methods: {
     toggleEmojiPicker(e: MouseEvent) {
@@ -183,6 +228,7 @@ export default Vue.extend({
           localID,
         )
       }
+      this.debouncedTyping()
     },
     deleteSelectedFile(idx: number) {
       if (this.attachments) {
@@ -208,6 +254,27 @@ export default Vue.extend({
           }, []),
         ]
       }
+    },
+    checkTyping() {
+      if (this.typers) {
+        Object.keys(this.typers).forEach((t) => {
+          if (new Date().getTime() - this.typers![t].getTime() > 3000) {
+            this.$accessor.app.deleteTyper({
+              host: this.$getHost(),
+              channelID: this.$route.params.channelid,
+              userID: t,
+            })
+          }
+        })
+      }
+    },
+    sendTyping() {
+      console.log('sending typing')
+      this.$sendTyping(
+        this.$getHost(),
+        this.$route.params.guildid,
+        this.$route.params.channelid,
+      )
     },
   },
 })

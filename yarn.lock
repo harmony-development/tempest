@@ -867,10 +867,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@harmony-dev/harmony-web-sdk@^4.0.9":
-  version "4.0.9"
-  resolved "https://registry.yarnpkg.com/@harmony-dev/harmony-web-sdk/-/harmony-web-sdk-4.0.9.tgz#1984a1bd53e273d0942aacc22f201216fb17a7f2"
-  integrity sha512-IO/oS8E6eMwWIQMnv8vX5rj65AbXsxV/ztfnlcPOsMIcp5DPVRdXejPIem8L+laEwx4LlpPKYyg9uenDc61TEg==
+"@harmony-dev/harmony-web-sdk@^4.0.10":
+  version "4.0.10"
+  resolved "https://registry.yarnpkg.com/@harmony-dev/harmony-web-sdk/-/harmony-web-sdk-4.0.10.tgz#8d9a1ef22c0acd245536e831da2ec353a57aa7ec"
+  integrity sha512-mdH+yAvq3or1fduLyj7BtAJ6M4l99UWoLe2cXOvfYvj4GCTVVkKdlt/UYMYhzfFNhj1E3LxPdXar5EOYcpALrw==
   dependencies:
     "@improbable-eng/grpc-web" "^0.13.0"
     "@types/google-protobuf" "^3.7.4"
@@ -1495,6 +1495,11 @@
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/@types/less/-/less-3.0.2.tgz#2761d477678c8374cb9897666871662eb1d1115e"
   integrity sha512-62vfe65cMSzYaWmpmhqCMMNl0khen89w57mByPi1OseGfcV/LV03fO8YVrNj7rFQsRWNJo650WWyh6m7p8vZmA==
+
+"@types/lodash@^4.14.166":
+  version "4.14.166"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.166.tgz#07e7f2699a149219dbc3c35574f126ec8737688f"
+  integrity sha512-A3YT/c1oTlyvvW/GQqG86EyqWNrT/tisOIh2mW3YCgcx71TNjiTZA3zYZWA5BCmtsOTXjhliy4c4yEkErw6njA==
 
 "@types/memory-fs@*":
   version "0.3.2"

@@ -58,6 +58,7 @@ declare module 'vue/types/vue' {
       newEmbeds?: Embed[],
     ): void
     $deleteChannel(host: string, guildID: string, channelID: string): void
+    $sendTyping(host: string, guildID: string, channelID: string): void
   }
 }
 
@@ -369,4 +370,14 @@ Vue.prototype.$deleteChannel = async function (
 ) {
   const conn = await this.$getOrFederate(host)
   return conn.deleteChannel(guildID, channelID)
+}
+
+Vue.prototype.$sendTyping = async function (
+  this: Vue,
+  host: string,
+  guildID: string,
+  channelID: string,
+) {
+  const conn = await this.$getOrFederate(host)
+  return conn.sendTyping(guildID, channelID)
 }

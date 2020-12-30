@@ -115,6 +115,12 @@ Vue.prototype.$bindEvents = function (this: Vue, conn: Connection) {
           guildID: deleteChannelEvent.guildId,
           channelID: deleteChannelEvent.channelId,
         })
+      } else if (ev.typing) {
+        this.$accessor.app.updateTyping({
+          host,
+          channelID: ev.typing.channelId,
+          userid: ev.typing.userId,
+        })
       } else {
         console.log(`unknown event received: ${JSON.stringify(ev)}`)
       }

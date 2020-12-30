@@ -135,7 +135,16 @@ const ensureChannel = (state: IState, host: string, channelID: string) => {
     isCategory: undefined,
     isVoice: undefined,
     messages: undefined,
+    typing: {},
   })
+}
+
+const ensureTyping = (state: IState, host: string, channelID: string) => {
+  ensureChannel(state, host, channelID)
+
+  if (state.data[host].channels[channelID].typing) return
+
+  Vue.set(state.data[host].channels[channelID], 'typing', {})
 }
 
 export const mutations = mutationTree(state, {
@@ -486,6 +495,38 @@ export const mutations = mutationTree(state, {
       if (data.isBot !== undefined) {
         user.bot = data.isBot
       }
+    }
+  },
+  updateTyping(
+    state,
+    data: {
+      host: string
+      channelID: string
+      userid: string
+    },
+  ) {
+    ensureTyping(state, data.host, data.channelID)
+
+    const typing = state.data[data.host]?.channels[data.channelID]?.typing
+
+    if (typing) {
+      Vue.set(typing, data.userid, new Date())
+    }
+  },
+  deleteTyper(
+    state,
+    data: {
+      host: string
+      channelID: string
+      userID: string
+    },
+  ) {
+    ensureTyping(state, data.host, data.channelID)
+
+    const typing = state.data[data.host]?.channels[data.channelID]?.typing
+
+    if (typing) {
+      Vue.delete(typing, data.userID)
     }
   },
 })
