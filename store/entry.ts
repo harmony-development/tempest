@@ -8,8 +8,8 @@ interface IServerEntry {
 export const state = () => ({
   serverList: [
     {
-      name: 'Localhost',
-      host: '127.0.0.1:2289',
+      name: 'harmonyapp.io',
+      host: 'chat.harmonyapp.io:2289',
     },
   ] as IServerEntry[],
   selectedServer: undefined as string | undefined,
