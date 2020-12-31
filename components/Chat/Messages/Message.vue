@@ -2,7 +2,7 @@
   <div
     :class="{ root: true, 'pl-3': true, 'pt-3': !collapseUserInfo, pending }"
   >
-    <!-- <v-avatar
+    <v-avatar
       v-if="!collapseUserInfo"
       v-ripple
       class="avatar avatar-space"
@@ -14,7 +14,7 @@
       <p v-if="false" class="caption text--secondary text">
         {{ smallTimeString }}
       </p>
-    </div> -->
+    </div>
     <div class="content ml-2">
       <v-list-item-title v-if="!collapseUserInfo">
         {{ overrideUsername || username || authorID }}
