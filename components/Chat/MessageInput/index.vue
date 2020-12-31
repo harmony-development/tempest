@@ -37,6 +37,9 @@
                 </v-overlay>
               </v-fade-transition>
             </v-img>
+            <v-card v-else outlined :loading="uploading">
+              <v-card-title>{{ a.file.name }}</v-card-title>
+            </v-card>
           </template>
         </v-hover>
       </v-slide-item>

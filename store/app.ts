@@ -361,6 +361,7 @@ export const mutations = mutationTree(state, {
     Vue.set(msgs, data.messageID, {
       ...msgs[data.echoID],
       pending: false,
+      attachmentsList: data.attachments,
     })
     Vue.delete(msgs, data.echoID)
   },
