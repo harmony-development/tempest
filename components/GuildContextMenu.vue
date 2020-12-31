@@ -35,18 +35,20 @@ export default Vue.extend({
     async leaveGuild() {
       if (!this.guildID || !this.host) return
 
-      await this.$confirmDialog(
+      const confirmed = await this.$confirmDialog(
         'Are you sure you would like to leave?',
         'Leave Guild',
       )
 
-      await this.$leaveGuild(this.$guildIconHost(this.host), this.guildID)
+      if (confirmed) {
+        await this.$leaveGuild(this.$guildIconHost(this.host), this.guildID)
 
-      if (
-        this.$route.params.guildid === this.guildID &&
-        this.host === this.$getHost()
-      ) {
-        this.$clearRoute()
+        if (
+          this.$route.params.guildid === this.guildID &&
+          this.host === this.$getHost()
+        ) {
+          this.$clearRoute()
+        }
       }
     },
   },
