@@ -1,10 +1,8 @@
 <template>
   <div
     :class="{ root: true, 'pl-3': true, 'pt-3': !collapseUserInfo, pending }"
-    @mouseenter="hovering = true"
-    @mouseleave="hovering = false"
   >
-    <v-avatar
+    <!-- <v-avatar
       v-if="!collapseUserInfo"
       v-ripple
       class="avatar avatar-space"
@@ -13,10 +11,10 @@
       <v-img :src="avatar" />
     </v-avatar>
     <div v-else class="avatar-space">
-      <p v-if="hovering" class="caption text--secondary text">
+      <p v-if="false" class="caption text--secondary text">
         {{ smallTimeString }}
       </p>
-    </div>
+    </div> -->
     <div class="content ml-2">
       <v-list-item-title v-if="!collapseUserInfo">
         {{ overrideUsername || username || authorID }}
@@ -91,9 +89,9 @@
   visibility: hidden;
 }
 
-.root:hover > .menu-area {
+/* .root:hover > .menu-area {
   visibility: visible;
-}
+} */
 
 .avatar {
   width: 48px;
@@ -174,7 +172,7 @@ import { Attachment as MessageAttachment } from '@harmony-dev/harmony-web-sdk/di
 import showdown from 'showdown'
 import DOMPurify from 'dompurify'
 import Attachment from './Attachment.vue'
-import { IMessageData, IUserData } from '~/store/app'
+import { IUserData } from '~/store/app'
 import { AnimationDirection, Position } from '~/store/userPopover'
 import { DialogType } from '~/store/dialog'
 
@@ -214,34 +212,53 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
+    content: {
+      type: String,
+      default: '',
+    },
+    overrideUsername: {
+      type: String,
+      default: undefined,
+    },
+    overrideAvatar: {
+      type: String,
+      default: undefined,
+    },
+    createdAt: {
+      type: Number,
+      default: 0,
+    },
+    editedAt: {
+      type: Number,
+      default: 0,
+    },
+    pending: {
+      type: Boolean,
+      default: false,
+    },
+    authorID: {
+      type: String,
+      default: undefined,
+    },
+    attachments: {
+      type: Array as () => Array<MessageAttachment.AsObject>,
+      default: undefined,
+    },
   },
   data() {
     return {
-      hovering: false,
       editing: false,
       editedContent: '',
     }
   },
   computed: {
-    data(): IMessageData | undefined {
-      return this.$accessor.app.data[this.$getHost()]?.messages[this.id]
-    },
-    authorID(): string | undefined {
-      return this.data?.authorID
-    },
     authorData(): IUserData | undefined {
       if (!this.authorID) return undefined
       return this.$accessor.app.data[this.$getHost()]?.users[this.authorID]
     },
-    overrideUsername(): string | undefined {
-      return this.data?.overrides?.name
-    },
     username(): string | undefined {
       if (!this.authorID) return undefined
       return this.authorData?.username
-    },
-    overrideAvatar(): string | undefined {
-      return this.data?.overrides?.avatar
     },
     avatar(): string | undefined {
       if (!this.authorID) return undefined
@@ -250,29 +267,20 @@ export default Vue.extend({
         ? `${this.$getHost()}/_harmony/media/download/${encodeURIComponent(a)}`
         : undefined
     },
-    content(): string {
-      return this.data?.content ?? ''
-    },
     formattedContent(): string {
       return DOMPurify.sanitize(conv.makeHtml(this.content))
     },
     timeString(): string {
-      return dayjs.unix(this.data?.createdAt || 0).calendar()
+      return dayjs.unix(this.createdAt || 0).calendar()
     },
     smallTimeString(): string {
-      return dayjs.unix(this.data?.createdAt || 0).format('hh:mm')
+      return dayjs.unix(this.createdAt || 0).format('hh:mm')
     },
     edited(): number | undefined {
-      return this.data?.editedAt
+      return this.editedAt
     },
     editedString(): string {
-      return ` - ${dayjs.unix(this.data?.editedAt || 0).calendar()}`
-    },
-    attachments(): MessageAttachment.AsObject[] | undefined {
-      return this.data?.attachmentsList
-    },
-    pending(): boolean | undefined {
-      return this.data?.pending
+      return ` - ${dayjs.unix(this.editedAt || 0).calendar()}`
     },
   },
   mounted() {

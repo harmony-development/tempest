@@ -6,6 +6,11 @@ import { Connection } from '@harmony-dev/harmony-web-sdk'
 
 export default Vue.extend({
   async mounted() {
+    if (!this.$accessor.app.host || !this.$accessor.app.session) {
+      this.$router.push('/entry/serverselect')
+      return
+    }
+
     const conn = new Connection(this.$accessor.app.host)
     conn.session = this.$accessor.app.session
     this.$accessor.app.setConnection({
