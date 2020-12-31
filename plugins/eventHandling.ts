@@ -132,6 +132,8 @@ Vue.prototype.$bindEvents = function (this: Vue, conn: Connection) {
             ? editedGuildEvent.picture
             : undefined,
         })
+      } else if (ev.guildRemovedFromList) {
+        console.log('guild removed event')
       } else {
         console.log(`unknown event received: ${JSON.stringify(ev)}`)
       }

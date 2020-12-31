@@ -40,7 +40,7 @@ export default Vue.extend({
         'Leave Guild',
       )
 
-      this.$leaveGuild(`https://${this.host}`, this.guildID)
+      await this.$leaveGuild(this.$guildIconHost(this.host), this.guildID)
     },
   },
 })
