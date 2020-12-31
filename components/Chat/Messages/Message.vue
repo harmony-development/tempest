@@ -57,7 +57,7 @@
             <v-icon dense> mdi-dots-vertical </v-icon>
           </v-btn>
         </template>
-        <v-list>
+        <v-list dense>
           <v-list-item
             v-if="authorID === $accessor.app.userID"
             link

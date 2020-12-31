@@ -2,9 +2,9 @@ import Vue from 'vue'
 
 interface UpdateRouteArgs {
   host?: string
-  guildid?: string
-  channelid?: string
-  messageid?: string
+  guildid?: string | null
+  channelid?: string | null
+  messageid?: string | null
 }
 
 declare module 'vue/types/vue' {
@@ -15,16 +15,28 @@ declare module 'vue/types/vue' {
 }
 
 Vue.prototype.$updateRoute = function (this: Vue, args: UpdateRouteArgs) {
-  const result: {
-    [key: string]: string
-  } = {}
-  if (args.guildid !== undefined) result.guildid = args.guildid
-  if (args.channelid !== undefined) result.channelid = args.channelid
-  if (args.messageid !== undefined) result.messageid = args.messageid
-  this.$router.push({
-    params: result,
-    hash: `#${encodeURIComponent(args.host ?? this.$getHost())}`,
-  })
+  let newPath = '/app'
+  const endHash = `#${encodeURIComponent(args.host ?? this.$getHost())}`
+  const newGuildID = args.guildid || this.$route.params.guildid
+  const newChannelID = args.channelid || this.$route.params.channelid
+  const newMessageID = args.messageid || this.$route.params.messageid
+
+  if (args.guildid === null) {
+    this.$router.push(`${newPath}${endHash}`)
+    return
+  }
+  if (newGuildID) newPath += `/${newGuildID}`
+  if (args.channelid === null) {
+    this.$router.push(`${newPath}${endHash}`)
+    return
+  }
+  if (newChannelID) newPath += `/${newChannelID}`
+  if (args.messageid === null) {
+    this.$router.push(`${newPath}${endHash}`)
+    return
+  }
+  if (newMessageID) newPath += `/${newMessageID}`
+  this.$router.push(`${newPath}${endHash}`)
 }
 
 Vue.prototype.$clearRoute = function (this: Vue) {

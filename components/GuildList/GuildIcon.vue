@@ -92,8 +92,9 @@ export default Vue.extend({
     onGuildIconClick() {
       this.$updateRoute({
         guildid: this.id,
-        channelid: this.$accessor.app.data[this.host]?.guilds[this.id]
-          ?.channels?.[0],
+        channelid:
+          this.$accessor.app.data[this.host]?.guilds[this.id]?.channels?.[0] ||
+          null,
         host: this.$guildIconHost(this.host),
       })
     },
