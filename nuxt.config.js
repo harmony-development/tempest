@@ -106,6 +106,7 @@ export default {
   },
   telemetry: false,
   i18n: {
+    strategy: 'no_prefix',
     lazy: true,
     langDir: 'locales/',
     defaultLocale: 'en',

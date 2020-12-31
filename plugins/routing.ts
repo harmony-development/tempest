@@ -10,6 +10,7 @@ interface UpdateRouteArgs {
 declare module 'vue/types/vue' {
   interface Vue {
     $updateRoute(args: UpdateRouteArgs): string
+    $clearRoute(): void
   }
 }
 
@@ -21,7 +22,16 @@ Vue.prototype.$updateRoute = function (this: Vue, args: UpdateRouteArgs) {
   if (args.channelid !== undefined) result.channelid = args.channelid
   if (args.messageid !== undefined) result.messageid = args.messageid
   this.$router.push({
+    name: 'mainapp',
     params: result,
-    hash: `#${encodeURIComponent(args.host ?? this.$getHost())}`,
+    hash: args.host
+      ? `#${encodeURIComponent(args.host ?? this.$getHost())}`
+      : undefined,
+  })
+}
+
+Vue.prototype.$clearRoute = function (this: Vue) {
+  this.$router.push({
+    path: '/app',
   })
 }

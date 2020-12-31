@@ -46,11 +46,7 @@ export default Vue.extend({
         this.$route.params.guildid === this.guildID &&
         this.host === this.$getHost()
       ) {
-        this.$updateRoute({
-          host: '',
-          guildid: '',
-          channelid: '',
-        })
+        this.$clearRoute()
       }
     },
   },
