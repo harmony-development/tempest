@@ -96,10 +96,17 @@ Vue.prototype.$bindEvents = function (this: Vue, conn: Connection) {
           isBot: profileEvent.updateIsBot ? profileEvent.isBot : undefined,
         })
       } else if (ev.guildAddedToList) {
+        console.log('asdf')
         const guildAddedEvent = ev.guildAddedToList
         this.$accessor.app.addGuildToList({
           guildId: guildAddedEvent.guildId,
           host: guildAddedEvent.homeserver,
+        })
+      } else if (ev.guildRemovedFromList) {
+        const guildRemovedEvent = ev.guildRemovedFromList
+        this.$accessor.app.removeGuildFromList({
+          host: guildRemovedEvent.homeserver,
+          guildID: guildRemovedEvent.guildId,
         })
       } else if (ev.deletedMessage) {
         const deleteMessageEvent = ev.deletedMessage

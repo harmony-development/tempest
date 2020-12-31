@@ -100,6 +100,7 @@ export default Vue.extend({
     conn.session = this.$accessor.app.session
     this.$bindEvents(conn)
     conn.beginStream()
+    conn.subscribeToHomeserverEvents()
     this.$accessor.app.setConnection({
       host: this.$accessor.app.host,
       connection: conn,

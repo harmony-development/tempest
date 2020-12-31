@@ -41,6 +41,17 @@ export default Vue.extend({
       )
 
       await this.$leaveGuild(this.$guildIconHost(this.host), this.guildID)
+
+      if (
+        this.$route.params.guildid === this.guildID &&
+        this.host === this.$getHost()
+      ) {
+        this.$updateRoute({
+          host: '',
+          guildid: '',
+          channelid: '',
+        })
+      }
     },
   },
 })

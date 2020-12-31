@@ -535,4 +535,19 @@ export const mutations = mutationTree(state, {
       Vue.delete(typing, data.userID)
     }
   },
+  removeGuildFromList(
+    state,
+    data: {
+      host: string
+      guildID: string
+    },
+  ) {
+    if (!state.guildsList) return
+    Vue.delete(
+      state.guildsList,
+      state.guildsList.findIndex(
+        (item) => item.host === data.host && item.guildId === data.guildID,
+      ),
+    )
+  },
 })
