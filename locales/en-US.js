@@ -21,7 +21,7 @@ export default {
     'confirm-password': 'Confirm Password',
   },
   app: {
-    'message-input': 'Message',
+    'message-input': 'Write your message...',
     'guild-menu-tooltip': 'Join/Create Guild',
     'add-channel': 'Add Channel',
     'guild-settings': 'Guild Settings',

@@ -64,7 +64,7 @@
   min-width: 0;
   flex-direction: column;
   height: 100%;
-  background-color: var(--harmony-dark-700);
+  background-color: var(--harmony-background-base);
 }
 
 .list-body {

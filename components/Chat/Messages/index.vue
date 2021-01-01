@@ -35,6 +35,11 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  scrollbar-color: var(--harmony-borders) transparent;
+  scrollbar-width: thin;
+}
+.messages-list *:last-child {
+  padding-bottom: 1rem;
 }
 
 ::-webkit-scrollbar {

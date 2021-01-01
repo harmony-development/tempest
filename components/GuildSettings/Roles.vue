@@ -23,7 +23,7 @@
 
 <style scoped>
 .list-root {
-  background-color: var(--harmony-dark-600);
+  background-color: var(--harmony-background-base);
   height: 100%;
 }
 .role-color {

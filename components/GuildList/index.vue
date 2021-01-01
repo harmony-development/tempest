@@ -17,7 +17,8 @@
   padding: 8px;
   display: flex;
   flex-direction: column;
-  background-color: var(--harmony-dark-800);
+  background-color: var(--harmony-background-chrome-outer);
+  box-sizing: border-box;
 }
 </style>
 

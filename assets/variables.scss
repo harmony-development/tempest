@@ -6,27 +6,39 @@
 @import '~vuetify/src/styles/tools/_functions.sass';
 
 :root {
-  --harmony-dark-50: #e1e2e2;
-  --harmony-dark-100: #b5b6b7;
-  --harmony-dark-200: #848587;
-  --harmony-dark-300: #535457;
-  --harmony-dark-400: #2e2f33;
-  --harmony-dark-500: #090a0f;
-  --harmony-dark-600: #08090d;
-  --harmony-dark-700: #06070b;
-  --harmony-dark-800: #050508;
-  --harmony-dark-900: #020304;
-  --harmony-dark-A100: #a6a6a6;
-  --harmony-dark-A200: #8c8c8c;
-  --harmony-dark-A400: #737373;
-  --harmony-dark-A700: #666666;
+  --harmony-background-base: #121212;
+  --harmony-background-chrome-inner: #161616;
+  --harmony-background-chrome-outer: #202020;
+  --harmony-background-chrome-alt: #212121;
+
+  --harmony-foreground: #eff0f1;
+
+  --harmony-borders: rgba(0,0,0,0.2);
+}
+
+@media (prefers-color-scheme: light) {
+:root {
+  --harmony-background-base: #ffffff;
+  --harmony-background-chrome-inner: #eeeeee;
+  --harmony-background-chrome-outer: #dddddd;
+  --harmony-background-chrome-alt: #dadada;
+
+  --harmony-foreground: #121212;
+
+  --harmony-borders: rgba(0,0,0,0.1);
+}
+
+.v-application, .v-btn, .v-btn--icon, .v-input textarea, .v-list {
+  color: var(--harmony-foreground) !important;
+}
+
 }
 
 $material-dark: (
-  background: var(--harmony-dark-500),
+  background: var(--harmony-background-base),
 );
 
-$harmony-dark-base: #060608;
+$harmony-dark-base: #121212;
 
 $material-dark-elevation-colors: () !default;
 $material-dark-elevation-colors: map-deep-merge(

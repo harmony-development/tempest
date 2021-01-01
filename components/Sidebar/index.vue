@@ -2,7 +2,6 @@
   <div class="sidebar">
     <template v-if="$route.params.guildid && $getHost()">
       <guild-banner :guildname="guildName" />
-      <v-divider />
       <channel-list />
     </template>
   </div>
@@ -13,7 +12,7 @@
   flex: 1 0 0;
   overflow-y: auto;
   text-overflow: ellipsis;
-  background-color: var(--harmony-dark-700);
+  background-color: var(--harmony-background-chrome-inner);
 }
 
 .guild-title {

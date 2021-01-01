@@ -12,7 +12,7 @@
       </div>
     </v-navigation-drawer>
     <v-main>
-      <v-app-bar fixed>
+      <v-app-bar fixed height="48px">
         <v-app-bar-nav-icon @click="leftNav = !leftNav" />
         <v-spacer />
         <v-btn icon @click="rightNav = !rightNav">
@@ -25,7 +25,7 @@
       v-model="rightNav"
       app
       right
-      class="pl-3 pr-3"
+      class="pl-3 pr-3 member-drawer"
       :permanent="$vuetify.breakpoint.mdAndUp"
     >
       <member-list />
@@ -38,6 +38,12 @@
   </div>
 </template>
 
+<style>
+div.v-navigation-drawer__border {
+  display: none;
+}
+</style>
+
 <style scoped>
 .root {
   width: 100%;
@@ -45,6 +51,16 @@
   display: flex;
   flex-direction: row;
   overflow: auto;
+}
+
+.member-drawer {
+  background-color: var(--harmony-background-chrome-inner) !important;
+}
+
+.v-app-bar {
+  background-color: var(--harmony-background-chrome-inner) !important;
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--harmony-borders);
 }
 
 .left-drawer {

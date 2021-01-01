@@ -11,7 +11,9 @@
 .guild-title {
   display: flex;
   align-items: center;
-  height: 64px;
+  height: 48px;
+  background-color: var(--harmony-background-chrome-inner);
+  border-bottom: 1px solid var(--harmony-borders);
 }
 </style>
 

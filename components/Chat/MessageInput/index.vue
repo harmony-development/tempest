@@ -1,6 +1,6 @@
 <template>
-  <div class="pl-2 pr-2 pb-2 pt-1 root">
-    <div class="typing-indicator">
+  <div class="pl-3 pr-3 pb-3 pt-3 root message-field">
+    <div v-if="!!typingDisplay" class="typing-indicator">
       <v-icon :class="{ invisible: !!!typingDisplay }">
         mdi-dots-horizontal
       </v-icon>
@@ -46,14 +46,16 @@
     </v-slide-group>
     <v-textarea
       v-model="message"
-      outlined
+      flat
+      solo
       dense
       autocomplete="off"
       hide-details="auto"
       :label="$i18n.t('app.message-input')"
       append-icon="mdi-emoticon"
-      prepend-icon="mdi-plus"
+      prepend-icon="mdi-attachment"
       auto-grow
+      background-color="transparent"
       :rows="1"
       class="message-input pt-1"
       @click:append="toggleEmojiPicker"
@@ -88,7 +90,7 @@
 }
 
 .root {
-  background-color: var(--harmony-dark-800);
+  background-color: var(--harmony-background-chrome-alt);
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
 }
@@ -96,6 +98,8 @@
 .message-input {
   max-height: 115px;
   overflow-y: auto;
+  background-color: transparent;
+  padding-top: 0 !important;
 }
 
 .typing-indicator {
