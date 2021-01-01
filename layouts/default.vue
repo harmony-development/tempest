@@ -12,5 +12,9 @@ import Dialog from '@/components/Dialog.vue'
 export default Vue.extend({
   name: 'Default',
   components: { Dialog },
+  mounted() {
+    const darkMediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    this.$vuetify.theme.dark = darkMediaQuery.matches
+  },
 })
 </script>

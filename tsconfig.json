@@ -27,6 +27,7 @@
       "@types/node",
       "@nuxt/types",
       "nuxt-i18n",
+      "node_modules/vuetify/types",
     ],
     "typeRoots": [
       "./types"
