@@ -18,10 +18,16 @@
     <div class="content ml-2">
       <v-list-item-title v-if="!collapseUserInfo">
         {{ overrideUsername || username || authorID }}
-        <span v-if="!!overrides.systemPlurality" class="text--tertiary">
+        <span
+          v-if="overrides ? !!overrides.systemPlurality : false"
+          class="text--tertiary"
+        >
           member of {{ username || authorID }}
         </span>
-        <span v-if="!!overrides.bridge" class="text--tertiary">
+        <span
+          v-if="overrides ? overrides.bridge : undefined"
+          class="text--tertiary"
+        >
           bridged by {{ username || authorID }}
         </span>
         <span class="text--secondary"> {{ timeString }} </span>
@@ -232,7 +238,7 @@ export default Vue.extend({
       default: '',
     },
     overrides: {
-      type: Override,
+      type: Object as () => Override.AsObject,
       default: undefined,
     },
     overrideUsername: {

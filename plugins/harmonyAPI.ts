@@ -183,7 +183,7 @@ Vue.prototype.$fetchMessageList = async function (
     this.$accessor.app.prependChannelMessages({
       host,
       channelID,
-      messages: asObj!.messagesList.map((m) => m.messageId),
+      messages: asObj!.messagesList.map((m) => m.messageId).reverse(),
     })
     this.$accessor.app.setReachedTop({
       host,

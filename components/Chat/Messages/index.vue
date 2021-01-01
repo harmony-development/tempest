@@ -219,11 +219,11 @@ export default Vue.extend({
       }
     },
     async onMessagesListScroll() {
-      console.log('hi')
       const el = this.$refs.messagesList as HTMLDivElement
       const oldScrollTop = el.scrollTop
       const oldScroll = el.scrollHeight - el.clientHeight
       if (el.scrollTop === 0) {
+        console.log(this.messagesList?.[0])
         await this.fetchData(this.messagesList?.[0])
         const newScroll = el.scrollHeight - el.clientHeight
         el.scrollTop = oldScrollTop + (newScroll - oldScroll)

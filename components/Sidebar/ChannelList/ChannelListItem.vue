@@ -20,7 +20,7 @@
         @mousedown.stop
         @touchstart.native.stop
       >
-        <v-icon color="grey lighten-1" small>mdi-delete</v-icon>
+        <v-icon color="secondary" small>mdi-delete</v-icon>
       </v-btn>
     </v-list-item-action>
   </v-list-item>

@@ -302,9 +302,10 @@ export const mutations = mutationTree(state, {
     },
   ) {
     ensureChannel(state, data.host, data.channelID)
-    Vue.set(state.data[data.host].channels[data.channelID], 'messages', [
+    const channel = state.data[data.host].channels[data.channelID]
+    Vue.set(channel, 'messages', [
       ...data.messages,
-      ...(state.data[data.host].channels[data.channelID].messages || []),
+      ...(channel.messages || []),
     ])
   },
   setMessagesData(
