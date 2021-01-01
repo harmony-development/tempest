@@ -94,6 +94,17 @@ interface IState {
   }
   guildSettingsOpen: boolean
   profileSettingsOpen: boolean
+  personas: IPersona[]
+}
+
+export enum PersonaKind {
+  Plurality,
+}
+
+export interface IPersona {
+  kind: PersonaKind
+  name: string
+  avatar: string | null
 }
 
 export const state = (): IState => ({
@@ -106,6 +117,7 @@ export const state = (): IState => ({
   disconnections: {},
   guildSettingsOpen: false,
   profileSettingsOpen: false,
+  personas: [],
 })
 
 const ensureHost = (state: IState, host: string) => {
@@ -156,6 +168,9 @@ export const mutations = mutationTree(state, {
   },
   setHost(state, host?: string) {
     state.host = host
+  },
+  setPersonas(state, personas: IPersona[]) {
+    state.personas = personas
   },
   setConnection(
     state,

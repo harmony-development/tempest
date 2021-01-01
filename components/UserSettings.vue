@@ -51,9 +51,32 @@
               ></v-checkbox>
             </v-col>
           </v-row>
+          <br />
+          <h3>{{ $i18n.t('app.personas.title') }}</h3>
+          <v-list>
+            <v-list-item
+              v-for="(item, i) in this.$accessor.app.personas"
+              :key="i"
+            >
+              <v-list-item-avatar>
+                <s-image :src="item.avatar"></s-image>
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title v-text="item.name"> </v-list-item-title>
+              </v-list-item-content>
+              <v-list-item-action>
+                <v-btn icon @click="deletePersona(i)">
+                  <v-icon color="grey lighten-1">mdi-delete</v-icon>
+                </v-btn>
+              </v-list-item-action>
+            </v-list-item>
+          </v-list>
         </v-container>
       </v-card-text>
       <v-card-actions>
+        <v-btn color="primary darken-1" text @click="newPersona">
+          {{ $i18n.t('app.personas.add') }}
+        </v-btn>
         <v-spacer></v-spacer>
         <v-btn color="primary darken-1" text @click="closeDialog">
           Cancel
@@ -63,12 +86,42 @@
         </v-btn>
       </v-card-actions>
     </v-card>
+    <v-dialog :value="subIsOpen" max-width="300" :fullscreen="breakpoint">
+      <v-card>
+        <v-card-title class="headline"> Create Subaccount </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-text-field
+              v-model="subaccountName"
+              outlined
+              label="Subaccount Name"
+            >
+            </v-text-field>
+            <v-select
+              v-model="subaccountKind"
+              :items="subaccountItems"
+              outlined
+              label="Subaccount Kind"
+            ></v-select>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary darken-1" text @click="subIsOpen = false">
+            Cancel
+          </v-btn>
+          <v-btn color="primary darken-1" text @click="createPersona">
+            Create
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-dialog>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { IUserData } from '~/store/app'
+import { IUserData, PersonaKind } from '~/store/app'
 export default Vue.extend({
   data() {
     return {
@@ -76,9 +129,15 @@ export default Vue.extend({
       newAvatarPreview: undefined as string | undefined,
       newAvatarFile: undefined as File | undefined,
       newIsBot: undefined as boolean | undefined,
+      subIsOpen: false,
+      subaccountName: '',
+      subaccountKind: PersonaKind.Plurality,
     }
   },
   computed: {
+    subaccountItems() {
+      return [{ text: 'System Member', value: PersonaKind.Plurality }]
+    },
     open() {
       return this.$accessor.app.profileSettingsOpen
     },
@@ -113,6 +172,26 @@ export default Vue.extend({
     },
   },
   methods: {
+    newPersona() {
+      this.subIsOpen = true
+    },
+    createPersona() {
+      this.$accessor.app.setPersonas(
+        this.$accessor.app.personas.concat([
+          {
+            kind: this.subaccountKind,
+            name: this.subaccountName,
+            avatar: null,
+          },
+        ]),
+      )
+      this.subIsOpen = false
+    },
+    deletePersona(idx: number) {
+      this.$accessor.app.setPersonas(
+        this.$accessor.app.personas.filter((_, index) => index !== idx),
+      )
+    },
     closeDialog() {
       this.$accessor.app.setProfileSettingsOpen(false)
     },

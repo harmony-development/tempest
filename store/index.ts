@@ -14,6 +14,12 @@ export const accessorType = getAccessorType({
 export const plugins = [
   createPersistedState({
     key: 'tempest',
-    paths: ['entry.serverList', 'app.userID', 'app.session', 'app.host'],
+    paths: [
+      'entry.serverList',
+      'app.userID',
+      'app.session',
+      'app.host',
+      'app.personas',
+    ],
   }),
 ]

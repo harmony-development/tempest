@@ -44,6 +44,13 @@
         </v-hover>
       </v-slide-item>
     </v-slide-group>
+    <v-select
+      v-if="$accessor.app.personas.length > 0"
+      v-model="selectedSender"
+      outlined
+      :items="possibleSenders"
+      label="Sending message as"
+    ></v-select>
     <v-textarea
       v-model="message"
       flat
@@ -134,6 +141,7 @@ export default Vue.extend({
       attachments: [] as IAttachment[],
       uploading: false,
       typingInterval: null as any,
+      selectedSender: -1,
     }
   },
   computed: {
@@ -154,6 +162,16 @@ export default Vue.extend({
 
         return outStr
       }, '')
+    },
+    possibleSenders(): any[] {
+      const ownP = this.$accessor.app.data[this.$accessor.app.host!]?.users[
+        this.$accessor.app.userID!
+      ]
+      return [{ text: ownP.username, value: -1 }].concat(
+        this.$accessor.app.personas.map((item, idx) => {
+          return { text: item.name, value: idx }
+        }),
+      )
     },
   },
   mounted() {

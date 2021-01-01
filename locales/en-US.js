@@ -27,6 +27,10 @@ export default {
     'guild-settings': 'Guild Settings',
     'log-out': 'Logout',
     settings: 'Settings',
+    personas: {
+      title: 'Subaccounts',
+      add: 'New Subaccount',
+    },
     statuses: {
       online: 'Online',
       dnd: 'Do Not Disturb',
