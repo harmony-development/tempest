@@ -11,3 +11,35 @@ html {
     url('~assets/Roboto/roboto-v20-latin-regular.woff2') format('woff2'),
     url('~assets/Roboto/roboto-v20-latin-regular.woff') format('woff');
 }
+
+:root {
+  --harmony-background-base: #121212;
+  --harmony-background-chrome-inner: #161616;
+  --harmony-background-chrome-outer: #202020;
+  --harmony-background-chrome-alt: #212121;
+
+  --harmony-foreground: #eff0f1;
+
+  --harmony-borders: rgba(0, 0, 0, 0.2);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --harmony-background-base: #ffffff;
+    --harmony-background-chrome-inner: #eeeeee;
+    --harmony-background-chrome-outer: #dddddd;
+    --harmony-background-chrome-alt: #dadada;
+
+    --harmony-foreground: #121212;
+
+    --harmony-borders: rgba(0, 0, 0, 0.1);
+  }
+
+  .v-application,
+  .v-btn,
+  .v-btn--icon,
+  .v-input textarea,
+  .v-list {
+    color: var(--harmony-foreground) !important;
+  }
+}
