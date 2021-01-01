@@ -5,6 +5,12 @@ interface IServerEntry {
   host: string
 }
 
+interface IInviteData {
+  host: string
+  id: string
+  guildName: string
+}
+
 export const state = () => ({
   serverList: [
     {
@@ -14,11 +20,15 @@ export const state = () => ({
   ] as IServerEntry[],
   selectedServer: undefined as string | undefined,
   step: 1,
+  pendingInvite: undefined as IInviteData | undefined,
 })
 
 export const mutations = mutationTree(state, {
   setSelectedServer(state, data: string | undefined) {
     state.selectedServer = data
+  },
+  setPendingInvite(state, data: IInviteData | undefined) {
+    state.pendingInvite = data
   },
   addServerToList(state, data: { name: string; host: string }) {
     state.serverList.push({

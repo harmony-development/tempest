@@ -147,7 +147,13 @@ export default Vue.extend({
         this.$accessor.app.setUserID(ev.session.userId)
         this.$accessor.app.setSession(ev.session.sessionToken)
         this.$accessor.app.setHost(this.$getHost())
-        this.$router.push({ path: '/app' })
+        if (this.$accessor.entry.pendingInvite !== undefined) {
+          const inv = this.$accessor.entry.pendingInvite
+          this.$accessor.entry.setPendingInvite(undefined)
+          this.$router.push({ path: `/join/${inv.host}/${inv.id}` })
+        } else {
+          this.$router.push({ path: '/app' })
+        }
       }
       this.loading = false
     },

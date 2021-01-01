@@ -7,6 +7,24 @@ import { Connection } from '@harmony-dev/harmony-web-sdk'
 export default Vue.extend({
   async mounted() {
     if (!this.$accessor.app.host || !this.$accessor.app.session) {
+      let host = this.$route.params.host
+      if (host.includes('://'))
+        host = `https${host.substr(host.indexOf('://'))}`
+      else host = `https://${host}`
+      const parsed = new URL(host)
+
+      const joinConn = new Connection(
+        `https://${parsed.hostname}:${parsed.port || '2289'}`,
+      )
+
+      const data = await joinConn.previewInvite(this.$route.params.inviteid)
+
+      this.$accessor.entry.setPendingInvite({
+        host: this.$route.params.host,
+        id: this.$route.params.inviteid,
+        guildName: data.message?.getName() ?? 'Unknown Guild',
+      })
+
       this.$router.push('/entry/serverselect')
       return
     }
