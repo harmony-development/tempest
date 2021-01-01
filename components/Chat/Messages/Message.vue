@@ -18,7 +18,13 @@
     <div class="content ml-2">
       <v-list-item-title v-if="!collapseUserInfo">
         {{ overrideUsername || username || authorID }}
-        <span class="text--secondary">{{ timeString }} </span>
+        <span v-if="!!overrides.systemPlurality" class="text--tertiary">
+          member of {{ username || authorID }}
+        </span>
+        <span v-if="!!overrides.bridge" class="text--tertiary">
+          bridged by {{ username || authorID }}
+        </span>
+        <span class="text--secondary"> {{ timeString }} </span>
       </v-list-item-title>
       <p class="text">
         <v-textarea
@@ -107,6 +113,12 @@
   min-width: 48px;
 }
 
+.text--tertiary {
+  opacity: 0.5;
+  margin: 0px 4px;
+  font-size: 80%;
+}
+
 .menu-area {
   width: 48px;
   min-width: 48px;
@@ -168,7 +180,10 @@ import Vue from 'vue'
 import dayjs from 'dayjs'
 import calendar from 'dayjs/plugin/calendar'
 import UTC from 'dayjs/plugin/utc'
-import { Attachment as MessageAttachment } from '@harmony-dev/harmony-web-sdk/dist/protocol/harmonytypes/v1/types_pb'
+import {
+  Attachment as MessageAttachment,
+  Override,
+} from '@harmony-dev/harmony-web-sdk/dist/protocol/harmonytypes/v1/types_pb'
 import showdown from 'showdown'
 import DOMPurify from 'dompurify'
 import Attachment from './Attachment.vue'
@@ -215,6 +230,10 @@ export default Vue.extend({
     content: {
       type: String,
       default: '',
+    },
+    overrides: {
+      type: Override,
+      default: undefined,
     },
     overrideUsername: {
       type: String,

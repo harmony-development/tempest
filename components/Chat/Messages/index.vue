@@ -23,6 +23,7 @@
           :edited-at="item.editedAt"
           :override-username="item.overrides ? item.overrides.name : undefined"
           :override-avatar="item.overrides ? item.overrides.avatar : undefined"
+          :overrides="item.overrides"
           :pending="item.pending"
           :collapse-user-info="getShouldCollapse(item.id, idx)"
         />
