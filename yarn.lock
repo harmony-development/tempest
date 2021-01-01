@@ -867,10 +867,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@harmony-dev/harmony-web-sdk@^4.0.11":
-  version "4.0.11"
-  resolved "https://registry.yarnpkg.com/@harmony-dev/harmony-web-sdk/-/harmony-web-sdk-4.0.11.tgz#16af8e0fb1b0403ccb75c7547558864e38ee2a88"
-  integrity sha512-kRXdR5Q78IovX4HvmIryKA7UHxkevitAnh+1IZekM6LmNqDPTtcU8VrLTUqb6y9Mi1LAXhujd+28NN1aJL1u5g==
+"@harmony-dev/harmony-web-sdk@^4.0.12":
+  version "4.0.12"
+  resolved "https://registry.yarnpkg.com/@harmony-dev/harmony-web-sdk/-/harmony-web-sdk-4.0.12.tgz#e8b564f6a14a8ea99761c453cf44b7b91f389c2f"
+  integrity sha512-lpAlrsbYMg5YoDP49p3Ihm04qPmVmNAWQ70Nyi5q9mib3YnJHIG/CtY8LLvNOQYdFIRSBH4mGc9WmbFWJU2E+Q==
   dependencies:
     "@improbable-eng/grpc-web" "^0.13.0"
     "@types/google-protobuf" "^3.7.4"
@@ -8187,11 +8187,6 @@ schema-utils@^3.0.0:
     ajv "^6.12.5"
     ajv-keywords "^3.5.2"
 
-scrollparent@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/scrollparent/-/scrollparent-2.0.1.tgz#715d5b9cc57760fb22bdccc3befb5bfe06b1a317"
-  integrity sha1-cV1bnMV3YPsivczDvvtb/gaxoxc=
-
 semver-compare@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/semver-compare/-/semver-compare-1.0.0.tgz#0dee216a1c941ab37e9efb1788f6afc5ff5537fc"
@@ -9358,20 +9353,10 @@ vue-no-ssr@^1.1.1:
   resolved "https://registry.yarnpkg.com/vue-no-ssr/-/vue-no-ssr-1.1.1.tgz#875f3be6fb0ae41568a837f3ac1a80eaa137b998"
   integrity sha512-ZMjqRpWabMPqPc7gIrG0Nw6vRf1+itwf0Itft7LbMXs2g3Zs/NFmevjZGN1x7K3Q95GmIjWbQZTVerxiBxI+0g==
 
-vue-observe-visibility@^0.4.4:
-  version "0.4.6"
-  resolved "https://registry.yarnpkg.com/vue-observe-visibility/-/vue-observe-visibility-0.4.6.tgz#878cb8ebcf3078e40807af29774e97105ebd519e"
-  integrity sha512-xo0CEVdkjSjhJoDdLSvoZoQrw/H2BlzB5jrCBKGZNXN2zdZgMuZ9BKrxXDjNP2AxlcCoKc8OahI3F3r3JGLv2Q==
-
 vue-property-decorator@^9.0.2:
   version "9.1.2"
   resolved "https://registry.yarnpkg.com/vue-property-decorator/-/vue-property-decorator-9.1.2.tgz#266a2eac61ba6527e2e68a6933cfb98fddab5457"
   integrity sha512-xYA8MkZynPBGd/w5QFJ2d/NM0z/YeegMqYTphy7NJQXbZcuU6FC6AOdUAcy4SXP+YnkerC6AfH+ldg7PDk9ESQ==
-
-vue-resize@^0.4.5:
-  version "0.4.5"
-  resolved "https://registry.yarnpkg.com/vue-resize/-/vue-resize-0.4.5.tgz#4777a23042e3c05620d9cbda01c0b3cc5e32dcea"
-  integrity sha512-bhP7MlgJQ8TIkZJXAfDf78uJO+mEI3CaLABLjv0WNzr4CcGRGPIAItyWYnP6LsPA4Oq0WE+suidNs6dgpO4RHg==
 
 vue-router@^3.4.9:
   version "3.4.9"
@@ -9417,15 +9402,6 @@ vue-typed-mixins@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/vue-typed-mixins/-/vue-typed-mixins-0.2.0.tgz#d369c186a392780bbbe9f1b28a4cdcf62bec9053"
   integrity sha512-0OxuinandPWv3nm5k/reYkuKtX3jjPZ40Sy9roJz0ih8PUzmI7zSRiXFEJ62LsyRegw9Tqy+qMkajk7ipKP8Vg==
-
-vue-virtual-scroller@^1.0.10:
-  version "1.0.10"
-  resolved "https://registry.yarnpkg.com/vue-virtual-scroller/-/vue-virtual-scroller-1.0.10.tgz#fdf243240001f05bd79aa77f2e2e60403760e2fb"
-  integrity sha512-Hn4qSBDhRY4XdngPioYy/ykDjrLX/NMm1fQXm/4UQQ/Xv1x8JbHGFZNftQowTcfICgN7yc31AKnUk1UGLJ2ndA==
-  dependencies:
-    scrollparent "^2.0.1"
-    vue-observe-visibility "^0.4.4"
-    vue-resize "^0.4.5"
 
 vue@^2.6.12:
   version "2.6.12"

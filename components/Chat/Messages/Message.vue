@@ -8,7 +8,7 @@
       class="avatar avatar-space"
       @click="showProfile"
     >
-      <v-img :src="avatar" />
+      <img :src="avatar" />
     </v-avatar>
     <div v-else class="avatar-space">
       <p v-if="false" class="caption text--secondary text">

@@ -175,7 +175,10 @@ export default Vue.extend({
           const field = new NextStepRequest.FormFields()
           if (this.formFields?.[i].type === 'number')
             field.setNumber(f as number)
-          if (this.formFields?.[i].type === 'password')
+          else if (
+            this.formFields?.[i].type === 'password' ||
+            this.formFields?.[i].type === 'new-password'
+          )
             field.setBytes(btoa(f as string))
           else field.setString(f as string)
           return field

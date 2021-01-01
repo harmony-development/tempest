@@ -10,38 +10,20 @@
           color="primary"
         ></v-progress-circular>
       </div>
-      <DynamicScroller
-        :items="mappedMessages || []"
-        :min-item-size="48"
-        :detect-hover="false"
-      >
-        <template v-slot="{ item, index, active }">
-          <DynamicScrollerItem
-            :item="item"
-            :active="active"
-            :size-dependencies="[item.content, item.attachments]"
-            :data-index="index"
-            :detect-hover="false"
-          >
-            <message
-              :id="item.id"
-              :content="item.content"
-              :attachments="item.attachmentsList"
-              :author-i-d="item.authorID"
-              :created-at="item.createdAt"
-              :edited-at="item.editedAt"
-              :override-username="
-                item.overrides ? item.overrides.name : undefined
-              "
-              :override-avatar="
-                item.overrides ? item.overrides.avatar : undefined
-              "
-              :pending="item.pending"
-              :collapse-user-info="getShouldCollapse(item.id, index)"
-            />
-          </DynamicScrollerItem>
-        </template>
-      </DynamicScroller>
+      <message
+        v-for="(item, idx) in mappedMessages || []"
+        :id="item.id"
+        :key="item.id"
+        :content="item.content"
+        :attachments="item.attachmentsList"
+        :author-i-d="item.authorID"
+        :created-at="item.createdAt"
+        :edited-at="item.editedAt"
+        :override-username="item.overrides ? item.overrides.name : undefined"
+        :override-avatar="item.overrides ? item.overrides.avatar : undefined"
+        :pending="item.pending"
+        :collapse-user-info="getShouldCollapse(item.id, idx)"
+      />
     </div>
   </div>
 </template>
@@ -77,17 +59,13 @@
 <script lang="ts">
 import Vue from 'vue'
 import { debounce } from 'debounce'
-import { DynamicScroller } from 'vue-virtual-scroller'
 import Message from './Message.vue'
 import { DialogType } from '~/store/dialog'
 import { IMessageData } from '~/store/app'
 
-import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
-
 export default Vue.extend({
   components: {
     Message,
-    DynamicScroller,
   },
   computed: {
     selectedGuildID() {
@@ -101,9 +79,7 @@ export default Vue.extend({
     messages() {
       return this.$accessor.app.data[this.$getHost()]?.messages
     },
-    mappedMessages():
-      | ((IMessageData & { id: string }) | undefined)[]
-      | undefined {
+    mappedMessages(): (IMessageData & { id: string })[] | undefined {
       return this.messagesList?.map((m) => ({
         ...this.messages[m],
         id: m,
@@ -178,6 +154,7 @@ export default Vue.extend({
       }
     },
     async onMessagesListScroll() {
+      console.log('hi')
       const el = this.$refs.messagesList as HTMLDivElement
       const oldScrollTop = el.scrollTop
       const oldScroll = el.scrollHeight - el.clientHeight
