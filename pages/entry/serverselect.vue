@@ -1,6 +1,14 @@
 <template>
   <div>
-    <h2 class="mb-2">{{ $i18n.t('server-select.title') }}</h2>
+    <h2 class="mb-2">
+      {{
+        $accessor.entry.pendingInvite === undefined
+          ? $i18n.t('server-select.title')
+          : $i18n.t('server-select.title-join', {
+              guild: $accessor.entry.pendingInvite.guildName,
+            })
+      }}
+    </h2>
     <v-dialog
       v-model="addServerDialog"
       max-width="290"

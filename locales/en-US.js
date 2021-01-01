@@ -2,6 +2,7 @@ export default {
   'app-name': 'Tempest',
   'server-select': {
     title: 'Select A Server To Login To',
+    'title-join': 'Select a server to join {guild} with',
     'add-btn': 'Add Server',
     'add-dialog': {
       title: 'Add Server',

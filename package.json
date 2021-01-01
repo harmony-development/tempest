@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@babel/plugin-proposal-optional-chaining": "^7.11.0",
-    "@harmony-dev/harmony-web-sdk": "^4.0.11",
+    "@harmony-dev/harmony-web-sdk": "^4.0.12",
     "@nuxt/typescript-runtime": "^2.0.0",
     "@nuxtjs/pwa": "^3.0.2",
     "@types/debounce": "^1.2.0",
