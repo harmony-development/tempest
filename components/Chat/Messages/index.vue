@@ -10,20 +10,23 @@
           color="primary"
         ></v-progress-circular>
       </div>
-      <message
+      <lazy-loader
         v-for="(item, idx) in mappedMessages || []"
         :id="item.id"
         :key="item.id"
-        :content="item.content"
-        :attachments="item.attachmentsList"
-        :author-i-d="item.authorID"
-        :created-at="item.createdAt"
-        :edited-at="item.editedAt"
-        :override-username="item.overrides ? item.overrides.name : undefined"
-        :override-avatar="item.overrides ? item.overrides.avatar : undefined"
-        :pending="item.pending"
-        :collapse-user-info="getShouldCollapse(item.id, idx)"
-      />
+      >
+        <message
+          :content="item.content"
+          :attachments="item.attachmentsList"
+          :author-i-d="item.authorID"
+          :created-at="item.createdAt"
+          :edited-at="item.editedAt"
+          :override-username="item.overrides ? item.overrides.name : undefined"
+          :override-avatar="item.overrides ? item.overrides.avatar : undefined"
+          :pending="item.pending"
+          :collapse-user-info="getShouldCollapse(item.id, idx)"
+        />
+      </lazy-loader>
     </div>
   </div>
 </template>
@@ -38,7 +41,7 @@
   scrollbar-color: var(--harmony-borders) transparent;
   scrollbar-width: thin;
 }
-.messages-list *:last-child {
+.messages-list > *:last-child {
   padding-bottom: 1rem;
 }
 
@@ -63,10 +66,66 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { Intersect } from 'vuetify/lib/directives'
 import { debounce } from 'debounce'
 import Message from './Message.vue'
 import { DialogType } from '~/store/dialog'
 import { IMessageData } from '~/store/app'
+
+Vue.directive('intersect', Intersect)
+
+Vue.component('lazy-loader', {
+  data() {
+    return {
+      visible: false,
+      previousHeight: '',
+    }
+  },
+  methods: {
+    onObserve(
+      _entries: IntersectionObserverEntry[],
+      _observer: IntersectionObserver,
+      _isIntersecting: boolean,
+    ) {
+      if (this.visible) return
+
+      const elm = _entries[0].target as HTMLElement
+
+      if (this.visible && !_isIntersecting) {
+        Vue.set(this, 'previousHeight', elm.offsetHeight.toString())
+      } else if (!this.visible && _isIntersecting) {
+        Vue.set(this, 'previousHeight', '')
+      }
+
+      Vue.set(this, 'visible', _isIntersecting)
+    },
+    obtainContent() {
+      return this.visible ? this.$slots.default : undefined
+    },
+  },
+  render(ce): Vue.VNode {
+    return ce(
+      'div',
+      {
+        style: {
+          'min-height': this.previousHeight,
+        },
+        directives: [
+          {
+            name: 'intersect',
+            value: {
+              handler: this.onObserve,
+              options: {
+                rootMargin: '100px',
+              },
+            },
+          },
+        ],
+      },
+      [this.obtainContent()],
+    )
+  },
+})
 
 export default Vue.extend({
   components: {
