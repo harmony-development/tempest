@@ -1,9 +1,14 @@
 <template>
   <div
-    :class="{ root: true, 'pl-3': true, 'pt-3': !collapseUserInfo, pending }"
+    :class="{
+      root: true,
+      'pl-3': true,
+      'pt-3': !source.shouldCollapse,
+      pending: source.pending,
+    }"
   >
     <v-avatar
-      v-if="!collapseUserInfo"
+      v-if="!source.shouldCollapse"
       v-ripple
       class="avatar avatar-space"
       @click="showProfile"
@@ -16,19 +21,21 @@
       </p>
     </div>
     <div class="content ml-2">
-      <v-list-item-title v-if="!collapseUserInfo">
-        {{ overrideUsername || username || authorID }}
+      <v-list-item-title v-if="!source.shouldCollapse">
+        {{
+          source.overrides ? source.overrides.name : username || source.authorID
+        }}
         <span
-          v-if="overrides ? !!overrides.systemPlurality : false"
+          v-if="source.overrides ? !!source.overrides.systemPlurality : false"
           class="text--tertiary"
         >
-          member of {{ username || authorID }}
+          member of {{ username || source.authorID }}
         </span>
         <span
-          v-if="overrides ? overrides.bridge : undefined"
+          v-if="source.overrides ? source.overrides.bridge : undefined"
           class="text--tertiary"
         >
-          bridged by {{ username || authorID }}
+          bridged by {{ username || source.authorID }}
         </span>
         <span class="text--secondary"> {{ timeString }} </span>
       </v-list-item-title>
@@ -54,10 +61,14 @@
         </v-tooltip>
       </p>
       <div
-        v-if="attachments && attachments.length > 0"
+        v-if="source.attachmentsList && source.attachmentsList.length > 0"
         class="attachment-container pt-3"
       >
-        <attachment v-for="a in attachments || []" :key="a.id" :data="a" />
+        <attachment
+          v-for="a in source.attachmentsList || []"
+          :key="a.id"
+          :data="a"
+        />
       </div>
     </div>
     <div class="menu-area">
@@ -68,15 +79,11 @@
           </v-btn>
         </template>
         <v-list dense>
-          <v-list-item
-            v-if="authorID === $accessor.app.userID"
-            link
-            @click="editMsg"
-          >
+          <v-list-item v-if="source.authorID === $accessor.app.userID" link>
             <v-list-item-title>Edit</v-list-item-title>
           </v-list-item>
           <v-list-item
-            v-if="authorID === $accessor.app.userID"
+            v-if="source.authorID === $accessor.app.userID"
             link
             @click="deleteMsg"
           >
@@ -186,14 +193,10 @@ import Vue from 'vue'
 import dayjs from 'dayjs'
 import calendar from 'dayjs/plugin/calendar'
 import UTC from 'dayjs/plugin/utc'
-import {
-  Attachment as MessageAttachment,
-  Override,
-} from '@harmony-dev/harmony-web-sdk/dist/protocol/harmonytypes/v1/types_pb'
 import showdown from 'showdown'
 import DOMPurify from 'dompurify'
 import Attachment from './Attachment.vue'
-import { IUserData } from '~/store/app'
+import { IMessageData, IUserData } from '~/store/app'
 import { AnimationDirection, Position } from '~/store/userPopover'
 import { DialogType } from '~/store/dialog'
 
@@ -225,48 +228,11 @@ conv.setFlavor('github')
 export default Vue.extend({
   components: { Attachment },
   props: {
-    id: {
-      type: String,
-      default: '',
-    },
-    collapseUserInfo: {
-      type: Boolean,
-      default: false,
-    },
-    content: {
-      type: String,
-      default: '',
-    },
-    overrides: {
-      type: Object as () => Override.AsObject,
-      default: undefined,
-    },
-    overrideUsername: {
-      type: String,
-      default: undefined,
-    },
-    overrideAvatar: {
-      type: String,
-      default: undefined,
-    },
-    createdAt: {
-      type: Number,
-      default: 0,
-    },
-    editedAt: {
-      type: Number,
-      default: 0,
-    },
-    pending: {
-      type: Boolean,
-      default: false,
-    },
-    authorID: {
-      type: String,
-      default: undefined,
-    },
-    attachments: {
-      type: Array as () => Array<MessageAttachment.AsObject>,
+    source: {
+      type: Object as () => IMessageData & {
+        id: string
+        shouldCollapse: boolean
+      },
       default: undefined,
     },
   },
@@ -278,46 +244,48 @@ export default Vue.extend({
   },
   computed: {
     authorData(): IUserData | undefined {
-      if (!this.authorID) return undefined
-      return this.$accessor.app.data[this.$getHost()]?.users[this.authorID]
+      if (!this.source.authorID) return undefined
+      return this.$accessor.app.data[this.$getHost()]?.users[
+        this.source.authorID
+      ]
     },
     username(): string | undefined {
-      if (!this.authorID) return undefined
+      if (!this.source.authorID) return undefined
       return this.authorData?.username
     },
     avatar(): string | undefined {
-      if (!this.authorID) return undefined
-      const a = this.overrideAvatar || this.authorData?.avatar
+      if (!this.source.authorID) return undefined
+      const a = this.source.overrides?.avatar || this.authorData?.avatar
       return a
         ? `${this.$getHost()}/_harmony/media/download/${encodeURIComponent(a)}`
         : undefined
     },
     formattedContent(): string {
-      return DOMPurify.sanitize(conv.makeHtml(this.content))
+      return DOMPurify.sanitize(conv.makeHtml(this.source.content))
     },
     timeString(): string {
-      return dayjs.unix(this.createdAt || 0).calendar()
+      return dayjs.unix(this.source.createdAt || 0).calendar()
     },
     smallTimeString(): string {
-      return dayjs.unix(this.createdAt || 0).format('hh:mm')
+      return dayjs.unix(this.source.createdAt || 0).format('hh:mm')
     },
     edited(): number | undefined {
-      return this.editedAt
+      return this.source.editedAt
     },
     editedString(): string {
-      return ` - ${dayjs.unix(this.editedAt || 0).calendar()}`
+      return ` - ${dayjs.unix(this.source.editedAt || 0).calendar()}`
     },
   },
   mounted() {
-    if (this.authorID) {
-      this.$fetchUser(this.$getHost(), this.authorID)
+    if (this.source.authorID) {
+      this.$fetchUser(this.$getHost(), this.source.authorID)
     }
   },
   methods: {
     showProfile(ev: MouseEvent) {
-      if (this.authorID) {
+      if (this.source.authorID) {
         this.$accessor.userPopover.openDialog({
-          id: this.authorID,
+          id: this.source.authorID,
           element: ev.currentTarget as Element,
           position: Position.TOP,
           animationDirection: AnimationDirection.yReverse,
@@ -325,7 +293,7 @@ export default Vue.extend({
       }
     },
     copyID() {
-      navigator.clipboard.writeText(this.id)
+      navigator.clipboard.writeText(this.source.id)
     },
     async deleteMsg() {
       if (
@@ -339,7 +307,7 @@ export default Vue.extend({
             this.$getHost(),
             this.$route.params.guildid,
             this.$route.params.channelid,
-            this.id,
+            this.source.id,
           )
         } catch (e) {
           this.$showDialog(DialogType.Error, e.statusMessage)
@@ -348,7 +316,7 @@ export default Vue.extend({
     },
     async editMsg() {
       this.editing = true
-      this.editedContent = this.content
+      this.editedContent = this.source.content
       await this.$nextTick()
       ;(this.$refs.editField as HTMLInputElement).focus()
     },
@@ -360,7 +328,7 @@ export default Vue.extend({
           this.$getHost(),
           this.$route.params.guildid,
           this.$route.params.channelid,
-          this.id,
+          this.source.id,
           this.editedContent,
         )
       }

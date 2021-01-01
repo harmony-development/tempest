@@ -9403,6 +9403,11 @@ vue-typed-mixins@^0.2.0:
   resolved "https://registry.yarnpkg.com/vue-typed-mixins/-/vue-typed-mixins-0.2.0.tgz#d369c186a392780bbbe9f1b28a4cdcf62bec9053"
   integrity sha512-0OxuinandPWv3nm5k/reYkuKtX3jjPZ40Sy9roJz0ih8PUzmI7zSRiXFEJ62LsyRegw9Tqy+qMkajk7ipKP8Vg==
 
+vue-virtual-scroll-list@^2.3.2:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/vue-virtual-scroll-list/-/vue-virtual-scroll-list-2.3.2.tgz#20dcdab58cbba4ca8b466ba1c8f318af358d647c"
+  integrity sha512-afm5bYgjJRK160KXlvs03dsPixEL/gS8sV5DKxEDRjPQKMXjIBmTMN/hMTEyazsPl+G4tXQs/msYK7p7tNVogQ==
+
 vue@^2.6.12:
   version "2.6.12"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.12.tgz#f5ebd4fa6bd2869403e29a896aed4904456c9123"
