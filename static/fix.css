@@ -21,6 +21,10 @@ html {
   --harmony-foreground: #eff0f1;
 
   --harmony-borders: rgba(0, 0, 0, 0.2);
+
+  --harmony-scroll-track: rgba(0, 0, 0, 0.3);
+  --harmony-scroll-thumb: rgba(255, 255, 255, 0.5);
+  --harmony-scroll-thumb-hov: rgba(255, 255, 255, 0.3);
 }
 
 @media (prefers-color-scheme: light) {
@@ -33,6 +37,10 @@ html {
     --harmony-foreground: #121212;
 
     --harmony-borders: rgba(0, 0, 0, 0.1);
+
+    --harmony-scroll-track: rgba(0, 0, 0, 0.3);
+    --harmony-scroll-thumb: rgba(0, 0, 0, 0.3);
+    --harmony-scroll-thumb-hov: rgba(0, 0, 0, 0.4);
   }
 
   .v-application,

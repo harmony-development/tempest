@@ -47,17 +47,17 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--v-accent-darken2);
+  background: var(--harmony-scroll-track);
   border-radius: 32px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--v-accent-darken1);
+  background: var(--harmony-scroll-thumb);
   border-radius: 32px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.4);
+  background: var(--harmony-scroll-thumb-hov);
 }
 </style>
 

@@ -18,7 +18,7 @@
     <div class="content ml-2">
       <v-list-item-title v-if="!collapseUserInfo">
         {{ overrideUsername || username || authorID }}
-        <span style="color: var(--v-accent-lighten3)">{{ timeString }} </span>
+        <span class="text--secondary">{{ timeString }} </span>
       </v-list-item-title>
       <p class="text">
         <v-textarea

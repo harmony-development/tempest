@@ -115,7 +115,7 @@
 }
 
 .member-item:hover {
-  background-color: var(--v-accent-base);
+  background-color: rgba(0, 0, 0, 0.08);
 }
 
 .avatar {

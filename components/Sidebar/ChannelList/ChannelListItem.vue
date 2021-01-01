@@ -28,7 +28,7 @@
 
 <style scoped>
 .active {
-  background-color: var(--v-accent-base);
+  background-color: rgba(0, 0, 0, 0.08);
   border-left: 4px solid var(--v-primary-base);
 }
 
