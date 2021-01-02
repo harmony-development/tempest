@@ -155,13 +155,19 @@ export default Vue.extend({
     },
     typingDisplay(): string {
       if (!this.typers) return ''
-      return Object.keys(this.typers).reduce((outStr, t) => {
-        const name = this.$accessor.app.data[this.$getHost()].users[t].username
-
-        outStr += `${name} is typing...`
-
-        return outStr
-      }, '')
+      const filteredTypers = Object.keys(this.typers)
+        .filter((v) => v !== this.$accessor.app.userID)
+        .map(
+          (userID) =>
+            this.$accessor.app.data[this.$getHost()].users[userID].username,
+        )
+        .filter((v) => v !== undefined)
+      if (filteredTypers.length === 0) return ''
+      return this.$tc(
+        'app.typing',
+        filteredTypers.length,
+        filteredTypers,
+      ).toString()
     },
     possibleSenders(): any[] {
       const ownP = this.$accessor.app.data[this.$accessor.app.host!]?.users[
@@ -175,7 +181,7 @@ export default Vue.extend({
     },
   },
   mounted() {
-    this.typingInterval = setInterval(this.checkTyping, 1000)
+    this.typingInterval = setInterval(this.checkTyping, 500)
   },
   beforeDestroy() {
     clearInterval(this.typingInterval)
@@ -283,7 +289,7 @@ export default Vue.extend({
     checkTyping() {
       if (this.typers) {
         Object.keys(this.typers).forEach((t) => {
-          if (new Date().getTime() - this.typers![t].getTime() > 3000) {
+          if (new Date().getTime() - this.typers![t].getTime() > 2000) {
             this.$accessor.app.deleteTyper({
               host: this.$getHost(),
               channelID: this.$route.params.channelid,

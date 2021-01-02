@@ -37,6 +37,8 @@ export default {
       idle: 'Idle',
       offline: 'Offline',
     },
+    typing:
+      'Uhh... nobody is typing? | {0} is typing... | {0} and {1} are typing... | {0}, {1} and {2} are typing... | Lots of people are typing...',
   },
   cancel: 'Cancel',
   done: 'Done',
