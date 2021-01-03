@@ -12,7 +12,7 @@
   flex: 1 0 0;
   overflow-y: auto;
   text-overflow: ellipsis;
-  background-color: var(--harmony-background-chrome-inner);
+  background-color: var(--v-chromeInner-base);
 }
 
 .guild-title {

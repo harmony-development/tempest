@@ -54,11 +54,11 @@ div.v-navigation-drawer__border {
 }
 
 .member-drawer {
-  background-color: var(--harmony-background-chrome-inner) !important;
+  background-color: var(--v-chromeInner-base) !important;
 }
 
 .v-app-bar {
-  background-color: var(--harmony-background-chrome-inner) !important;
+  background-color: var(--v-chromeInner-base) !important;
   box-sizing: border-box;
   border-bottom: 1px solid var(--harmony-borders);
 }

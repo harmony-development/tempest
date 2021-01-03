@@ -51,17 +51,13 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--harmony-scroll-track);
+  background: var(--v-chromeOuter-darken2);
   border-radius: 32px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--harmony-scroll-thumb);
+  background: var(--v-chromeOuter-base);
   border-radius: 32px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--harmony-scroll-thumb-hov);
 }
 </style>
 

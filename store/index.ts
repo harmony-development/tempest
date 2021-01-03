@@ -6,9 +6,18 @@ import * as dialog from './dialog'
 import * as userPopover from './userPopover'
 import * as imageView from './imageView'
 import * as guildContextMenu from './guildContextMenu'
+import * as theming from './theming'
 
 export const accessorType = getAccessorType({
-  modules: { entry, app, dialog, userPopover, imageView, guildContextMenu },
+  modules: {
+    entry,
+    app,
+    dialog,
+    userPopover,
+    imageView,
+    guildContextMenu,
+    theming,
+  },
 })
 
 export const plugins = [
@@ -20,6 +29,9 @@ export const plugins = [
       'app.session',
       'app.host',
       'app.personas',
+      'theming.dark',
+      'theming.primary',
+      'theming.secondary',
     ],
   }),
 ]

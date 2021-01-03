@@ -12,7 +12,7 @@
   display: flex;
   align-items: center;
   height: 48px;
-  background-color: var(--harmony-background-chrome-inner);
+  background-color: var(--v-chromeInner-base);
   border-bottom: 1px solid var(--harmony-borders);
 }
 </style>

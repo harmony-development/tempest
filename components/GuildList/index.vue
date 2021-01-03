@@ -17,7 +17,7 @@
   padding: 8px;
   display: flex;
   flex-direction: column;
-  background-color: var(--harmony-background-chrome-outer);
+  background-color: var(--v-chromeOuter-base);
   box-sizing: border-box;
 }
 </style>

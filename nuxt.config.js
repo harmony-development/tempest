@@ -4,6 +4,8 @@ export default {
   // Disable server-side rendering (https://go.nuxtjs.dev/ssr-mode)
   ssr: false,
 
+  analyze: true,
+
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
     titleTemplate: '%s',
@@ -64,6 +66,16 @@ export default {
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,
           success: colors.green.accent3,
+          harmony: '#121212',
+          chromeInner: '#161616',
+          chromeOuter: '#202020',
+          chromeAlt: '#212121',
+        },
+        light: {
+          harmony: '#ffffff',
+          chromeInner: '#eeeeee',
+          chromeOuter: '#dddddd',
+          chromeAlt: '#dadada',
         },
       },
       options: {

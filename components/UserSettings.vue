@@ -52,8 +52,19 @@
             </v-col>
           </v-row>
           <br />
-          <h3>{{ $i18n.t('app.personas.title') }}</h3>
-          <v-list>
+          <v-row align="center">
+            <h3 class="subtitle-1 mr-3">{{ $t('app.personas.title') }}</h3>
+            <v-btn color="primary darken-1" icon small @click="newPersona">
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
+          </v-row>
+          <h4
+            v-if="this.$accessor.app.personas.length === 0"
+            class="subtitle text-center mt-3 mb-3 subtitle-2"
+          >
+            No Subaccounts Added
+          </h4>
+          <v-list v-else>
             <v-list-item
               v-for="(item, i) in this.$accessor.app.personas"
               :key="i"
@@ -71,12 +82,51 @@
               </v-list-item-action>
             </v-list-item>
           </v-list>
+          <v-row>
+            <h3 class="subtitle-1">Theme</h3>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-row>
+                <v-col>
+                  <v-switch
+                    label="Dark Theme"
+                    :value="oldDark"
+                    @change="darkThemeChanged"
+                  />
+                </v-col>
+              </v-row>
+              <v-row no-gutters>
+                <v-col>
+                  <h3 class="subtitle-1">Primary</h3>
+                  <v-color-picker
+                    hide-canvas
+                    hide-inputs
+                    hide-mode-switch
+                    hide-sliders
+                    show-swatches
+                    :value="oldPrimary"
+                    @input="primaryColorChanged"
+                  />
+                </v-col>
+                <v-col>
+                  <h3 class="subtitle-1">Secondary</h3>
+                  <v-color-picker
+                    hide-canvas
+                    hide-inputs
+                    hide-mode-switch
+                    hide-sliders
+                    show-swatches
+                    :value="oldSecondary"
+                    @input="secondaryColorChanged"
+                  />
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
         </v-container>
       </v-card-text>
       <v-card-actions>
-        <v-btn color="primary darken-1" text @click="newPersona">
-          {{ $i18n.t('app.personas.add') }}
-        </v-btn>
         <v-spacer></v-spacer>
         <v-btn color="primary darken-1" text @click="closeDialog">
           Cancel
@@ -122,6 +172,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { IUserData, PersonaKind } from '~/store/app'
+
 export default Vue.extend({
   data() {
     return {
@@ -132,6 +183,9 @@ export default Vue.extend({
       subIsOpen: false,
       subaccountName: '',
       subaccountKind: PersonaKind.Plurality,
+      oldDark: this.$vuetify.theme.dark,
+      oldPrimary: this.$vuetify.theme.currentTheme.primary?.toString(),
+      oldSecondary: this.$vuetify.theme.currentTheme.secondary?.toString(),
     }
   },
   computed: {
@@ -196,6 +250,13 @@ export default Vue.extend({
       this.$accessor.app.setProfileSettingsOpen(false)
     },
     async saveChanges() {
+      this.$accessor.theming.applyTheme({
+        dark: this.$vuetify.theme.dark,
+        primary:
+          this.$vuetify.theme.currentTheme.primary?.toString() || '#000000',
+        secondary:
+          this.$vuetify.theme.currentTheme.secondary?.toString() || '#000000',
+      })
       const host = this.$accessor.app.host!
       let newAvatar: string | undefined
       if (this.newAvatarFile) {
@@ -218,6 +279,17 @@ export default Vue.extend({
         this.newAvatarFile = f
         this.newAvatarPreview = URL.createObjectURL(f)
       }
+    },
+    darkThemeChanged(dark: boolean) {
+      this.$vuetify.theme.dark = dark
+    },
+    primaryColorChanged(event: string) {
+      console.log(event)
+      this.$vuetify.theme.currentTheme.primary = event
+    },
+    secondaryColorChanged(event: string) {
+      console.log(event)
+      this.$vuetify.theme.currentTheme.secondary = event
     },
   },
 })
