@@ -60,6 +60,14 @@ declare module 'vue/types/vue' {
     $deleteChannel(host: string, guildID: string, channelID: string): void
     $sendTyping(host: string, guildID: string, channelID: string): void
     $leaveGuild(host: string, guildID: string): void
+    $fetchInvites(host: string, guildID: string): void
+    $deleteInvite(host: string, guildID: string, inviteID: string): void
+    $createInvite(
+      host: string,
+      guildID: string,
+      inviteID: string,
+      maxUses: number,
+    ): void
   }
 }
 
@@ -391,4 +399,40 @@ Vue.prototype.$leaveGuild = async function (
   const conn = await this.$getOrFederate(host)
 
   return conn.leaveGuild(guildID)
+}
+
+Vue.prototype.$fetchInvites = async function (
+  this: Vue,
+  host: string,
+  guildID: string,
+) {
+  const conn = await this.$getOrFederate(host)
+  const invites = await conn.getGuildInvites(guildID)
+  const asObj = invites.message!.toObject()
+  this.$accessor.app.setInvites({
+    host,
+    guildID,
+    invites: asObj.invitesList,
+  })
+}
+
+Vue.prototype.$deleteInvite = async function (
+  this: Vue,
+  host: string,
+  guildID: string,
+  inviteID: string,
+) {
+  const conn = await this.$getOrFederate(host)
+  return conn.deleteInvite(guildID, inviteID)
+}
+
+Vue.prototype.$createInvite = async function (
+  this: Vue,
+  host: string,
+  guildID: string,
+  inviteID: string,
+  maxUses: number,
+) {
+  const conn = await this.$getOrFederate(host)
+  return conn.createInvite(guildID, inviteID, maxUses)
 }

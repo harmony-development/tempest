@@ -1,4 +1,5 @@
 import { Connection } from '@harmony-dev/harmony-web-sdk'
+import { GetGuildInvitesResponse } from '@harmony-dev/harmony-web-sdk/dist/protocol/chat/v1/guilds_pb'
 import { Event } from '@harmony-dev/harmony-web-sdk/dist/protocol/chat/v1/streaming_pb'
 import {
   Action,
@@ -21,6 +22,7 @@ export interface IGuildData {
   channels?: string[]
   memberList?: string[]
   roles?: string[]
+  invites?: GetGuildInvitesResponse.Invite.AsObject[]
 }
 
 export interface IChannelData {
@@ -566,5 +568,46 @@ export const mutations = mutationTree(state, {
         (item) => item.host === data.host && item.guildId === data.guildID,
       ),
     )
+  },
+  setInvites(
+    state,
+    data: {
+      host: string
+      guildID: string
+      invites: GetGuildInvitesResponse.Invite.AsObject[]
+    },
+  ) {
+    ensureGuild(state, data.host, data.guildID)
+    Vue.set(state.data[data.host].guilds[data.guildID], 'invites', data.invites)
+  },
+  deleteInvite(
+    state,
+    data: {
+      host: string
+      guildID: string
+      inviteID: string
+    },
+  ) {
+    ensureGuild(state, data.host, data.guildID)
+    const idx = state.data[data.host].guilds[data.guildID].invites!.findIndex(
+      (invite) => invite.inviteId === data.inviteID,
+    )
+    Vue.delete(state.data[data.host].guilds[data.guildID].invites!, idx)
+  },
+  createInvite(
+    state,
+    data: {
+      host: string
+      guildID: string
+      inviteID: string
+      maxUses: number
+    },
+  ) {
+    ensureGuild(state, data.host, data.guildID)
+    state.data[data.host].guilds[data.guildID].invites?.push({
+      inviteId: data.inviteID,
+      possibleUses: data.maxUses,
+      useCount: 0,
+    })
   },
 })

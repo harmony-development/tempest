@@ -112,7 +112,6 @@ export default {
         path: '/app/:guildid?/:channelid?/:messageid?',
         component: resolve(__dirname, 'pages/_app'),
         name: 'mainapp',
-        chunkName: 'mainapp',
       })
     },
   },

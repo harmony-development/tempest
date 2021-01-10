@@ -31,7 +31,7 @@
       <member-list />
     </v-navigation-drawer>
     <user-popover />
-    <guild-settings />
+    <LazyGuildSettings v-if="guildSettingsOpen" />
     <image-view />
     <user-settings />
     <guild-context-menu />
@@ -78,7 +78,6 @@ import Sidebar from '@/components/Sidebar/index.vue'
 import MemberList from '@/components/MemberList/index.vue'
 import Chat from '@/components/Chat/index.vue'
 import { Connection } from '@harmony-dev/harmony-web-sdk'
-import GuildSettings from '@/components/GuildSettings/index.vue'
 import UserPopover from '~/components/UserPopover.vue'
 import ImageView from '~/components/ImageView.vue'
 import GuildContextMenu from '~/components/GuildContextMenu.vue'
@@ -90,7 +89,6 @@ export default Vue.extend({
     MemberList,
     Chat,
     UserPopover,
-    GuildSettings,
     ImageView,
     GuildContextMenu,
   },
@@ -99,6 +97,11 @@ export default Vue.extend({
       leftNav: false,
       rightNav: false,
     }
+  },
+  computed: {
+    guildSettingsOpen() {
+      return this.$accessor.app.guildSettingsOpen
+    },
   },
   watch: {
     '$accessor.app.disconnections': {
