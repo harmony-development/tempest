@@ -3,12 +3,21 @@
     <v-row class="mb-3">
       <v-col cols="12" md="3">
         <v-row justify="center" class="mb-4">
-          <v-btn icon width="auto" height="auto">
-            <s-image width="100px" height="100px" />
+          <v-btn icon width="auto" height="auto" @click="pictureClicked">
+            <s-image width="100px" height="100px" :src="displayPicture" />
           </v-btn>
         </v-row>
         <v-row justify="center">
-          <v-btn outlined color="primary">Change Picture</v-btn>
+          <v-btn outlined color="primary" @click="pictureClicked"
+            >Change Picture</v-btn
+          >
+          <input
+            ref="fileUpload"
+            type="file"
+            hidden
+            multiple
+            @change="pictureSelected"
+          />
         </v-row>
       </v-col>
       <v-col>
@@ -21,7 +30,7 @@
       </v-col>
     </v-row>
     <v-divider />
-    <v-toolbar dense flat>
+    <v-toolbar dense>
       <v-toolbar-title>Invites</v-toolbar-title>
       <v-spacer />
       <v-dialog v-model="inviteDialog" max-width="320">
@@ -70,38 +79,40 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
-    <v-simple-table>
-      <template v-slot:default>
-        <thead>
-          <tr>
-            <th class="text-left">Invite Name</th>
-            <th class="text-left">Uses</th>
-            <th class="text-left">Possible Uses</th>
-            <th class="text-left" style="width: 90px">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="inv in invites || []" :key="inv.inviteId">
-            <td>{{ inv.inviteId }}</td>
-            <td>{{ inv.useCount }}</td>
-            <td>{{ inv.possibleUses === -1 ? '∞' : inv.possibleUses }}</td>
-            <td class="d-flex align-center">
-              <v-btn icon @click="copyInvite(inv.inviteId)">
-                <v-icon size="18"> mdi-content-copy </v-icon>
-              </v-btn>
-              <v-btn icon @click="deleteInvite(inv.inviteId)">
-                <v-icon size="18"> mdi-delete </v-icon>
-              </v-btn>
-            </td>
-          </tr>
-        </tbody>
-      </template>
-    </v-simple-table>
+    <v-sheet color="harmony lighten-1 pa-3">
+      <v-simple-table>
+        <template v-slot:default>
+          <thead>
+            <tr>
+              <th class="text-left">Invite Name</th>
+              <th class="text-left">Uses</th>
+              <th class="text-left">Possible Uses</th>
+              <th class="text-left" style="width: 90px">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="inv in invites || []" :key="inv.inviteId">
+              <td>{{ inv.inviteId }}</td>
+              <td>{{ inv.useCount }}</td>
+              <td>{{ inv.possibleUses === -1 ? '∞' : inv.possibleUses }}</td>
+              <td class="d-flex align-center">
+                <v-btn icon @click="copyInvite(inv.inviteId)">
+                  <v-icon size="18"> mdi-content-copy </v-icon>
+                </v-btn>
+                <v-btn icon @click="deleteInvite(inv.inviteId)">
+                  <v-icon size="18"> mdi-delete </v-icon>
+                </v-btn>
+              </td>
+            </tr>
+          </tbody>
+        </template>
+      </v-simple-table>
+    </v-sheet>
     <v-snackbar :value="changed" :timeout="-1">
       You have unsaved changes
       <template>
         <v-btn text class="ml-2 mr-2" @click="resetAll"> Cancel </v-btn>
-        <v-btn color="green"> Save Changes </v-btn>
+        <v-btn color="green" @click="saveChanges"> Save Changes </v-btn>
       </template>
     </v-snackbar>
   </div>
@@ -110,25 +121,39 @@
 <script lang="ts">
 import Vue from 'vue'
 import SImage from '../SImage.vue'
+import { IGuildData } from '~/store/app'
 export default Vue.extend({
   components: { SImage },
   data() {
     return {
       guildName: undefined as string | undefined,
+      newPicturePreview: undefined as string | undefined,
+      newPictureFile: undefined as File | undefined,
       inviteName: '',
       maxUses: 1,
       inviteDialog: false,
     }
   },
   computed: {
+    guildData(): IGuildData | undefined {
+      return this.$accessor.app.data[this.$getHost()]?.guilds[
+        this.$route.params.guildid
+      ]
+    },
     displayName(): string | undefined {
       if (this.guildName !== undefined) {
         return this.guildName
       } else {
-        return this.$accessor.app.data[this.$getHost()]?.guilds[
-          this.$route.params.guildid
-        ]?.name
+        return this.guildData?.name
       }
+    },
+    displayPicture(): string | undefined {
+      if (this.newPicturePreview) {
+        return this.newPicturePreview
+      } else if (this.guildData?.picture) {
+        return this.$parseMediaURI(this.$getHost(), this.guildData.picture)
+      }
+      return undefined
     },
     guildNameChanged(): boolean {
       return (
@@ -140,7 +165,7 @@ export default Vue.extend({
       )
     },
     changed(): boolean {
-      return this.guildNameChanged
+      return this.guildNameChanged || !!this.newPictureFile
     },
     invites() {
       return this.$accessor.app.data[this.$getHost()]?.guilds[
@@ -187,6 +212,35 @@ export default Vue.extend({
     },
     copyInvite(inviteID: string) {
       navigator.clipboard.writeText(`https://chat.harmonyapp.io/${inviteID}`)
+    },
+    pictureClicked() {
+      ;(this.$refs.fileUpload as HTMLInputElement).click()
+    },
+    pictureSelected(e: Event) {
+      const input = e.target as HTMLInputElement
+      const f = input.files?.[0]
+      if (f && f.type.startsWith('image/')) {
+        this.newPictureFile = f
+        this.newPicturePreview = URL.createObjectURL(f)
+      }
+    },
+    async saveChanges() {
+      let newPicture: string | undefined
+      const host = this.$accessor.app.host!
+      if (this.newPictureFile) {
+        newPicture = await this.$uploadFile(host, this.newPictureFile)
+      }
+      await this.$updateGuildInfo(
+        this.$getHost(),
+        this.$route.params.guildid,
+        this.guildName,
+        newPicture,
+      )
+      if (this.newPictureFile) {
+        URL.revokeObjectURL(this.newPicturePreview!)
+        this.newPicturePreview = undefined
+        this.newPictureFile = undefined
+      }
     },
   },
 })

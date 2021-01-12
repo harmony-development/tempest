@@ -14,7 +14,7 @@
           <v-icon> mdi-close </v-icon>
         </v-btn>
       </v-app-bar>
-      <v-container fluid class="fill-height">
+      <v-container fluid class="fill-height" style="height: 600px">
         <v-row class="fill-height">
           <v-col cols="5" sm="4" md="3" class="fill-height">
             <div class="sidebar fill-height">
@@ -47,7 +47,7 @@
               </v-list>
             </div>
           </v-col>
-          <v-col class="pt-8">
+          <v-col>
             <keep-alive>
               <overview v-if="page === 'overview'" />
               <roles v-if="page === 'roles'" />
@@ -97,7 +97,7 @@ export default Vue.extend({
   },
   computed: {
     open() {
-      return this.$accessor.app.guildSettingsOpen
+      return this.$accessor.ui.guildSettingsOpen
     },
     displayName() {
       return this.$accessor.app.data[this.$getHost()]?.guilds[
@@ -107,7 +107,7 @@ export default Vue.extend({
   },
   methods: {
     dialogChange() {
-      this.$accessor.app.setGuildSettingsOpen(false)
+      this.$accessor.ui.setGuildSettingsOpen(false)
     },
   },
 })

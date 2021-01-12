@@ -1,5 +1,9 @@
 import { Connection } from '@harmony-dev/harmony-web-sdk'
 import {
+  PermissionList,
+  Role,
+} from '@harmony-dev/harmony-web-sdk/dist/protocol/chat/v1/permissions_pb'
+import {
   Action,
   Embed,
   UserStatusMap,
@@ -67,6 +71,35 @@ declare module 'vue/types/vue' {
       guildID: string,
       inviteID: string,
       maxUses: number,
+    ): void
+    $updateGuildInfo(
+      host: string,
+      guildID: string,
+      newName?: string,
+      newPicture?: string,
+    ): void
+    $fetchPermissions(
+      host: string,
+      guildID: string,
+      channelID: string,
+      roleID: string,
+    ): void
+    $setRolePermissions(
+      this: Vue,
+      host: string,
+      guildID: string,
+      channelID: string | undefined,
+      roleID: string,
+      perms: PermissionList,
+    ): void
+    $deleteRole(this: Vue, host: string, guildID: string, roleID: string): void
+    $createRole(
+      host: string,
+      guildID: string,
+      name: string,
+      color: number,
+      hoist: boolean,
+      pingable: boolean,
     ): void
   }
 }
@@ -301,25 +334,25 @@ Vue.prototype.$fetchGuildRoles = async function (
 
   const mapped = asObj!.rolesList.reduce<{
     [roleID: string]: IRoleData
-  }>((prev, val) => {
-    Vue.set(prev, val.roleId, {
+  }>((obj, val) => {
+    Vue.set(obj, val.roleId, {
       name: val.name,
       color: val.color,
       hoist: val.hoist,
       pingable: val.pingable,
     })
-    return prev
+    return obj
   }, {})
+
+  this.$accessor.app.setRolesData({
+    host,
+    roles: mapped,
+  })
 
   this.$accessor.app.setRolesList({
     host,
     guildID,
     roles: asObj!.rolesList.map((r) => r.roleId),
-  })
-
-  this.$accessor.app.setRolesData({
-    host,
-    roles: mapped,
   })
 }
 
@@ -435,4 +468,77 @@ Vue.prototype.$createInvite = async function (
 ) {
   const conn = await this.$getOrFederate(host)
   return conn.createInvite(guildID, inviteID, maxUses)
+}
+
+Vue.prototype.$updateGuildInfo = async function (
+  this: Vue,
+  host: string,
+  guildID: string,
+  newName?: string,
+  newPicture?: string,
+) {
+  const conn = await this.$getOrFederate(host)
+  return conn.updateGuildInfo(guildID, newName, newPicture)
+}
+
+Vue.prototype.$fetchPermissions = async function (
+  this: Vue,
+  host: string,
+  guildID: string,
+  channelID: string,
+  roleID: string,
+) {
+  const conn = await this.$getOrFederate(host)
+  const resp = await conn.getPermissions(guildID, channelID, roleID)
+  const asObj = resp.message?.toObject()
+  const permsList = asObj?.perms?.permissionsList
+
+  this.$accessor.app.setPermissions({
+    host,
+    roleID,
+    permissions: permsList!.reduce((obj, perm) => {
+      Vue.set(obj, perm.matches, perm.mode)
+      return obj
+    }, {}),
+  })
+}
+
+Vue.prototype.$setRolePermissions = async function (
+  this: Vue,
+  host: string,
+  guildID: string,
+  channelID: string | undefined,
+  roleID: string,
+  perms: PermissionList,
+) {
+  const conn = await this.$getOrFederate(host)
+  conn.setRolePermissions(guildID, channelID, roleID, perms)
+}
+
+Vue.prototype.$deleteRole = async function (
+  this: Vue,
+  host: string,
+  guildID: string,
+  roleID: string,
+) {
+  const conn = await this.$getOrFederate(host)
+  return conn.deleteGuildRole(guildID, roleID)
+}
+
+Vue.prototype.$createRole = async function (
+  this: Vue,
+  host: string,
+  guildID: string,
+  name: string,
+  color: number,
+  hoist: boolean,
+  pingable: boolean,
+) {
+  const conn = await this.$getOrFederate(host)
+  const role = new Role()
+  role.setName(name)
+  role.setColor(color)
+  role.setHoist(hoist)
+  role.setPingable(pingable)
+  return conn.createRole(guildID, role)
 }

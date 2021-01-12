@@ -14,7 +14,7 @@ export interface IMediaResult {
 declare module 'vue/types/vue' {
   interface Vue {
     $parseHarmonyURI(uri: string): IParseResult
-    $parseMediaURI(uri: string): IMediaResult
+    $parseMediaURI(host: string, uri: string): string
     $toReqHost(host: string): string
     $toMediaURI(host: string, attachmentID: string): string
     $guildIconHost(host: string): string
@@ -31,16 +31,14 @@ Vue.prototype.$parseHarmonyURI = (uri: string) => {
   }
 }
 
-Vue.prototype.$parseMediaURI = (uri: string) => {
-  if (!uri.startsWith('hmc://')) throw new Error('invalid protocol')
+Vue.prototype.$parseMediaURI = function (this: Vue, host: string, uri: string) {
+  if (!uri.startsWith('hmc://')) {
+    return this.$toMediaURI(host, uri)
+  }
   // browsers are hardcoded to parse HTTP urls 🗿
   const parsed = new URL(uri.replace('hmc://', 'https://'))
   const attachmentID = parsed.pathname.substr(1)
-  return {
-    host: parsed.host,
-    id: attachmentID,
-    download: `https://${parsed.host}/_harmony/media/download/${attachmentID}`,
-  }
+  return `https://${parsed.host}/_harmony/media/download/${attachmentID}`
 }
 
 Vue.prototype.$toReqHost = (host: string) => {
@@ -51,7 +49,7 @@ Vue.prototype.$toReqHost = (host: string) => {
 Vue.prototype.$toMediaURI = (host: string, attachmentID: string) => {
   return `${
     host.startsWith('https://') ? '' : 'https://'
-  }${host}/_harmony/media/${attachmentID}`
+  }${host}/_harmony/media/download/${attachmentID}`
 }
 
 Vue.prototype.$guildIconHost = function (this: Vue, host: string) {

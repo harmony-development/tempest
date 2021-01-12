@@ -11,6 +11,18 @@ import {
 import { mutationTree } from 'nuxt-typed-vuex'
 import Vue from 'vue'
 
+export const permissionsList = {
+  'messages.send': -1,
+  'roles.user.get': -1,
+  'roles.user.manage': -1,
+  'roles.manage': -1,
+  'roles.get': -1,
+  'permissions.manage.get': -1,
+  'permissions.manage.set': -1,
+  'permissions.query': -1,
+  'actions.trigger': -1,
+}
+
 interface IGuildEntry {
   guildId: string
   host: string
@@ -60,6 +72,11 @@ export interface IRoleData {
   color: number
   hoist: boolean
   pingable: boolean
+  permissions:
+    | {
+        [id: string]: number
+      }
+    | undefined
 }
 
 interface IData {
@@ -94,8 +111,6 @@ interface IState {
   disconnections: {
     [host: string]: string
   }
-  guildSettingsOpen: boolean
-  profileSettingsOpen: boolean
   personas: IPersona[]
 }
 
@@ -117,8 +132,6 @@ export const state = (): IState => ({
   data: {},
   guildsList: undefined,
   disconnections: {},
-  guildSettingsOpen: false,
-  profileSettingsOpen: false,
   personas: [],
 })
 
@@ -433,12 +446,6 @@ export const mutations = mutationTree(state, {
       data.memberList,
     )
   },
-  setGuildSettingsOpen(state, data: boolean) {
-    state.guildSettingsOpen = data
-  },
-  setProfileSettingsOpen(state, data: boolean) {
-    state.profileSettingsOpen = data
-  },
   setRolesList(
     state,
     data: {
@@ -460,10 +467,10 @@ export const mutations = mutationTree(state, {
     },
   ) {
     ensureHost(state, data.host)
-    state.data[data.host].roles = {
+    Vue.set(state.data[data.host], 'roles', {
       ...state.data[data.host].roles,
       ...data.roles,
-    }
+    })
   },
   deleteMessage(
     state,
@@ -609,5 +616,24 @@ export const mutations = mutationTree(state, {
       possibleUses: data.maxUses,
       useCount: 0,
     })
+  },
+  setPermissions(
+    state,
+    data: {
+      host: string
+      roleID: string
+      permissions:
+        | {
+            [id: string]: number
+          }
+        | undefined
+    },
+  ) {
+    ensureHost(state, data.host)
+    Vue.set(
+      state.data[data.host].roles[data.roleID],
+      'permissions',
+      data.permissions,
+    )
   },
 })

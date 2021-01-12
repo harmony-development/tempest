@@ -28,8 +28,11 @@
 
 <style scoped>
 .active {
-  background-color: rgba(0, 0, 0, 0.08);
   border-left: 4px solid var(--v-primary-base);
+}
+
+.active::before {
+  opacity: 0.24 !important;
 }
 
 .icon-hidden {
@@ -38,6 +41,10 @@
 
 .channel-item {
   transition: 0.1s ease-in;
+}
+
+.channel-item:hover::before {
+  opacity: 0.1;
 }
 </style>
 

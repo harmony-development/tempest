@@ -193,7 +193,7 @@ export default Vue.extend({
       return [{ text: 'System Member', value: PersonaKind.Plurality }]
     },
     open() {
-      return this.$accessor.app.profileSettingsOpen
+      return this.$accessor.ui.profileSettingsOpen
     },
     data(): IUserData | undefined {
       const host = this.$accessor.app.host
@@ -247,7 +247,7 @@ export default Vue.extend({
       )
     },
     closeDialog() {
-      this.$accessor.app.setProfileSettingsOpen(false)
+      this.$accessor.ui.setProfileSettingsOpen(false)
     },
     async saveChanges() {
       this.$accessor.theming.applyTheme({

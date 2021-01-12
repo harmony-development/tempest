@@ -21,7 +21,7 @@ export default Vue.extend({
   },
   methods: {
     click() {
-      this.$accessor.app.setGuildSettingsOpen(true)
+      this.$accessor.ui.setGuildSettingsOpen(true)
     },
   },
 })

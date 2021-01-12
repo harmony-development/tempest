@@ -87,11 +87,7 @@ export default Vue.extend({
       return this.typedData.name
     },
     src(): string {
-      if (this.typedData.id.startsWith('hmc://')) {
-        const parsed = new URL(this.typedData.id.replace('hmc://', 'https://'))
-        return `https://${parsed.host}/_harmony/media/download${parsed.pathname}`
-      }
-      return `${this.$getHost()}/_harmony/media/download/${this.typedData.id}`
+      return this.$parseMediaURI(this.$getHost(), this.typedData.id)
     },
   },
   methods: {

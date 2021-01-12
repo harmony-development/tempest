@@ -59,9 +59,8 @@ export default Vue.extend({
 
       if (!pic) return undefined
 
-      const parsed = this.$parseMediaURI(pic)
-
-      return parsed.download
+      const parsed = this.$parseMediaURI(this.host, pic)
+      return parsed
     },
     iconStyle(): string {
       return `img-content mb-2 ${

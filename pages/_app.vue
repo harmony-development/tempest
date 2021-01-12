@@ -83,6 +83,7 @@ import ImageView from '~/components/ImageView.vue'
 import GuildContextMenu from '~/components/GuildContextMenu.vue'
 
 export default Vue.extend({
+  name: 'App',
   components: {
     GuildList,
     Sidebar,
@@ -100,7 +101,7 @@ export default Vue.extend({
   },
   computed: {
     guildSettingsOpen() {
-      return this.$accessor.app.guildSettingsOpen
+      return this.$accessor.ui.guildSettingsOpen
     },
   },
   watch: {

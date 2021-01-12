@@ -7,6 +7,7 @@ import * as userPopover from './userPopover'
 import * as imageView from './imageView'
 import * as guildContextMenu from './guildContextMenu'
 import * as theming from './theming'
+import * as ui from './ui'
 
 export const accessorType = getAccessorType({
   modules: {
@@ -17,6 +18,7 @@ export const accessorType = getAccessorType({
     imageView,
     guildContextMenu,
     theming,
+    ui,
   },
 })
 
