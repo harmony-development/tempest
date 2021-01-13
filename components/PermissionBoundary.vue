@@ -13,10 +13,14 @@ export default Vue.extend({
       return this.$slots.default![0]
     }
     const hasNode = true // TMP
-    if (this.$slots.noperm && !hasNode) {
-      return this.$slots.noperm[0]
+    if (hasNode) {
+      return this.$slots.default![0]
+    } else {
+      if (this.$slots.noperm) {
+        return this.$slots.noperm[0]
+      }
+      return null as any
     }
-    return null as any
   },
 })
 </script>
