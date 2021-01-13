@@ -24,6 +24,7 @@
           </div>
           <message
             v-for="(item, idx) in mappedMessages || []"
+            :id="item.id"
             :key="item.id"
             :content="item.content"
             :attachments="item.attachmentsList"

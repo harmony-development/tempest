@@ -101,9 +101,9 @@
   visibility: hidden;
 }
 
-/* .root:hover > .menu-area {
+.root:hover > .menu-area {
   visibility: visible;
-} */
+}
 
 .avatar {
   width: 48px;
