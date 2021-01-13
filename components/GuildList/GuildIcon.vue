@@ -35,7 +35,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { DialogType } from '~/store/dialog'
 export default Vue.extend({
   props: {
     id: {
@@ -46,6 +45,11 @@ export default Vue.extend({
       type: String,
       default: '',
     },
+  },
+  data() {
+    return {
+      error: undefined as Error | undefined,
+    }
   },
   computed: {
     name(): string | undefined {
@@ -82,8 +86,7 @@ export default Vue.extend({
           picture: asObj.guildPicture,
         })
       } catch (e) {
-        console.log(e)
-        this.$showDialog(DialogType.Error, e.statusMessage || e)
+        this.error = e
       }
     }
   },
