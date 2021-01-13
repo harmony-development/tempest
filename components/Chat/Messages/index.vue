@@ -40,6 +40,7 @@
             :overrides="item.overrides"
             :pending="item.pending"
             :collapse-user-info="getShouldCollapse(item.id, idx)"
+            :conv="conv"
           />
         </div>
       </permission-boundary>
@@ -79,6 +80,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { debounce } from 'debounce'
+import showdown from 'showdown'
 import Message from './Message.vue'
 import { DialogType } from '~/store/dialog'
 import { IMessageData } from '~/store/app'
@@ -86,6 +88,44 @@ import { IMessageData } from '~/store/app'
 export default Vue.extend({
   components: {
     Message,
+  },
+  data() {
+    const markdownClasses: {
+      [key: string]: string
+    } = {
+      p: 'msg-p',
+      pre: 'codeblock',
+    }
+    const conv = new showdown.Converter({
+      simplifiedAutoLink: true,
+      openLinksInNewWindow: true,
+      ghCodeBlocks: true,
+      extensions: [
+        ...Object.keys(markdownClasses).map((key) => ({
+          type: 'output',
+          regex: new RegExp(`<${key}>`, 'g'),
+          replace: `<${key} class="${markdownClasses[key]}" $1>`,
+        })),
+        {
+          type: 'lang',
+          filter: (text, _converter, _options) => {
+            return text.replaceAll(/<:.+?:>/g, (m) => {
+              return `<img class="${
+                m.length === text.replace(/\s/g, '').length
+                  ? 'big-emoji'
+                  : 'emoji'
+              }" src="${this.$toMediaURI(this.$getHost(), m.slice(2, -2))}" />`
+            })
+          },
+        },
+      ],
+    })
+
+    conv.setFlavor('github')
+
+    return {
+      conv,
+    }
   },
   computed: {
     selectedGuildID() {

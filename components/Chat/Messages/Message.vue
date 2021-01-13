@@ -179,6 +179,15 @@
   margin-bottom: 0px;
   width: auto;
 }
+
+.content-out >>> .emoji {
+  height: 1em;
+  vertical-align: middle;
+}
+
+.content-out >>> .big-emoji {
+  height: 3em;
+}
 </style>
 
 <script lang="ts">
@@ -190,37 +199,14 @@ import {
   Attachment as MessageAttachment,
   Override,
 } from '@harmony-dev/harmony-web-sdk/dist/protocol/harmonytypes/v1/types_pb'
-import showdown from 'showdown'
 import DOMPurify from 'dompurify'
 import Attachment from './Attachment.vue'
 import { IUserData } from '~/store/app'
 import { AnimationDirection, Position } from '~/store/userPopover'
 import { DialogType } from '~/store/dialog'
 
-const markdownClasses: {
-  [key: string]: string
-} = {
-  p: 'msg-p',
-  pre: 'codeblock',
-}
-
 dayjs.extend(calendar)
 dayjs.extend(UTC)
-
-const conv = new showdown.Converter({
-  simplifiedAutoLink: true,
-  openLinksInNewWindow: true,
-  ghCodeBlocks: true,
-  extensions: [
-    ...Object.keys(markdownClasses).map((key) => ({
-      type: 'output',
-      regex: new RegExp(`<${key}>`, 'g'),
-      replace: `<${key} class="${markdownClasses[key]}" $1>`,
-    })),
-  ],
-})
-
-conv.setFlavor('github')
 
 export default Vue.extend({
   components: { Attachment },
@@ -269,6 +255,10 @@ export default Vue.extend({
       type: Array as () => Array<MessageAttachment.AsObject>,
       default: undefined,
     },
+    conv: {
+      type: Object as () => showdown.Converter,
+      default: undefined,
+    },
   },
   data() {
     return {
@@ -293,7 +283,7 @@ export default Vue.extend({
         : undefined
     },
     formattedContent(): string {
-      return DOMPurify.sanitize(conv.makeHtml(this.content))
+      return DOMPurify.sanitize(this.conv.makeHtml(this.content))
     },
     timeString(): string {
       return dayjs.unix(this.createdAt || 0).calendar()

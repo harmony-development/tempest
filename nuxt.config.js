@@ -129,4 +129,5 @@ export default {
       },
     ],
   },
+  target: 'static',
 }
