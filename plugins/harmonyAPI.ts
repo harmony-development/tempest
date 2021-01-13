@@ -166,9 +166,9 @@ Vue.prototype.$fetchChannelList = async function (
 ) {
   const conn = await this.$getOrFederate(host)
   const resp = await conn.getGuildChannels(guildID)
-  const asObj = resp.message?.toObject()
+  const asObj = resp.message!.toObject()
 
-  const mapped = asObj!.channelsList.reduce<{
+  const mapped = asObj.channelsList.reduce<{
     [channelID: string]: IChannelData
   }>((prev, val) => {
     Vue.set(prev, val.channelId, {
@@ -330,9 +330,9 @@ Vue.prototype.$fetchGuildRoles = async function (
 ) {
   const conn = await this.$getOrFederate(host)
   const resp = await conn.getGuildRoles(guildID)
-  const asObj = resp.message?.toObject()
+  const asObj = resp.message!.toObject()
 
-  const mapped = asObj!.rolesList.reduce<{
+  const mapped = asObj.rolesList.reduce<{
     [roleID: string]: IRoleData
   }>((obj, val) => {
     Vue.set(obj, val.roleId, {
@@ -490,8 +490,8 @@ Vue.prototype.$fetchPermissions = async function (
 ) {
   const conn = await this.$getOrFederate(host)
   const resp = await conn.getPermissions(guildID, channelID, roleID)
-  const asObj = resp.message?.toObject()
-  const permsList = asObj?.perms?.permissionsList
+  const asObj = resp.message!.toObject()
+  const permsList = asObj.perms!.permissionsList
 
   this.$accessor.app.setPermissions({
     host,

@@ -46,7 +46,7 @@
           @keypress="onEditKeyPress"
         ></v-textarea>
         <span v-else class="content-out" v-html="formattedContent"></span>
-        <v-tooltip v-if="edited && edited !== 0" top>
+        <v-tooltip v-if="edited" top>
           <template #activator="{ on, attrs }">
             <span class="edited ml-1" v-bind="attrs" v-on="on">(edited)</span>
           </template>

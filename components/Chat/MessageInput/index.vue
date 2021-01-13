@@ -1,7 +1,7 @@
 <template>
   <div class="pl-3 pr-3 pb-3 pt-3 root message-field harmony darken-1">
     <div v-if="!!typingDisplay" class="typing-indicator">
-      <v-icon :class="{ invisible: !!!typingDisplay }">
+      <v-icon :class="{ invisible: !typingDisplay }">
         mdi-dots-horizontal
       </v-icon>
       {{ typingDisplay || '&nbsp;' }}

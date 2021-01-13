@@ -132,7 +132,7 @@ export default Vue.extend({
       this.addServerDialog = false
     },
     nextPage() {
-      let host = this.serverList[this.selected]?.host
+      let host = this.serverList[this.selected].host
 
       if (host.includes('://'))
         host = `https${host.substr(host.indexOf('://'))}`
