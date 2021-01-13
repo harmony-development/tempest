@@ -12,29 +12,35 @@
             </h2>
           </div>
         </template>
-        <h3 v-if="reachedTop" class="ma-3 font-weight-regular">
-          Welcome to the start of <strong>#{{ channelName }}</strong>
-        </h3>
-        <div v-else class="ma-3 d-flex justify-center align-center">
-          <v-progress-circular
-            indeterminate
-            color="primary"
-          ></v-progress-circular>
+        <div>
+          <h3 v-if="reachedTop" class="ma-3 font-weight-regular">
+            Welcome to the start of <strong>#{{ channelName }}</strong>
+          </h3>
+          <div v-else class="ma-3 d-flex justify-center align-center">
+            <v-progress-circular
+              indeterminate
+              color="primary"
+            ></v-progress-circular>
+          </div>
+          <message
+            v-for="(item, idx) in mappedMessages || []"
+            :key="item.id"
+            :content="item.content"
+            :attachments="item.attachmentsList"
+            :author-i-d="item.authorID"
+            :created-at="item.createdAt"
+            :edited-at="item.editedAt"
+            :override-username="
+              item.overrides ? item.overrides.name : undefined
+            "
+            :override-avatar="
+              item.overrides ? item.overrides.avatar : undefined
+            "
+            :overrides="item.overrides"
+            :pending="item.pending"
+            :collapse-user-info="getShouldCollapse(item.id, idx)"
+          />
         </div>
-        <message
-          v-for="(item, idx) in mappedMessages || []"
-          :key="item.id"
-          :content="item.content"
-          :attachments="item.attachmentsList"
-          :author-i-d="item.authorID"
-          :created-at="item.createdAt"
-          :edited-at="item.editedAt"
-          :override-username="item.overrides ? item.overrides.name : undefined"
-          :override-avatar="item.overrides ? item.overrides.avatar : undefined"
-          :overrides="item.overrides"
-          :pending="item.pending"
-          :collapse-user-info="getShouldCollapse(item.id, idx)"
-        />
       </permission-boundary>
     </div>
   </div>
