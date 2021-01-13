@@ -13,6 +13,7 @@ import Vue from 'vue'
 
 export const permissionsList = {
   'messages.send': -1,
+  'messages.view': -1,
   'roles.user.get': -1,
   'roles.user.manage': -1,
   'roles.manage': -1,

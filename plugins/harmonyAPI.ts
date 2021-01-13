@@ -542,3 +542,13 @@ Vue.prototype.$createRole = async function (
   role.setPingable(pingable)
   return conn.createRole(guildID, role)
 }
+
+Vue.prototype.$getPermissions = async function (
+  this: Vue,
+  host: string,
+  guildID: string,
+  userID: string,
+) {
+  const conn = await this.$getOrFederate(host)
+  await conn.getUserRoles(guildID, userID)
+}

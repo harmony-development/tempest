@@ -1,5 +1,6 @@
 <template>
   <div class="chat">
+    <v-toolbar dense />
     <messages />
     <message-input />
   </div>
