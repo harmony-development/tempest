@@ -3,17 +3,31 @@
     <template #activator="{ on, attrs }">
       <v-img
         v-ripple
-        :class="iconStyle"
+        :class="{
+          'img-content': true,
+          'mb-2': true,
+          selected: id === $route.params.guildid,
+          error: !!error,
+        }"
         max-width="64"
         max-height="64"
         v-bind="attrs"
-        :src="picture"
+        :src="error ? '' : picture"
         v-on="on"
         @click="onGuildIconClick"
         @contextmenu="onContextMenu"
-      />
+      >
+        <v-row
+          v-if="error"
+          class="fill-height ma-0"
+          align="center"
+          justify="center"
+        >
+          <v-icon size="32"> mdi-alert </v-icon>
+        </v-row>
+      </v-img>
     </template>
-    {{ name || id }}
+    {{ error || name || id }}
   </v-tooltip>
 </template>
 
@@ -25,6 +39,14 @@
   border-radius: 100%;
   cursor: pointer;
   border: 2px solid transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.error {
+  transition: border 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+  border: 2px solid var(--v-error-base);
 }
 
 .selected {
@@ -65,11 +87,6 @@ export default Vue.extend({
 
       const parsed = this.$parseMediaURI(this.host, pic)
       return parsed
-    },
-    iconStyle(): string {
-      return `img-content mb-2 ${
-        this.id === this.$route.params.guildid ? 'selected' : ''
-      }`
     },
   },
   async mounted() {
