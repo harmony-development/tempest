@@ -1,93 +1,95 @@
 <template>
-  <div class="pl-3 pr-3 pb-3 pt-1 root message-field harmony darken-1">
-    <div class="typing-indicator">
+  <div>
+    <div class="typing-indicator pl-3 subtitle-2">
       <v-icon :class="{ invisible: !typingDisplay }">
         mdi-dots-horizontal
       </v-icon>
       {{ typingDisplay }}
       &zwnj;
     </div>
-    <v-slide-group
-      v-if="attachments.length > 0"
-      multiple
-      show-arrows
-      class="mb-2"
-    >
-      <v-slide-item v-for="(a, idx) in attachments" :key="idx">
-        <v-hover>
-          <template v-slot:default="{ hover }">
-            <v-img
-              v-if="a.file.type.startsWith('image/')"
-              :src="a.preview"
-              class="grey lighten-2 thumbnail"
-              max-height="100"
-              max-width="177"
-            >
-              <v-fade-transition>
-                <v-overlay v-if="hover || uploading" absolute color="black">
-                  <v-btn
-                    v-if="!uploading"
-                    icon
-                    class="delete-btn"
-                    @click="deleteSelectedFile(idx)"
-                  >
-                    <v-icon> mdi-close </v-icon>
-                  </v-btn>
-                  <v-progress-linear value="15"></v-progress-linear>
-                </v-overlay>
-              </v-fade-transition>
-            </v-img>
-            <v-card v-else outlined :loading="uploading">
-              <v-card-title>{{ a.file.name }}</v-card-title>
-            </v-card>
-          </template>
-        </v-hover>
-      </v-slide-item>
-    </v-slide-group>
-    <v-select
-      v-if="$accessor.app.personas.length > 0"
-      v-model="selectedSender"
-      outlined
-      :items="possibleSenders"
-      label="Sending message as"
-    ></v-select>
-    <v-textarea
-      v-model="message"
-      flat
-      solo
-      dense
-      autocomplete="off"
-      hide-details="auto"
-      :label="$i18n.t('app.message-input')"
-      append-icon="mdi-emoticon"
-      prepend-icon="mdi-attachment"
-      auto-grow
-      background-color="transparent"
-      :rows="1"
-      class="message-input pt-1"
-      @click:append="toggleEmojiPicker"
-      @click:prepend="selectFileClicked"
-      @keypress="onInputKeyPress"
-      @paste="onPaste"
-    />
-    <input
-      ref="fileUpload"
-      type="file"
-      hidden
-      multiple
-      @change="selectFileComplete"
-    />
-    <v-menu
-      v-model="emojiOpen"
-      :close-on-content-click="false"
-      :position-x="emojiX"
-      :position-y="emojiY"
-      absolute
-      top
-      nudge-top="32"
-    >
-      <v-emoji-picker :dark="true" @select="pickEmoji" />
-    </v-menu>
+    <div class="pl-3 pr-3 pb-3 pt-2 root message-field harmony darken-1">
+      <v-slide-group
+        v-if="attachments.length > 0"
+        multiple
+        show-arrows
+        class="mb-2"
+      >
+        <v-slide-item v-for="(a, idx) in attachments" :key="idx">
+          <v-hover>
+            <template v-slot:default="{ hover }">
+              <v-img
+                v-if="a.file.type.startsWith('image/')"
+                :src="a.preview"
+                class="grey lighten-2 thumbnail"
+                max-height="100"
+                max-width="177"
+              >
+                <v-fade-transition>
+                  <v-overlay v-if="hover || uploading" absolute color="black">
+                    <v-btn
+                      v-if="!uploading"
+                      icon
+                      class="delete-btn"
+                      @click="deleteSelectedFile(idx)"
+                    >
+                      <v-icon> mdi-close </v-icon>
+                    </v-btn>
+                    <v-progress-linear value="15"></v-progress-linear>
+                  </v-overlay>
+                </v-fade-transition>
+              </v-img>
+              <v-card v-else outlined :loading="uploading">
+                <v-card-title>{{ a.file.name }}</v-card-title>
+              </v-card>
+            </template>
+          </v-hover>
+        </v-slide-item>
+      </v-slide-group>
+      <v-select
+        v-if="$accessor.app.personas.length > 0"
+        v-model="selectedSender"
+        outlined
+        :items="possibleSenders"
+        label="Sending message as"
+      ></v-select>
+      <v-textarea
+        v-model="message"
+        flat
+        solo
+        dense
+        autocomplete="off"
+        hide-details="auto"
+        :label="$i18n.t('app.message-input')"
+        append-icon="mdi-emoticon"
+        prepend-icon="mdi-attachment"
+        auto-grow
+        background-color="transparent"
+        :rows="1"
+        class="message-input pt-1"
+        @click:append="toggleEmojiPicker"
+        @click:prepend="selectFileClicked"
+        @keypress="onInputKeyPress"
+        @paste="onPaste"
+      />
+      <input
+        ref="fileUpload"
+        type="file"
+        hidden
+        multiple
+        @change="selectFileComplete"
+      />
+      <v-menu
+        v-model="emojiOpen"
+        :close-on-content-click="false"
+        :position-x="emojiX"
+        :position-y="emojiY"
+        absolute
+        top
+        nudge-top="32"
+      >
+        <v-emoji-picker :dark="true" @select="pickEmoji" />
+      </v-menu>
+    </div>
   </div>
 </template>
 
