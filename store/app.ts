@@ -14,6 +14,7 @@ import Vue from 'vue'
 export const permissionsList = {
   'messages.send': -1,
   'messages.view': -1,
+  'actions.trigger': -1,
   'roles.user.get': -1,
   'roles.user.manage': -1,
   'roles.manage': -1,
@@ -21,7 +22,15 @@ export const permissionsList = {
   'permissions.manage.get': -1,
   'permissions.manage.set': -1,
   'permissions.query': -1,
-  'actions.trigger': -1,
+  'channels.manage.create': -1,
+  'channels.manage.change-information': -1,
+  'channels.manage.move': -1,
+  'channels.manage.delete': -1,
+  'invites.view': -1,
+  'invites.manage.create': -1,
+  'invites.manage.delete': -1,
+  'guild.manage.change-information': -1,
+  'guild.manage.delete': -1,
 }
 
 interface IGuildEntry {

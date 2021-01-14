@@ -33,11 +33,12 @@
           two-line
           class="permission-list-inner"
         >
-          <v-subheader
-            >{{ selectedRoleData.name }}<v-spacer />
+          <v-subheader>
+            {{ selectedRoleData.name }}
+            <v-spacer />
             <v-btn outlined color="red" @click="deleteSelectedRole"
-              >Delete Role</v-btn
-            >
+              >Delete Role
+            </v-btn>
           </v-subheader>
           <v-list-item
             v-for="(node, key) in withModified"
@@ -46,9 +47,11 @@
             :ripple="false"
           >
             <v-list-item-content>
-              <v-list-item-title>{{ `perms.${key}` }}</v-list-item-title>
+              <v-list-item-title>{{
+                $t(`perms.${key}.title`)
+              }}</v-list-item-title>
               <v-list-item-subtitle>{{
-                `perms.${key}.description`
+                $t(`perms.${key}.description`)
               }}</v-list-item-subtitle>
             </v-list-item-content>
             <v-list-item-action>

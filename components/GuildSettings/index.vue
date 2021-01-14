@@ -15,7 +15,7 @@
         </v-btn>
       </v-app-bar>
       <v-container fluid class="fill-height" style="height: 600px">
-        <v-row class="fill-height">
+        <v-row class="fill-height flex-nowrap">
           <v-col cols="5" sm="4" md="3" class="fill-height">
             <div class="sidebar fill-height">
               <v-list dense nav>

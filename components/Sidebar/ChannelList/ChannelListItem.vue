@@ -79,10 +79,11 @@ export default Vue.extend({
       })
     },
     async onDeleteClick() {
-      await this.$confirmDialog(
+      const choice = await this.$confirmDialog(
         'Are you sure you would like to delete this channel?',
         'Delete',
       )
+      if (!choice) return
       return this.$deleteChannel(
         this.$getHost(),
         this.$route.params.guildid,
