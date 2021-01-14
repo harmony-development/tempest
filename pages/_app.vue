@@ -1,5 +1,9 @@
 <template>
   <div class="root">
+    <div
+      :class="{ background: true, light: !$vuetify.theme.dark }"
+      :style="{ backgroundImage: guildIconSrc }"
+    ></div>
     <v-navigation-drawer
       v-model="leftNav"
       app
@@ -37,7 +41,7 @@
       v-model="rightNav"
       app
       right
-      class="member-drawer"
+      class="member-drawer pl-3"
       :permanent="$vuetify.breakpoint.mdAndUp"
     >
       <member-list />
@@ -60,13 +64,32 @@ div.v-navigation-drawer__border {
 .root {
   width: 100%;
   height: 100%;
+  position: relative;
   display: flex;
   flex-direction: row;
   overflow: auto;
 }
 
+.background {
+  transition: all 0.3s ease-out;
+  position: absolute;
+  content: '';
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  top: 0;
+  left: 0;
+  filter: blur(300px) brightness(50%);
+}
+
+.light {
+  filter: blur(300px) brightness(200%);
+}
+
 .member-drawer {
-  background-color: var(--v-harmony-base) !important;
+  background-color: transparent !important;
 }
 
 .member-drawer:before {
@@ -154,9 +177,16 @@ export default Vue.extend({
       return this.$accessor.ui.guildSettingsOpen
     },
     channelName() {
-      return this.$accessor.app.data[this.$getHost()].channels[
+      return this.$accessor.app.data[this.$getHost()]?.channels[
         this.$route.params.channelid
-      ].channelName
+      ]?.channelName
+    },
+    guildIconSrc() {
+      const picture = this.$accessor.app.data[this.$getHost()]?.guilds[
+        this.$route.params.guildid
+      ]?.picture
+      if (!picture) return undefined
+      return `url(${this.$parseMediaURI(this.$getHost(), picture)})`
     },
   },
   watch: {

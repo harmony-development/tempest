@@ -7,7 +7,7 @@
       {{ typingDisplay }}
       &zwnj;
     </div>
-    <div class="pl-3 pr-3 pb-3 pt-2 root message-field harmony darken-1">
+    <div class="pl-3 pr-3 pb-3 pt-2 root message-field">
       <v-slide-group
         v-if="attachments.length > 0"
         multiple
@@ -99,9 +99,21 @@
 }
 
 .root {
-  background-color: var(--harmony-background-chrome-alt);
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
+  position: relative;
+}
+
+.root:before {
+  position: absolute;
+  content: '';
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--v-layer-base);
+  opacity: 0.02;
+  top: 0;
+  left: 0;
 }
 
 .message-input {
