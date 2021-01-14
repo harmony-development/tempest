@@ -5,6 +5,7 @@
       app
       :permanent="$vuetify.breakpoint.mdAndUp"
       width="350px"
+      style="background-color: transparent"
     >
       <div class="left-drawer">
         <guild-list />
@@ -12,10 +13,21 @@
       </div>
     </v-navigation-drawer>
     <v-main>
-      <v-app-bar fixed height="48px">
-        <v-app-bar-nav-icon @click="leftNav = !leftNav" />
+      <v-app-bar flat height="48px" app>
+        <v-app-bar-nav-icon
+          v-if="!$vuetify.breakpoint.mdAndUp"
+          @click="leftNav = !leftNav"
+        />
+        <v-icon size="18">mdi-pound</v-icon>
+        <v-toolbar-title>
+          {{ channelName }}
+        </v-toolbar-title>
         <v-spacer />
-        <v-btn icon @click="rightNav = !rightNav">
+        <v-btn
+          v-if="!$vuetify.breakpoint.mdAndUp"
+          icon
+          @click="rightNav = !rightNav"
+        >
           <v-icon>mdi-account-supervisor</v-icon>
         </v-btn>
       </v-app-bar>
@@ -25,7 +37,7 @@
       v-model="rightNav"
       app
       right
-      class="pl-3 pr-3 member-drawer"
+      class="member-drawer"
       :permanent="$vuetify.breakpoint.mdAndUp"
     >
       <member-list />
@@ -54,13 +66,38 @@ div.v-navigation-drawer__border {
 }
 
 .member-drawer {
-  background-color: var(--v-chromeInner-base) !important;
+  background-color: var(--v-harmony-base) !important;
+}
+
+.member-drawer:before {
+  position: absolute;
+  content: '';
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--v-layer-base);
+  opacity: 0.08;
+  top: 0;
+  left: 0;
 }
 
 .v-app-bar {
-  background-color: var(--v-chromeInner-base) !important;
   box-sizing: border-box;
   border-bottom: 1px solid var(--harmony-borders);
+  background-color: transparent !important;
+}
+
+.v-app-bar:before {
+  position: absolute;
+  content: '';
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--v-layer-base);
+  opacity: 0.08;
+  top: 0;
+  left: 0;
+  z-index: -1;
 }
 
 .left-drawer {
@@ -68,6 +105,19 @@ div.v-navigation-drawer__border {
   height: 100%;
   width: 100%;
   flex-direction: row;
+}
+
+.left-drawer:before {
+  position: absolute;
+  content: '';
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--v-layer-base);
+  opacity: 0.08;
+  top: 0;
+  left: 0;
+  z-index: -1;
 }
 </style>
 
@@ -102,6 +152,11 @@ export default Vue.extend({
   computed: {
     guildSettingsOpen() {
       return this.$accessor.ui.guildSettingsOpen
+    },
+    channelName() {
+      return this.$accessor.app.data[this.$getHost()].channels[
+        this.$route.params.channelid
+      ].channelName
     },
   },
   watch: {

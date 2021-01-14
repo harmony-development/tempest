@@ -67,15 +67,11 @@ export default {
           error: colors.deepOrange.accent4,
           success: colors.green.accent3,
           harmony: '#121212',
-          chromeInner: '#161616',
-          chromeOuter: '#202020',
-          chromeAlt: '#212121',
+          layer: '#ffffff',
         },
         light: {
           harmony: '#ffffff',
-          chromeInner: '#eeeeee',
-          chromeOuter: '#dddddd',
-          chromeAlt: '#dadada',
+          layer: '#000000',
         },
       },
       options: {
