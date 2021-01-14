@@ -1,6 +1,12 @@
 <template>
   <div
-    :class="{ root: true, 'pl-3': true, 'pt-3': !collapseUserInfo, pending }"
+    :class="{
+      root: true,
+      'pl-3': true,
+      'pt-1': !collapseUserInfo,
+      'pb-1': !collapseUserInfo,
+      pending,
+    }"
   >
     <v-avatar
       v-if="!collapseUserInfo"
@@ -95,6 +101,11 @@
 .root {
   width: 100%;
   display: flex;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.root:hover {
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .root > .menu-area {

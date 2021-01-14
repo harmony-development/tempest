@@ -284,11 +284,9 @@ export default Vue.extend({
       this.$vuetify.theme.dark = dark
     },
     primaryColorChanged(event: string) {
-      console.log(event)
       this.$vuetify.theme.currentTheme.primary = event
     },
     secondaryColorChanged(event: string) {
-      console.log(event)
       this.$vuetify.theme.currentTheme.secondary = event
     },
   },
