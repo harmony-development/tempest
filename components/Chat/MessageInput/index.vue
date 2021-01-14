@@ -1,5 +1,5 @@
 <template>
-  <div class="pl-3 pr-3 pb-3 pt-3 root message-field harmony darken-1">
+  <div class="pl-3 pr-3 pb-3 pt-1 root message-field harmony darken-1">
     <div class="typing-indicator">
       <v-icon :class="{ invisible: !typingDisplay }">
         mdi-dots-horizontal
