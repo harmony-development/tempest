@@ -290,7 +290,7 @@ Vue.prototype.$fetchUser = async function (
   userID: string,
 ) {
   if (pendingUserFetches[userID]) return
-  if (this.$accessor.app.data[host].users[userID]) return
+  if (this.$accessor.app.data[host]?.users[userID]) return
   pendingUserFetches[userID] = true
   const conn = await this.$getOrFederate(host)
   const resp = await conn.getUser(userID)

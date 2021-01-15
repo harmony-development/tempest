@@ -184,7 +184,9 @@ export default Vue.extend({
     avatar(): string | undefined {
       if (!this.ownProfile) return undefined
       const a = this.ownProfile?.avatar
-      return a ? `${this.$getHost()}/_harmony/media/download/${a}` : undefined
+      return a
+        ? `${this.$accessor.app.host}/_harmony/media/download/${a}`
+        : undefined
     },
     status(): UserStatusMap[keyof UserStatusMap] {
       return this.ownProfile?.status ?? UserStatus.USER_STATUS_OFFLINE

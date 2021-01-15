@@ -201,7 +201,7 @@ export default Vue.extend({
       },
     },
   },
-  created() {
+  async created() {
     if (!this.$accessor.app.host || !this.$accessor.app.session) {
       this.$router.push('entry')
       return
@@ -215,6 +215,7 @@ export default Vue.extend({
       host: this.$accessor.app.host,
       connection: conn,
     })
+    await this.$fetchUser(this.$accessor.app.host, this.$accessor.app.userID!)
   },
   key: 'app',
 })
