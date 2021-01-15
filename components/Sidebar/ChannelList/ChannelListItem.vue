@@ -25,15 +25,21 @@
       ></v-list-item-title>
     </v-list-item-content>
     <v-list-item-action :class="{ 'icon-hidden': !hovering }">
-      <v-btn
-        icon
-        small
-        @click.stop="onDeleteClick"
-        @mousedown.stop
-        @touchstart.native.stop
-      >
-        <v-icon color="secondary" small>mdi-delete</v-icon>
-      </v-btn>
+      <v-menu offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn icon small v-bind="attrs" class="menu-btn" v-on="on">
+            <v-icon small> mdi-dots-vertical </v-icon>
+          </v-btn>
+        </template>
+        <v-list dense>
+          <v-list-item link @click="onDeleteClick">
+            <v-list-item-title>Delete Channel</v-list-item-title>
+          </v-list-item>
+          <v-list-item link @click="copyID">
+            <v-list-item-title>Copy ID</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-list-item-action>
   </v-list-item>
 </template>
@@ -99,6 +105,9 @@ export default Vue.extend({
         host: this.$getHost(),
         channelID: this.id,
       })
+    },
+    copyID() {
+      navigator.clipboard.writeText(this.id)
     },
     async onDeleteClick() {
       const choice = await this.$confirmDialog(
