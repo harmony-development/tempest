@@ -176,6 +176,7 @@ Vue.prototype.$fetchChannelList = async function (
       channelName: val.channelName,
       isCategory: val.isCategory,
       isVoice: false,
+      unread: false,
     })
     return prev
   }, {})

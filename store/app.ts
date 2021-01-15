@@ -52,6 +52,7 @@ export interface IChannelData {
   isCategory?: boolean
   isVoice?: boolean
   reachedTop?: boolean
+  unread?: boolean
   messages?: string[]
   typing?: {
     [userid: string]: Date
@@ -362,6 +363,7 @@ export const mutations = mutationTree(state, {
     state.data[data.host].channels[data.channelID].messages?.push(
       data.messageID,
     )
+    state.data[data.host].channels[data.channelID].unread = true
   },
   editMessage(
     state,
@@ -645,5 +647,15 @@ export const mutations = mutationTree(state, {
       'permissions',
       data.permissions,
     )
+  },
+  markAsRead(
+    state,
+    data: {
+      host: string
+      channelID: string
+    },
+  ) {
+    ensureHost(state, data.host)
+    state.data[data.host].channels[data.channelID].unread = false
   },
 })

@@ -1,16 +1,28 @@
 <template>
   <v-list-item
     :class="{ 'channel-item': true, active: selected }"
-    color="primary"
     @click="onClick"
     @mouseover="hovering = true"
     @mouseout="hovering = false"
   >
     <v-list-item-icon style="align-self: center">
-      <v-icon size="24px">mdi-pound</v-icon>
+      <v-icon
+        size="24px"
+        :class="{
+          'font-weight-black': !selected && unread,
+          'text--secondary': !selected && !unread,
+        }"
+        >mdi-pound</v-icon
+      >
     </v-list-item-icon>
     <v-list-item-content>
-      <v-list-item-title v-text="name"></v-list-item-title>
+      <v-list-item-title
+        :class="{
+          'font-weight-black': !selected && unread,
+          'text--secondary': !selected && !unread,
+        }"
+        v-text="name"
+      ></v-list-item-title>
     </v-list-item-content>
     <v-list-item-action :class="{ 'icon-hidden': !hovering }">
       <v-btn
@@ -50,6 +62,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { IChannelData } from '~/store/app'
 
 export default Vue.extend({
   props: {
@@ -64,18 +77,27 @@ export default Vue.extend({
     }
   },
   computed: {
-    name(): string | undefined {
+    data(): IChannelData | undefined {
       return this.$accessor.app.data[this.$getHost()]?.channels[this.id]
-        ?.channelName
+    },
+    name(): string | undefined {
+      return this.data?.channelName
     },
     selected(): boolean {
       return this.$route.params.channelid === this.id
+    },
+    unread(): boolean | undefined {
+      return this.data?.unread
     },
   },
   methods: {
     onClick() {
       this.$updateRoute({
         channelid: this.id,
+      })
+      this.$accessor.app.markAsRead({
+        host: this.$getHost(),
+        channelID: this.id,
       })
     },
     async onDeleteClick() {
