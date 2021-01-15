@@ -52,25 +52,33 @@
         :items="possibleSenders"
         label="Sending message as"
       ></v-select>
-      <v-textarea
-        v-model="message"
-        flat
-        solo
-        dense
-        autocomplete="off"
-        hide-details="auto"
-        :label="$i18n.t('app.message-input')"
-        append-icon="mdi-emoticon"
-        prepend-icon="mdi-attachment"
-        auto-grow
-        background-color="transparent"
-        :rows="1"
-        class="message-input pt-1"
-        @click:append="toggleEmojiPicker"
-        @click:prepend="selectFileClicked"
-        @keypress="onInputKeyPress"
-        @paste="onPaste"
-      />
+      <v-row class="message-row">
+        <v-icon @click="selectFileClicked"> mdi-attachment </v-icon>
+        <v-textarea
+          v-model="message"
+          flat
+          solo
+          dense
+          autocomplete="off"
+          hide-details="auto"
+          :label="$i18n.t('app.message-input')"
+          auto-grow
+          background-color="transparent"
+          :rows="1"
+          class="message-input pt-1"
+          @keypress="onInputKeyPress"
+          @paste="onPaste"
+        />
+        <v-icon @click="toggleEmojiPicker"> mdi-emoticon </v-icon>
+        <v-icon
+          v-if="!$vuetify.breakpoint.mdAndUp"
+          :disabled="!sendValid"
+          class="send-icon"
+          @click="sendMessage"
+        >
+          mdi-send
+        </v-icon>
+      </v-row>
       <input
         ref="fileUpload"
         type="file"
@@ -94,6 +102,22 @@
 </template>
 
 <style scoped>
+.message-row {
+  padding: 8px;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+.message-row > * + * {
+  margin-left: 10px;
+}
+.send-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 24px;
+}
+.send-icon:not(:disabled) {
+  background-color: var(--v-primary-base);
+}
 .invisible {
   visibility: hidden;
 }
@@ -194,6 +218,12 @@ export default Vue.extend({
         }),
       )
     },
+    sendValid(): boolean {
+      return !(
+        (this.message === '' || /^\s+$/.test(this.message)) &&
+        this.attachments.length === 0
+      )
+    },
   },
   mounted() {
     this.typingInterval = setInterval(this.checkTyping, 500)
@@ -225,54 +255,64 @@ export default Vue.extend({
         ]
       }
     },
-    async onInputKeyPress(e: KeyboardEvent) {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault()
-        this.uploading = true
-        const localID = Math.floor(Math.random() * 1000)
-        const sendMsg = this.message
-        this.message = ''
-        this.$accessor.app.addMessage({
-          host: this.$getHost(),
-          channelID: this.$route.params.channelid,
-          messageID: localID.toString(),
-          data: {
-            authorID: this.$accessor.app.userID || '',
-            createdAt: Date.now() / 1000,
-            editedAt: 0,
-            content: sendMsg,
-            pending: true,
-            embedsList: [],
-            actionsList: [],
-            attachmentsList: [],
-          },
+    async sendMessage() {
+      if (!this.sendValid) {
+        return
+      }
+      this.uploading = true
+      const localID = Math.floor(Math.random() * 1000)
+      const sendMsg = this.message
+      this.message = ''
+      this.$accessor.app.addMessage({
+        host: this.$getHost(),
+        channelID: this.$route.params.channelid,
+        messageID: localID.toString(),
+        data: {
+          authorID: this.$accessor.app.userID || '',
+          createdAt: Date.now() / 1000,
+          editedAt: 0,
+          content: sendMsg,
+          pending: true,
+          embedsList: [],
+          actionsList: [],
+          attachmentsList: [],
+        },
+      })
+
+      let uploadAttachments = undefined as string[] | undefined
+      let uploadPromises = [] as Promise<void>[]
+      if (this.attachments && this.attachments.length > 0) {
+        uploadAttachments = []
+        uploadPromises = this.attachments.map(async (f) => {
+          const resp = await this.$uploadFile(this.$getHost(), f.file)
+          if (f.preview) URL.revokeObjectURL(f.preview)
+          uploadAttachments?.push(resp)
         })
+      }
 
-        let uploadAttachments = undefined as string[] | undefined
-        let uploadPromises = [] as Promise<void>[]
-        if (this.attachments && this.attachments.length > 0) {
-          uploadAttachments = []
-          uploadPromises = this.attachments.map(async (f) => {
-            const resp = await this.$uploadFile(this.$getHost(), f.file)
-            if (f.preview) URL.revokeObjectURL(f.preview)
-            uploadAttachments?.push(resp)
-          })
-        }
+      await Promise.all(uploadPromises)
 
-        await Promise.all(uploadPromises)
+      this.uploading = false
 
-        this.uploading = false
+      this.attachments = []
 
-        this.attachments = []
-
-        await this.$sendMessage(
-          this.$getHost(),
-          this.$route.params.guildid,
-          this.$route.params.channelid,
-          sendMsg,
-          uploadAttachments,
-          localID,
-        )
+      await this.$sendMessage(
+        this.$getHost(),
+        this.$route.params.guildid,
+        this.$route.params.channelid,
+        sendMsg,
+        uploadAttachments,
+        localID,
+      )
+    },
+    async onInputKeyPress(e: KeyboardEvent) {
+      if (
+        e.key === 'Enter' &&
+        !e.shiftKey &&
+        this.$vuetify.breakpoint.mdAndUp
+      ) {
+        e.preventDefault()
+        await this.sendMessage()
       }
       this.debouncedTyping()
     },
