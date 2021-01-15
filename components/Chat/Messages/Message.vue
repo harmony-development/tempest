@@ -30,13 +30,9 @@
         >
           member of {{ username || authorID }}
         </span>
-        <span
-          v-if="overrides ? overrides.bridge : undefined"
-          class="text--tertiary"
-        >
-          bridged by {{ username || authorID }}
+        <span class="text--tertiary">
+          {{ timeString }}
         </span>
-        <span class="text--secondary"> {{ timeString }} </span>
       </v-list-item-title>
       <p class="text">
         <v-textarea

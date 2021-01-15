@@ -131,7 +131,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import { VEmojiPicker } from 'v-emoji-picker'
-import _, { DebouncedFunc } from 'lodash'
+import debounce from 'lodash-es/debounce'
+import { DebouncedFunc } from 'lodash'
 
 interface IAttachment {
   file: File
@@ -160,7 +161,7 @@ export default Vue.extend({
   },
   computed: {
     debouncedTyping(): DebouncedFunc<() => void> {
-      return _.debounce(this.sendTyping, 1000, { maxWait: 0, leading: true })
+      return debounce(this.sendTyping, 1000, { maxWait: 0, leading: true })
     },
     typers(): TypingMap | undefined {
       return this.$accessor.app.data[this.$getHost()]?.channels[

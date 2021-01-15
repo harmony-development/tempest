@@ -9,7 +9,11 @@
       app
       :permanent="$vuetify.breakpoint.mdAndUp"
       width="350px"
-      style="background-color: transparent"
+      :style="{
+        backgroundColor: $vuetify.breakpoint.mdAndUp
+          ? 'transparent'
+          : 'var(--v-harmony-darken1)',
+      }"
     >
       <div class="left-drawer">
         <guild-list />
@@ -42,6 +46,11 @@
       app
       right
       class="member-drawer pl-3"
+      :style="{
+        backgroundColor: $vuetify.breakpoint.mdAndUp
+          ? 'transparent'
+          : 'var(--v-harmony-darken1)',
+      }"
       :permanent="$vuetify.breakpoint.mdAndUp"
     >
       <member-list />
@@ -86,10 +95,6 @@ div.v-navigation-drawer__border {
 
 .light {
   filter: blur(300px) brightness(200%);
-}
-
-.member-drawer {
-  background-color: transparent !important;
 }
 
 .member-drawer:before {
