@@ -53,7 +53,9 @@
         label="Sending message as"
       ></v-select>
       <v-row class="message-row">
-        <v-icon @click="selectFileClicked"> mdi-attachment </v-icon>
+        <v-icon class="squared-icon" @click="selectFileClicked">
+          mdi-attachment
+        </v-icon>
         <v-textarea
           v-model="message"
           flat
@@ -69,11 +71,13 @@
           @keypress="onInputKeyPress"
           @paste="onPaste"
         />
-        <v-icon @click="toggleEmojiPicker"> mdi-emoticon </v-icon>
+        <v-icon class="squared-icon" @click="toggleEmojiPicker">
+          mdi-emoticon
+        </v-icon>
         <v-icon
           v-if="!$vuetify.breakpoint.mdAndUp"
           :disabled="!sendValid"
-          class="send-icon"
+          class="squared-icon send-icon"
           @click="sendMessage"
         >
           mdi-send
@@ -110,7 +114,7 @@
 .message-row > * + * {
   margin-left: 10px;
 }
-.send-icon {
+.squared-icon {
   width: 38px;
   height: 38px;
   border-radius: 24px;
