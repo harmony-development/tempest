@@ -164,6 +164,7 @@ Vue.prototype.$fetchChannelList = async function (
   host: string,
   guildID: string,
 ) {
+  if (this.$accessor.app.data[host]?.guilds[guildID]?.channels) return
   const conn = await this.$getOrFederate(host)
   const resp = await conn.getGuildChannels(guildID)
   const asObj = resp.message!.toObject()
@@ -188,6 +189,12 @@ Vue.prototype.$fetchChannelList = async function (
     host,
     data: mapped,
   })
+
+  if (asObj!.channelsList[0]) {
+    this.$updateRoute({
+      channelid: asObj!.channelsList[0].channelId,
+    })
+  }
 }
 
 Vue.prototype.$fetchMessageList = async function (
