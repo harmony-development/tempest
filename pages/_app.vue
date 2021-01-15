@@ -90,11 +90,11 @@ div.v-navigation-drawer__border {
   background-position: center;
   top: 0;
   left: 0;
-  filter: blur(300px) brightness(50%);
+  filter: blur(150px) brightness(50%);
 }
 
 .light {
-  filter: blur(300px) brightness(200%);
+  filter: blur(150px) brightness(200%);
 }
 
 .member-drawer:before {
