@@ -6,9 +6,10 @@
       :key="member"
     />
 
-    <v-menu v-if="ownProfile" top offset-y :close-on-content-click="false">
+    <v-menu top offset-y :close-on-content-click="false">
       <template #activator="{ on, attrs }">
         <div
+          v-if="ownProfile"
           v-ripple
           class="member-item pa-1 my-profile"
           v-bind="attrs"

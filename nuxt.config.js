@@ -70,7 +70,7 @@ export default {
           layer: '#ffffff',
         },
         light: {
-          harmony: '#ffffff',
+          harmony: '#e3e3e3',
           layer: '#000000',
         },
       },

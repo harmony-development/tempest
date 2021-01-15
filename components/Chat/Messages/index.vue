@@ -55,7 +55,7 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  scrollbar-color: var(--harmony-borders) transparent;
+  scrollbar-color: var(--v-layer-base);
   scrollbar-width: thin;
 }
 .messages-list > *:last-child {
@@ -67,12 +67,12 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--v-chromeOuter-darken2);
+  background: var(--v-harmony-lighten2);
   border-radius: 32px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--v-chromeOuter-base);
+  background: var(--v-harmony-base);
   border-radius: 32px;
 }
 </style>

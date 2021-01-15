@@ -91,6 +91,7 @@ div.v-navigation-drawer__border {
   top: 0;
   left: 0;
   filter: blur(150px) brightness(50%);
+  opacity: 0.7;
 }
 
 .light {

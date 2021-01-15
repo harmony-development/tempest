@@ -198,7 +198,7 @@ export default Vue.extend({
         .filter((v) => v !== this.$accessor.app.userID)
         .map(
           (userID) =>
-            this.$accessor.app.data[this.$getHost()].users[userID].username,
+            this.$accessor.app.data[this.$getHost()].users[userID]?.username,
         )
         .filter((v) => v !== undefined)
       if (filteredTypers.length === 0) return ''
