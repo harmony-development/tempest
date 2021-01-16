@@ -18,15 +18,14 @@
       :data-sources="mappedMessages || []"
       :estimate-size="32"
       :data-component="messageComponent"
-      :keeps="30"
+      :keeps="45"
     />
   </div>
 </template>
 
 <style scoped>
 .messages-list {
-  height: 400px;
-  /* flex: 1 0 0; */
+  flex: 1 0 0;
   overflow-y: auto;
   display: flex;
   flex-direction: column;

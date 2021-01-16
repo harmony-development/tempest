@@ -1,7 +1,14 @@
 <template>
-  <div>
-    <span>{{ formattedContent }}</span>
-    <!-- <v-avatar
+  <div
+    :class="{
+      root: true,
+      'pl-3': true,
+      'pt-1': !source.shouldCollapse,
+      'pb-1': !source.shouldCollapse,
+      pending: source.pending,
+    }"
+  >
+    <v-avatar
       v-if="!source.shouldCollapse"
       v-ripple
       class="avatar avatar-space"
@@ -13,8 +20,8 @@
       <p v-if="false" class="caption text--secondary text">
         {{ smallTimeString }}
       </p>
-    </div> -->
-    <!-- <div class="ml-2">
+    </div>
+    <div class="content ml-2">
       <v-list-item-title v-if="!source.shouldCollapse">
         {{
           source.overrides ? source.overrides.name : username || source.authorID
@@ -25,11 +32,8 @@
         >
           member of {{ username || source.authorID }}
         </span>
-        <span
-          v-if="source.overrides ? source.overrides.bridge : undefined"
-          class="text--tertiary"
-        >
-          bridged by {{ username || source.authorID }}
+        <span class="text--tertiary">
+          {{ timeString }}
         </span>
       </v-list-item-title>
       <p class="text">
@@ -45,7 +49,7 @@
           @keydown.esc="editing = false"
           @keypress="onEditKeyPress"
         ></v-textarea>
-        <span class="content-out">{{ formattedContent }}</span>
+        <span v-else class="content-out" v-html="formattedContent"></span>
         <v-tooltip v-if="edited" top>
           <template #activator="{ on, attrs }">
             <span class="edited ml-1" v-bind="attrs" v-on="on">(edited)</span>
@@ -63,8 +67,8 @@
           :data="a"
         />
       </div>
-    </div> -->
-    <!-- <div class="menu-area">
+    </div>
+    <div class="menu-area">
       <v-menu offset-y>
         <template #activator="{ on, attrs }">
           <v-btn icon x-small v-bind="attrs" class="menu-btn" v-on="on">
@@ -72,7 +76,11 @@
           </v-btn>
         </template>
         <v-list dense>
-          <v-list-item v-if="source.authorID === $accessor.app.userID" link>
+          <v-list-item
+            v-if="source.authorID === $accessor.app.userID"
+            link
+            @click="editMsg"
+          >
             <v-list-item-title>Edit</v-list-item-title>
           </v-list-item>
           <v-list-item
@@ -87,30 +95,26 @@
           </v-list-item>
         </v-list>
       </v-menu>
-    </div> -->
+    </div>
   </div>
 </template>
 
 <style scoped>
-/* .root {
+.root {
   width: 100%;
   display: flex;
   background-color: rgba(0, 0, 0, 0);
-} */
-
-/* .root:hover {
+}
+.root:hover {
   background-color: rgba(0, 0, 0, 0.1);
-} */
-
-/* .root > .menu-area {
+}
+.root > .menu-area {
   visibility: hidden;
-} */
-
-/* .root:hover > .menu-area {
+}
+.root:hover > .menu-area {
   visibility: visible;
-} */
-
-/* .avatar {
+}
+.avatar {
   width: 48px;
   height: 48px;
   flex: 0 0 auto;
@@ -118,31 +122,25 @@
   border-radius: 100%;
   cursor: pointer;
 }
-
 .avatar-space {
   width: 48px;
   min-width: 48px;
 }
-
 .text--tertiary {
   opacity: 0.5;
   margin: 0px 4px;
   font-size: 80%;
 }
-
 .menu-area {
   width: 48px;
   min-width: 48px;
 }
-
 .attachment-container {
   width: 100%;
 }
-
 .content {
   width: 100%;
 }
-
 .text {
   word-wrap: break-word;
   overflow-wrap: break-word;
@@ -150,16 +148,13 @@
   width: 100%;
   margin-bottom: 0px;
 }
-
 .pending {
   opacity: 0.8;
 }
-
 .edited {
   color: var(--v-accent-lighten3);
   font-size: 12px;
 }
-
 .content-out >>> .codeblock {
   width: 100%;
   display: block;
@@ -169,7 +164,6 @@
   white-space: pre-wrap;
   padding-right: 12px;
 }
-
 .content-out >>> .codeblock > code {
   word-wrap: break-word;
   overflow-wrap: break-word;
@@ -179,20 +173,17 @@
   padding: 8px;
   padding-left: 12px;
 }
-
 .content-out >>> .msg-p {
   margin-bottom: 0px;
   width: auto;
 }
-
 .content-out >>> .emoji {
   height: 1em;
   vertical-align: middle;
 }
-
 .content-out >>> .big-emoji {
   height: 3em;
-} */
+}
 </style>
 
 <script lang="ts">
@@ -205,11 +196,10 @@ import showdown from 'showdown'
 import { IMessageData, IUserData } from '~/store/app'
 import { AnimationDirection, Position } from '~/store/userPopover'
 import { DialogType } from '~/store/dialog'
-
 dayjs.extend(calendar)
 dayjs.extend(UTC)
-
 export default Vue.extend({
+  name: 'Message',
   props: {
     source: {
       type: Object as () => IMessageData & {
