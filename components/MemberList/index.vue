@@ -1,5 +1,5 @@
 <template>
-  <v-list color="#00000000" class="list-body">
+  <v-list color="transparent" class="list-body">
     <member-list-item
       v-for="member in memberList || []"
       :id="member"
@@ -7,7 +7,7 @@
     />
 
     <v-menu v-if="ownProfile" top offset-y :close-on-content-click="false">
-      <template #activator="{ on, attrs }">
+      <template v-if="ownProfile" #activator="{ on, attrs }">
         <div
           v-ripple
           class="member-item pa-1 my-profile"
@@ -27,8 +27,7 @@
         <v-list-item
           v-for="s in statuses"
           :key="s.name"
-          link
-          :class="{ active: s.status === status }"
+          :class="{ 'profile-item': true, active: s.status === status }"
           @click="setStatus(s.status)"
         >
           <v-list-item-action>
@@ -64,7 +63,7 @@
   min-width: 0;
   flex-direction: column;
   height: 100%;
-  background-color: var(--harmony-background-base);
+  background-color: var(--v-harmony-base);
 }
 
 .list-body {
@@ -114,10 +113,6 @@
   bottom: 10px;
 }
 
-.member-item:hover {
-  background-color: rgba(0, 0, 0, 0.08);
-}
-
 .avatar {
   background-color: grey;
   width: 36px;
@@ -127,6 +122,10 @@
 
 .active::before {
   opacity: 0.24 !important;
+}
+
+.profile-item:hover::before {
+  opacity: 0.1;
 }
 </style>
 
@@ -185,7 +184,9 @@ export default Vue.extend({
     avatar(): string | undefined {
       if (!this.ownProfile) return undefined
       const a = this.ownProfile?.avatar
-      return a ? `${this.$getHost()}/_harmony/media/download/${a}` : undefined
+      return a
+        ? `${this.$accessor.app.host}/_harmony/media/download/${a}`
+        : undefined
     },
     status(): UserStatusMap[keyof UserStatusMap] {
       return this.ownProfile?.status ?? UserStatus.USER_STATUS_OFFLINE
@@ -219,7 +220,7 @@ export default Vue.extend({
       this.$showDialog(DialogType.Info, 'Successfully logged out')
     },
     openProfileSettings() {
-      this.$accessor.app.setProfileSettingsOpen(true)
+      this.$accessor.ui.setProfileSettingsOpen(true)
     },
     async setStatus(newStatus: UserStatusMap[keyof UserStatusMap]) {
       await this.$updateProfile(this.$getHost(), {

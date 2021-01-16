@@ -1,10 +1,19 @@
 <template>
   <div class="root">
+    <div
+      :class="{ background: true, light: !$vuetify.theme.dark }"
+      :style="{ backgroundImage: guildIconSrc }"
+    ></div>
     <v-navigation-drawer
       v-model="leftNav"
       app
       :permanent="$vuetify.breakpoint.mdAndUp"
       width="350px"
+      :style="{
+        backgroundColor: $vuetify.breakpoint.mdAndUp
+          ? 'transparent'
+          : 'var(--v-harmony-darken1)',
+      }"
     >
       <div class="left-drawer">
         <guild-list />
@@ -12,10 +21,21 @@
       </div>
     </v-navigation-drawer>
     <v-main>
-      <v-app-bar fixed height="48px">
-        <v-app-bar-nav-icon @click="leftNav = !leftNav" />
+      <v-app-bar flat height="48px" app>
+        <v-app-bar-nav-icon
+          v-if="!$vuetify.breakpoint.mdAndUp"
+          @click="leftNav = !leftNav"
+        />
+        <v-icon size="18">mdi-pound</v-icon>
+        <v-toolbar-title>
+          {{ channelName }}
+        </v-toolbar-title>
         <v-spacer />
-        <v-btn icon @click="rightNav = !rightNav">
+        <v-btn
+          v-if="!$vuetify.breakpoint.mdAndUp"
+          icon
+          @click="rightNav = !rightNav"
+        >
           <v-icon>mdi-account-supervisor</v-icon>
         </v-btn>
       </v-app-bar>
@@ -25,13 +45,18 @@
       v-model="rightNav"
       app
       right
-      class="pl-3 pr-3 member-drawer"
+      class="member-drawer pl-3"
+      :style="{
+        backgroundColor: $vuetify.breakpoint.mdAndUp
+          ? 'transparent'
+          : 'var(--v-harmony-darken1)',
+      }"
       :permanent="$vuetify.breakpoint.mdAndUp"
     >
       <member-list />
     </v-navigation-drawer>
     <user-popover />
-    <guild-settings />
+    <LazyGuildSettings v-if="guildSettingsOpen" />
     <image-view />
     <user-settings />
     <guild-context-menu />
@@ -48,19 +73,60 @@ div.v-navigation-drawer__border {
 .root {
   width: 100%;
   height: 100%;
+  position: relative;
   display: flex;
   flex-direction: row;
   overflow: auto;
 }
 
-.member-drawer {
-  background-color: var(--harmony-background-chrome-inner) !important;
+.background {
+  transition: all 0.3s ease-out;
+  position: absolute;
+  content: '';
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  top: 0;
+  left: 0;
+  filter: blur(150px) brightness(50%);
+  opacity: 0.7;
+}
+
+.light {
+  filter: blur(150px) brightness(200%);
+}
+
+.member-drawer:before {
+  position: absolute;
+  content: '';
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--v-layer-base);
+  opacity: 0.08;
+  top: 0;
+  left: 0;
 }
 
 .v-app-bar {
-  background-color: var(--harmony-background-chrome-inner) !important;
   box-sizing: border-box;
   border-bottom: 1px solid var(--harmony-borders);
+  background-color: transparent !important;
+}
+
+.v-app-bar:before {
+  position: absolute;
+  content: '';
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--v-layer-base);
+  opacity: 0.08;
+  top: 0;
+  left: 0;
+  z-index: -1;
 }
 
 .left-drawer {
@@ -68,6 +134,19 @@ div.v-navigation-drawer__border {
   height: 100%;
   width: 100%;
   flex-direction: row;
+}
+
+.left-drawer:before {
+  position: absolute;
+  content: '';
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--v-layer-base);
+  opacity: 0.08;
+  top: 0;
+  left: 0;
+  z-index: -1;
 }
 </style>
 
@@ -78,19 +157,18 @@ import Sidebar from '@/components/Sidebar/index.vue'
 import MemberList from '@/components/MemberList/index.vue'
 import Chat from '@/components/Chat/index.vue'
 import { Connection } from '@harmony-dev/harmony-web-sdk'
-import GuildSettings from '@/components/GuildSettings/index.vue'
 import UserPopover from '~/components/UserPopover.vue'
 import ImageView from '~/components/ImageView.vue'
 import GuildContextMenu from '~/components/GuildContextMenu.vue'
 
 export default Vue.extend({
+  name: 'App',
   components: {
     GuildList,
     Sidebar,
     MemberList,
     Chat,
     UserPopover,
-    GuildSettings,
     ImageView,
     GuildContextMenu,
   },
@@ -100,6 +178,23 @@ export default Vue.extend({
       rightNav: false,
     }
   },
+  computed: {
+    guildSettingsOpen() {
+      return this.$accessor.ui.guildSettingsOpen
+    },
+    channelName() {
+      return this.$accessor.app.data[this.$getHost()]?.channels[
+        this.$route.params.channelid
+      ]?.channelName
+    },
+    guildIconSrc() {
+      const picture = this.$accessor.app.data[this.$getHost()]?.guilds[
+        this.$route.params.guildid
+      ]?.picture
+      if (!picture) return undefined
+      return `url(${this.$parseMediaURI(this.$getHost(), picture)})`
+    },
+  },
   watch: {
     '$accessor.app.disconnections': {
       handler() {
@@ -107,7 +202,7 @@ export default Vue.extend({
       },
     },
   },
-  created() {
+  async created() {
     if (!this.$accessor.app.host || !this.$accessor.app.session) {
       this.$router.push('entry')
       return
@@ -121,6 +216,7 @@ export default Vue.extend({
       host: this.$accessor.app.host,
       connection: conn,
     })
+    await this.$fetchUser(this.$accessor.app.host, this.$accessor.app.userID!)
   },
   key: 'app',
 })

@@ -16,9 +16,9 @@
       class="messages-list"
       :data-key="'id'"
       :data-sources="mappedMessages || []"
-      :estimate-size="24"
+      :estimate-size="32"
       :data-component="messageComponent"
-      :keeps="20"
+      :keeps="30"
     />
   </div>
 </template>
@@ -28,9 +28,9 @@
   height: 400px;
   /* flex: 1 0 0; */
   overflow-y: auto;
-  /* display: flex;
-  flex-direction: column; */
-  scrollbar-color: var(--harmony-borders) transparent;
+  display: flex;
+  flex-direction: column;
+  scrollbar-color: var(--v-layer-base);
   scrollbar-width: thin;
 }
 .messages-list > *:last-child {
@@ -42,17 +42,13 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--harmony-scroll-track);
+  background: var(--v-harmony-lighten2);
   border-radius: 32px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--harmony-scroll-thumb);
+  background: var(--v-harmony-base);
   border-radius: 32px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--harmony-scroll-thumb-hov);
 }
 </style>
 
@@ -133,6 +129,9 @@ export default Vue.extend({
   async mounted() {
     // const el = this.$refs.messagesList as HTMLDivElement
     await this.fetchData()
+    await this.fetchData(this.messagesList?.[0])
+    await this.fetchData(this.messagesList?.[0])
+    await this.fetchData(this.messagesList?.[0])
     // el.scrollTop = el.scrollHeight
   },
   methods: {

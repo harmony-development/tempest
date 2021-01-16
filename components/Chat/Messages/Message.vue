@@ -1,13 +1,7 @@
 <template>
-  <div
-    :class="{
-      root: true,
-      'pl-3': true,
-      'pt-3': !source.shouldCollapse,
-      pending: source.pending,
-    }"
-  >
-    <v-avatar
+  <div>
+    <span>{{ formattedContent }}</span>
+    <!-- <v-avatar
       v-if="!source.shouldCollapse"
       v-ripple
       class="avatar avatar-space"
@@ -19,8 +13,8 @@
       <p v-if="false" class="caption text--secondary text">
         {{ smallTimeString }}
       </p>
-    </div>
-    <div class="content ml-2">
+    </div> -->
+    <!-- <div class="ml-2">
       <v-list-item-title v-if="!source.shouldCollapse">
         {{
           source.overrides ? source.overrides.name : username || source.authorID
@@ -37,7 +31,6 @@
         >
           bridged by {{ username || source.authorID }}
         </span>
-        <span class="text--secondary"> {{ timeString }} </span>
       </v-list-item-title>
       <p class="text">
         <v-textarea
@@ -52,8 +45,8 @@
           @keydown.esc="editing = false"
           @keypress="onEditKeyPress"
         ></v-textarea>
-        <span v-else class="content-out" v-html="formattedContent"></span>
-        <v-tooltip v-if="edited && edited !== 0" top>
+        <span class="content-out">{{ formattedContent }}</span>
+        <v-tooltip v-if="edited" top>
           <template #activator="{ on, attrs }">
             <span class="edited ml-1" v-bind="attrs" v-on="on">(edited)</span>
           </template>
@@ -70,8 +63,8 @@
           :data="a"
         />
       </div>
-    </div>
-    <div class="menu-area">
+    </div> -->
+    <!-- <div class="menu-area">
       <v-menu offset-y>
         <template #activator="{ on, attrs }">
           <v-btn icon x-small v-bind="attrs" class="menu-btn" v-on="on">
@@ -94,25 +87,30 @@
           </v-list-item>
         </v-list>
       </v-menu>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <style scoped>
-.root {
+/* .root {
   width: 100%;
   display: flex;
-}
+  background-color: rgba(0, 0, 0, 0);
+} */
 
-.root > .menu-area {
+/* .root:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+} */
+
+/* .root > .menu-area {
   visibility: hidden;
-}
+} */
 
 /* .root:hover > .menu-area {
   visibility: visible;
 } */
 
-.avatar {
+/* .avatar {
   width: 48px;
   height: 48px;
   flex: 0 0 auto;
@@ -186,6 +184,15 @@
   margin-bottom: 0px;
   width: auto;
 }
+
+.content-out >>> .emoji {
+  height: 1em;
+  vertical-align: middle;
+}
+
+.content-out >>> .big-emoji {
+  height: 3em;
+} */
 </style>
 
 <script lang="ts">
@@ -194,45 +201,25 @@ import dayjs from 'dayjs'
 import calendar from 'dayjs/plugin/calendar'
 import UTC from 'dayjs/plugin/utc'
 import showdown from 'showdown'
-import DOMPurify from 'dompurify'
-import Attachment from './Attachment.vue'
+// import DOMPurify from 'dompurify'
 import { IMessageData, IUserData } from '~/store/app'
 import { AnimationDirection, Position } from '~/store/userPopover'
 import { DialogType } from '~/store/dialog'
 
-const markdownClasses: {
-  [key: string]: string
-} = {
-  p: 'msg-p',
-  pre: 'codeblock',
-}
-
 dayjs.extend(calendar)
 dayjs.extend(UTC)
 
-const conv = new showdown.Converter({
-  simplifiedAutoLink: true,
-  openLinksInNewWindow: true,
-  ghCodeBlocks: true,
-  extensions: [
-    ...Object.keys(markdownClasses).map((key) => ({
-      type: 'output',
-      regex: new RegExp(`<${key}>`, 'g'),
-      replace: `<${key} class="${markdownClasses[key]}" $1>`,
-    })),
-  ],
-})
-
-conv.setFlavor('github')
-
 export default Vue.extend({
-  components: { Attachment },
   props: {
     source: {
       type: Object as () => IMessageData & {
         id: string
         shouldCollapse: boolean
       },
+      default: undefined,
+    },
+    conv: {
+      type: Object as () => showdown.Converter,
       default: undefined,
     },
   },
@@ -261,7 +248,7 @@ export default Vue.extend({
         : undefined
     },
     formattedContent(): string {
-      return DOMPurify.sanitize(conv.makeHtml(this.source.content))
+      return this.source.content
     },
     timeString(): string {
       return dayjs.unix(this.source.createdAt || 0).calendar()

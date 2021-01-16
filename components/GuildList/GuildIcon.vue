@@ -3,17 +3,31 @@
     <template #activator="{ on, attrs }">
       <v-img
         v-ripple
-        :class="iconStyle"
+        :class="{
+          'img-content': true,
+          'mb-2': true,
+          selected: id === $route.params.guildid,
+          error: !!error,
+        }"
         max-width="64"
         max-height="64"
         v-bind="attrs"
-        :src="picture"
+        :src="error ? '' : picture"
         v-on="on"
         @click="onGuildIconClick"
         @contextmenu="onContextMenu"
-      />
+      >
+        <v-row
+          v-if="error"
+          class="fill-height ma-0"
+          align="center"
+          justify="center"
+        >
+          <v-icon size="32"> mdi-alert </v-icon>
+        </v-row>
+      </v-img>
     </template>
-    {{ name || id }}
+    {{ error || name || id }}
   </v-tooltip>
 </template>
 
@@ -25,6 +39,14 @@
   border-radius: 100%;
   cursor: pointer;
   border: 2px solid transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.error {
+  transition: border 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+  border: 2px solid var(--v-error-base);
 }
 
 .selected {
@@ -35,7 +57,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { DialogType } from '~/store/dialog'
 export default Vue.extend({
   props: {
     id: {
@@ -46,6 +67,11 @@ export default Vue.extend({
       type: String,
       default: '',
     },
+  },
+  data() {
+    return {
+      error: undefined as Error | undefined,
+    }
   },
   computed: {
     name(): string | undefined {
@@ -59,14 +85,8 @@ export default Vue.extend({
 
       if (!pic) return undefined
 
-      const parsed = this.$parseMediaURI(pic)
-
-      return parsed.download
-    },
-    iconStyle(): string {
-      return `img-content mb-2 ${
-        this.id === this.$route.params.guildid ? 'selected' : ''
-      }`
+      const parsed = this.$parseMediaURI(this.host, pic)
+      return parsed
     },
   },
   async mounted() {
@@ -83,8 +103,7 @@ export default Vue.extend({
           picture: asObj.guildPicture,
         })
       } catch (e) {
-        console.log(e)
-        this.$showDialog(DialogType.Error, e.statusMessage || e)
+        this.error = e
       }
     }
   },

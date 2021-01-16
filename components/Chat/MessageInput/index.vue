@@ -1,105 +1,147 @@
 <template>
-  <div class="pl-3 pr-3 pb-3 pt-3 root message-field">
-    <div v-if="!!typingDisplay" class="typing-indicator">
-      <v-icon :class="{ invisible: !!!typingDisplay }">
+  <div>
+    <div class="typing-indicator pl-3 subtitle-2">
+      <v-icon :class="{ invisible: !typingDisplay }">
         mdi-dots-horizontal
       </v-icon>
-      {{ typingDisplay || '&nbsp;' }}
+      {{ typingDisplay }}
       &zwnj;
     </div>
-    <v-slide-group
-      v-if="attachments.length > 0"
-      multiple
-      show-arrows
-      class="mb-2"
-    >
-      <v-slide-item v-for="(a, idx) in attachments" :key="idx">
-        <v-hover>
-          <template v-slot:default="{ hover }">
-            <v-img
-              v-if="a.file.type.startsWith('image/')"
-              :src="a.preview"
-              class="grey lighten-2 thumbnail"
-              max-height="100"
-              max-width="177"
-            >
-              <v-fade-transition>
-                <v-overlay v-if="hover || uploading" absolute color="black">
-                  <v-btn
-                    v-if="!uploading"
-                    icon
-                    class="delete-btn"
-                    @click="deleteSelectedFile(idx)"
-                  >
-                    <v-icon> mdi-close </v-icon>
-                  </v-btn>
-                  <v-progress-linear value="15"></v-progress-linear>
-                </v-overlay>
-              </v-fade-transition>
-            </v-img>
-            <v-card v-else outlined :loading="uploading">
-              <v-card-title>{{ a.file.name }}</v-card-title>
-            </v-card>
-          </template>
-        </v-hover>
-      </v-slide-item>
-    </v-slide-group>
-    <v-select
-      v-if="$accessor.app.personas.length > 0"
-      v-model="selectedSender"
-      outlined
-      :items="possibleSenders"
-      label="Sending message as"
-    ></v-select>
-    <v-textarea
-      v-model="message"
-      flat
-      solo
-      dense
-      autocomplete="off"
-      hide-details="auto"
-      :label="$i18n.t('app.message-input')"
-      append-icon="mdi-emoticon"
-      prepend-icon="mdi-attachment"
-      auto-grow
-      background-color="transparent"
-      :rows="1"
-      class="message-input pt-1"
-      @click:append="toggleEmojiPicker"
-      @click:prepend="selectFileClicked"
-      @keypress="onInputKeyPress"
-      @paste="onPaste"
-    />
-    <input
-      ref="fileUpload"
-      type="file"
-      hidden
-      multiple
-      @change="selectFileComplete"
-    />
-    <v-menu
-      v-model="emojiOpen"
-      :close-on-content-click="false"
-      :position-x="emojiX"
-      :position-y="emojiY"
-      absolute
-      top
-      nudge-top="32"
-    >
-      <v-emoji-picker :dark="true" @select="pickEmoji" />
-    </v-menu>
+    <div class="pl-3 pr-3 pb-3 pt-2 root message-field">
+      <v-slide-group
+        v-if="attachments.length > 0"
+        multiple
+        show-arrows
+        class="mb-2"
+      >
+        <v-slide-item v-for="(a, idx) in attachments" :key="idx">
+          <v-hover>
+            <template v-slot:default="{ hover }">
+              <v-img
+                v-if="a.file.type.startsWith('image/')"
+                :src="a.preview"
+                class="grey lighten-2 thumbnail"
+                max-height="100"
+                max-width="177"
+              >
+                <v-fade-transition>
+                  <v-overlay v-if="hover || uploading" absolute color="black">
+                    <v-btn
+                      v-if="!uploading"
+                      icon
+                      class="delete-btn"
+                      @click="deleteSelectedFile(idx)"
+                    >
+                      <v-icon> mdi-close </v-icon>
+                    </v-btn>
+                    <v-progress-linear value="15"></v-progress-linear>
+                  </v-overlay>
+                </v-fade-transition>
+              </v-img>
+              <v-card v-else outlined :loading="uploading">
+                <v-card-title>{{ a.file.name }}</v-card-title>
+              </v-card>
+            </template>
+          </v-hover>
+        </v-slide-item>
+      </v-slide-group>
+      <v-select
+        v-if="$accessor.app.personas.length > 0"
+        v-model="selectedSender"
+        outlined
+        :items="possibleSenders"
+        label="Sending message as"
+      ></v-select>
+      <v-row class="message-row">
+        <v-icon class="squared-icon" @click="selectFileClicked">
+          mdi-attachment
+        </v-icon>
+        <v-textarea
+          v-model="message"
+          flat
+          solo
+          dense
+          autocomplete="off"
+          hide-details="auto"
+          :label="$i18n.t('app.message-input')"
+          auto-grow
+          background-color="transparent"
+          :rows="1"
+          class="message-input pt-1"
+          @keypress="onInputKeyPress"
+          @paste="onPaste"
+        />
+        <v-icon class="squared-icon" @click="toggleEmojiPicker">
+          mdi-emoticon
+        </v-icon>
+        <v-icon
+          v-if="!$vuetify.breakpoint.mdAndUp"
+          :disabled="!sendValid"
+          class="squared-icon send-icon"
+          @click="sendMessage"
+        >
+          mdi-send
+        </v-icon>
+      </v-row>
+      <input
+        ref="fileUpload"
+        type="file"
+        hidden
+        multiple
+        @change="selectFileComplete"
+      />
+      <v-menu
+        v-model="emojiOpen"
+        :close-on-content-click="false"
+        :position-x="emojiX"
+        :position-y="emojiY"
+        absolute
+        top
+        nudge-top="32"
+      >
+        <v-emoji-picker :dark="true" @select="pickEmoji" />
+      </v-menu>
+    </div>
   </div>
 </template>
 
 <style scoped>
+.message-row {
+  padding: 8px;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+.message-row > * + * {
+  margin-left: 10px;
+}
+.squared-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 24px;
+}
+.send-icon:not(:disabled) {
+  background-color: var(--v-primary-base);
+}
 .invisible {
   visibility: hidden;
 }
 
 .root {
-  background-color: var(--harmony-background-chrome-alt);
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
+  position: relative;
+}
+
+.root:before {
+  position: absolute;
+  content: '';
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--v-layer-base);
+  opacity: 0.02;
+  top: 0;
+  left: 0;
 }
 
 .message-input {
@@ -117,7 +159,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import { VEmojiPicker } from 'v-emoji-picker'
-import _, { DebouncedFunc } from 'lodash'
+import debounce from 'lodash-es/debounce'
+import { DebouncedFunc } from 'lodash'
 
 interface IAttachment {
   file: File
@@ -146,7 +189,7 @@ export default Vue.extend({
   },
   computed: {
     debouncedTyping(): DebouncedFunc<() => void> {
-      return _.debounce(this.sendTyping, 1000, { maxWait: 0, leading: true })
+      return debounce(this.sendTyping, 1000, { maxWait: 0, leading: true })
     },
     typers(): TypingMap | undefined {
       return this.$accessor.app.data[this.$getHost()]?.channels[
@@ -155,13 +198,19 @@ export default Vue.extend({
     },
     typingDisplay(): string {
       if (!this.typers) return ''
-      return Object.keys(this.typers).reduce((outStr, t) => {
-        const name = this.$accessor.app.data[this.$getHost()].users[t].username
-
-        outStr += `${name} is typing...`
-
-        return outStr
-      }, '')
+      const filteredTypers = Object.keys(this.typers)
+        .filter((v) => v !== this.$accessor.app.userID)
+        .map(
+          (userID) =>
+            this.$accessor.app.data[this.$getHost()].users[userID]?.username,
+        )
+        .filter((v) => v !== undefined)
+      if (filteredTypers.length === 0) return ''
+      return this.$tc(
+        'app.typing',
+        filteredTypers.length,
+        filteredTypers,
+      ).toString()
     },
     possibleSenders(): any[] {
       const ownP = this.$accessor.app.data[this.$accessor.app.host!]?.users[
@@ -173,9 +222,15 @@ export default Vue.extend({
         }),
       )
     },
+    sendValid(): boolean {
+      return !(
+        (this.message === '' || /^\s+$/.test(this.message)) &&
+        this.attachments.length === 0
+      )
+    },
   },
   mounted() {
-    this.typingInterval = setInterval(this.checkTyping, 1000)
+    this.typingInterval = setInterval(this.checkTyping, 500)
   },
   beforeDestroy() {
     clearInterval(this.typingInterval)
@@ -204,54 +259,64 @@ export default Vue.extend({
         ]
       }
     },
-    async onInputKeyPress(e: KeyboardEvent) {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault()
-        this.uploading = true
-        const localID = Math.floor(Math.random() * 1000)
-        const sendMsg = this.message
-        this.message = ''
-        this.$accessor.app.addMessage({
-          host: this.$getHost(),
-          channelID: this.$route.params.channelid,
-          messageID: localID.toString(),
-          data: {
-            authorID: this.$accessor.app.userID || '',
-            createdAt: Date.now() / 1000,
-            editedAt: 0,
-            content: sendMsg,
-            pending: true,
-            embedsList: [],
-            actionsList: [],
-            attachmentsList: [],
-          },
+    async sendMessage() {
+      if (!this.sendValid) {
+        return
+      }
+      this.uploading = true
+      const localID = Math.floor(Math.random() * 1000)
+      const sendMsg = this.message
+      this.message = ''
+      this.$accessor.app.addMessage({
+        host: this.$getHost(),
+        channelID: this.$route.params.channelid,
+        messageID: localID.toString(),
+        data: {
+          authorID: this.$accessor.app.userID || '',
+          createdAt: Date.now() / 1000,
+          editedAt: 0,
+          content: sendMsg,
+          pending: true,
+          embedsList: [],
+          actionsList: [],
+          attachmentsList: [],
+        },
+      })
+
+      let uploadAttachments = undefined as string[] | undefined
+      let uploadPromises = [] as Promise<void>[]
+      if (this.attachments && this.attachments.length > 0) {
+        uploadAttachments = []
+        uploadPromises = this.attachments.map(async (f) => {
+          const resp = await this.$uploadFile(this.$getHost(), f.file)
+          if (f.preview) URL.revokeObjectURL(f.preview)
+          uploadAttachments?.push(resp)
         })
+      }
 
-        let uploadAttachments = undefined as string[] | undefined
-        let uploadPromises = [] as Promise<void>[]
-        if (this.attachments && this.attachments.length > 0) {
-          uploadAttachments = []
-          uploadPromises = this.attachments.map(async (f) => {
-            const resp = await this.$uploadFile(this.$getHost(), f.file)
-            if (f.preview) URL.revokeObjectURL(f.preview)
-            uploadAttachments?.push(resp)
-          })
-        }
+      await Promise.all(uploadPromises)
 
-        await Promise.all(uploadPromises)
+      this.uploading = false
 
-        this.uploading = false
+      this.attachments = []
 
-        this.attachments = []
-
-        await this.$sendMessage(
-          this.$getHost(),
-          this.$route.params.guildid,
-          this.$route.params.channelid,
-          sendMsg,
-          uploadAttachments,
-          localID,
-        )
+      await this.$sendMessage(
+        this.$getHost(),
+        this.$route.params.guildid,
+        this.$route.params.channelid,
+        sendMsg,
+        uploadAttachments,
+        localID,
+      )
+    },
+    async onInputKeyPress(e: KeyboardEvent) {
+      if (
+        e.key === 'Enter' &&
+        !e.shiftKey &&
+        this.$vuetify.breakpoint.mdAndUp
+      ) {
+        e.preventDefault()
+        await this.sendMessage()
       }
       this.debouncedTyping()
     },
@@ -283,7 +348,7 @@ export default Vue.extend({
     checkTyping() {
       if (this.typers) {
         Object.keys(this.typers).forEach((t) => {
-          if (new Date().getTime() - this.typers![t].getTime() > 3000) {
+          if (new Date().getTime() - this.typers![t].getTime() > 2000) {
             this.$accessor.app.deleteTyper({
               host: this.$getHost(),
               channelID: this.$route.params.channelid,

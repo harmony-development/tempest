@@ -15,5 +15,6 @@ module.exports = {
   // add your custom rules here
   rules: {
     'vue/valid-template-root': 'off',
+    'unicorn/number-literal-case': 'off',
   },
 }

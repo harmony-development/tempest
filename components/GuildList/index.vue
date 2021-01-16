@@ -17,7 +17,7 @@
   padding: 8px;
   display: flex;
   flex-direction: column;
-  background-color: var(--harmony-background-chrome-outer);
+  background-color: var(--v-chromeOuter-base);
   box-sizing: border-box;
 }
 </style>
@@ -46,7 +46,15 @@ export default Vue.extend({
 
       this.$accessor.app.setGuildList(asObj!.guildsList)
     } catch (e) {
-      this.$showDialog(DialogType.Error, e.statusMessage || e)
+      if (e.statusMessage === 'invalid-session') {
+        this.$accessor.app.setSession() // todo: make sure localstorage is cleared correctly
+        Object.values(this.$accessor.app.connections).forEach((conn) =>
+          conn.client?.close(),
+        )
+        this.$router.push('/')
+      } else {
+        this.$showDialog(DialogType.Error, e.statusMessage || e)
+      }
     }
   },
 })

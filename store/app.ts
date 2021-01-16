@@ -1,4 +1,5 @@
 import { Connection } from '@harmony-dev/harmony-web-sdk'
+import { GetGuildInvitesResponse } from '@harmony-dev/harmony-web-sdk/dist/protocol/chat/v1/guilds_pb'
 import { Event } from '@harmony-dev/harmony-web-sdk/dist/protocol/chat/v1/streaming_pb'
 import {
   Action,
@@ -9,6 +10,28 @@ import {
 } from '@harmony-dev/harmony-web-sdk/dist/protocol/harmonytypes/v1/types_pb'
 import { mutationTree } from 'nuxt-typed-vuex'
 import Vue from 'vue'
+
+export const permissionsList = {
+  'messages.send': -1,
+  'messages.view': -1,
+  'actions.trigger': -1,
+  'roles.user.get': -1,
+  'roles.user.manage': -1,
+  'roles.manage': -1,
+  'roles.get': -1,
+  'permissions.manage.get': -1,
+  'permissions.manage.set': -1,
+  'permissions.query': -1,
+  'channels.manage.create': -1,
+  'channels.manage.change-information': -1,
+  'channels.manage.move': -1,
+  'channels.manage.delete': -1,
+  'invites.view': -1,
+  'invites.manage.create': -1,
+  'invites.manage.delete': -1,
+  'guild.manage.change-information': -1,
+  'guild.manage.delete': -1,
+}
 
 interface IGuildEntry {
   guildId: string
@@ -21,6 +44,7 @@ export interface IGuildData {
   channels?: string[]
   memberList?: string[]
   roles?: string[]
+  invites?: GetGuildInvitesResponse.Invite.AsObject[]
 }
 
 export interface IChannelData {
@@ -28,6 +52,7 @@ export interface IChannelData {
   isCategory?: boolean
   isVoice?: boolean
   reachedTop?: boolean
+  unread?: boolean
   messages?: string[]
   typing?: {
     [userid: string]: Date
@@ -58,6 +83,11 @@ export interface IRoleData {
   color: number
   hoist: boolean
   pingable: boolean
+  permissions:
+    | {
+        [id: string]: number
+      }
+    | undefined
 }
 
 interface IData {
@@ -92,8 +122,6 @@ interface IState {
   disconnections: {
     [host: string]: string
   }
-  guildSettingsOpen: boolean
-  profileSettingsOpen: boolean
   personas: IPersona[]
 }
 
@@ -115,8 +143,6 @@ export const state = (): IState => ({
   data: {},
   guildsList: undefined,
   disconnections: {},
-  guildSettingsOpen: false,
-  profileSettingsOpen: false,
   personas: [],
 })
 
@@ -337,6 +363,7 @@ export const mutations = mutationTree(state, {
     state.data[data.host].channels[data.channelID].messages?.push(
       data.messageID,
     )
+    state.data[data.host].channels[data.channelID].unread = true
   },
   editMessage(
     state,
@@ -431,12 +458,6 @@ export const mutations = mutationTree(state, {
       data.memberList,
     )
   },
-  setGuildSettingsOpen(state, data: boolean) {
-    state.guildSettingsOpen = data
-  },
-  setProfileSettingsOpen(state, data: boolean) {
-    state.profileSettingsOpen = data
-  },
   setRolesList(
     state,
     data: {
@@ -458,10 +479,10 @@ export const mutations = mutationTree(state, {
     },
   ) {
     ensureHost(state, data.host)
-    state.data[data.host].roles = {
+    Vue.set(state.data[data.host], 'roles', {
       ...state.data[data.host].roles,
       ...data.roles,
-    }
+    })
   },
   deleteMessage(
     state,
@@ -566,5 +587,75 @@ export const mutations = mutationTree(state, {
         (item) => item.host === data.host && item.guildId === data.guildID,
       ),
     )
+  },
+  setInvites(
+    state,
+    data: {
+      host: string
+      guildID: string
+      invites: GetGuildInvitesResponse.Invite.AsObject[]
+    },
+  ) {
+    ensureGuild(state, data.host, data.guildID)
+    Vue.set(state.data[data.host].guilds[data.guildID], 'invites', data.invites)
+  },
+  deleteInvite(
+    state,
+    data: {
+      host: string
+      guildID: string
+      inviteID: string
+    },
+  ) {
+    ensureGuild(state, data.host, data.guildID)
+    const idx = state.data[data.host].guilds[data.guildID].invites!.findIndex(
+      (invite) => invite.inviteId === data.inviteID,
+    )
+    Vue.delete(state.data[data.host].guilds[data.guildID].invites!, idx)
+  },
+  createInvite(
+    state,
+    data: {
+      host: string
+      guildID: string
+      inviteID: string
+      maxUses: number
+    },
+  ) {
+    ensureGuild(state, data.host, data.guildID)
+    state.data[data.host].guilds[data.guildID].invites?.push({
+      inviteId: data.inviteID,
+      possibleUses: data.maxUses,
+      useCount: 0,
+    })
+  },
+  setPermissions(
+    state,
+    data: {
+      host: string
+      roleID: string
+      permissions:
+        | {
+            [id: string]: number
+          }
+        | undefined
+    },
+  ) {
+    ensureHost(state, data.host)
+    Vue.set(
+      state.data[data.host].roles[data.roleID],
+      'permissions',
+      data.permissions,
+    )
+  },
+  markAsRead(
+    state,
+    data: {
+      host: string
+      channelID: string
+    },
+  ) {
+    ensureHost(state, data.host)
+    state.data[data.host].channels[data.channelID].unread = false
   },
 })

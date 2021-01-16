@@ -2,24 +2,22 @@
   <v-dialog
     :value="open"
     persistent
-    fullscreen
+    max-width="1000px"
     transition="scroll-y-reverse-transition"
     @input="dialogChange"
   >
-    <v-card class="fill-height">
-      <v-container fluid class="fill-height">
-        <v-row class="fill-height">
-          <v-col cols="4" sm="4" md="3" lg="2" class="fill-height">
+    <v-card>
+      <v-app-bar>
+        <v-app-bar-title>{{ displayName || 'Unknown Name' }}</v-app-bar-title>
+        <v-spacer />
+        <v-btn icon min-width="0px" @click="dialogChange">
+          <v-icon> mdi-close </v-icon>
+        </v-btn>
+      </v-app-bar>
+      <v-container fluid class="fill-height" style="height: 600px">
+        <v-row class="fill-height flex-nowrap">
+          <v-col cols="5" sm="4" md="3" class="fill-height">
             <div class="sidebar fill-height">
-              <v-list-item>
-                <v-list-item-content>
-                  <v-list-item-title class="title">
-                    {{ displayName || 'Unknown Name' }}
-                  </v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-              <v-divider></v-divider>
-
               <v-list dense nav>
                 <v-list-item
                   :class="{ 'sidebar-item': true, active: page === 'overview' }"
@@ -54,11 +52,6 @@
               <overview v-if="page === 'overview'" />
               <roles v-if="page === 'roles'" />
             </keep-alive>
-          </v-col>
-          <v-col md="1" cols="2">
-            <v-btn icon large min-width="0px" @click="dialogChange">
-              <v-icon> mdi-close </v-icon>
-            </v-btn>
           </v-col>
         </v-row>
       </v-container>
@@ -104,7 +97,7 @@ export default Vue.extend({
   },
   computed: {
     open() {
-      return this.$accessor.app.guildSettingsOpen
+      return this.$accessor.ui.guildSettingsOpen
     },
     displayName() {
       return this.$accessor.app.data[this.$getHost()]?.guilds[
@@ -114,7 +107,7 @@ export default Vue.extend({
   },
   methods: {
     dialogChange() {
-      this.$accessor.app.setGuildSettingsOpen(false)
+      this.$accessor.ui.setGuildSettingsOpen(false)
     },
   },
 })

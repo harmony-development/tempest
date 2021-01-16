@@ -1,35 +1,56 @@
 <template>
   <v-list-item
     :class="{ 'channel-item': true, active: selected }"
-    color="primary"
     @click="onClick"
     @mouseover="hovering = true"
     @mouseout="hovering = false"
   >
     <v-list-item-icon style="align-self: center">
-      <v-icon size="24px">mdi-pound</v-icon>
+      <v-icon
+        size="24px"
+        :class="{
+          'font-weight-black': !selected && unread,
+          'text--secondary': !selected && !unread,
+        }"
+        >mdi-pound</v-icon
+      >
     </v-list-item-icon>
     <v-list-item-content>
-      <v-list-item-title v-text="name"></v-list-item-title>
+      <v-list-item-title
+        :class="{
+          'font-weight-black': !selected && unread,
+          'text--secondary': !selected && !unread,
+        }"
+        v-text="name"
+      ></v-list-item-title>
     </v-list-item-content>
     <v-list-item-action :class="{ 'icon-hidden': !hovering }">
-      <v-btn
-        icon
-        small
-        @click.stop="onDeleteClick"
-        @mousedown.stop
-        @touchstart.native.stop
-      >
-        <v-icon color="secondary" small>mdi-delete</v-icon>
-      </v-btn>
+      <v-menu offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn icon small v-bind="attrs" class="menu-btn" v-on="on">
+            <v-icon small> mdi-dots-vertical </v-icon>
+          </v-btn>
+        </template>
+        <v-list dense>
+          <v-list-item link @click="onDeleteClick">
+            <v-list-item-title>Delete Channel</v-list-item-title>
+          </v-list-item>
+          <v-list-item link @click="copyID">
+            <v-list-item-title>Copy ID</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-list-item-action>
   </v-list-item>
 </template>
 
 <style scoped>
 .active {
-  background-color: rgba(0, 0, 0, 0.08);
   border-left: 4px solid var(--v-primary-base);
+}
+
+.active::before {
+  opacity: 0.24 !important;
 }
 
 .icon-hidden {
@@ -39,10 +60,15 @@
 .channel-item {
   transition: 0.1s ease-in;
 }
+
+.channel-item:hover::before {
+  opacity: 0.1;
+}
 </style>
 
 <script lang="ts">
 import Vue from 'vue'
+import { IChannelData } from '~/store/app'
 
 export default Vue.extend({
   props: {
@@ -57,12 +83,17 @@ export default Vue.extend({
     }
   },
   computed: {
-    name(): string | undefined {
+    data(): IChannelData | undefined {
       return this.$accessor.app.data[this.$getHost()]?.channels[this.id]
-        ?.channelName
+    },
+    name(): string | undefined {
+      return this.data?.channelName
     },
     selected(): boolean {
       return this.$route.params.channelid === this.id
+    },
+    unread(): boolean | undefined {
+      return this.data?.unread
     },
   },
   methods: {
@@ -70,12 +101,20 @@ export default Vue.extend({
       this.$updateRoute({
         channelid: this.id,
       })
+      this.$accessor.app.markAsRead({
+        host: this.$getHost(),
+        channelID: this.id,
+      })
+    },
+    copyID() {
+      navigator.clipboard.writeText(this.id)
     },
     async onDeleteClick() {
-      await this.$confirmDialog(
+      const choice = await this.$confirmDialog(
         'Are you sure you would like to delete this channel?',
         'Delete',
       )
+      if (!choice) return
       return this.$deleteChannel(
         this.$getHost(),
         this.$route.params.guildid,

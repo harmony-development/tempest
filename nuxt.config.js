@@ -4,6 +4,8 @@ export default {
   // Disable server-side rendering (https://go.nuxtjs.dev/ssr-mode)
   ssr: false,
 
+  analyze: true,
+
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
     titleTemplate: '%s',
@@ -64,6 +66,12 @@ export default {
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,
           success: colors.green.accent3,
+          harmony: '#121212',
+          layer: '#ffffff',
+        },
+        light: {
+          harmony: '#e3e3e3',
+          layer: '#000000',
         },
       },
       options: {
@@ -100,7 +108,6 @@ export default {
         path: '/app/:guildid?/:channelid?/:messageid?',
         component: resolve(__dirname, 'pages/_app'),
         name: 'mainapp',
-        chunkName: 'mainapp',
       })
     },
   },
