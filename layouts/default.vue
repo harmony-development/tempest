@@ -24,7 +24,7 @@ body,
 }
 
 .dark-mode {
-  @apply text-white bg-gray-900;
+  @apply text-white bg-harmonydark-900;
 }
 
 .light-mode {

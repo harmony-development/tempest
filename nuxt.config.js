@@ -14,10 +14,15 @@ export default {
   },
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
-  css: [],
+  css: ['@fortawesome/fontawesome-svg-core/styles.css'],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: [],
+  plugins: [
+    { src: '~/plugins/fragment.js' },
+    { src: '~/plugins/fontawesome.ts' },
+    { src: '~/plugins/clickaway.ts', mode: 'client' },
+    { src: '~/plugins/persistedState.client.ts', mode: 'client' },
+  ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
@@ -39,6 +44,7 @@ export default {
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
     'v-wave/nuxt',
+    'nuxt-i18n',
   ],
 
   router: {
@@ -55,4 +61,20 @@ export default {
   build: {},
 
   telemetry: false,
+  purgeCSS: {
+    whitelistPatterns: [/svg.*/, /fa.*/],
+  },
+  i18n: {
+    strategy: 'no_prefix',
+    lazy: true,
+    langDir: 'locales/',
+    defaultLocale: 'en',
+    locales: [
+      {
+        code: 'en',
+        file: 'en-US.js',
+        name: 'English',
+      },
+    ],
+  },
 }

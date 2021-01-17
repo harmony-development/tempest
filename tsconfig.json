@@ -26,7 +26,8 @@
     "types": [
       "@types/node",
       "@nuxt/types",
-      "@nuxtjs/color-mode"
+      "@nuxtjs/color-mode",
+      "nuxt-i18n",
     ]
   },
   "exclude": [

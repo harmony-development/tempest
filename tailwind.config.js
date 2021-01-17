@@ -1,11 +1,14 @@
-import { colors } from 'tailwindcss/defaultTheme'
+import colors from 'tailwindcss/colors'
 
-export const theme = {
-  extend: {
-    colors: {
-      primary: colors.blue,
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        primary: colors.blue,
+        harmonydark: colors.coolGray,
+      },
+      darkMode: 'class',
     },
-    darkMode: 'class',
   },
   plugins: [require('tailwindcss-dark-mode')()],
 }
