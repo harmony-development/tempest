@@ -33,8 +33,8 @@
   @apply rounded-full px-2 py-2 w-10 h-10;
 }
 
-.text {
-  @apply bg-transparent;
+.outlined {
+  @apply border;
 }
 
 .primary {
@@ -45,7 +45,7 @@
     }
   }
   &.outlined {
-    @apply border-2 border-primary-300 text-primary-300;
+    @apply border-primary-300 text-primary-300;
     &:hover {
       @apply bg-primary-300 text-white bg-opacity-25;
     }
@@ -54,6 +54,27 @@
     @apply text-primary-300;
     &:hover {
       @apply bg-primary-300 bg-opacity-25;
+    }
+  }
+}
+
+.secondary {
+  &.filled {
+    @apply bg-secondary-400 text-white;
+    &:hover {
+      @apply bg-secondary-300;
+    }
+  }
+  &.outlined {
+    @apply border-secondary-300 text-secondary-300;
+    &:hover {
+      @apply bg-secondary-300 text-white bg-opacity-25;
+    }
+  }
+  &.text {
+    @apply text-secondary-300;
+    &:hover {
+      @apply bg-secondary-300 bg-opacity-25;
     }
   }
 }

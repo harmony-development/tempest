@@ -5,6 +5,7 @@ module.exports = {
     extend: {
       colors: {
         primary: colors.blue,
+        secondary: colors.amber,
         harmonydark: colors.coolGray,
       },
       darkMode: 'class',
