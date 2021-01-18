@@ -1,4 +1,4 @@
-import colors from 'tailwindcss/colors'
+const colors = require('tailwindcss/colors')
 
 module.exports = {
   theme: {
