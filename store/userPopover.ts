@@ -1,4 +1,4 @@
-import { mutationTree } from 'nuxt-typed-vuex'
+import { mutationTree } from 'typed-vuex'
 
 export enum AnimationDirection {
   x = 'scroll-x-transition',
@@ -40,7 +40,7 @@ export const mutations = mutationTree(state, {
       element: Element
       position?: Position
       animationDirection?: AnimationDirection
-    },
+    }
   ) {
     const boundingBox = data.element.getBoundingClientRect()
     state.open = true

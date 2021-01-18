@@ -1,4 +1,4 @@
-import { getAccessorType } from 'nuxt-typed-vuex'
+import { getAccessorType } from 'typed-vuex'
 import * as entry from './entry'
 import * as app from './app'
 import * as dialog from './dialog'

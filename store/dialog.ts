@@ -1,4 +1,4 @@
-import { mutationTree } from 'nuxt-typed-vuex'
+import { mutationTree } from 'typed-vuex'
 
 export enum DialogType {
   Error,
@@ -32,7 +32,7 @@ export const mutations = mutationTree(state, {
       content: string
       action?: string
       res?: Function
-    },
+    }
   ) {
     state.dialog.open = true
     state.dialog.type = data.type

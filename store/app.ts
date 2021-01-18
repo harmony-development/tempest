@@ -8,7 +8,7 @@ import {
   Override,
   UserStatusMap,
 } from '@harmony-dev/harmony-web-sdk/dist/protocol/harmonytypes/v1/types_pb'
-import { mutationTree } from 'nuxt-typed-vuex'
+import { mutationTree } from 'typed-vuex'
 import Vue from 'vue'
 
 export const permissionsList = {
@@ -203,7 +203,7 @@ export const mutations = mutationTree(state, {
     data: {
       host: string
       connection: Connection
-    },
+    }
   ) {
     state.connections[data.host] = data.connection
     Vue.set(state.connections, data.host, data.connection)
@@ -221,7 +221,7 @@ export const mutations = mutationTree(state, {
       guildID: string
       name?: string
       picture?: string
-    },
+    }
   ) {
     ensureGuild(state, data.host, data.guildID)
     if (data.name !== undefined)
@@ -230,7 +230,7 @@ export const mutations = mutationTree(state, {
       Vue.set(
         state.data[data.host].guilds[data.guildID],
         'picture',
-        data.picture,
+        data.picture
       )
   },
   setGuildChannels(
@@ -239,7 +239,7 @@ export const mutations = mutationTree(state, {
       host: string
       guildID: string
       channels: string[]
-    },
+    }
   ) {
     ensureGuild(state, data.host, data.guildID)
     state.data[data.host].guilds[data.guildID].channels = data.channels
@@ -251,7 +251,7 @@ export const mutations = mutationTree(state, {
       data: {
         [channelID: string]: IChannelData
       }
-    },
+    }
   ) {
     ensureHost(state, data.host)
     Object.keys(data.data).forEach((key) => {
@@ -262,17 +262,17 @@ export const mutations = mutationTree(state, {
       Vue.set(
         state.data[data.host].channels[key],
         'channelName',
-        data.data[key].channelName,
+        data.data[key].channelName
       )
       Vue.set(
         state.data[data.host].channels[key],
         'isVoice',
-        data.data[key].isVoice,
+        data.data[key].isVoice
       )
       Vue.set(
         state.data[data.host].channels[key],
         'isCategory',
-        data.data[key].isCategory,
+        data.data[key].isCategory
       )
     })
   },
@@ -285,7 +285,7 @@ export const mutations = mutationTree(state, {
       nextID: string
       previousID: string
       data: IChannelData
-    },
+    }
   ) {
     ensureGuild(state, data.host, data.guildID)
     const guild = state.data[data.host].guilds[data.guildID]
@@ -299,7 +299,7 @@ export const mutations = mutationTree(state, {
       guild.channels.splice(
         guild.channels.indexOf(data.previousID),
         0,
-        data.channelID,
+        data.channelID
       )
     }
     state.data[data.host].channels[data.channelID] = data.data
@@ -310,13 +310,13 @@ export const mutations = mutationTree(state, {
       host: string
       channelID: string
       messages: string[]
-    },
+    }
   ) {
     ensureChannel(state, data.host, data.channelID)
     Vue.set(
       state.data[data.host].channels[data.channelID],
       'messages',
-      data.messages,
+      data.messages
     )
   },
   prependChannelMessages(
@@ -325,7 +325,7 @@ export const mutations = mutationTree(state, {
       host: string
       channelID: string
       messages: string[]
-    },
+    }
   ) {
     ensureChannel(state, data.host, data.channelID)
     const channel = state.data[data.host].channels[data.channelID]
@@ -341,7 +341,7 @@ export const mutations = mutationTree(state, {
       data: {
         [messageID: string]: IMessageData
       }
-    },
+    }
   ) {
     ensureHost(state, data.host)
     state.data[data.host].messages = {
@@ -356,12 +356,12 @@ export const mutations = mutationTree(state, {
       channelID: string
       messageID: string
       data: IMessageData
-    },
+    }
   ) {
     ensureChannel(state, data.host, data.channelID)
     state.data[data.host].messages[data.messageID] = data.data
     state.data[data.host].channels[data.channelID].messages?.push(
-      data.messageID,
+      data.messageID
     )
     state.data[data.host].channels[data.channelID].unread = true
   },
@@ -370,7 +370,7 @@ export const mutations = mutationTree(state, {
     data: {
       host: string
       updateEvent: Event.MessageUpdated.AsObject
-    },
+    }
   ) {
     const message = state.data[data.host].messages[data.updateEvent.messageId]
     if (message) {
@@ -395,7 +395,7 @@ export const mutations = mutationTree(state, {
       messageID: string
       echoID: string
       attachments: Attachment.AsObject[]
-    },
+    }
   ) {
     const msgsList = state.data[data.host]?.channels[data.channelID]?.messages
     const msgs = state.data[data.host]?.messages
@@ -414,7 +414,7 @@ export const mutations = mutationTree(state, {
       host: string
       userID: string
       data: IUserData
-    },
+    }
   ) {
     ensureHost(state, data.host)
     Vue.set(state.data[data.host]?.users, data.userID, data.data)
@@ -424,7 +424,7 @@ export const mutations = mutationTree(state, {
     data: {
       host: string
       message: string
-    },
+    }
   ) {
     Vue.set(state.disconnections, data.host, data.message)
   },
@@ -434,13 +434,13 @@ export const mutations = mutationTree(state, {
       host: string
       channelID: string
       reachedTop?: boolean
-    },
+    }
   ) {
     ensureChannel(state, data.host, data.channelID)
     Vue.set(
       state.data[data.host].channels[data.channelID],
       'reachedTop',
-      data.reachedTop,
+      data.reachedTop
     )
   },
   setMemberList(
@@ -449,13 +449,13 @@ export const mutations = mutationTree(state, {
       host: string
       guildID: string
       memberList: string[]
-    },
+    }
   ) {
     ensureGuild(state, data.host, data.guildID)
     Vue.set(
       state.data[data.host].guilds[data.guildID],
       'memberList',
-      data.memberList,
+      data.memberList
     )
   },
   setRolesList(
@@ -464,7 +464,7 @@ export const mutations = mutationTree(state, {
       host: string
       guildID: string
       roles: string[]
-    },
+    }
   ) {
     ensureGuild(state, data.host, data.guildID)
     Vue.set(state.data[data.host].guilds[data.guildID], 'roles', data.roles)
@@ -476,7 +476,7 @@ export const mutations = mutationTree(state, {
       roles: {
         [roleID: string]: IRoleData
       }
-    },
+    }
   ) {
     ensureHost(state, data.host)
     Vue.set(state.data[data.host], 'roles', {
@@ -490,7 +490,7 @@ export const mutations = mutationTree(state, {
       host: string
       channelID: string
       messageID: string
-    },
+    }
   ) {
     ensureHost(state, data.host)
     const msgs = state.data[data.host].channels[data.channelID].messages
@@ -505,7 +505,7 @@ export const mutations = mutationTree(state, {
       host: string
       guildID: string
       channelID: string
-    },
+    }
   ) {
     const channels = state.data[data.host]?.channels
     const channelsList = state.data[data.host]?.guilds[data.guildID]?.channels
@@ -522,7 +522,7 @@ export const mutations = mutationTree(state, {
       avatar?: string
       status?: UserStatusMap[keyof UserStatusMap]
       isBot?: boolean
-    },
+    }
   ) {
     ensureHost(state, data.host)
     const user = state.data[data.host].users[data.userid]
@@ -547,7 +547,7 @@ export const mutations = mutationTree(state, {
       host: string
       channelID: string
       userid: string
-    },
+    }
   ) {
     ensureTyping(state, data.host, data.channelID)
 
@@ -563,7 +563,7 @@ export const mutations = mutationTree(state, {
       host: string
       channelID: string
       userID: string
-    },
+    }
   ) {
     ensureTyping(state, data.host, data.channelID)
 
@@ -578,14 +578,14 @@ export const mutations = mutationTree(state, {
     data: {
       host: string
       guildID: string
-    },
+    }
   ) {
     if (!state.guildsList) return
     Vue.delete(
       state.guildsList,
       state.guildsList.findIndex(
-        (item) => item.host === data.host && item.guildId === data.guildID,
-      ),
+        (item) => item.host === data.host && item.guildId === data.guildID
+      )
     )
   },
   setInvites(
@@ -594,7 +594,7 @@ export const mutations = mutationTree(state, {
       host: string
       guildID: string
       invites: GetGuildInvitesResponse.Invite.AsObject[]
-    },
+    }
   ) {
     ensureGuild(state, data.host, data.guildID)
     Vue.set(state.data[data.host].guilds[data.guildID], 'invites', data.invites)
@@ -605,11 +605,11 @@ export const mutations = mutationTree(state, {
       host: string
       guildID: string
       inviteID: string
-    },
+    }
   ) {
     ensureGuild(state, data.host, data.guildID)
     const idx = state.data[data.host].guilds[data.guildID].invites!.findIndex(
-      (invite) => invite.inviteId === data.inviteID,
+      (invite) => invite.inviteId === data.inviteID
     )
     Vue.delete(state.data[data.host].guilds[data.guildID].invites!, idx)
   },
@@ -620,7 +620,7 @@ export const mutations = mutationTree(state, {
       guildID: string
       inviteID: string
       maxUses: number
-    },
+    }
   ) {
     ensureGuild(state, data.host, data.guildID)
     state.data[data.host].guilds[data.guildID].invites?.push({
@@ -639,13 +639,13 @@ export const mutations = mutationTree(state, {
             [id: string]: number
           }
         | undefined
-    },
+    }
   ) {
     ensureHost(state, data.host)
     Vue.set(
       state.data[data.host].roles[data.roleID],
       'permissions',
-      data.permissions,
+      data.permissions
     )
   },
   markAsRead(
@@ -653,7 +653,7 @@ export const mutations = mutationTree(state, {
     data: {
       host: string
       channelID: string
-    },
+    }
   ) {
     ensureHost(state, data.host)
     state.data[data.host].channels[data.channelID].unread = false

@@ -1,4 +1,4 @@
-import { mutationTree } from 'nuxt-typed-vuex'
+import { mutationTree } from 'typed-vuex'
 
 interface IState {
   open: boolean
@@ -24,7 +24,7 @@ export const mutations = mutationTree(state, {
       host: string
       x: number
       y: number
-    },
+    }
   ) {
     state.open = true
     state.guildID = data.guildID

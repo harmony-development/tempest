@@ -20,6 +20,9 @@ export default {
   plugins: [
     { src: '~/plugins/fragment.js' },
     { src: '~/plugins/fontawesome.ts' },
+    { src: '~/plugins/routing.ts' },
+    { src: '~/plugins/eventHandling.ts' },
+    { src: '~/plugins/harmonyAPI.ts' },
     { src: '~/plugins/clickaway.ts', mode: 'client' },
     { src: '~/plugins/persistedState.client.ts', mode: 'client' },
   ],
@@ -37,6 +40,7 @@ export default {
     '@nuxtjs/tailwindcss',
     '@nuxtjs/composition-api',
     '@nuxtjs/color-mode',
+    'nuxt-typed-vuex',
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)

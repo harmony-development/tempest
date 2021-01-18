@@ -1,4 +1,4 @@
-import { mutationTree } from 'nuxt-typed-vuex'
+import { mutationTree } from 'typed-vuex'
 
 interface IState {
   guildSettingsOpen: boolean

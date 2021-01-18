@@ -5,9 +5,9 @@
       <spacer />
       <dropdown>
         <template slot="activator" slot-scope="{ toggle }">
-          <btn icon text @click.native="toggle()">
+          <h-btn icon text @click.native="toggle()">
             <fa-icon icon="globe" size="1x" />
-          </btn>
+          </h-btn>
         </template>
         <list>
           <list-item

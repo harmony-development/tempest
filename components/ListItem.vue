@@ -12,7 +12,7 @@
 
 <style lang="postcss" scoped>
 .list-item {
-  @apply w-full py-2 px-4 cursor-pointer select-none transition duration-200;
+  @apply flex items-center rounded w-full py-2 px-4 cursor-pointer select-none transition duration-200;
 
   &:hover {
     @apply bg-white bg-opacity-10;

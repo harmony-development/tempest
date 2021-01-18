@@ -19,6 +19,9 @@
 <style scoped lang="postcss">
 .root {
   @apply px-4 py-2 outline-none rounded transition duration-200 ease-in-out;
+  &:disabled {
+    @apply pointer-events-none;
+  }
 }
 
 .not-flat {
@@ -27,14 +30,6 @@
     transform: translate(0, -0.125rem);
     @apply shadow-xl;
   }
-}
-
-.icon {
-  @apply rounded-full px-2 py-2 w-10 h-10;
-}
-
-.outlined {
-  @apply border;
 }
 
 .primary {
@@ -66,16 +61,43 @@
     }
   }
   &.outlined {
-    @apply border-secondary-300 text-secondary-300;
-    &:hover {
-      @apply bg-secondary-300 text-white bg-opacity-25;
-    }
+    @apply text-secondary-300;
   }
   &.text {
     @apply text-secondary-300;
     &:hover {
       @apply bg-secondary-300 bg-opacity-25;
     }
+  }
+}
+
+.icon {
+  @apply rounded-full px-2 py-2 w-10 h-10;
+}
+
+.filled {
+  &:disabled {
+    @apply bg-gray-600 text-gray-500 bg-opacity-75;
+  }
+}
+
+.outlined {
+  @apply border;
+  &:hover {
+    @apply bg-current bg-opacity-25 text-white;
+  }
+  &:disabled {
+    @apply border border-gray-500 text-gray-500 bg-opacity-75;
+  }
+}
+
+.text {
+  @apply text-white;
+  &:hover {
+    @apply bg-current bg-opacity-25;
+  }
+  &:disabled {
+    @apply text-gray-500 bg-opacity-75;
   }
 }
 </style>
