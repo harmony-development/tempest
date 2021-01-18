@@ -22,10 +22,10 @@ export default Vue.extend({
   },
   computed: {
     inputVal: {
-      get() {
+      get(): string {
         return this.value
       },
-      set(val) {
+      set(val: string): void {
         this.$emit('input', val)
       },
     },

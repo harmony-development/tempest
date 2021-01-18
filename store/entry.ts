@@ -1,6 +1,6 @@
 import { mutationTree } from 'typed-vuex'
 
-interface IServerEntry {
+export interface IServerEntry {
   name: string
   host: string
 }

@@ -80,10 +80,12 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { TranslateResult } from 'vue-i18n'
 import HBtn from '~/components/HBtn.vue'
 import HDialog from '~/components/HDialog.vue'
 import HTextField from '~/components/HTextField.vue'
 import Spacer from '~/components/Spacer.vue'
+import { IServerEntry } from '~/store/entry'
 
 export default Vue.extend({
   components: {
@@ -101,10 +103,10 @@ export default Vue.extend({
     }
   },
   computed: {
-    title() {
+    title(): TranslateResult {
       return this.$t('server-select.title')
     },
-    serverList() {
+    serverList(): IServerEntry[] {
       return this.$accessor.entry.serverList
     },
   },
