@@ -25,6 +25,7 @@ export default {
     { src: '~/plugins/routing.ts' },
     { src: '~/plugins/eventHandling.ts' },
     { src: '~/plugins/harmonyAPI.ts' },
+    { src: '~/plugins/harmonyURIParser.ts' },
     { src: '~/plugins/clickaway.ts', mode: 'client' },
     { src: '~/plugins/persistedState.client.ts', mode: 'client' },
   ],

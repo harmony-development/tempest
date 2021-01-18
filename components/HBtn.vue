@@ -12,13 +12,14 @@
       secondary: color === 'secondary',
     }"
   >
+    <fa-icon v-if="icon" :icon="icon" />
     <slot />
   </button>
 </template>
 
 <style scoped lang="postcss">
 .root {
-  @apply px-4 py-2 outline-none rounded transition duration-200 ease-in-out;
+  @apply px-4 py-2 outline-none rounded transition duration-200 ease-in-out justify-center items-center;
   &:disabled {
     @apply pointer-events-none;
   }
@@ -123,8 +124,8 @@ export default Vue.extend({
       default: false,
     },
     icon: {
-      type: Boolean,
-      default: false,
+      type: String,
+      default: undefined,
     },
     color: {
       type: String as () => 'primary' | 'secondary',

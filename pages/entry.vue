@@ -20,8 +20,12 @@
         </list>
       </dropdown>
     </app-bar>
-    <div class="h-full w-full flex items-center background">
-      <div class="bg-harmonydark-800 w-1/4 ml-12 p-6 rounded">
+    <div
+      class="h-full w-full flex items-center justify-center sm:justify-start background"
+    >
+      <div
+        class="bg-harmonydark-800 w-11/12 sm:w-2/3 md:w-5/12 sm:m-12 p-6 rounded"
+      >
         <nuxt-child />
       </div>
     </div>
