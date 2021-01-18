@@ -21,7 +21,7 @@
       </dropdown>
     </app-bar>
     <div class="h-full w-full flex items-center background">
-      <div class="bg-harmonydark-800 w-1/3 ml-12 p-6 rounded">
+      <div class="bg-harmonydark-800 w-1/4 ml-12 p-6 rounded">
         <nuxt-child />
       </div>
     </div>
