@@ -1,3 +1,5 @@
 <template>
-  <guild-list />
+  <div class="flex">
+    <guild-list />
+  </div>
 </template>

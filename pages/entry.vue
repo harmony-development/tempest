@@ -6,7 +6,7 @@
       <dropdown>
         <template slot="activator" slot-scope="{ toggle }">
           <h-btn icon text @click.native="toggle()">
-            <fa-icon icon="globe" size="1x" />
+            <h-icon icon="mdiTranslate" />
           </h-btn>
         </template>
         <list>
@@ -42,6 +42,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import HIcon from '~/components/HIcon.vue'
 import AppBar from '~/components/AppBar.vue'
 import Dropdown from '~/components/Dropdown.vue'
 import List from '~/components/List.vue'
@@ -49,7 +50,7 @@ import ListItem from '~/components/ListItem.vue'
 import Spacer from '~/components/Spacer.vue'
 
 export default Vue.extend({
-  components: { AppBar, Spacer, Dropdown, List, ListItem },
+  components: { AppBar, Spacer, Dropdown, List, ListItem, HIcon },
   methods: {
     toggleTheme() {
       this.$colorMode.preference =

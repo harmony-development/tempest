@@ -1,3 +1,3 @@
 <template>
-  <fa-icon icon="spinner" spin />
+  <h-icon icon="mdiLoading" class="animate-spin" />
 </template>

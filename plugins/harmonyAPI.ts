@@ -15,6 +15,7 @@ declare module 'vue/types/vue' {
   interface Vue {
     $getHost(): string
     $getOrFederate(host: string): Promise<Connection>
+    $homeserverConn(): Connection
     $addGuildToList(host: string, guildID: string): void
     $fetchChannelList(host: string, guildID: string): void
     $fetchMessageList(
@@ -114,6 +115,21 @@ const pendingUserFetches: {
 
 Vue.prototype.$getHost = function (this: Vue) {
   return decodeURIComponent(this.$route.hash.substr(1))
+}
+
+Vue.prototype.$homeserverConn = function (this: Vue) {
+  const host = this.$accessor.app.host!
+  const appState = this.$accessor.app
+  if (appState.connections[host]) return appState.connections[host]
+  const conn = new Connection(host)
+  appState.setConnection({
+    host,
+    connection: conn,
+  })
+  conn.session = appState.session
+  this.$bindEvents(conn)
+  conn.beginStream()
+  return conn
 }
 
 Vue.prototype.$getOrFederate = function (this: Vue, host: string) {

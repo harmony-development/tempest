@@ -7,11 +7,12 @@
     <div class="h-full">
       <app-bar absolute>
         <h-btn
-          icon="bars"
+          icon
           text
           class="md:invisible"
           @click.native.stop="leftNav = true"
         >
+          <h-icon icon="mdiMenu" />
         </h-btn>
         <spacer />
       </app-bar>

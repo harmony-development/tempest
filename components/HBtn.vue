@@ -12,7 +12,6 @@
       secondary: color === 'secondary',
     }"
   >
-    <fa-icon v-if="icon" :icon="icon" />
     <slot />
   </button>
 </template>
@@ -124,8 +123,8 @@ export default Vue.extend({
       default: false,
     },
     icon: {
-      type: String,
-      default: undefined,
+      type: Boolean,
+      default: false,
     },
     color: {
       type: String as () => 'primary' | 'secondary',

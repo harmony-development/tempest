@@ -16,13 +16,13 @@ export default {
   },
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
-  css: ['@fortawesome/fontawesome-svg-core/styles.css'],
+  css: [],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
     { src: '~/plugins/fragment.js' },
-    { src: '~/plugins/fontawesome.ts' },
     { src: '~/plugins/routing.ts' },
+    { src: '~/plugins/icons.ts' },
     { src: '~/plugins/eventHandling.ts' },
     { src: '~/plugins/harmonyAPI.ts' },
     { src: '~/plugins/harmonyURIParser.ts' },
@@ -52,6 +52,7 @@ export default {
     '@nuxtjs/pwa',
     'v-wave/nuxt',
     'nuxt-i18n',
+    '@nuxtjs/toast',
   ],
 
   router: {

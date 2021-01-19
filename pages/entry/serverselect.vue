@@ -61,7 +61,7 @@
             @pointerdown.native.stop=""
             @click.native.stop="removeServer(idx)"
           >
-            <fa-icon icon="trash" class="text-2xl" />
+            <h-icon icon="mdiDelete" />
           </h-btn>
         </list-item>
       </client-only>
@@ -72,7 +72,7 @@
       </h-btn>
       <h-btn :disabled="!selected" filled @click.native="nextPage">
         {{ $i18n.t('next') }}
-        <fa-icon icon="chevron-right" class="ml-2 text-2xl" />
+        <h-icon icon="mdiChevronRight" />
       </h-btn>
     </div>
   </fragment>
