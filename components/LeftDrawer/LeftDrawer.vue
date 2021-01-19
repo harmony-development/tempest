@@ -1,0 +1,3 @@
+<template>
+  <guild-list />
+</template>

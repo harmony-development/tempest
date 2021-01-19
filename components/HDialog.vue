@@ -5,6 +5,7 @@
       <div
         v-show="value"
         class="fixed w-full h-full top-0 left-0 z-10 overflow-auto bg-white bg-opacity-10"
+        v-bind="$attrs"
       ></div>
     </transition>
     <transition name="content">

@@ -1,42 +1,38 @@
 <template>
-  <div class="overlay">
-    <div v-on-clickaway="close" :class="{ drawer: true, closed: !value }">
+  <fragment>
+    <div v-show="value" class="overlay" @click.self="close"></div>
+    <div :class="['drawer', !value ? 'closed' : undefined, drawerClass]">
       <slot />
     </div>
-  </div>
+  </fragment>
 </template>
 
 <style lang="postcss" scoped>
-.drawer {
-  @apply translate-x-0 h-full bg-harmonydark-700 transform top-0 left-0 fixed overflow-auto ease-in-out transition duration-150 z-30;
-}
-
 .overlay {
   @apply fixed w-full h-full top-0 left-0 z-10 overflow-auto bg-gray-500 bg-opacity-10;
 }
 
-.closed {
-  @apply -translate-x-full;
+.drawer {
+  @apply translate-x-0 h-full bg-harmonydark-700 transform top-0 left-0 fixed overflow-auto ease-in-out transition duration-150 z-30;
 }
 
-@screen md {
-  .drawer {
-    @apply static translate-x-0;
-  }
-
-  .overlay {
-    @apply hidden;
-  }
+.closed {
+  @apply -translate-x-full md:translate-x-0;
 }
 </style>
 
 <script lang="ts">
 import Vue from 'vue'
 export default Vue.extend({
+  inheritAttrs: false,
   props: {
     value: {
       type: Boolean,
       default: false,
+    },
+    drawerClass: {
+      type: String || Object || Array,
+      default: '',
     },
   },
   methods: {

@@ -1,26 +1,19 @@
 <template>
   <div class="root">
     <div class="background" />
-    <drawer v-model="leftNav">
-      <h1>Hello</h1>
+    <drawer v-model="leftNav" drawer-class="w-2/3 md:w-1/3 flex">
+      <left-drawer />
     </drawer>
     <div class="h-full">
       <app-bar absolute>
         <h-btn
-          icon="globe"
+          icon="bars"
           text
           class="md:invisible"
           @click.native.stop="leftNav = true"
         >
         </h-btn>
         <spacer />
-        <h-btn
-          icon="globe"
-          text
-          class="md:invisible"
-          @click.native.stop="leftNav = true"
-        >
-        </h-btn>
       </app-bar>
     </div>
   </div>
@@ -39,10 +32,13 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Connection } from '@harmony-dev/harmony-web-sdk'
+import LeftDrawer from '~/components/LeftDrawer/LeftDrawer.vue'
 
 export default Vue.extend({
   name: 'App',
-  components: {},
+  components: {
+    LeftDrawer,
+  },
   data() {
     return {
       leftNav: false,
