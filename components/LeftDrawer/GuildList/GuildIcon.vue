@@ -1,10 +1,8 @@
 <template>
   <button
     v-wave
-    :class="{ 'guild-icon': true, selected }"
+    :class="{ 'guild-icon': true, selected, 'hint--right': true }"
     :aria-label="name || id"
-    data-balloon-blunt
-    data-balloon-pos="right"
     @click.prevent.stop="onGuildIconClick"
     @mousedown.prevent=""
   >

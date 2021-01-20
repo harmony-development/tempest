@@ -4,9 +4,8 @@
       <h-btn
         text
         icon
-        class="w-14 h-14"
+        class="w-14 h-14 hint--right"
         aria-label="Guild Menu"
-        data-balloon-pos="right"
         data-balloon-blunt
         @click.native="open = !open"
       >
