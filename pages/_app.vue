@@ -1,33 +1,37 @@
 <template>
   <div class="root">
-    <div class="background" />
+    <portal-target name="destination" multiple> </portal-target>
+    <global-dialog />
     <drawer v-model="leftNav" drawer-class="w-3/4 sm:w-1/2 md:w-80 flex">
       <left-drawer />
     </drawer>
-    <div class="h-full">
-      <app-bar absolute>
+    <div class="h-full flex-1 flex flex-col">
+      <app-bar>
         <div>
           <h-btn
             icon
             text
-            class="md:invisible"
+            class="md:hidden"
             @click.native.stop="leftNav = true"
           >
             <h-icon icon="mdiMenu" />
           </h-btn>
         </div>
+        <h-icon icon="mdiPound" class="text-gray-400 mr-2" />
+        <h1 class="text-lg">{{ channelName }}</h1>
         <spacer />
         <div>
           <h-btn
             icon
             text
-            class="md:invisible"
+            class="md:hidden"
             @click.native.stop="leftNav = true"
           >
             <h-icon icon="mdiAccountMultiple" />
           </h-btn>
         </div>
       </app-bar>
+      <chat />
     </div>
   </div>
 </template>
@@ -35,10 +39,6 @@
 <style lang="postcss" scoped>
 .root {
   @apply w-full h-full flex flex-row overflow-auto;
-}
-
-.background {
-  @apply absolute w-full h-full top-0 left-0;
 }
 </style>
 
@@ -48,6 +48,7 @@ import { Connection } from '@harmony-dev/harmony-web-sdk'
 import LeftDrawer from '~/components/LeftDrawer/LeftDrawer.vue'
 import 'hint.css/hint.base.min.css'
 import '@/assets/fixes.css'
+import { IChannelData, IGuildData } from '~/store/app'
 
 export default Vue.extend({
   name: 'App',
@@ -61,20 +62,17 @@ export default Vue.extend({
     }
   },
   computed: {
-    guildSettingsOpen() {
+    guildData(): IGuildData | undefined {
+      return this.$guildData()
+    },
+    channelData(): IChannelData | undefined {
+      return this.$channelData()
+    },
+    guildSettingsOpen(): boolean {
       return this.$accessor.ui.guildSettingsOpen
     },
-    channelName() {
-      return this.$accessor.app.data[this.$getHost()]?.channels[
-        this.$route.params.channelid
-      ]?.channelName
-    },
-    guildIconSrc() {
-      const picture = this.$accessor.app.data[this.$getHost()]?.guilds[
-        this.$route.params.guildid
-      ]?.picture
-      if (!picture) return undefined
-      return `url(${this.$parseMediaURI(this.$getHost(), picture)})`
+    channelName(): string | undefined {
+      return this.channelData?.channelName
     },
   },
   watch: {

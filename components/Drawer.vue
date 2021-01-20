@@ -1,19 +1,21 @@
 <template>
   <fragment>
     <div v-show="value" class="overlay" @click.self="close"></div>
-    <div :class="['drawer', !value ? 'closed' : undefined, drawerClass]">
-      <slot />
-    </div>
+    <portal to="destination">
+      <div :class="['drawer', !value ? 'closed' : undefined, drawerClass]">
+        <slot />
+      </div>
+    </portal>
   </fragment>
 </template>
 
 <style lang="postcss" scoped>
 .overlay {
-  @apply fixed w-full h-full top-0 left-0 z-10 overflow-auto bg-gray-500 bg-opacity-10 md:hidden;
+  @apply fixed w-full h-full top-0 left-0 z-10 md:z-auto overflow-auto bg-gray-500 bg-opacity-10 md:hidden;
 }
 
 .drawer {
-  @apply h-full bg-harmonydark-700 transform top-0 left-0 fixed overflow-auto ease-in-out transition duration-150 z-30;
+  @apply h-full bg-harmonydark-700 transform top-0 left-0 fixed md:static overflow-auto ease-in-out transition duration-150 z-30 md:z-auto;
 }
 
 .closed {

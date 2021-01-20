@@ -6,7 +6,7 @@
 
 <style scoped lang="postcss">
 .appbar {
-  @apply w-full bg-gray-700 bg-opacity-25 mx-auto p-3 flex items-center mx-auto;
+  @apply w-full bg-harmonydark-600 mx-auto p-3 flex items-center h-14;
 }
 </style>
 

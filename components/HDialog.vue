@@ -1,22 +1,24 @@
 <template>
   <div>
     <slot name="activator" :toggle="toggle" />
-    <transition name="overlay">
-      <div
-        v-show="value"
-        class="fixed w-screen h-screen top-0 left-0 z-10 overflow-auto bg-white bg-opacity-10"
-        v-bind="$attrs"
-      ></div>
-    </transition>
-    <transition name="content">
-      <div
-        v-show="value"
-        class="fixed z-50 top-0 left-0 w-full h-full flex items-center align-center justify-center"
-        @click.self="toggle"
-      >
-        <slot />
-      </div>
-    </transition>
+    <portal to="destination">
+      <transition name="overlay">
+        <div
+          v-show="value"
+          class="fixed w-screen h-screen top-0 left-0 z-10 overflow-auto bg-white bg-opacity-10"
+          v-bind="$attrs"
+        ></div>
+      </transition>
+      <transition name="content">
+        <div
+          v-show="value"
+          class="fixed z-50 top-0 left-0 w-full h-full flex items-center align-center justify-center"
+          @click.self="toggle"
+        >
+          <slot />
+        </div>
+      </transition>
+    </portal>
   </div>
 </template>
 

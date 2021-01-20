@@ -22,11 +22,13 @@ export default {
   plugins: [
     { src: '~/plugins/fragment.js' },
     { src: '~/plugins/routing.ts' },
+    { src: '~/plugins/portals.ts' },
     { src: '~/plugins/icons.ts' },
     { src: '~/plugins/eventHandling.ts' },
     { src: '~/plugins/harmonyAPI.ts' },
     { src: '~/plugins/harmonyURIParser.ts' },
     { src: '~/plugins/getters.ts' },
+    { src: '~/plugins/dialogs.ts' },
     { src: '~/plugins/clickaway.ts', mode: 'client' },
     { src: '~/plugins/persistedState.client.ts', mode: 'client' },
   ],

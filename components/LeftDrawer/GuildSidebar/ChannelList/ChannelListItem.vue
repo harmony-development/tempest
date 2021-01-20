@@ -1,5 +1,6 @@
 <template>
   <list-item @click.native="onClick">
+    <h-icon icon="mdiPound" class="text-gray-400 mr-1" size="22" />
     <list-item-text>{{ name }}</list-item-text>
   </list-item>
 </template>
