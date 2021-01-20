@@ -13,7 +13,7 @@
 <style lang="postcss" scoped>
 .guild-list {
   scrollbar-width: none;
-  @apply bg-harmonydark-800 p-3 w-auto overflow-y-auto;
+  @apply bg-harmonydark-800 p-3 w-auto overflow-visible;
   &::-webkit-scrollbar {
     display: none;
   }

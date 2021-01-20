@@ -2,7 +2,11 @@
   <button
     v-wave
     :class="{ 'guild-icon': true, selected }"
-    @click="onGuildIconClick"
+    :aria-label="name || id"
+    data-balloon-blunt
+    data-balloon-pos="right"
+    @click.prevent.stop="onGuildIconClick"
+    @mousedown.prevent=""
   >
     <img
       :src="picture"

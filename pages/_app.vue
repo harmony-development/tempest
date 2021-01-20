@@ -46,6 +46,8 @@
 import Vue from 'vue'
 import { Connection } from '@harmony-dev/harmony-web-sdk'
 import LeftDrawer from '~/components/LeftDrawer/LeftDrawer.vue'
+import 'balloon-css'
+import '@/assets/fixes.css'
 
 export default Vue.extend({
   name: 'App',

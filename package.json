@@ -22,7 +22,6 @@
     }
   },
   "dependencies": {
-    "@fortawesome/free-solid-svg-icons": "^5.15.2",
     "@harmony-dev/harmony-web-sdk": "^4.0.21",
     "@mdi/js": "^5.9.55",
     "@nuxt/typescript-runtime": "^2.0.0",
@@ -31,6 +30,7 @@
     "@nuxtjs/pwa": "^3.0.2",
     "@tailwindcss/postcss7-compat": "^2.0.2",
     "autoprefixer": "^9",
+    "balloon-css": "^1.2.0",
     "core-js": "^3.6.5",
     "nuxt": "^2.14.6",
     "nuxt-typed-vuex": "^0.1.22",

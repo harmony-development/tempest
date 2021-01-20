@@ -1,0 +1,6 @@
+[data-balloon],
+[data-balloon]::before,
+[data-balloon]::after {
+  z-index: 9999;
+  outline: none;
+}
