@@ -1,20 +1,32 @@
 <template>
   <div class="root">
     <div class="background" />
-    <drawer v-model="leftNav" drawer-class="w-2/3 md:w-1/3 flex">
+    <drawer v-model="leftNav" drawer-class="w-3/4 sm:w-1/2 md:w-80 flex">
       <left-drawer />
     </drawer>
     <div class="h-full">
       <app-bar absolute>
-        <h-btn
-          icon
-          text
-          class="md:invisible"
-          @click.native.stop="leftNav = true"
-        >
-          <h-icon icon="mdiMenu" />
-        </h-btn>
+        <div>
+          <h-btn
+            icon
+            text
+            class="md:invisible"
+            @click.native.stop="leftNav = true"
+          >
+            <h-icon icon="mdiMenu" />
+          </h-btn>
+        </div>
         <spacer />
+        <div>
+          <h-btn
+            icon
+            text
+            class="md:invisible"
+            @click.native.stop="leftNav = true"
+          >
+            <h-icon icon="mdiAccountMultiple" />
+          </h-btn>
+        </div>
       </app-bar>
     </div>
   </div>
@@ -22,7 +34,7 @@
 
 <style lang="postcss" scoped>
 .root {
-  @apply w-full h-full relative flex flex-row overflow-auto;
+  @apply w-full h-full flex flex-row overflow-auto;
 }
 
 .background {

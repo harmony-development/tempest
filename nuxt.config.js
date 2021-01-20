@@ -52,7 +52,6 @@ export default {
     '@nuxtjs/pwa',
     'v-wave/nuxt',
     'nuxt-i18n',
-    '@nuxtjs/toast',
   ],
 
   router: {

@@ -4,7 +4,7 @@
     <transition name="overlay">
       <div
         v-show="value"
-        class="fixed w-full h-full top-0 left-0 z-10 overflow-auto bg-white bg-opacity-10"
+        class="fixed w-screen h-screen top-0 left-0 z-10 overflow-auto bg-white bg-opacity-10"
         v-bind="$attrs"
       ></div>
     </transition>
@@ -38,7 +38,7 @@
 
 .content-enter-active,
 .content-leave-active {
-  @apply transition ease-in duration-150;
+  @apply transition ease-in-out duration-200;
 }
 
 .content-enter-to,

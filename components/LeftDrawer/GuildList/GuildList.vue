@@ -6,6 +6,7 @@
       :key="`${guild.guildId}:${guild.host}`"
       :host="guild.host || $accessor.app.host"
     />
+    <guild-btn />
   </div>
 </template>
 
@@ -21,7 +22,11 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import GuildBtn from './GuildBtn.vue'
 export default Vue.extend({
+  components: {
+    GuildBtn,
+  },
   computed: {
     guildList() {
       return this.$accessor.app.guildsList || []
@@ -39,13 +44,6 @@ export default Vue.extend({
           conn.client?.close()
         )
         this.$router.push('/')
-        this.$toast.info('Session Expired, please login again', {
-          duration: 3000,
-        })
-      } else {
-        this.$toast.error('Error', {
-          duration: 2000,
-        })
       }
     }
   },

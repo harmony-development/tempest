@@ -6,7 +6,7 @@
   >
     <img
       :src="picture"
-      class="w-12 h-12 object-cover outline-none rounded-full inline"
+      class="w-14 h-14 object-cover outline-none rounded-full inline"
       draggable="false"
     />
   </button>

@@ -9,15 +9,15 @@
 
 <style lang="postcss" scoped>
 .overlay {
-  @apply fixed w-full h-full top-0 left-0 z-10 overflow-auto bg-gray-500 bg-opacity-10;
+  @apply fixed w-full h-full top-0 left-0 z-10 overflow-auto bg-gray-500 bg-opacity-10 md:hidden;
 }
 
 .drawer {
-  @apply translate-x-0 h-full bg-harmonydark-700 transform top-0 left-0 fixed overflow-auto ease-in-out transition duration-150 z-30;
+  @apply h-full bg-harmonydark-700 transform top-0 left-0 fixed overflow-auto ease-in-out transition duration-150 z-30;
 }
 
 .closed {
-  @apply -translate-x-full md:translate-x-0;
+  @apply -translate-x-full md:transform-none;
 }
 </style>
 

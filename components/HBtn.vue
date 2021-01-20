@@ -11,6 +11,7 @@
       primary: color === 'primary',
       secondary: color === 'secondary',
     }"
+    v-bind="$props"
   >
     <slot />
   </button>
@@ -72,7 +73,7 @@
 }
 
 .icon {
-  @apply rounded-full px-2 py-2 w-10 h-10;
+  @apply rounded-full px-2 py-2;
 }
 
 .filled {

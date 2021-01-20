@@ -19,8 +19,7 @@
       "@types/node",
       "@nuxt/types",
       "@nuxtjs/color-mode",
-      "nuxt-i18n",
-      "@nuxtjs/toast"
+      "nuxt-i18n"
     ]
   },
   "exclude": ["node_modules", ".nuxt", "dist"]

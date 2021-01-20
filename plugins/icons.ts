@@ -5,6 +5,8 @@ import {
   mdiChevronRight,
   mdiLoading,
   mdiMenu,
+  mdiAccountMultiple,
+  mdiAccountPlus,
 } from '@mdi/js'
 
 Vue.prototype.$iconSet = {
@@ -13,4 +15,6 @@ Vue.prototype.$iconSet = {
   mdiChevronRight,
   mdiLoading,
   mdiMenu,
+  mdiAccountMultiple,
+  mdiAccountPlus,
 }
