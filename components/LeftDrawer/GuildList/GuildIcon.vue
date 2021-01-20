@@ -31,6 +31,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { IGuildData } from '~/store/app'
 export default Vue.extend({
   props: {
     id: {
@@ -51,14 +52,14 @@ export default Vue.extend({
     selected(): boolean {
       return this.id === this.$route.params.guildid
     },
-    name(): string | undefined {
-      return this.$accessor.app.data[this.$guildIconHost(this.host)]?.guilds[
-        this.id
-      ]?.name
+    guildData(): IGuildData | undefined {
+      return this.$guildData(this.host, this.id)
+    },
+    name(): string {
+      return this.guildData?.name || this.id
     },
     picture(): string | undefined {
-      const pic = this.$accessor.app.data[this.$guildIconHost(this.host)]
-        ?.guilds[this.id]?.picture
+      const pic = this.guildData?.picture
       if (!pic) return undefined
       const parsed = this.$parseMediaURI(this.host, pic)
       return parsed
