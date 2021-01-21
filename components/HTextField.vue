@@ -1,5 +1,6 @@
 <template>
-  <input v-model="inputVal" type="text" class="text-field" />
+  <textarea v-if="multiline" class="text-field" rows="1"></textarea>
+  <input v-else v-model="inputVal" type="text" class="text-field" />
 </template>
 
 <style lang="postcss" scoped>
@@ -18,6 +19,10 @@ export default Vue.extend({
     value: {
       type: String,
       default: '',
+    },
+    multiline: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {
