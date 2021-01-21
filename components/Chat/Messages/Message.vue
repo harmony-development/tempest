@@ -94,12 +94,12 @@
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="postcss">
 .root {
-  @apply flex w-full bg-transparent;
+  @apply flex w-full bg-transparent duration-100 transition;
 }
 .root:hover {
-  @apply bg-black bg-opacity-5;
+  @apply bg-white bg-opacity-5;
 }
 .menu-area {
   @apply w-8;

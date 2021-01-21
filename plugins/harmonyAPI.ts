@@ -23,7 +23,7 @@ declare module 'vue/types/vue' {
       guildID: string,
       channelID: string,
       lastMessageID?: string
-    ): void
+    ): string[]
     $createChannel(host: string, guildID: string, channelName: string): void
     $sendMessage(
       host: string,
@@ -244,11 +244,13 @@ Vue.prototype.$fetchMessageList = async function (
   }, {})
   const reachedTop = asObj!.reachedTop
 
+  const messagesList = asObj!.messagesList.map((m) => m.messageId).reverse()
+
   if (lastMessageID) {
     this.$accessor.app.prependChannelMessages({
       host,
       channelID,
-      messages: asObj!.messagesList.map((m) => m.messageId).reverse(),
+      messages: messagesList,
     })
     this.$accessor.app.setReachedTop({
       host,
@@ -259,13 +261,14 @@ Vue.prototype.$fetchMessageList = async function (
     this.$accessor.app.setChannelMessages({
       host,
       channelID,
-      messages: asObj!.messagesList.map((c) => c.messageId).reverse(),
+      messages: messagesList,
     })
   }
   this.$accessor.app.setMessagesData({
     host,
     data: mapped,
   })
+  return messagesList
 }
 
 Vue.prototype.$createChannel = async function (

@@ -1,25 +1,43 @@
 <template>
-  <virtual-list
-    ref="messagesList"
+  <dynamic-scroller
+    ref="scroller"
+    :items="mappedMessages || []"
+    :min-item-size="8"
+    :buffer="50"
+    :detect-hover="false"
     class="flex-1 overflow-auto flex flex-col"
-    :data-key="'id'"
-    :data-sources="mappedMessages || []"
-    :estimate-size="40"
-    :keeps="36"
-    :data-component="messageComponent"
+    @scroll.native="debouncedScroll"
   >
-  </virtual-list>
+    <template v-slot="{ item, index, active }">
+      <dynamic-scroller-item
+        :item="item"
+        :active="active"
+        :size-dependencies="[item.content]"
+        :data-index="index"
+      >
+        <message :source="item" />
+      </dynamic-scroller-item>
+    </template>
+  </dynamic-scroller>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import VirtualList from 'vue-virtual-scroll-list'
+import {
+  DynamicScroller,
+  DynamicScrollerItem,
+} from '@akryuminfinitum/vue-virtual-scroller'
+import debounce from 'lodash.debounce'
+import { DebouncedFunc } from 'lodash'
 import Message from './Message.vue'
 import { IMessageData } from '~/store/app'
+import '@akryuminfinitum/vue-virtual-scroller/dist/vue-virtual-scroller.css'
 
 export default Vue.extend({
   components: {
-    VirtualList,
+    DynamicScroller,
+    DynamicScrollerItem,
+    Message,
   },
   data() {
     return {
@@ -44,20 +62,39 @@ export default Vue.extend({
         shouldCollapse: this.getShouldCollapse(m, idx),
       }))
     },
+    debouncedScroll(): DebouncedFunc<() => Promise<void>> {
+      return debounce(this.onScroll, 100, { maxWait: 0, leading: true })
+    },
+  },
+  watch: {
+    messagesList: {
+      async handler() {
+        const el = (this.$refs.scroller as any).$el as HTMLDivElement
+        const distanceFromBottom =
+          el.scrollHeight - (el.scrollTop + el.clientHeight)
+        await this.$nextTick()
+        if (distanceFromBottom < 200) {
+          ;(this.$refs.scroller as any).scrollToBottom()
+        }
+      },
+    },
   },
   async mounted() {
-    this.$confirmDialog('Are you sure?', 'Yes')
     await this.fetchData()
-    await this.fetchData(this.messagesList?.[0])
-    await this.fetchData(this.messagesList?.[0])
-    await this.fetchData(this.messagesList?.[0])
   },
   methods: {
-    async fetchData(lastMessageID?: string) {
-      const firstFetch = !this.$accessor.app.data[this.$getHost()]?.channels[
-        this.$route.params.channelid
-      ]?.messages
-      // const el = this.$refs.messagesList as HTMLDivElement
+    async onScroll(e: WheelEvent) {
+      const el = e.target as HTMLDivElement
+      if (el.scrollTop === 0) {
+        const oldScrollTop = el.scrollTop
+        const oldScroll = el.scrollHeight - el.clientHeight
+        await this.fetchData(this.messagesList?.[0])
+        await this.$nextTick()
+        const newScroll = el.scrollHeight - el.clientHeight
+        el.scrollTop = oldScrollTop + (newScroll - oldScroll)
+      }
+    },
+    async fetchData(lastMessageID?: string): Promise<string[] | undefined> {
       if (
         this.$route.params.guildid &&
         this.$route.params.channelid &&
@@ -67,15 +104,12 @@ export default Vue.extend({
           ]?.messages)
       ) {
         try {
-          await this.$fetchMessageList(
+          return await this.$fetchMessageList(
             this.$getHost(),
             this.$route.params.guildid,
             this.$route.params.channelid,
             lastMessageID
           )
-          if (firstFetch) {
-            // el.scrollTop = el.scrollHeight
-          }
         } catch (e) {
           console.log(e)
         }
