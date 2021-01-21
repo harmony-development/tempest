@@ -3,18 +3,36 @@
 </template>
 
 <style lang="postcss" scoped>
-.editor {
-  @apply border-2 border-transparent px-2 py-3 bg-harmonydark-400 bg-opacity-5 outline-none rounded-t shadow-md;
+.editor >>> .ProseMirror {
+  @apply border-2 border-transparent px-2 py-3 bg-harmonydark-400 bg-opacity-5 outline-none rounded-t shadow-md break-words;
+
+  & > * {
+    caret-color: currentColor;
+  }
+
+  & > h1 {
+    @apply text-3xl;
+  }
+
+  & > h2 {
+    @apply text-2xl;
+  }
+
+  & > h3 {
+    @apply text-xl;
+  }
+
+  & > pre {
+    @apply px-1 py-2 rounded font-bold bg-white bg-opacity-10 text-white text-opacity-80;
+  }
 }
 </style>
 
 <script lang="ts">
 import Vue from 'vue'
-import { Editor, EditorContent } from 'tiptap'
+import { Editor, EditorContent, Extension } from 'tiptap'
 import {
   Blockquote,
-  CodeBlock,
-  HardBreak,
   Heading,
   OrderedList,
   BulletList,
@@ -28,7 +46,13 @@ import {
   Strike,
   Underline,
   History,
+  CodeBlock,
 } from 'tiptap-extensions'
+import TurndownService from 'turndown'
+
+const turndownService = new TurndownService({
+  headingStyle: 'atx',
+})
 
 export default Vue.extend({
   components: {
@@ -40,13 +64,12 @@ export default Vue.extend({
     }
   },
   mounted() {
+    const vm = this
     this.editor = new Editor({
-      content: `<h1>Yay Headlines!</h1>
-          <p>All these <strong>cool tags</strong> are working now.</p>`,
+      content: ``,
       extensions: [
         new Blockquote(),
         new CodeBlock(),
-        new HardBreak(),
         new Heading({ levels: [1, 2, 3] }),
         new BulletList(),
         new OrderedList(),
@@ -60,11 +83,27 @@ export default Vue.extend({
         new Strike(),
         new Underline(),
         new History(),
+        new (class extends Extension {
+          keys() {
+            return {
+              Enter() {
+                vm.sendMessage()
+                return true
+              },
+            }
+          }
+        })(),
       ],
     })
   },
   beforeDestroy() {
     this.editor?.destroy()
+  },
+  methods: {
+    sendMessage() {
+      const md = turndownService.turndown(this.editor!.getHTML())
+      console.log(md)
+    },
   },
 })
 </script>
