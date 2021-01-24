@@ -1,4 +1,4 @@
-import { mutationTree } from 'typed-vuex'
+import { Store } from './store'
 
 export enum DialogType {
   Error,
@@ -7,40 +7,32 @@ export enum DialogType {
 }
 
 interface IState {
-  dialog: {
-    open: boolean
-    type: DialogType
-    content: string
-    action?: string
+  open: boolean
+  type: DialogType
+  content: string
+  action?: string
+  res?: Function
+}
+
+class DialogState extends Store<IState> {
+  openDialog(
+    type: DialogType,
+    content: string,
+    action?: string,
     res?: Function
+  ) {
+    this.state.open = true
+    this.state.type = type
+    this.state.content = content
+    this.state.action = action
+    this.state.res = res
   }
 }
 
-export const state = (): IState => ({
-  dialog: {
-    open: false,
-    type: DialogType.Info,
-    content: '',
-  },
-})
-
-export const mutations = mutationTree(state, {
-  openDialog(
-    state,
-    data: {
-      type: DialogType
-      content: string
-      action?: string
-      res?: Function
-    }
-  ) {
-    state.dialog.open = true
-    state.dialog.type = data.type
-    state.dialog.content = data.content
-    state.dialog.action = data.action
-    state.dialog.res = data.res
-  },
-  closeDialog(state) {
-    state.dialog.open = false
-  },
+export const dialogState = new DialogState({
+  open: false,
+  type: DialogType.Info,
+  content: '',
+  action: undefined as string | undefined,
+  res: undefined as Function | undefined,
 })

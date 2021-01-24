@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { IChannelData, IGuildData, IMessageData } from '~/store/app'
+import { appState, IChannelData, IGuildData, IMessageData } from '~/store/app'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -18,7 +18,7 @@ Vue.prototype.$guildData = function (
   host?: string,
   guildid?: string
 ) {
-  return this.$accessor.app.data[this.$guildIconHost(host ?? this.$getHost())]
+  return appState.state.data[this.$guildIconHost(host ?? this.$getHost())]
     ?.guilds[guildid || this.$route.params.guildid]
 }
 
@@ -27,11 +27,11 @@ Vue.prototype.$channelData = function (
   host?: string,
   channelid?: string
 ) {
-  return this.$accessor.app.data[host ?? this.$getHost()]?.channels[
+  return appState.state.data[host ?? this.$getHost()]?.channels[
     channelid || this.$route.params.channelid
   ]
 }
 
 Vue.prototype.$messages = function (this: Vue, host?: string) {
-  return this.$accessor.app.data[host ?? this.$getHost()]?.messages
+  return appState.state.data[host ?? this.$getHost()]?.messages
 }

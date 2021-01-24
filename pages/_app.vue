@@ -45,10 +45,12 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Connection } from '@harmony-dev/harmony-web-sdk'
+import showdownPlugin from '@/plugins/showdown'
 import LeftDrawer from '~/components/LeftDrawer/LeftDrawer.vue'
-import 'hint.css/hint.base.min.css'
 import '@/assets/fixes.css'
-import { IChannelData, IGuildData } from '~/store/app'
+import { appState, IChannelData, IGuildData } from '~/store/app'
+import 'hint.css'
+import { uiState } from '~/store/ui'
 
 export default Vue.extend({
   name: 'App',
@@ -69,34 +71,37 @@ export default Vue.extend({
       return this.$channelData()
     },
     guildSettingsOpen(): boolean {
-      return this.$accessor.ui.guildSettingsOpen
+      return uiState.guildSettingsOpen
     },
     channelName(): string | undefined {
       return this.channelData?.channelName
     },
+    disconnections() {
+      return appState.state.disconnections
+    },
   },
   watch: {
-    '$accessor.app.disconnections': {
+    disconnections: {
       handler() {
         console.log('disconnected')
       },
     },
   },
   async created() {
-    if (!this.$accessor.app.host || !this.$accessor.app.session) {
+    if (process.client) {
+      Vue.use(showdownPlugin, this)
+    }
+    if (!appState.state.host || !appState.state.session) {
       this.$router.push('entry')
       return
     }
-    const conn = new Connection(this.$accessor.app.host)
-    conn.session = this.$accessor.app.session
+    const conn = new Connection(appState.state.host)
+    conn.session = appState.state.session
     this.$bindEvents(conn)
     conn.beginStream()
     conn.subscribeToHomeserverEvents()
-    this.$accessor.app.setConnection({
-      host: this.$accessor.app.host,
-      connection: conn,
-    })
-    await this.$fetchUser(this.$accessor.app.host, this.$accessor.app.userID!)
+    appState.state.connections[appState.state.host] = conn
+    await this.$fetchUser(appState.state.host, appState.state.userID!)
   },
   key: 'app',
 })

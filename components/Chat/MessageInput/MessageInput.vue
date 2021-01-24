@@ -25,6 +25,10 @@
   & > pre {
     @apply px-1 py-2 rounded font-bold bg-white bg-opacity-10 text-white text-opacity-80;
   }
+
+  & > p code {
+    @apply p-1 rounded bg-white bg-opacity-10 text-white text-opacity-80;
+  }
 }
 </style>
 
@@ -47,6 +51,7 @@ import {
   Underline,
   History,
   CodeBlock,
+  HardBreak,
 } from 'tiptap-extensions'
 import TurndownService from 'turndown'
 
@@ -70,6 +75,7 @@ export default Vue.extend({
       extensions: [
         new Blockquote(),
         new CodeBlock(),
+        new HardBreak(),
         new Heading({ levels: [1, 2, 3] }),
         new BulletList(),
         new OrderedList(),

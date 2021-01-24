@@ -1,6 +1,36 @@
-[data-balloon],
-[data-balloon]::before,
-[data-balloon]::after {
-  z-index: 9999;
-  outline: none;
+.tooltip {
+  display: block !important;
+  @apply z-50 transition-opacity duration-75 transform-gpu outline-none;
+
+  & > .tooltip-inner {
+    @apply bg-black text-white rounded px-2 py-2;
+  }
+
+  &[x-placement^='right'] {
+    @apply ml-1;
+  }
+
+  &[x-placement^='left'] {
+    @apply mr-1;
+  }
+
+  &[x-placement^='top'] {
+    @apply mb-1;
+  }
+
+  &[x-placement^='bottom'] {
+    @apply mt-1;
+  }
+
+  &[aria-hidden='true'] {
+    @apply opacity-0;
+  }
+
+  &[aria-hidden='false'] {
+    @apply opacity-100;
+  }
+
+  &.popover {
+    @apply bg-black rounded;
+  }
 }

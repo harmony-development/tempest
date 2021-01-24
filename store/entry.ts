@@ -1,4 +1,4 @@
-import { mutationTree } from 'typed-vuex'
+import { Store } from './store'
 
 export interface IServerEntry {
   name: string
@@ -11,7 +11,39 @@ interface IInviteData {
   guildName: string
 }
 
-export const state = () => ({
+interface IState {
+  serverList: IServerEntry[]
+  selectedServer: string | undefined
+  pendingInvite: IInviteData | undefined
+  step: number
+}
+
+class EntryState extends Store<IState> {
+  setSelectedServer(data: string | undefined) {
+    this.state.selectedServer = data
+  }
+
+  setPendingInvite(data: IInviteData | undefined) {
+    this.state.pendingInvite = data
+  }
+
+  addServerToList(data: { name: string; host: string }) {
+    this.state.serverList.push({
+      name: data.name,
+      host: data.host,
+    })
+  }
+
+  removeServerFromList(idx: number) {
+    this.state.serverList.splice(idx, 1)
+  }
+
+  setStep(step: number) {
+    this.state.step = step
+  }
+}
+
+export const entryState = new EntryState({
   serverList: [
     {
       name: 'harmonyapp.io',
@@ -19,27 +51,6 @@ export const state = () => ({
     },
   ] as IServerEntry[],
   selectedServer: undefined as string | undefined,
-  step: 1,
   pendingInvite: undefined as IInviteData | undefined,
-})
-
-export const mutations = mutationTree(state, {
-  setSelectedServer(state, data: string | undefined) {
-    state.selectedServer = data
-  },
-  setPendingInvite(state, data: IInviteData | undefined) {
-    state.pendingInvite = data
-  },
-  addServerToList(state, data: { name: string; host: string }) {
-    state.serverList.push({
-      name: data.name,
-      host: data.host,
-    })
-  },
-  removeServerFromList(state, idx: number) {
-    state.serverList.splice(idx, 1)
-  },
-  setStep(state, step: number) {
-    state.step = step
-  },
+  step: 1,
 })

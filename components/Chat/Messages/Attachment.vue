@@ -66,6 +66,7 @@
 <script lang="ts">
 import { Attachment as MessageAttachment } from '@harmony-dev/harmony-web-sdk/dist/protocol/harmonytypes/v1/types_pb'
 import Vue from 'vue'
+import { imageViewState } from '~/store/imageView'
 export default Vue.extend({
   props: {
     data: {
@@ -92,7 +93,7 @@ export default Vue.extend({
   },
   methods: {
     openImagePreview(id: string) {
-      this.$accessor.imageView.openDialog(id)
+      imageViewState.openImageView(id)
     },
     formatBytes(bytes: number, decimals: number) {
       if (bytes === 0) return '0 Bytes'

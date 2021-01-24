@@ -7,7 +7,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { IChannelData } from '~/store/app'
+import { appState, IChannelData } from '~/store/app'
 export default Vue.extend({
   props: {
     id: {
@@ -17,7 +17,7 @@ export default Vue.extend({
   },
   computed: {
     data(): IChannelData | undefined {
-      return this.$accessor.app.data[this.$getHost()]?.channels[this.id]
+      return appState.getChannel(this.$getHost(), this.id)
     },
     name(): string | undefined {
       return this.data?.channelName
@@ -34,10 +34,7 @@ export default Vue.extend({
       this.$updateRoute({
         channelid: this.id,
       })
-      this.$accessor.app.markAsRead({
-        host: this.$getHost(),
-        channelID: this.id,
-      })
+      appState.markAsRead(this.$getHost(), this.id)
     },
   },
 })

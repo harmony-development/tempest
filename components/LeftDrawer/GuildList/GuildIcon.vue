@@ -1,8 +1,8 @@
 <template>
   <button
     v-wave
-    :class="{ 'guild-icon': true, selected, 'hint--right': true }"
-    :aria-label="name || id"
+    v-tooltip.right="name || id"
+    :class="{ 'guild-icon': true, selected }"
     @click.prevent.stop="onGuildIconClick"
     @mousedown.prevent=""
   >
@@ -31,7 +31,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { IGuildData } from '~/store/app'
+import { appState, IGuildData } from '~/store/app'
 export default Vue.extend({
   props: {
     id: {
@@ -72,12 +72,12 @@ export default Vue.extend({
         const resp = await conn.getGuild(this.id)
         const asObj = resp.message!.toObject()
         conn.subscribe(this.id)
-        this.$accessor.app.setGuildData({
-          host: this.$guildIconHost(this.host),
-          guildID: this.id,
-          name: asObj.guildName,
-          picture: asObj.guildPicture,
-        })
+        appState.setGuildData(
+          this.$guildIconHost(this.host),
+          this.id,
+          asObj.guildName,
+          asObj.guildPicture
+        )
       } catch (e) {
         this.error = e
       }
@@ -87,9 +87,7 @@ export default Vue.extend({
     onGuildIconClick() {
       this.$updateRoute({
         guildid: this.id,
-        channelid:
-          this.$accessor.app.data[this.host]?.guilds[this.id]?.channels?.[0] ||
-          null,
+        channelid: appState.getGuild(this.host, this.id)?.channels?.[0] || null,
         host: this.$guildIconHost(this.host),
       })
     },

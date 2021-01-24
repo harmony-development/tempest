@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import { appState } from '~/store/app'
 
 export interface IParseResult {
   host: string
@@ -53,5 +54,5 @@ Vue.prototype.$toMediaURI = (host: string, attachmentID: string) => {
 }
 
 Vue.prototype.$guildIconHost = function (this: Vue, host: string) {
-  return host ? this.$toReqHost(host) : this.$accessor.app.host
+  return host ? this.$toReqHost(host) : appState.state.host
 }

@@ -8,8 +8,7 @@ import {
   Override,
   UserStatusMap,
 } from '@harmony-dev/harmony-web-sdk/dist/protocol/harmonytypes/v1/types_pb'
-import { mutationTree } from 'typed-vuex'
-import Vue from 'vue'
+import { Store } from './store'
 
 export const permissionsList = {
   'messages.send': -1,
@@ -108,6 +107,16 @@ interface IData {
   }
 }
 
+export enum PersonaKind {
+  Plurality,
+}
+
+export interface IPersona {
+  kind: PersonaKind
+  name: string
+  avatar: string | null
+}
+
 interface IState {
   userID: string | undefined
   session: string | undefined
@@ -125,17 +134,326 @@ interface IState {
   personas: IPersona[]
 }
 
-export enum PersonaKind {
-  Plurality,
+class AppState extends Store<IState> {
+  getHost(host: string) {
+    if (this.state.data[host]) return this.state.data[host]
+    this.state.data[host] = {
+      messages: {},
+      guilds: {},
+      channels: {},
+      users: {},
+      roles: {},
+    }
+    return this.state.data[host]
+  }
+
+  getGuild(host: string, guildID: string) {
+    const data = this.getHost(host)
+    if (data.guilds[guildID]) return data.guilds[guildID]
+    data.guilds[guildID] = {
+      name: undefined,
+      channels: undefined,
+    }
+
+    return data.guilds[guildID]
+  }
+
+  getChannel(host: string, channelID: string) {
+    const data = this.getHost(host)
+    if (data.channels[channelID]) return data.channels[channelID]
+    data.channels[channelID] = {
+      channelName: undefined,
+      isCategory: undefined,
+      isVoice: undefined,
+      messages: undefined,
+      typing: {},
+    }
+    return data.channels[channelID]
+  }
+
+  setGuildData(host: string, guildID: string, name?: string, picture?: string) {
+    const guild = this.getGuild(host, guildID)
+    if (name) guild.name = name
+    if (picture) guild.picture = picture
+  }
+
+  setGuildChannels(host: string, guildID: string, channels: string[]) {
+    const guild = this.getGuild(host, guildID)
+    guild.channels = channels
+  }
+
+  setChannelData(
+    host: string,
+    channels: {
+      [channelID: string]: IChannelData
+    }
+  ) {
+    const data = this.getHost(host)
+    for (const [channelID, channel] of Object.entries(channels)) {
+      data.channels[channelID] = {
+        ...data.channels[channelID],
+        ...channel,
+      }
+    }
+  }
+
+  addChannel(
+    host: string,
+    guildID: string,
+    channelID: string,
+    _nextID: string,
+    previousID: string,
+    data: IChannelData
+  ) {
+    const guild = this.getGuild(host, guildID)
+    if (!guild.channels) guild.channels = []
+    if (!previousID || previousID === '0') {
+      guild.channels.push(channelID)
+    } else {
+      guild.channels.splice(guild.channels.indexOf(previousID), 0, channelID)
+    }
+    this.setChannelData(host, {
+      [channelID]: data,
+    })
+  }
+
+  setChannelMesseages(host: string, channelID: string, messages: string[]) {
+    const channel = this.getChannel(host, channelID)
+    channel.messages = messages
+  }
+
+  prependChannelMessages(host: string, channelID: string, messages: string[]) {
+    const channel = this.getChannel(host, channelID)
+    channel.messages = [...messages, ...(channel.messages || [])]
+  }
+
+  setMessagesData(
+    host: string,
+    messages: {
+      [messageID: string]: IMessageData
+    }
+  ) {
+    const data = this.getHost(host)
+    data.messages = {
+      ...data.messages,
+      ...messages,
+    }
+  }
+
+  addMessage(
+    host: string,
+    channelID: string,
+    messageID: string,
+    data: IMessageData
+  ) {
+    const channel = this.getChannel(host, channelID)
+    channel.messages?.push(messageID)
+    this.setMessagesData(host, {
+      [messageID]: data,
+    })
+  }
+
+  editMessage(host: string, updateEvent: Event.MessageUpdated.AsObject) {
+    const message = this.getHost(host).messages[updateEvent.messageId]
+    if (!message) return // if the message isn't even loaded then why bother updating it?
+    if (updateEvent.updateContent) message.content = updateEvent.content
+    if (updateEvent.updateAttachments)
+      message.attachmentsList = updateEvent.attachmentsList
+    if (updateEvent.updateEmbeds) message.embedsList = updateEvent.embedsList
+    if (updateEvent.updateOverrides) message.overrides = updateEvent.overrides
+    if (updateEvent.updateActions) message.actionsList = updateEvent.actionsList
+    message.editedAt = updateEvent.editedAt!.seconds
+  }
+
+  messageUnlocal(
+    host: string,
+    channelID: string,
+    messageID: string,
+    echoID: string,
+    attachments: Attachment.AsObject[]
+  ) {
+    const hostData = this.getHost(host)
+    const channelData = this.getChannel(host, channelID)
+    const msgsList = channelData.messages
+    const msgs = hostData.messages
+    if (!msgsList || !msgs) return
+    msgsList[msgsList.indexOf(echoID)] = messageID
+    msgs[messageID] = {
+      ...msgs[echoID],
+      pending: false,
+      attachmentsList: attachments,
+    }
+    delete msgs[echoID]
+  }
+
+  setUser(host: string, userID: string, data: IUserData) {
+    const hostData = this.getHost(host)
+    hostData.users[userID] = data
+  }
+
+  setDisconnected(host: string, message: string) {
+    this.state.disconnections[host] = message
+  }
+
+  setReachedTop(host: string, channelID: string, reachedTop?: boolean) {
+    const channel = this.getChannel(host, channelID)
+    channel.reachedTop = reachedTop
+  }
+
+  setMemberList(host: string, guildID: string, memberList: string[]) {
+    const guildData = this.getGuild(host, guildID)
+    guildData.memberList = memberList
+  }
+
+  setRolesList(host: string, guildID: string, roles: string[]) {
+    const guildData = this.getGuild(host, guildID)
+    guildData.roles = roles
+  }
+
+  setRolesData(
+    host: string,
+    roles: {
+      [roleID: string]: IRoleData
+    }
+  ) {
+    const hostData = this.getHost(host)
+    hostData.roles = {
+      ...hostData.roles,
+      ...roles,
+    }
+  }
+
+  deleteMessage(host: string, channelID: string, messageID: string) {
+    const hostData = this.getHost(host)
+    const channelData = this.getChannel(host, channelID)
+    const msgs = channelData.messages
+    if (!msgs) return
+
+    delete hostData.messages[messageID]
+    msgs.splice(msgs.indexOf(messageID), 1)
+  }
+
+  deleteChannel(host: string, guildID: string, channelID: string) {
+    const hostData = this.getHost(host)
+    const guild = this.getGuild(host, guildID)
+    const channels = hostData.channels
+    const channelsList = guild.channels
+    if (!channelsList) return
+    delete channelsList[channelsList.indexOf(channelID)]
+    delete channels[channelID]
+  }
+
+  updateProfile(
+    host: string,
+    userid: string,
+    username?: string,
+    avatar?: string,
+    status?: UserStatusMap[keyof UserStatusMap],
+    isBot?: boolean
+  ) {
+    const hostData = this.getHost(host)
+    const user = hostData.users[userid]
+    if (user) {
+      if (username !== undefined) {
+        user.username = username
+      }
+      if (avatar !== undefined) {
+        user.avatar = avatar
+      }
+      if (status !== undefined) {
+        user.status = status
+      }
+      if (isBot !== undefined) {
+        user.bot = isBot
+      }
+    }
+  }
+
+  updateTyping(host: string, channelID: string, userid: string) {
+    const channel = this.getChannel(host, channelID)
+
+    if (!channel.typing) channel.typing = {}
+
+    channel.typing[userid] = new Date()
+  }
+
+  deleteTyper(host: string, channelID: string, userID: string) {
+    const channel = this.getChannel(host, channelID)
+
+    if (!channel.typing) channel.typing = {}
+
+    delete channel.typing[userID]
+  }
+
+  removeGuildFromList(host: string, guildID: string) {
+    if (!this.state.guildsList) return
+    delete this.state.guildsList[
+      this.state.guildsList.findIndex(
+        (item) => item.host === host && item.guildId === guildID
+      )
+    ]
+  }
+
+  setInvites(
+    host: string,
+    guildID: string,
+    invites: GetGuildInvitesResponse.Invite.AsObject[]
+  ) {
+    const guildData = this.getGuild(host, guildID)
+    guildData.invites = invites
+  }
+
+  deleteInvite(host: string, guildID: string, inviteID: string) {
+    const guildData = this.getGuild(host, guildID)
+    const idx = guildData.invites!.findIndex(
+      (invite) => invite.inviteId === inviteID
+    )
+    delete guildData.invites?.[idx]
+  }
+
+  createInvite(
+    host: string,
+    guildID: string,
+    inviteID: string,
+    maxUses: number
+  ) {
+    const guildData = this.getGuild(host, guildID)
+    guildData.invites?.push({
+      inviteId: inviteID,
+      possibleUses: maxUses,
+      useCount: 0,
+    })
+  }
+
+  setPermissions(
+    host: string,
+    roleID: string,
+    permissions:
+      | {
+          [id: string]: number
+        }
+      | undefined
+  ) {
+    const hostData = this.getHost(host)
+    hostData.roles[roleID].permissions = permissions
+  }
+
+  markAsRead(host: string, channelID: string) {
+    const channelData = this.getChannel(host, channelID)
+    channelData.unread = false
+  }
+
+  setAuthDetails(userID: string, sessionToken: string, host: string) {
+    this.state.userID = userID
+    this.state.session = sessionToken
+    this.state.host = host
+    localStorage.setItem('userid', userID)
+    localStorage.setItem('session', sessionToken)
+    localStorage.setItem('host', host)
+  }
 }
 
-export interface IPersona {
-  kind: PersonaKind
-  name: string
-  avatar: string | null
-}
-
-export const state = (): IState => ({
+export const appState: AppState = new AppState({
   userID: undefined,
   session: undefined,
   host: undefined,
@@ -144,518 +462,4 @@ export const state = (): IState => ({
   guildsList: undefined,
   disconnections: {},
   personas: [],
-})
-
-const ensureHost = (state: IState, host: string) => {
-  if (state.data[host]) return
-  Vue.set(state.data, host, {
-    messages: {},
-    guilds: {},
-    channels: {},
-    users: {},
-  })
-}
-
-const ensureGuild = (state: IState, host: string, guildID: string) => {
-  ensureHost(state, host)
-  if (state.data[host].guilds[guildID]) return
-  Vue.set(state.data[host].guilds, guildID, {
-    name: undefined,
-    channels: undefined,
-  })
-}
-
-const ensureChannel = (state: IState, host: string, channelID: string) => {
-  ensureHost(state, host)
-  if (state.data[host].channels[channelID]) return
-  Vue.set(state.data[host].channels, channelID, {
-    channelName: undefined,
-    isCategory: undefined,
-    isVoice: undefined,
-    messages: undefined,
-    typing: {},
-  })
-}
-
-const ensureTyping = (state: IState, host: string, channelID: string) => {
-  ensureChannel(state, host, channelID)
-
-  if (state.data[host].channels[channelID].typing) return
-
-  Vue.set(state.data[host].channels[channelID], 'typing', {})
-}
-
-export const mutations = mutationTree(state, {
-  setUserID(state, userID?: string) {
-    state.userID = userID
-  },
-  setSession(state, token?: string) {
-    state.session = token
-  },
-  setHost(state, host?: string) {
-    state.host = host
-  },
-  setPersonas(state, personas: IPersona[]) {
-    state.personas = personas
-  },
-  setConnection(
-    state,
-    data: {
-      host: string
-      connection: Connection
-    }
-  ) {
-    state.connections[data.host] = data.connection
-    Vue.set(state.connections, data.host, data.connection)
-  },
-  setGuildList(state, list: IGuildEntry[]) {
-    state.guildsList = list
-  },
-  addGuildToList(state, entry: IGuildEntry) {
-    state.guildsList?.push(entry)
-  },
-  setGuildData(
-    state,
-    data: {
-      host: string
-      guildID: string
-      name?: string
-      picture?: string
-    }
-  ) {
-    ensureGuild(state, data.host, data.guildID)
-    if (data.name !== undefined)
-      Vue.set(state.data[data.host].guilds[data.guildID], 'name', data.name)
-    if (data.picture !== undefined)
-      Vue.set(
-        state.data[data.host].guilds[data.guildID],
-        'picture',
-        data.picture
-      )
-  },
-  setGuildChannels(
-    state,
-    data: {
-      host: string
-      guildID: string
-      channels: string[]
-    }
-  ) {
-    ensureGuild(state, data.host, data.guildID)
-    state.data[data.host].guilds[data.guildID].channels = data.channels
-  },
-  setChannelsData(
-    state,
-    data: {
-      host: string
-      data: {
-        [channelID: string]: IChannelData
-      }
-    }
-  ) {
-    ensureHost(state, data.host)
-    Object.keys(data.data).forEach((key) => {
-      if (!state.data[data.host].channels[key]) {
-        Vue.set(state.data[data.host].channels, key, data.data[key])
-        return
-      }
-      Vue.set(
-        state.data[data.host].channels[key],
-        'channelName',
-        data.data[key].channelName
-      )
-      Vue.set(
-        state.data[data.host].channels[key],
-        'isVoice',
-        data.data[key].isVoice
-      )
-      Vue.set(
-        state.data[data.host].channels[key],
-        'isCategory',
-        data.data[key].isCategory
-      )
-    })
-  },
-  addChannel(
-    state,
-    data: {
-      host: string
-      guildID: string
-      channelID: string
-      nextID: string
-      previousID: string
-      data: IChannelData
-    }
-  ) {
-    ensureGuild(state, data.host, data.guildID)
-    const guild = state.data[data.host].guilds[data.guildID]
-    if (!guild.channels) {
-      guild.channels = [data.channelID]
-      return
-    }
-    if (!data.previousID || data.previousID === '0') {
-      guild.channels.push(data.channelID)
-    } else {
-      guild.channels.splice(
-        guild.channels.indexOf(data.previousID),
-        0,
-        data.channelID
-      )
-    }
-    state.data[data.host].channels[data.channelID] = data.data
-  },
-  setChannelMessages(
-    state,
-    data: {
-      host: string
-      channelID: string
-      messages: string[]
-    }
-  ) {
-    ensureChannel(state, data.host, data.channelID)
-    Vue.set(
-      state.data[data.host].channels[data.channelID],
-      'messages',
-      data.messages
-    )
-  },
-  prependChannelMessages(
-    state,
-    data: {
-      host: string
-      channelID: string
-      messages: string[]
-    }
-  ) {
-    ensureChannel(state, data.host, data.channelID)
-    const channel = state.data[data.host].channels[data.channelID]
-    Vue.set(channel, 'messages', [
-      ...data.messages,
-      ...(channel.messages || []),
-    ])
-  },
-  setMessagesData(
-    state,
-    data: {
-      host: string
-      data: {
-        [messageID: string]: IMessageData
-      }
-    }
-  ) {
-    ensureHost(state, data.host)
-    state.data[data.host].messages = {
-      ...state.data[data.host].messages,
-      ...data.data,
-    }
-  },
-  addMessage(
-    state,
-    data: {
-      host: string
-      channelID: string
-      messageID: string
-      data: IMessageData
-    }
-  ) {
-    ensureChannel(state, data.host, data.channelID)
-    state.data[data.host].messages[data.messageID] = data.data
-    state.data[data.host].channels[data.channelID].messages?.push(
-      data.messageID
-    )
-    state.data[data.host].channels[data.channelID].unread = true
-  },
-  editMessage(
-    state,
-    data: {
-      host: string
-      updateEvent: Event.MessageUpdated.AsObject
-    }
-  ) {
-    const message = state.data[data.host].messages[data.updateEvent.messageId]
-    if (message) {
-      if (data.updateEvent.updateContent)
-        Vue.set(message, 'content', data.updateEvent.content)
-      if (data.updateEvent.updateAttachments)
-        Vue.set(message, 'attachmentsList', data.updateEvent.attachmentsList)
-      if (data.updateEvent.updateEmbeds)
-        Vue.set(message, 'embedsList', data.updateEvent.embedsList)
-      if (data.updateEvent.updateOverrides)
-        Vue.set(message, 'overrides', data.updateEvent.overrides)
-      if (data.updateEvent.updateActions)
-        Vue.set(message, 'actionsList', data.updateEvent.actionsList)
-      Vue.set(message, 'editedAt', data.updateEvent.editedAt)
-    }
-  },
-  messageUnlocal(
-    state,
-    data: {
-      host: string
-      channelID: string
-      messageID: string
-      echoID: string
-      attachments: Attachment.AsObject[]
-    }
-  ) {
-    const msgsList = state.data[data.host]?.channels[data.channelID]?.messages
-    const msgs = state.data[data.host]?.messages
-    if (!msgsList || !msgs) return
-    Vue.set(msgsList, msgsList.indexOf(data.echoID), data.messageID)
-    Vue.set(msgs, data.messageID, {
-      ...msgs[data.echoID],
-      pending: false,
-      attachmentsList: data.attachments,
-    })
-    Vue.delete(msgs, data.echoID)
-  },
-  setUser(
-    state,
-    data: {
-      host: string
-      userID: string
-      data: IUserData
-    }
-  ) {
-    ensureHost(state, data.host)
-    Vue.set(state.data[data.host]?.users, data.userID, data.data)
-  },
-  setDisconnected(
-    state,
-    data: {
-      host: string
-      message: string
-    }
-  ) {
-    Vue.set(state.disconnections, data.host, data.message)
-  },
-  setReachedTop(
-    state,
-    data: {
-      host: string
-      channelID: string
-      reachedTop?: boolean
-    }
-  ) {
-    ensureChannel(state, data.host, data.channelID)
-    Vue.set(
-      state.data[data.host].channels[data.channelID],
-      'reachedTop',
-      data.reachedTop
-    )
-  },
-  setMemberList(
-    state,
-    data: {
-      host: string
-      guildID: string
-      memberList: string[]
-    }
-  ) {
-    ensureGuild(state, data.host, data.guildID)
-    Vue.set(
-      state.data[data.host].guilds[data.guildID],
-      'memberList',
-      data.memberList
-    )
-  },
-  setRolesList(
-    state,
-    data: {
-      host: string
-      guildID: string
-      roles: string[]
-    }
-  ) {
-    ensureGuild(state, data.host, data.guildID)
-    Vue.set(state.data[data.host].guilds[data.guildID], 'roles', data.roles)
-  },
-  setRolesData(
-    state,
-    data: {
-      host: string
-      roles: {
-        [roleID: string]: IRoleData
-      }
-    }
-  ) {
-    ensureHost(state, data.host)
-    Vue.set(state.data[data.host], 'roles', {
-      ...state.data[data.host].roles,
-      ...data.roles,
-    })
-  },
-  deleteMessage(
-    state,
-    data: {
-      host: string
-      channelID: string
-      messageID: string
-    }
-  ) {
-    ensureHost(state, data.host)
-    const msgs = state.data[data.host].channels[data.channelID].messages
-    if (!msgs) return
-
-    Vue.delete(state.data[data.host].messages, data.messageID)
-    msgs.splice(msgs.indexOf(data.messageID), 1)
-  },
-  deleteChannel(
-    state,
-    data: {
-      host: string
-      guildID: string
-      channelID: string
-    }
-  ) {
-    const channels = state.data[data.host]?.channels
-    const channelsList = state.data[data.host]?.guilds[data.guildID]?.channels
-    if (!channels || !channelsList) return
-    Vue.delete(channelsList, channelsList.indexOf(data.channelID))
-    Vue.delete(channels, data.channelID)
-  },
-  updateProfile(
-    state,
-    data: {
-      host: string
-      userid: string
-      username?: string
-      avatar?: string
-      status?: UserStatusMap[keyof UserStatusMap]
-      isBot?: boolean
-    }
-  ) {
-    ensureHost(state, data.host)
-    const user = state.data[data.host].users[data.userid]
-    if (user) {
-      if (data.username !== undefined) {
-        user.username = data.username
-      }
-      if (data.avatar !== undefined) {
-        user.avatar = data.avatar
-      }
-      if (data.status !== undefined) {
-        user.status = data.status
-      }
-      if (data.isBot !== undefined) {
-        user.bot = data.isBot
-      }
-    }
-  },
-  updateTyping(
-    state,
-    data: {
-      host: string
-      channelID: string
-      userid: string
-    }
-  ) {
-    ensureTyping(state, data.host, data.channelID)
-
-    const typing = state.data[data.host]?.channels[data.channelID]?.typing
-
-    if (typing) {
-      Vue.set(typing, data.userid, new Date())
-    }
-  },
-  deleteTyper(
-    state,
-    data: {
-      host: string
-      channelID: string
-      userID: string
-    }
-  ) {
-    ensureTyping(state, data.host, data.channelID)
-
-    const typing = state.data[data.host]?.channels[data.channelID]?.typing
-
-    if (typing) {
-      Vue.delete(typing, data.userID)
-    }
-  },
-  removeGuildFromList(
-    state,
-    data: {
-      host: string
-      guildID: string
-    }
-  ) {
-    if (!state.guildsList) return
-    Vue.delete(
-      state.guildsList,
-      state.guildsList.findIndex(
-        (item) => item.host === data.host && item.guildId === data.guildID
-      )
-    )
-  },
-  setInvites(
-    state,
-    data: {
-      host: string
-      guildID: string
-      invites: GetGuildInvitesResponse.Invite.AsObject[]
-    }
-  ) {
-    ensureGuild(state, data.host, data.guildID)
-    Vue.set(state.data[data.host].guilds[data.guildID], 'invites', data.invites)
-  },
-  deleteInvite(
-    state,
-    data: {
-      host: string
-      guildID: string
-      inviteID: string
-    }
-  ) {
-    ensureGuild(state, data.host, data.guildID)
-    const idx = state.data[data.host].guilds[data.guildID].invites!.findIndex(
-      (invite) => invite.inviteId === data.inviteID
-    )
-    Vue.delete(state.data[data.host].guilds[data.guildID].invites!, idx)
-  },
-  createInvite(
-    state,
-    data: {
-      host: string
-      guildID: string
-      inviteID: string
-      maxUses: number
-    }
-  ) {
-    ensureGuild(state, data.host, data.guildID)
-    state.data[data.host].guilds[data.guildID].invites?.push({
-      inviteId: data.inviteID,
-      possibleUses: data.maxUses,
-      useCount: 0,
-    })
-  },
-  setPermissions(
-    state,
-    data: {
-      host: string
-      roleID: string
-      permissions:
-        | {
-            [id: string]: number
-          }
-        | undefined
-    }
-  ) {
-    ensureHost(state, data.host)
-    Vue.set(
-      state.data[data.host].roles[data.roleID],
-      'permissions',
-      data.permissions
-    )
-  },
-  markAsRead(
-    state,
-    data: {
-      host: string
-      channelID: string
-    }
-  ) {
-    ensureHost(state, data.host)
-    state.data[data.host].channels[data.channelID].unread = false
-  },
 })

@@ -89,6 +89,8 @@ import CircularProgress from '~/components/CircularProgress.vue'
 import List from '~/components/List.vue'
 import ListItem from '~/components/ListItem.vue'
 import HBtn from '~/components/HBtn.vue'
+import { appState } from '~/store/app'
+import { entryState } from '~/store/entry'
 
 export default Vue.extend({
   components: {
@@ -146,12 +148,14 @@ export default Vue.extend({
           f.type === 'number' ? 0 : ''
         )
       } else if (ev.session) {
-        this.$accessor.app.setUserID(ev.session.userId)
-        this.$accessor.app.setSession(ev.session.sessionToken)
-        this.$accessor.app.setHost(this.$getHost())
-        if (this.$accessor.entry.pendingInvite !== undefined) {
-          const inv = this.$accessor.entry.pendingInvite
-          this.$accessor.entry.setPendingInvite(undefined)
+        appState.setAuthDetails(
+          ev.session.userId,
+          ev.session.sessionToken,
+          this.$getHost()
+        )
+        if (entryState.state.pendingInvite !== undefined) {
+          const inv = entryState.state.pendingInvite
+          entryState.setPendingInvite(undefined)
           this.$router.push({ path: `/join/${inv.host}/${inv.id}` })
         } else {
           this.$router.push({ path: '/app' })

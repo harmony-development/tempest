@@ -9,7 +9,6 @@
         text
         flat
         aria-label="Guild Settings"
-        class="hint--bottom-left"
         @pointerdown.native.stop=""
       >
         <h-icon icon="mdiCogOutline" />

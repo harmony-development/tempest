@@ -1,10 +1,10 @@
 <template>
   <div class="guild-list">
     <guild-icon
-      v-for="guild in guildList"
+      v-for="guild in guildsList"
       :id="guild.guildId"
       :key="`${guild.guildId}:${guild.host}`"
-      :host="guild.host || $accessor.app.host"
+      :host="guild.host || defaultHost"
     />
     <guild-btn />
   </div>
@@ -23,24 +23,28 @@
 <script lang="ts">
 import Vue from 'vue'
 import GuildBtn from './GuildBtn.vue'
+import { appState } from '~/store/app'
 export default Vue.extend({
   components: {
     GuildBtn,
   },
   computed: {
-    guildList() {
-      return this.$accessor.app.guildsList || []
+    guildsList() {
+      return appState.state.guildsList || []
+    },
+    defaultHost() {
+      return appState.state.host
     },
   },
   async mounted() {
     try {
       const conn = this.$homeserverConn()
       const resp = (await conn.getGuildList()).message?.toObject()
-      this.$accessor.app.setGuildList(resp!.guildsList)
+      appState.state.guildsList = resp!.guildsList
     } catch (e) {
       if (e.statusMessage === 'invalid-session') {
-        this.$accessor.app.setSession() // todo: make sure localstorage is cleared correctly
-        Object.values(this.$accessor.app.connections).forEach((conn) =>
+        appState.state.session = undefined
+        Object.values(appState.state.connections).forEach((conn) =>
           conn.client?.close()
         )
         this.$router.push('/')

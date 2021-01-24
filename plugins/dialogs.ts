@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { DialogType } from '~/store/dialog'
+import { dialogState, DialogType } from '~/store/dialog'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -13,10 +13,7 @@ Vue.prototype.$showDialog = function (
   type: DialogType,
   content: string
 ) {
-  this.$accessor.dialog.openDialog({
-    type,
-    content,
-  })
+  dialogState.openDialog(type, content)
 }
 
 Vue.prototype.$confirmDialog = function (
@@ -25,11 +22,6 @@ Vue.prototype.$confirmDialog = function (
   action: string
 ) {
   return new Promise((resolve) =>
-    this.$accessor.dialog.openDialog({
-      type: DialogType.Confirmation,
-      content,
-      action,
-      res: resolve,
-    })
+    dialogState.openDialog(DialogType.Confirmation, content, action, resolve)
   )
 }

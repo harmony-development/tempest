@@ -9,7 +9,7 @@ import {
   UserStatusMap,
 } from '@harmony-dev/harmony-web-sdk/dist/protocol/harmonytypes/v1/types_pb'
 import Vue from 'vue'
-import { IChannelData, IMessageData, IRoleData } from '~/store/app'
+import { appState, IChannelData, IMessageData, IRoleData } from '~/store/app'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -118,47 +118,35 @@ Vue.prototype.$getHost = function (this: Vue) {
 }
 
 Vue.prototype.$homeserverConn = function (this: Vue) {
-  const host = this.$accessor.app.host!
-  const appState = this.$accessor.app
-  if (appState.connections[host]) return appState.connections[host]
+  const host = appState.state.host!
+  if (appState.state.connections[host]) return appState.state.connections[host]
   const conn = new Connection(host)
-  appState.setConnection({
-    host,
-    connection: conn,
-  })
-  conn.session = appState.session
+  appState.state.connections[host] = conn
+  conn.session = appState.state.session
   this.$bindEvents(conn)
   conn.beginStream()
   return conn
 }
 
 Vue.prototype.$getOrFederate = function (this: Vue, host: string) {
-  if (!host) host = this.$accessor.app.host!
-  const appState = this.$accessor.app
-  if (appState.connections[host]) return appState.connections[host]
+  if (!host) host = appState.state.host!
+  if (appState.state.connections[host]) return appState.state.connections[host]
   if (pendingFederations[host]) return pendingFederations[host]
   const process = async () => {
-    const federateResp = await appState.connections[appState.host!].federate(
-      host
-    )
+    const federateResp = await appState.state.connections[
+      appState.state.host!
+    ].federate(host)
     const conn = new Connection(host)
-    appState.setConnection({
-      host,
-      connection: conn,
-    })
     const loginResp = await conn.loginFederated(
       federateResp.message!.getToken(),
-      appState.host!.replace('https://', '')
+      appState.state.host!.replace('https://', '')
     )
     conn.session = loginResp.message!.getSessionToken()
-    this.$accessor.app.setConnection({
-      host,
-      connection: conn,
-    })
+    appState.state.connections[host] = conn
     delete pendingFederations[host]
     this.$bindEvents(conn)
     conn.beginStream()
-    return appState.connections[host]
+    return appState.state.connections[host]
   }
   pendingFederations[host] = process()
   return pendingFederations[host]
@@ -169,10 +157,11 @@ Vue.prototype.$addGuildToList = function (
   host: string,
   guildID: string
 ) {
-  if (!this.$accessor.app.host) return
-  return this.$accessor.app.connections[
-    this.$accessor.app.host
-  ].addGuildToGuildList(guildID, host)
+  if (!appState.state.host) return
+  return appState.state.connections[appState.state.host].addGuildToGuildList(
+    guildID,
+    host
+  )
 }
 
 Vue.prototype.$fetchChannelList = async function (
@@ -180,7 +169,7 @@ Vue.prototype.$fetchChannelList = async function (
   host: string,
   guildID: string
 ) {
-  if (this.$accessor.app.data[host]?.guilds[guildID]?.channels) return
+  if (appState.state.data[host]?.guilds[guildID]?.channels) return
   const conn = await this.$getOrFederate(host)
   const resp = await conn.getGuildChannels(guildID)
   const asObj = resp.message!.toObject()
@@ -197,15 +186,12 @@ Vue.prototype.$fetchChannelList = async function (
     return prev
   }, {})
 
-  this.$accessor.app.setGuildChannels({
+  appState.setGuildChannels(
     host,
-    guildID: this.$route.params.guildid,
-    channels: asObj!.channelsList.map((c) => c.channelId),
-  })
-  this.$accessor.app.setChannelsData({
-    host,
-    data: mapped,
-  })
+    this.$route.params.guildid,
+    asObj!.channelsList.map((c) => c.channelId)
+  )
+  appState.setChannelData(host, mapped)
 
   if (asObj!.channelsList[0]) {
     this.$updateRoute({
@@ -247,27 +233,12 @@ Vue.prototype.$fetchMessageList = async function (
   const messagesList = asObj!.messagesList.map((m) => m.messageId).reverse()
 
   if (lastMessageID) {
-    this.$accessor.app.prependChannelMessages({
-      host,
-      channelID,
-      messages: messagesList,
-    })
-    this.$accessor.app.setReachedTop({
-      host,
-      channelID,
-      reachedTop,
-    })
+    appState.prependChannelMessages(host, channelID, messagesList)
+    appState.setReachedTop(host, channelID, reachedTop)
   } else {
-    this.$accessor.app.setChannelMessages({
-      host,
-      channelID,
-      messages: messagesList,
-    })
+    appState.setChannelMesseages(host, channelID, messagesList)
   }
-  this.$accessor.app.setMessagesData({
-    host,
-    data: mapped,
-  })
+  appState.setMessagesData(host, mapped)
   return messagesList
 }
 
@@ -317,20 +288,16 @@ Vue.prototype.$fetchUser = async function (
   userID: string
 ) {
   if (pendingUserFetches[userID]) return
-  if (this.$accessor.app.data[host]?.users[userID]) return
+  if (appState.state.data[host]?.users[userID]) return
   pendingUserFetches[userID] = true
   const conn = await this.$getOrFederate(host)
   const resp = await conn.getUser(userID)
   const asObj = resp.message?.toObject()
-  this.$accessor.app.setUser({
-    host,
-    userID,
-    data: {
-      username: asObj?.userName,
-      avatar: asObj?.userAvatar,
-      status: asObj?.userStatus,
-      bot: asObj?.isBot,
-    },
+  appState.setUser(host, userID, {
+    username: asObj?.userName,
+    avatar: asObj?.userAvatar,
+    status: asObj?.userStatus,
+    bot: asObj?.isBot,
   })
   delete pendingUserFetches[userID]
 }
@@ -343,11 +310,7 @@ Vue.prototype.$fetchMemberList = async function (
   const conn = await this.$getOrFederate(host)
   const resp = await conn.getGuildMembers(guildID)
   const asObj = resp.message?.toObject()
-  this.$accessor.app.setMemberList({
-    host,
-    guildID,
-    memberList: asObj!.membersList,
-  })
+  appState.setMemberList(host, guildID, asObj!.membersList)
 }
 
 Vue.prototype.$fetchGuildRoles = async function (
@@ -371,16 +334,13 @@ Vue.prototype.$fetchGuildRoles = async function (
     return obj
   }, {})
 
-  this.$accessor.app.setRolesData({
-    host,
-    roles: mapped,
-  })
+  appState.setRolesData(host, mapped)
 
-  this.$accessor.app.setRolesList({
+  appState.setRolesList(
     host,
     guildID,
-    roles: asObj!.rolesList.map((r) => r.roleId),
-  })
+    asObj!.rolesList.map((r) => r.roleId)
+  )
 }
 
 Vue.prototype.$updateProfile = async function (
@@ -469,11 +429,7 @@ Vue.prototype.$fetchInvites = async function (
   const conn = await this.$getOrFederate(host)
   const invites = await conn.getGuildInvites(guildID)
   const asObj = invites.message!.toObject()
-  this.$accessor.app.setInvites({
-    host,
-    guildID,
-    invites: asObj.invitesList,
-  })
+  appState.setInvites(host, guildID, asObj.invitesList)
 }
 
 Vue.prototype.$deleteInvite = async function (
@@ -520,14 +476,14 @@ Vue.prototype.$fetchPermissions = async function (
   const asObj = resp.message!.toObject()
   const permsList = asObj.perms!.permissionsList
 
-  this.$accessor.app.setPermissions({
+  appState.setPermissions(
     host,
     roleID,
-    permissions: permsList!.reduce((obj, perm) => {
+    permsList!.reduce((obj, perm) => {
       Vue.set(obj, perm.matches, perm.mode)
       return obj
-    }, {}),
-  })
+    }, {})
+  )
 }
 
 Vue.prototype.$setRolePermissions = async function (

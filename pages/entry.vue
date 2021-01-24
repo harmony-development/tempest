@@ -1,15 +1,16 @@
 <template>
   <fragment>
+    <portal-target name="destination" multiple> </portal-target>
     <app-bar absolute>
       <h1 class="text-2xl">Tempest</h1>
       <spacer />
-      <dropdown>
+      <popover v-model="translateMenu">
         <template slot="activator" slot-scope="{ toggle }">
-          <h-btn icon text @click.native="toggle()">
+          <h-btn icon text @click.native="toggle">
             <h-icon icon="mdiTranslate" />
           </h-btn>
         </template>
-        <list>
+        <list class="bg-indigo-700">
           <list-item
             v-for="(lang, idx) in $i18n.locales || []"
             :key="idx"
@@ -18,7 +19,7 @@
             {{ lang.name }}
           </list-item>
         </list>
-      </dropdown>
+      </popover>
     </app-bar>
     <div
       class="h-full w-full flex items-center justify-center sm:justify-start background"
@@ -44,13 +45,18 @@
 import Vue from 'vue'
 import HIcon from '~/components/HIcon.vue'
 import AppBar from '~/components/AppBar.vue'
-import Dropdown from '~/components/Dropdown.vue'
+import Popover from '~/components/Popover.vue'
 import List from '~/components/List.vue'
 import ListItem from '~/components/ListItem.vue'
 import Spacer from '~/components/Spacer.vue'
 
 export default Vue.extend({
-  components: { AppBar, Spacer, Dropdown, List, ListItem, HIcon },
+  components: { AppBar, Spacer, Popover, List, ListItem, HIcon },
+  data() {
+    return {
+      translateMenu: false,
+    }
+  },
   methods: {
     toggleTheme() {
       this.$colorMode.preference =

@@ -1,8 +1,5 @@
 <template>
-  <h-dialog
-    :value="dialogState.open"
-    @input="this.$accessor.dialog.closeDialog"
-  >
+  <h-dialog :value="dialogState.open" @input="reject">
     <paper class="p-4 w-1/5">
       <h1 class="text-xl">
         {{ dialogType[dialogState.type] }}
@@ -30,47 +27,39 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import { DialogType } from '@/store/dialog'
+import { dialogState, DialogType } from '@/store/dialog'
+import { defineComponent } from '@nuxtjs/composition-api'
 
-export default Vue.extend({
+export default defineComponent({
   computed: {
-    confirmText(): string {
-      return this.$accessor.dialog.dialog.action ?? 'Ok'
+    confirmText() {
+      return dialogState.state.action ?? 'Ok'
     },
     rejectText: () => 'Cancel',
-    dialogState(): {
-      open: boolean
-      type: DialogType
-      content: string
-      action?: string
-      res?: Function
-    } {
-      return this.$accessor.dialog.dialog
-    },
     dialogType(): typeof DialogType {
       return DialogType
     },
-    rejectButtonColor(): string {
+    rejectButtonColor() {
       return 'primary'
     },
-    isConfirmation(): boolean {
-      return this.$accessor.dialog.dialog.type === DialogType.Confirmation
+    isConfirmation() {
+      return dialogState.state.type === DialogType.Confirmation
+    },
+    dialogState() {
+      return dialogState.state
     },
   },
   methods: {
     confirm() {
-      this.$accessor.dialog.closeDialog()
-      if (this.$accessor.dialog.dialog.res !== undefined) {
-        console.log('Confirm')
-        this.$accessor.dialog.dialog.res(true)
+      dialogState.state.open = false
+      if (dialogState.state.res !== undefined) {
+        dialogState.state.res(true)
       }
     },
     reject() {
-      this.$accessor.dialog.closeDialog()
-      if (this.$accessor.dialog.dialog.res !== undefined) {
-        console.log('Reject')
-        this.$accessor.dialog.dialog.res(false)
+      dialogState.state.open = false
+      if (dialogState.state.res !== undefined) {
+        dialogState.state.res(false)
       }
     },
   },

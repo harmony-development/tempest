@@ -1352,7 +1352,7 @@
     ts-loader "^8.0.14"
     typescript "~4.1"
 
-"@nuxt/typescript-runtime@^2.0.0":
+"@nuxt/typescript-runtime@^2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@nuxt/typescript-runtime/-/typescript-runtime-2.0.1.tgz#a04c56caa980ef26fb214cfa9fc8a5de6133ba46"
   integrity sha512-7yDI9v56E3P3D8oTEv2iprIbh5rTSBeC53lpiPfTgWq57X3ZE0U3EMbmeBezr8y1/kXO59HxSuNNlyzAvwyugg==
@@ -1677,6 +1677,13 @@
   dependencies:
     "@types/node" "*"
 
+"@types/dompurify@^2.2.1":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@types/dompurify/-/dompurify-2.2.1.tgz#eebf3af8afe2f577a53acab9d98a3a4cb04bbbe7"
+  integrity sha512-3JwbEeRVQ3n6+JgBW/hCdkydRk9/vWT+UEglcXEJqLJEcUganDH37zlfLznxPKTZZfDqA9K229l1qN458ubcOQ==
+  dependencies:
+    "@types/trusted-types" "*"
+
 "@types/eslint-visitor-keys@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@types/eslint-visitor-keys/-/eslint-visitor-keys-1.0.0.tgz#1ee30d79544ca84d68d4b3cdb0af4f205663dd2d"
@@ -1919,6 +1926,11 @@
   dependencies:
     "@types/webpack" "*"
     terser "^4.3.9"
+
+"@types/trusted-types@*":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@types/trusted-types/-/trusted-types-2.0.0.tgz#aee6e868fcef74f2b8c71614b6df81a601a42f17"
+  integrity sha512-I8MnZqNXsOLHsU111oHbn3khtvKMi5Bn4qVFsIWSJcCP1KKDiXX5AEw8UPk0nSopeC+Hvxt6yAy1/a5PailFqg==
 
 "@types/turndown@^5.0.0":
   version "5.0.0"
@@ -4200,6 +4212,11 @@ domino@^2.1.6:
   resolved "https://registry.yarnpkg.com/domino/-/domino-2.1.6.tgz#fe4ace4310526e5e7b9d12c7de01b7f485a57ffe"
   integrity sha512-3VdM/SXBZX2omc9JF9nOPCtDaYQ67BGp5CoLpIQlO2KCAPETs8TcDHacF26jXadGbvUteZzRTeos2fhID5+ucQ==
 
+dompurify@^2.2.6:
+  version "2.2.6"
+  resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-2.2.6.tgz#54945dc5c0b45ce5ae228705777e8e59d7b2edc4"
+  integrity sha512-7b7ZArhhH0SP6W2R9cqK6RjaU82FZ2UPM7RO8qN1b1wyvC/NY1FNWcX1Pu00fFOAnzEORtwXe4bPaClg6pUybQ==
+
 domutils@^1.5.1, domutils@^1.7.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/domutils/-/domutils-1.7.0.tgz#56ea341e834e06e6748af7a1cb25da67ea9f8c2a"
@@ -5726,6 +5743,11 @@ human-signals@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/human-signals/-/human-signals-2.1.0.tgz#dc91fcba42e4d06e4abaed33b3e7a3c02f514ea0"
   integrity sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==
+
+humps@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/humps/-/humps-2.0.1.tgz#dd02ea6081bd0568dc5d073184463957ba9ef9aa"
+  integrity sha1-3QLqYIG9BWjcXQcxhEY5V7qe+ao=
 
 husky@^4.3.0:
   version "4.3.8"
@@ -7359,15 +7381,6 @@ nuxt-i18n@^6.18.0:
     klona "^2.0.4"
     vue-i18n "^8.18.1"
 
-nuxt-typed-vuex@^0.1.22:
-  version "0.1.22"
-  resolved "https://registry.yarnpkg.com/nuxt-typed-vuex/-/nuxt-typed-vuex-0.1.22.tgz#aff07cc39985146a75e8b40678fe0f2011d1a561"
-  integrity sha512-2X7/BSbN/tlBfVi5BR3unHTpVOnxxfiltR+E8XLdhlK9KHgSOWyDbnqFtxB5VAXA9efgTFlCq9UwG1xby+ubXQ==
-  dependencies:
-    consola "^2.15.0"
-    normalize-path "^3.0.0"
-    typed-vuex "0.1.22"
-
 nuxt@^2.14.6:
   version "2.14.12"
   resolved "https://registry.yarnpkg.com/nuxt/-/nuxt-2.14.12.tgz#836096ff62ba72554b73744d94f5547109e563f7"
@@ -7881,6 +7894,11 @@ pluralize@^8.0.0:
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-8.0.0.tgz#1a6fa16a38d12a1901e0320fa017051c539ce3b1"
   integrity sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==
+
+popper.js@^1.14.7:
+  version "1.16.1"
+  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.16.1.tgz#2a223cb3dc7b6213d740e40372be40de43e65b1b"
+  integrity sha512-Wb4p1J4zyFTbM+u6WuO4XstYx4Ky9Cewe4DWrel7B0w6VVICvPwdOpotjzcf6eD8TsckVnIMNONQyPIUFOUbCQ==
 
 portal-vue@^2.1.7:
   version "2.1.7"
@@ -9659,11 +9677,6 @@ showdown@^1.9.1:
   dependencies:
     yargs "^14.2"
 
-shvl@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/shvl/-/shvl-2.0.2.tgz#eca7decb9bbd4e8dd93f06ea9ab94036319cd351"
-  integrity sha512-G3KkIXPza3dgkt6Bo8zIl5K/KvAAhbG6o9KfAjhPvrIIzzAhnfc2ztv1i+iPTbNNM43MaBUqIaZwqVjkSgY/rw==
-
 signal-exit@^3.0.2, signal-exit@^3.0.3:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.3.tgz#a1410c2edd8f077b08b4e253c8eacfcaf057461c"
@@ -10394,6 +10407,13 @@ timsort@^0.3.0:
   resolved "https://registry.yarnpkg.com/timsort/-/timsort-0.3.0.tgz#405411a8e7e6339fe64db9a234de11dc31e02bd4"
   integrity sha1-QFQRqOfmM5/mTbmiNN4R3DHgK9Q=
 
+tippy.js@^4.3.5:
+  version "4.3.5"
+  resolved "https://registry.yarnpkg.com/tippy.js/-/tippy.js-4.3.5.tgz#882bff8d92f09bb0546d2826d5668c0560006f54"
+  integrity sha512-NDq3efte8nGK6BOJ1dDN1/WelAwfmh3UtIYXXck6+SxLzbIQNZE/cmRSnwScZ/FyiKdIcvFHvYUgqmoGx8CcyA==
+  dependencies:
+    popper.js "^1.14.7"
+
 tiptap-commands@^1.16.0:
   version "1.16.0"
   resolved "https://registry.yarnpkg.com/tiptap-commands/-/tiptap-commands-1.16.0.tgz#02ba31c386ab22c3999ea620787761e014b99809"
@@ -10627,11 +10647,6 @@ type-is@^1.6.16, type-is@~1.6.17, type-is@~1.6.18:
   dependencies:
     media-typer "0.3.0"
     mime-types "~2.1.24"
-
-typed-vuex@0.1.22, typed-vuex@^0.1.22:
-  version "0.1.22"
-  resolved "https://registry.yarnpkg.com/typed-vuex/-/typed-vuex-0.1.22.tgz#e35a896fa7d76b37904041d38c55037b70ccf240"
-  integrity sha512-WJkYbLX9DbnjVnSKS1LNrqEXB6gbRCfk2qExAA+wa1RGQAURZpdSQ/A33YkgfQbzNitJbgR0qzjE7jclSWC6Ag==
 
 typedarray-to-buffer@^3.1.5:
   version "3.1.5"
@@ -11057,6 +11072,14 @@ vue-template-es2015-compiler@^1.9.0:
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==
 
+vue-tippy@^4.7.2:
+  version "4.7.2"
+  resolved "https://registry.yarnpkg.com/vue-tippy/-/vue-tippy-4.7.2.tgz#8f8782fd049bd27bdfc4e17ad8444a81e1164788"
+  integrity sha512-MyRoitAyLGdaj8O/vxBQS4dy4zEjOcLzDH6zklTTHVTXniODtgDpsvhLeJoLyfWdXqDCLPKsXjFP8yOukVhTKA==
+  dependencies:
+    humps "^2.0.1"
+    tippy.js "^4.3.5"
+
 vue-virtual-scroll-list@^2.3.2:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/vue-virtual-scroll-list/-/vue-virtual-scroll-list-2.3.2.tgz#20dcdab58cbba4ca8b466ba1c8f318af358d647c"
@@ -11066,14 +11089,6 @@ vue@^2.0.0, vue@^2.2.1, vue@^2.6.10, vue@^2.6.12:
   version "2.6.12"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.12.tgz#f5ebd4fa6bd2869403e29a896aed4904456c9123"
   integrity sha512-uhmLFETqPPNyuLLbsKz6ioJ4q7AZHzD8ZVFNATNyICSZouqP2Sz0rotWQC8UNBF6VGSCs5abnKJoStA6JbCbfg==
-
-vuex-persistedstate@^4.0.0-beta.3:
-  version "4.0.0-beta.3"
-  resolved "https://registry.yarnpkg.com/vuex-persistedstate/-/vuex-persistedstate-4.0.0-beta.3.tgz#89dd712de72d28e85cc95467d066002c1405f277"
-  integrity sha512-T4IRD27qoUWh+8qr6T6zVp15xO7x/nPgnU13OD0C2uUwA7U9PhGozrj6lvVmMYDyRgc36J0msMXn3GvwHjkIhA==
-  dependencies:
-    deepmerge "^4.2.2"
-    shvl "^2.0.2"
 
 vuex@^3.6.0:
   version "3.6.0"

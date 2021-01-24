@@ -85,7 +85,7 @@ import HBtn from '~/components/HBtn.vue'
 import HDialog from '~/components/HDialog.vue'
 import HTextField from '~/components/HTextField.vue'
 import Spacer from '~/components/Spacer.vue'
-import { IServerEntry } from '~/store/entry'
+import { entryState, IServerEntry } from '~/store/entry'
 
 export default Vue.extend({
   components: {
@@ -107,15 +107,15 @@ export default Vue.extend({
       return this.$t('server-select.title')
     },
     serverList(): IServerEntry[] {
-      return this.$accessor.entry.serverList
+      return entryState.state.serverList
     },
   },
   methods: {
     removeServer(idx: number) {
-      this.$accessor.entry.removeServerFromList(idx)
+      entryState.removeServerFromList(idx)
     },
     addServer(name: string, host: string) {
-      this.$accessor.entry.addServerToList({
+      entryState.addServerToList({
         name,
         host,
       })
@@ -136,7 +136,7 @@ export default Vue.extend({
           `https://${parsed.hostname}:${parsed.port || '2289'}`
         ),
       })
-      this.$accessor.entry.setStep(this.$accessor.entry.step + 1)
+      entryState.setStep(entryState.state.step + 1)
     },
   },
 })

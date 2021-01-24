@@ -1,6 +1,10 @@
-export default {
+import { NuxtConfig } from '@nuxt/types'
+
+const config: NuxtConfig = {
   // Target (https://go.nuxtjs.dev/config-target)
   target: 'static',
+
+  modern: true,
 
   analyze: true,
 
@@ -46,7 +50,6 @@ export default {
     '@nuxtjs/tailwindcss',
     '@nuxtjs/composition-api',
     '@nuxtjs/color-mode',
-    'nuxt-typed-vuex',
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
@@ -88,3 +91,5 @@ export default {
     ],
   },
 }
+
+export default config

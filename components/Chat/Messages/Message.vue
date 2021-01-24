@@ -11,7 +11,7 @@
     <img
       v-if="!source.shouldCollapse"
       :src="avatar"
-      class="avatar avatar-space"
+      class="avatar"
       @click="showProfile"
     />
     <div v-else class="avatar-space">
@@ -36,19 +36,15 @@
       </list-item-text>
       <p class="text">
         <h-text-field
-          v-if="editing"
+          v-if="localState.editing"
           ref="editField"
-          v-model="editedContent"
+          v-model="localState.editingContent"
           hide-details="auto"
           @keydown.esc="editing = false"
           @keypress="onEditKeyPress"
         ></h-text-field>
         <span v-else class="content-out" v-html="formattedContent"></span>
-        <span
-          v-if="edited"
-          class="edited ml-1 hint--top"
-          :aria-label="editedString"
-        >
+        <span v-if="edited" class="edited ml-1" :aria-label="editedString">
           (edited)
         </span>
       </p>
@@ -64,6 +60,19 @@
       </div>
     </div>
     <div class="menu-area">
+      <!-- <popover>
+        <template #activator="{ toggle }">
+          <h-icon
+            icon="mdiDotsVertical"
+            class="cursor-pointer"
+            :size="18"
+            @click.native="toggle"
+          />
+        </template>
+        <list>
+          <list-item> Copy ID </list-item>
+        </list>
+      </popover> -->
       <!-- <v-menu offset-y>
         <template #activator="{ on, attrs }">
           <v-btn icon x-small v-bind="attrs" class="menu-btn" v-on="on">
@@ -102,7 +111,7 @@
   @apply bg-white bg-opacity-5;
 }
 .menu-area {
-  @apply w-8;
+  @apply w-10;
 }
 .root > .menu-area {
   @apply invisible;
@@ -111,7 +120,7 @@
   @apply visible;
 }
 .avatar {
-  @apply w-10 h-10 flex-grow-0 flex-shrink-0 bg-gray-500 rounded-full cursor-pointer;
+  @apply w-10 h-10 bg-gray-500 rounded-full cursor-pointer;
 }
 .avatar-space {
   @apply w-10;
@@ -135,11 +144,18 @@
   color: var(--v-accent-lighten3);
   font-size: 12px;
 }
-.content-out >>> .codeblock {
-  @apply w-full block break-all whitespace-pre-wrap pr-3;
-}
-.content-out >>> .codeblock > code {
-  @apply break-words w-full block p-2 pl-3;
+.content-out {
+  & >>> .codeblock {
+    @apply w-full block break-all whitespace-pre-wrap pr-3 bg-white bg-opacity-5 rounded;
+
+    & > code {
+      @apply break-words w-full block p-2 pl-3;
+    }
+  }
+
+  & >>> a {
+    @apply text-primary-300;
+  }
 }
 .content-out >>> .msg-p {
   @apply mb-0 w-auto;
@@ -158,11 +174,12 @@ import dayjs from 'dayjs'
 import calendar from 'dayjs/plugin/calendar'
 import UTC from 'dayjs/plugin/utc'
 import showdown from 'showdown'
-// import DOMPurify from 'dompurify'
+import { sanitize } from 'dompurify'
 import { IMessageData, IUserData } from '~/store/app'
-import { AnimationDirection, Position } from '~/store/userPopover'
+import { Position, userPopoverState } from '~/store/userPopover'
 import { DialogType } from '~/store/dialog'
 import ListItemText from '~/components/ListItemText.vue'
+
 dayjs.extend(calendar)
 dayjs.extend(UTC)
 export default Vue.extend({
@@ -180,12 +197,13 @@ export default Vue.extend({
       type: Object as () => showdown.Converter,
       default: undefined,
     },
-  },
-  data() {
-    return {
-      editing: false,
-      editedContent: '',
-    }
+    localState: {
+      type: Object as () => {
+        editing: boolean
+        editingContent: string
+      },
+      default: undefined,
+    },
   },
   computed: {
     authorData(): IUserData | undefined {
@@ -206,7 +224,7 @@ export default Vue.extend({
         : undefined
     },
     formattedContent(): string {
-      return this.source.content
+      return sanitize(this.$markdownRenderer.makeHtml(this.source.content))
     },
     timeString(): string {
       return dayjs.unix(this.source.createdAt || 0).calendar()
@@ -229,12 +247,11 @@ export default Vue.extend({
   methods: {
     showProfile(ev: MouseEvent) {
       if (this.source.authorID) {
-        this.$accessor.userPopover.openDialog({
-          id: this.source.authorID,
-          element: ev.currentTarget as Element,
-          position: Position.TOP,
-          animationDirection: AnimationDirection.yReverse,
-        })
+        userPopoverState.openDialog(
+          this.source.authorID,
+          ev.currentTarget as Element,
+          Position.TOP
+        )
       }
     },
     copyID() {
@@ -260,21 +277,21 @@ export default Vue.extend({
       }
     },
     async editMsg() {
-      this.editing = true
-      this.editedContent = this.source.content
+      this.localState.editing = true
+      this.localState.editingContent = this.source.content
       await this.$nextTick()
       ;(this.$refs.editField as HTMLInputElement).focus()
     },
     async onEditKeyPress(e: KeyboardEvent) {
       if (e.shiftKey) return
       if (e.key === 'Enter') {
-        this.editing = false
+        this.localState.editing = false
         return await this.$editMessage(
           this.$getHost(),
           this.$route.params.guildid,
           this.$route.params.channelid,
           this.source.id,
-          this.editedContent
+          this.localState.editingContent
         )
       }
     },

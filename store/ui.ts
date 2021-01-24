@@ -1,20 +1,19 @@
-import { mutationTree } from 'typed-vuex'
+import { Store } from './store'
 
 interface IState {
   guildSettingsOpen: boolean
   profileSettingsOpen: boolean
+  messageDropdownOpen: boolean
 }
 
-export const state = (): IState => ({
+class UIState extends Store<IState> {
+  setMessageDropdownOpen(v: boolean) {
+    this.state.messageDropdownOpen = v
+  }
+}
+
+export const uiState = new UIState({
   guildSettingsOpen: false,
   profileSettingsOpen: false,
-})
-
-export const mutations = mutationTree(state, {
-  setGuildSettingsOpen(state, data: boolean) {
-    state.guildSettingsOpen = data
-  },
-  setProfileSettingsOpen(state, data: boolean) {
-    state.profileSettingsOpen = data
-  },
+  messageDropdownOpen: false,
 })

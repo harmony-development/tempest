@@ -1,12 +1,11 @@
 <template>
-  <h-dialog v-model="open">
+  <h-dialog v-model="open" offset="128">
     <template slot="activator">
       <h-btn
+        v-tooltip.right="'Join or Create Guild'"
         text
         icon
-        class="w-14 h-14 hint--right"
-        aria-label="Guild Menu"
-        data-balloon-blunt
+        class="w-14 h-14"
         @click.native="open = !open"
       >
         <h-icon icon="mdiAccountPlus" />

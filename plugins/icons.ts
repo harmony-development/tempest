@@ -9,6 +9,7 @@ import {
   mdiAccountPlus,
   mdiCogOutline,
   mdiPound,
+  mdiDotsVertical,
 } from '@mdi/js'
 
 Vue.prototype.$iconSet = {
@@ -21,4 +22,5 @@ Vue.prototype.$iconSet = {
   mdiAccountPlus,
   mdiCogOutline,
   mdiPound,
+  mdiDotsVertical,
 }

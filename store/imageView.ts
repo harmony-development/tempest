@@ -1,21 +1,22 @@
-import { mutationTree } from 'typed-vuex'
+import { reactive } from '@nuxtjs/composition-api'
+import { Store } from './store'
 
 interface IState {
   open: boolean
-  imageID: string | undefined
+  imageID?: string
+}
+class ImageViewState extends Store<IState> {
+  openImageView(imageID: string) {
+    this.state.open = true
+    this.state.imageID = imageID
+  }
+
+  closeImageView() {
+    this.state.open = false
+  }
 }
 
-export const state = (): IState => ({
+export const imageViewState = new ImageViewState({
   open: false,
   imageID: undefined,
-})
-
-export const mutations = mutationTree(state, {
-  openDialog(state, data: string) {
-    state.open = true
-    state.imageID = data
-  },
-  closeDialog(state) {
-    state.open = false
-  },
 })

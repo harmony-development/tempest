@@ -1,14 +1,12 @@
-import createPersistedState from 'vuex-persistedstate'
+import { appState } from '~/store/app'
+import { entryState } from '~/store/entry'
 
-export default ({ store }: { store: any }) => {
-  createPersistedState({
-    key: 'tempest',
-    paths: [
-      'entry.serverList',
-      'app.userID',
-      'app.session',
-      'app.host',
-      'app.personas',
-    ],
-  })(store)
-}
+const serverList = localStorage.getItem('serverList')
+const userID = localStorage.getItem('userid')
+const session = localStorage.getItem('session')
+const host = localStorage.getItem('host')
+
+if (serverList) entryState.state.serverList = JSON.parse(serverList)
+if (userID) appState.state.userID = userID
+if (session) appState.state.session = session
+if (host) appState.state.host = host

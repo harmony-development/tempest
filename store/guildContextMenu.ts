@@ -1,38 +1,26 @@
-import { mutationTree } from 'typed-vuex'
+import { reactive } from '@nuxtjs/composition-api'
 
-interface IState {
-  open: boolean
-  host: string | undefined
-  guildID: string | undefined
-  x: number
-  y: number
-}
-
-export const state = (): IState => ({
+const s = reactive({
   open: false,
-  host: undefined,
-  guildID: undefined,
+  host: undefined as string | undefined,
+  guildID: undefined as string | undefined,
   x: 0,
   y: 0,
 })
 
-export const mutations = mutationTree(state, {
-  openDialog(
-    state,
-    data: {
-      guildID: string
-      host: string
-      x: number
-      y: number
-    }
-  ) {
-    state.open = true
-    state.guildID = data.guildID
-    state.host = data.host
-    state.x = data.x
-    state.y = data.y
-  },
-  setDialogOpen(state, value: boolean) {
-    state.open = value
-  },
-})
+export const openDialog = (
+  guildID: string,
+  host: string,
+  x: number,
+  y: number
+) => {
+  s.open = true
+  s.guildID = guildID
+  s.host = host
+  s.x = x
+  s.y = y
+}
+
+export const closeDialog = (value: boolean) => {
+  s.open = value
+}

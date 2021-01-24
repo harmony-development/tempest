@@ -2,8 +2,8 @@
   <dynamic-scroller
     ref="scroller"
     :items="mappedMessages || []"
-    :min-item-size="8"
-    :buffer="50"
+    :min-item-size="16"
+    :buffer="60"
     :detect-hover="false"
     class="flex-1 overflow-auto flex flex-col"
     @scroll.native="debouncedScroll"
@@ -15,7 +15,10 @@
         :size-dependencies="[item.content]"
         :data-index="index"
       >
-        <message :source="item" />
+        <message
+          :source="item"
+          :local-state="{ editing: false, editingContent: '' }"
+        />
       </dynamic-scroller-item>
     </template>
   </dynamic-scroller>
@@ -30,7 +33,7 @@ import {
 import debounce from 'lodash.debounce'
 import { DebouncedFunc } from 'lodash'
 import Message from './Message.vue'
-import { IMessageData } from '~/store/app'
+import { appState, IMessageData } from '~/store/app'
 import '@akryuminfinitum/vue-virtual-scroller/dist/vue-virtual-scroller.css'
 
 export default Vue.extend({
@@ -42,6 +45,7 @@ export default Vue.extend({
   data() {
     return {
       messageComponent: Message,
+      loading: false,
     }
   },
   computed: {
@@ -85,23 +89,22 @@ export default Vue.extend({
   methods: {
     async onScroll(e: WheelEvent) {
       const el = e.target as HTMLDivElement
-      if (el.scrollTop === 0) {
+      if (el.scrollTop < 400 && !this.loading) {
+        this.loading = true
         const oldScrollTop = el.scrollTop
         const oldScroll = el.scrollHeight - el.clientHeight
         await this.fetchData(this.messagesList?.[0])
         await this.$nextTick()
         const newScroll = el.scrollHeight - el.clientHeight
         el.scrollTop = oldScrollTop + (newScroll - oldScroll)
+        this.loading = false
       }
     },
     async fetchData(lastMessageID?: string): Promise<string[] | undefined> {
       if (
         this.$route.params.guildid &&
         this.$route.params.channelid &&
-        (lastMessageID ||
-          !this.$accessor.app.data[this.$getHost()]?.channels[
-            this.$route.params.channelid
-          ]?.messages)
+        (lastMessageID || !this.$channelData()?.messages)
       ) {
         try {
           return await this.$fetchMessageList(
@@ -118,7 +121,7 @@ export default Vue.extend({
     getShouldCollapse(messageID: string, idx: number): boolean {
       if (!this.messagesList) return false
 
-      const messages = this.$accessor.app.data[this.$getHost()].messages
+      const messages = appState.getHost(this.$getHost()).messages
 
       const previous = messages[this.messagesList[idx - 1]]
       const current = messages[messageID]
