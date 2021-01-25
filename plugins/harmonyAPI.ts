@@ -236,7 +236,7 @@ Vue.prototype.$fetchMessageList = async function (
     appState.prependChannelMessages(host, channelID, messagesList)
     appState.setReachedTop(host, channelID, reachedTop)
   } else {
-    appState.setChannelMesseages(host, channelID, messagesList)
+    appState.setChannelMessages(host, channelID, messagesList)
   }
   appState.setMessagesData(host, mapped)
   return messagesList

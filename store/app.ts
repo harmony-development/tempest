@@ -8,6 +8,7 @@ import {
   Override,
   UserStatusMap,
 } from '@harmony-dev/harmony-web-sdk/dist/protocol/harmonytypes/v1/types_pb'
+import Vue from 'vue'
 import { Store } from './store'
 
 export const permissionsList = {
@@ -137,23 +138,23 @@ interface IState {
 class AppState extends Store<IState> {
   getHost(host: string) {
     if (this.state.data[host]) return this.state.data[host]
-    this.state.data[host] = {
+    Vue.set(this.state.data, host, {
       messages: {},
       guilds: {},
       channels: {},
       users: {},
       roles: {},
-    }
+    })
     return this.state.data[host]
   }
 
   getGuild(host: string, guildID: string) {
     const data = this.getHost(host)
     if (data.guilds[guildID]) return data.guilds[guildID]
-    data.guilds[guildID] = {
+    Vue.set(data.guilds, guildID, {
       name: undefined,
       channels: undefined,
-    }
+    })
 
     return data.guilds[guildID]
   }
@@ -161,13 +162,13 @@ class AppState extends Store<IState> {
   getChannel(host: string, channelID: string) {
     const data = this.getHost(host)
     if (data.channels[channelID]) return data.channels[channelID]
-    data.channels[channelID] = {
+    Vue.set(data.channels, channelID, {
       channelName: undefined,
       isCategory: undefined,
       isVoice: undefined,
       messages: undefined,
       typing: {},
-    }
+    })
     return data.channels[channelID]
   }
 
@@ -190,10 +191,10 @@ class AppState extends Store<IState> {
   ) {
     const data = this.getHost(host)
     for (const [channelID, channel] of Object.entries(channels)) {
-      data.channels[channelID] = {
+      Vue.set(data.channels, channelID, {
         ...data.channels[channelID],
         ...channel,
-      }
+      })
     }
   }
 
@@ -217,9 +218,9 @@ class AppState extends Store<IState> {
     })
   }
 
-  setChannelMesseages(host: string, channelID: string, messages: string[]) {
+  setChannelMessages(host: string, channelID: string, messages: string[]) {
     const channel = this.getChannel(host, channelID)
-    channel.messages = messages
+    Vue.set(channel, 'messages', messages)
   }
 
   prependChannelMessages(host: string, channelID: string, messages: string[]) {
@@ -329,7 +330,7 @@ class AppState extends Store<IState> {
     const msgs = channelData.messages
     if (!msgs) return
 
-    delete hostData.messages[messageID]
+    Vue.delete(hostData.messages, messageID)
     msgs.splice(msgs.indexOf(messageID), 1)
   }
 
@@ -453,7 +454,7 @@ class AppState extends Store<IState> {
   }
 }
 
-export const appState: AppState = new AppState({
+export const appState = new AppState({
   userID: undefined,
   session: undefined,
   host: undefined,
@@ -463,3 +464,6 @@ export const appState: AppState = new AppState({
   disconnections: {},
   personas: [],
 })
+
+// @ts-ignore
+if (process.client) window.appState = appState

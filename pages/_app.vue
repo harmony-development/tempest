@@ -71,7 +71,7 @@ export default Vue.extend({
       return this.$channelData()
     },
     guildSettingsOpen(): boolean {
-      return uiState.guildSettingsOpen
+      return uiState.state.guildSettingsOpen
     },
     channelName(): string | undefined {
       return this.channelData?.channelName

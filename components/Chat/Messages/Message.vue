@@ -175,7 +175,7 @@ import calendar from 'dayjs/plugin/calendar'
 import UTC from 'dayjs/plugin/utc'
 import showdown from 'showdown'
 import { sanitize } from 'dompurify'
-import { IMessageData, IUserData } from '~/store/app'
+import { appState, IMessageData, IUserData } from '~/store/app'
 import { Position, userPopoverState } from '~/store/userPopover'
 import { DialogType } from '~/store/dialog'
 import ListItemText from '~/components/ListItemText.vue'
@@ -208,9 +208,7 @@ export default Vue.extend({
   computed: {
     authorData(): IUserData | undefined {
       if (!this.source.authorID) return undefined
-      return this.$accessor.app.data[this.$getHost()]?.users[
-        this.source.authorID
-      ]
+      return appState.getHost(this.$getHost()).users[this.source.authorID]
     },
     username(): string | undefined {
       if (!this.source.authorID) return undefined
