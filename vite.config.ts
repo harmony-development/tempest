@@ -19,20 +19,35 @@ export default defineConfig({
   },
   plugins: [
     Vue({
-      include: [/\.vue$/],
+      include: [/\.vue$/, /\.md$/],
     }),
 
     // https://github.com/hannoeru/vite-plugin-pages
     Pages({
-      extensions: ['vue'],
+      extensions: ['vue', 'md'],
     }),
 
     // https://github.com/JohnCampionJr/vite-plugin-vue-layouts
     Layouts(),
+
+    // https://github.com/antfu/vite-plugin-md
+    Markdown({
+      wrapperClasses: 'prose prose-sm m-auto text-left',
+      headEnabled: true,
+      markdownItSetup(md) {
+        // https://prismjs.com/
+        md.use(Prism)
+      },
+    }),
+
     // https://github.com/antfu/vite-plugin-components
     ViteComponents({
       // allow auto load markdown components under `./src/components/`
-      extensions: ['vue'],
+      extensions: ['vue', 'md'],
+
+      // allow auto import and register components used in markdown
+      customLoaderMatcher: id => id.endsWith('.md'),
+
       // auto import icons
       customComponentResolvers: [
         // https://github.com/antfu/vite-plugin-icons
@@ -48,7 +63,7 @@ export default defineConfig({
 
     // https://github.com/antfu/vite-plugin-windicss
     WindiCSS({
-      safelist: 'prose prose-sm m-auto',
+      safelist: 'prose prose-sm m-auto text-left',
     }),
 
     // https://github.com/antfu/vite-plugin-pwa
