@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { defineProps } from 'vue'
+import { defineProps } from "vue";
 
-const { selected } = defineProps()
+const props = defineProps<{
+  selected?: boolean;
+}>();
 </script>
-
 
 <template>
   <li
     v-wave
     :class="{
       'list-item': true,
-      selected,
+      selected: props.selected,
     }"
   >
     <slot />
@@ -19,14 +20,14 @@ const { selected } = defineProps()
 
 <style lang="postcss" scoped>
 .list-item {
-  @apply flex items-center rounded w-full py-2 px-4 cursor-pointer select-none transition duration-200;
+  @apply flex items-center w-full py-2 px-4 cursor-pointer select-none transition duration-200;
 
   &:hover {
-    @apply bg-white bg-opacity-10;
+    @apply bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10;
   }
 }
 
 .selected {
-  @apply bg-white bg-opacity-20;
+  @apply bg-black dark:bg-white bg-opacity-5 dark:bg-opacity-5;
 }
 </style>

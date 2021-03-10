@@ -2,9 +2,10 @@
   "private": true,
   "scripts": {
     "build": "cross-env NODE_ENV=production vite-ssg build",
-    "dev": "vite --port 3333 --open"
+    "dev": "vite --port 3333 --force"
   },
   "dependencies": {
+    "@harmony-dev/harmony-web-sdk": "^5.0.29",
     "@vueuse/core": "^4.3.1",
     "@vueuse/head": "^0.3.1",
     "v-wave": "^1.2.8",
@@ -15,25 +16,26 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.4.3",
-    "@iconify/json": "^1.1.310",
-    "@intlify/vite-plugin-vue-i18n": "^1.0.0-beta.17",
+    "@iconify/json": "^1.1.311",
+    "@intlify/vite-plugin-vue-i18n": "^2.0.0",
     "@typescript-eslint/eslint-plugin": "^4.16.1",
     "@vitejs/plugin-vue": "^1.1.5",
     "@vue/compiler-sfc": "^3.0.7",
     "@vue/server-renderer": "^3.0.7",
     "cross-env": "^7.0.3",
     "eslint": "^7.21.0",
+    "eslint-config-prettier": "^8.1.0",
     "markdown-it-prism": "^2.1.4",
     "pnpm": "^5.18.1",
     "postcss-nested": "^5.0.4",
+    "prettier": "^2.2.1",
     "typescript": "^4.2.2",
-    "vite": "^2.0.4",
-    "vite-plugin-components": "^0.7.5",
+    "vite": "^2.0.5",
+    "vite-plugin-components": "^0.8.0",
     "vite-plugin-icons": "^0.3.2",
-    "vite-plugin-pages": "^0.4.7",
     "vite-plugin-pwa": "^0.5.6",
     "vite-plugin-vue-layouts": "^0.2.2",
-    "vite-plugin-windicss": "^0.6.2",
+    "vite-plugin-windicss": "^0.6.4",
     "vite-ssg": "^0.8.12"
   }
 }

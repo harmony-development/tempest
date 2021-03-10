@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import { defineProps } from 'vue'
+import { defineProps } from "vue";
 
 const { variant, color, icon, raised } = defineProps<{
-  variant: 'text' | 'filled' | 'outlined'
-  color?: 'primary' | 'secondary'
-  icon?: boolean
-  raised?: boolean
-}>()
+  variant: "text" | "filled" | "outlined";
+  color?: "primary" | "secondary";
+  icon?: boolean;
+  raised?: boolean;
+}>();
 
 const buttonClasses = {
   btn: true,
   [variant]: true,
-  [color || 'plain']: true,
+  [color || "plain"]: true,
   icon,
   raised,
-}
+};
 </script>
 <template>
   <button v-wave :class="buttonClasses">
@@ -22,7 +22,7 @@ const buttonClasses = {
   </button>
 </template>
 
-<style lang="postcss">
+<style lang="postcss" scoped>
 .btn {
   @apply px-4 py-2 rounded focus:outline-none transition duration-200 ease-in-out flex justify-center items-center;
   &:disabled {
@@ -48,14 +48,40 @@ const buttonClasses = {
   }
 }
 
-.primary.filled {
-  @apply bg-primary-400 text-white;
-  &:hover {
-    @apply bg-primary-300;
+.primary {
+  &.filled {
+    @apply bg-primary-300 text-white;
+    &:hover {
+      @apply bg-primary-200;
+    }
+  }
+  &.outlined {
+    @apply border-primary-300 border-1 text-primary-300;
+  }
+  &.text {
+    @apply text-primary-300;
+    &:hover {
+      @apply bg-primary-400 bg-opacity-10;
+    }
   }
 }
 
-.primary.outlined {
-  @apply border-primary-300 border-1 text-primary-300;
+.secondary {
+  &.text {
+    @apply text-secondary-300;
+    &:hover {
+      @apply bg-secondary-400 bg-opacity-10;
+    }
+  }
+}
+
+@variants disabled {
+  .btn.text {
+    @apply text-gray-500;
+  }
+
+  .btn.filled {
+    @apply bg-gray-400 dark:bg-gray-600 text-gray-500 dark:text-gray-500 bg-opacity-75;
+  }
 }
 </style>

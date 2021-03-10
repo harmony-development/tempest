@@ -1,5 +1,5 @@
 <template>
-  <ol class="bg-white rounded-md dark:bg-harmonydark-500">
+  <ol class="rounded-lg shadow-sm">
     <slot />
   </ol>
 </template>

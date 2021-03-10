@@ -1,18 +1,39 @@
 {
   "app-name": "Tempest",
+  "auth": {
+    "add-server": "Add Server",
+    "confirm-password": "Confirm Password",
+    "email": "Email",
+    "initial-choice": "Select an option",
+    "login": "Login",
+    "mismatched-passwords": "Passwords do not match",
+    "other-options": "Advanced Options",
+    "password": "Password",
+    "register": "Register",
+    "server-address": "Server Address",
+    "server-name": "Server Name",
+    "username": "Username"
+  },
   "button": {
     "about": "About",
     "back": "Back",
     "go": "GO",
     "home": "Home",
+    "next": "Next",
     "toggle_dark": "Toggle dark mode",
     "toggle_langs": "Change languages"
   },
-  "intro": {
-    "desc": "Opinionated Vite Starter Template",
-    "dynamic-route": "Demo of dynamic route",
-    "hi": "Hi, {name}!",
-    "whats-your-name": "What's your name?"
+  "buttons": {
+    "back": "Back",
+    "done": "Done"
   },
-  "not-found": "Not found"
+  "entry": {
+    "serverselect": {
+      "title": "Select a Server"
+    }
+  },
+  "h": {
+    "bad-email": "Invalid Email",
+    "incorrect-password": "Incorrect Password"
+  }
 }

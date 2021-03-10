@@ -1,31 +1,41 @@
 <script setup lang="ts">
-import HAppBar from '~/components/HAppBar.vue'
-import HSpacer from '~/components/HSpacer.vue'
-import HBtn from '~/components/HBtn.vue'
-import HMenu from '~/components/HMenu.vue'
-import HList from '~/components/HList.vue'
-import HListItem from '~/components/HListItem.vue'
-import { toggleDark } from '~/logics/dark'
+import { useI18n } from "vue-i18n";
+import { ref } from "vue";
+import HAppBar from "~/components/HAppBar.vue";
+import HSpacer from "~/components/HSpacer.vue";
+import HBtn from "~/components/HBtn.vue";
+import HMenu from "~/components/HMenu.vue";
+import HList from "~/components/HList.vue";
+import HListItem from "~/components/HListItem.vue";
+import { toggleDark } from "~/logics/dark";
+
+const { availableLocales, locale } = useI18n();
+const i18nMenu = ref(false);
 </script>
 
 <template>
   <h-app-bar absolute>
     <h1 v-t="'app-name'" class="text-lg" />
     <h-spacer />
-    <h-menu>
-      <template #activator="{toggle}">
+    <h-menu v-model="i18nMenu">
+      <template #activator="{ toggle }">
         <h-btn variant="text" icon @click="toggle">
           <ic-round-translate />
         </h-btn>
       </template>
       <h-list>
-        <h-list-item>
-          Hello
+        <h-list-item
+          v-for="lang in availableLocales"
+          :key="lang"
+          :selected="locale === lang"
+          @click="locale = lang"
+        >
+          {{ lang }}
         </h-list-item>
       </h-list>
     </h-menu>
     <h-btn variant="text" icon @click="toggleDark">
-
+      <ion-moon />
     </h-btn>
   </h-app-bar>
   <div
@@ -42,12 +52,12 @@ import { toggleDark } from '~/logics/dark'
 <style lang="postcss" scoped>
 .background {
   background: repeating-linear-gradient(
-  45deg,
-  rgba(127, 127, 127, 0.05),
-  rgba(127, 127, 127, 0.05) 10px,
-  transparent 10px,
-  transparent 20px
-);;
+    45deg,
+    rgba(127, 127, 127, 0.05),
+    rgba(127, 127, 127, 0.05) 10px,
+    transparent 10px,
+    transparent 20px
+  );
   background-repeat: repeat;
   fill: black;
 }
