@@ -1,10 +1,6 @@
 import { Connection } from "@harmony-dev/harmony-web-sdk";
 import { host } from "./app";
-import {
-  closeStreamHandler,
-  eventStreamHandler,
-  openStreamhandler,
-} from "./eventStreamHandler";
+import { closeStreamHandler, eventStreamHandler } from "./eventStreamHandler";
 import { ChatStream } from "~/types";
 
 const connections: {
@@ -30,15 +26,15 @@ export const getOrFederate = (targetHost: string) => {
     return conn;
   }
   pendingFederations[targetHost] = (async () => {
-    const federateResp = await connections[host.value].auth.Federate({
+    const federateResp = await connections[host.value].auth.federate({
       target: targetHost,
     });
     const conn = new Connection(targetHost);
-    const loginResp = await conn.auth.LoginFederated({
-      authToken: federateResp.token!,
+    const loginResp = await conn.auth.loginFederated({
+      authToken: federateResp.response.token,
       domain: host.value.replace("https://", ""),
     });
-    conn.setSession(loginResp.sessionToken);
+    conn.setSession(loginResp.response.sessionToken);
     connections[targetHost] = conn;
     delete pendingFederations[targetHost];
     return conn;
@@ -51,12 +47,14 @@ export const getChatStream = async (host: string, session?: string) => {
   const conn = await getOrFederate(host);
   if (session) {
     conn.setSession(session);
-    conn.chat.session = session;
   }
-  const stream = conn.chat.StreamEvents();
+  const stream = conn.chat.streamEvents();
   chatStreams[host] = stream;
-  stream.eventEmitter.on("data", eventStreamHandler(stream));
-  stream.eventEmitter.on("close", closeStreamHandler(stream));
-  stream.eventEmitter.on("open", openStreamhandler(stream));
+  stream.response.onMessage(eventStreamHandler(stream));
+  stream.response.onComplete(closeStreamHandler(stream));
   return stream;
+};
+
+export const homeserverConn = () => {
+  return getOrFederate(host.value);
 };

@@ -7,6 +7,7 @@ import ViteComponents from "vite-plugin-components";
 import WindiCSS from "vite-plugin-windicss";
 import { VitePWA } from "vite-plugin-pwa";
 import VueI18n from "@intlify/vite-plugin-vue-i18n";
+import visualizer from "rollup-plugin-visualizer";
 
 export default defineConfig({
   resolve: {
@@ -74,12 +75,21 @@ export default defineConfig({
     VueI18n({
       include: [path.resolve(__dirname, "locales/**")],
     }),
+    {
+      ...visualizer({
+        gzipSize: true,
+        brotliSize: true,
+        template: "treemap",
+      }),
+      apply: "build",
+      enforce: "post",
+    },
   ],
-  // https://github.com/antfu/vite-ssg
-  ssgOptions: {
-    script: "async",
-    formatting: "minify",
-  },
+  // // https://github.com/antfu/vite-ssg
+  // ssgOptions: {
+  //   script: "async defer",
+  //   formatting: "minify",
+  // },
 
   optimizeDeps: {
     include: ["vue", "vue-router", "@vueuse/core"],

@@ -5,7 +5,7 @@ export const session = useLocalStorage<string | undefined>(
   "session",
   undefined
 );
-export const userID = useLocalStorage<number | undefined>("userid", undefined);
+export const userID = useLocalStorage<string | undefined>("userid", undefined);
 
 export const isLoggedIn = () => {
   return !!host && !!session && !!userID;

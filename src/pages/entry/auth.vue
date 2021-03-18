@@ -3,7 +3,15 @@ import { onMounted, ref, reactive, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { Connection } from "@harmony-dev/harmony-web-sdk";
 import { useRouter } from "vue-router";
-import gen from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/auth/v1/output";
+import {
+  AuthStep,
+  AuthStep_Form_FormField,
+  NextStepRequest,
+  NextStepRequest_FormFields,
+  StepBackRequest,
+  StreamStepsRequest,
+} from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/auth/v1/auth";
+import { Empty } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/google/protobuf/empty";
 import type { AuthStream } from "~/types";
 import { useHashValue } from "~/logics/location";
 import { host, session, userID } from "~/logics/app";
@@ -27,7 +35,7 @@ const choiceStep = reactive<{
 }>({});
 const formStep = reactive<{
   title?: string;
-  formFields?: gen.protocol.auth.v1.AuthStep.Form.IFormField[];
+  formFields?: AuthStep_Form_FormField[];
   formFieldValues: (string | number)[];
 }>({ formFieldValues: [] });
 let authStream: AuthStream | undefined;
@@ -36,43 +44,64 @@ let authID: string | undefined;
 const conn = new Connection(selectedHost);
 
 const selectChoice = async (c: string) => {
-  const req = new gen.protocol.auth.v1.NextStepRequest.Choice();
-  req.choice = c;
-
   onAuthStep(
-    await conn.auth.NextStep({
-      authId: authID,
-      choice: req,
-    })
+    await conn.auth.nextStep(
+      NextStepRequest.create({
+        authId: authID,
+        step: {
+          oneofKind: "choice",
+          choice: {
+            choice: c,
+          },
+        },
+      })
+    ).response
   );
 };
 
 const goBack = () => {
-  conn.auth.StepBack({
-    authId: authID,
-  });
+  conn.auth.stepBack(
+    StepBackRequest.create({
+      authId: authID,
+    })
+  );
 };
 
 const doneClicked = async () => {
   try {
     onAuthStep(
-      await conn.auth.NextStep({
-        authId: authID,
-        form: {
-          fields: formStep.formFieldValues.map((f, i) => {
-            const field: gen.protocol.auth.v1.NextStepRequest.IFormFields = {};
-            if (formStep.formFields?.[i].type === "number")
-              field.number = f as number;
-            else if (
-              formStep.formFields?.[i].type === "password" ||
-              formStep.formFields?.[i].type === "new-password"
-            )
-              field.bytes = new TextEncoder().encode(f as string);
-            else field.string = f as string;
-            return field;
-          }),
-        },
-      })
+      await conn.auth.nextStep(
+        NextStepRequest.create({
+          authId: authID,
+          step: {
+            oneofKind: "form",
+            form: {
+              fields: formStep.formFieldValues.map((f, i) => {
+                const field: NextStepRequest_FormFields = NextStepRequest_FormFields.create();
+                if (formStep.formFields?.[i].type === "number")
+                  field.field = {
+                    oneofKind: "number",
+                    number: f.toString(),
+                  };
+                else if (
+                  formStep.formFields?.[i].type === "password" ||
+                  formStep.formFields?.[i].type === "new-password"
+                )
+                  field.field = {
+                    oneofKind: "bytes",
+                    bytes: new TextEncoder().encode(f as string),
+                  };
+                else
+                  field.field = {
+                    oneofKind: "string",
+                    string: f as string,
+                  };
+                return field;
+              }),
+            },
+          },
+        })
+      ).response
     );
   } catch (e) {
     const resp = e as Response;
@@ -83,46 +112,51 @@ const doneClicked = async () => {
   }
 };
 
-const onAuthStep = (step: gen.protocol.auth.v1.AuthStep) => {
-  if (step.choice) {
-    const choice = step.choice;
-    choiceStep.title = choice.title!;
-    choiceStep.choices = choice.options!;
-    currentStep.value = "choice";
-  } else if (step.form) {
-    const form = step.form;
-    formStep.title = form.title!;
-    formStep.formFields = form.fields!;
-    formStep.formFieldValues = form.fields!.map((v) =>
-      v.type === "number" ? 0 : ""
-    );
-    currentStep.value = "form";
-  } else if (step.session) {
-    host.value = selectedHost;
-    session.value = step.session.sessionToken!;
-    userID.value = step.session.userId!;
-    router.push({
-      path: "/app",
-      hash: `#${encodeURIComponent(selectedHost)}`,
-    });
+const onAuthStep = (step: AuthStep) => {
+  switch (step.step.oneofKind) {
+    case "choice": {
+      choiceStep.title = step.step.choice.title;
+      choiceStep.choices = step.step.choice.options;
+      currentStep.value = "choice";
+      break;
+    }
+    case "form": {
+      formStep.title = step.step.form.title!;
+      formStep.formFields = step.step.form.fields!;
+      formStep.formFieldValues = step.step.form.fields!.map((v) =>
+        v.type === "number" ? 0 : ""
+      );
+      currentStep.value = "form";
+      break;
+    }
+    case "session": {
+      host.value = selectedHost;
+      session.value = step.step.session.sessionToken;
+      userID.value = step.step.session.userId;
+      router.push({
+        path: "/app",
+        hash: `#${encodeURIComponent(selectedHost)}`,
+      });
+    }
   }
-  canGoBack.value = step.canGoBack!;
+  canGoBack.value = step.canGoBack;
 };
 
 onMounted(async () => {
-  const resp = await conn.auth.BeginAuth({});
-  authID = resp.authId;
-  authStream = conn.auth.StreamSteps();
-  authStream.eventEmitter.on("open", async () => {
-    authStream!.send({
-      authId: resp.authId,
-    });
-  });
-  authStream!.eventEmitter.on("data", onAuthStep);
-  onAuthStep(
-    await conn.auth.NextStep({
-      authId: resp.authId,
+  const resp = await conn.auth.beginAuth(Empty.create());
+  authID = resp.response.authId;
+  authStream = conn.auth.streamSteps(
+    StreamStepsRequest.create({
+      authId: resp.response.authId,
     })
+  );
+  authStream.response.onMessage(onAuthStep);
+  onAuthStep(
+    await conn.auth.nextStep(
+      NextStepRequest.create({
+        authId: resp.response.authId,
+      })
+    ).response
   );
 });
 
@@ -136,12 +170,11 @@ const allFieldsFilled = computed(() => {
     <h-circular-progress />
   </div>
   <div v-else-if="currentStep === 'choice'" class="w-full">
-    <h3 v-t="`auth.${choiceStep?.title}`" class="text-xl mb-3" />
+    <h3 class="text-xl mb-3">{{ $t(`auth.${choiceStep?.title}`) }}</h3>
     <h-list class="bg-gray-200 dark:bg-harmonydark-700">
       <h-list-item
         v-for="choice in choiceStep.choices || []"
         :key="choice"
-        v-t="`auth.${choice}`"
         @click="selectChoice(choice)"
       />
     </h-list>
@@ -179,7 +212,6 @@ const allFieldsFilled = computed(() => {
       @click="goBack"
     />
     <h-btn
-      v-t="'buttons.done'"
       color="primary"
       :variant="'filled'"
       :disabled="!allFieldsFilled"
