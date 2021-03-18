@@ -2693,6 +2693,11 @@ he@^1.2.0:
   resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
   integrity sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==
 
+hint.css@^2.6.0:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/hint.css/-/hint.css-2.6.0.tgz#cd6bbe25e2bc16a6454765d9559ad7bd035b3cf5"
+  integrity sha512-SnCLQOoPQt4fuHbOOvEL3UZwL0SPFtKMN4YIxAvBTe4oFUtBAT4R2Kk1uk3x5hgN+0xzOb6LFEQf5StbYfNm8w==
+
 hosted-git-info@^2.1.4:
   version "2.8.8"
   resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-2.8.8.tgz#7539bd4bc1e0e0a895815a2e0262420b12858488"

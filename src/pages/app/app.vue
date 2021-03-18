@@ -15,6 +15,7 @@ if (!isLoggedIn()) {
 </script>
 <template>
   <div class="flex h-full w-full">
+    <guild-list />
     <div class="bg-harmonydark-800 p-3">channel list</div>
     <div class="flex flex-col flex-1">
       <div class="flex-1 p-4 overflow-x-auto">
@@ -54,6 +55,5 @@ if (!isLoggedIn()) {
       <div class="bg-harmonydark-700 p-3">Text Input</div>
     </div>
     <div class="bg-harmonydark-800 p-3">member list</div>
-    <guild-list />
   </div>
 </template>

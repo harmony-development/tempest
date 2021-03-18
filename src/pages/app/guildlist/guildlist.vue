@@ -8,11 +8,11 @@ const guildList = computed(() => guildListState.getGuildList() || []);
 
 onMounted(async () => {
   const conn = await homeserverConn();
-  const resp = await conn.chat.GetGuildList({});
+  const resp = await conn.chat.getGuildList({});
   guildListState.setGuildList(
-    resp.guilds.map((g) => ({
-      guildId: g.guildId!,
-      host: g.host!,
+    resp.response.guilds.map((g) => ({
+      guildId: g.guildId,
+      host: g.host,
     }))
   );
 });

@@ -3,6 +3,7 @@ import { ViteSSG } from "vite-ssg";
 import { setupLayouts } from "layouts-generated";
 import App from "./App.vue";
 import { appRoutes } from "~/router";
+import "hint.css";
 
 const routes = setupLayouts(appRoutes);
 

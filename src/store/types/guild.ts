@@ -4,7 +4,7 @@ export interface IGuildInfo {
 }
 
 export interface IGuildData {
-  channels?: number[];
-  members?: number[];
-  roles?: number[];
+  channels?: string[];
+  members?: string[];
+  roles?: string[];
 }

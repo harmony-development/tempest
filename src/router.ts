@@ -20,7 +20,7 @@ export const appRoutes: RouteRecordRaw[] = [
     ],
   },
   {
-    path: "app",
+    path: "app/:guildid?/:channelid?/:messageid?",
     component: appVue,
   },
 ];

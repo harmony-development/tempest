@@ -6,12 +6,8 @@ import { useRouter } from "vue-router";
 import {
   AuthStep,
   AuthStep_Form_FormField,
-  NextStepRequest,
   NextStepRequest_FormFields,
-  StepBackRequest,
-  StreamStepsRequest,
 } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/auth/v1/auth";
-import { Empty } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/google/protobuf/empty";
 import type { AuthStream } from "~/types";
 import { useHashValue } from "~/logics/location";
 import { host, session, userID } from "~/logics/app";
@@ -45,63 +41,57 @@ const conn = new Connection(selectedHost);
 
 const selectChoice = async (c: string) => {
   onAuthStep(
-    await conn.auth.nextStep(
-      NextStepRequest.create({
-        authId: authID,
-        step: {
-          oneofKind: "choice",
-          choice: {
-            choice: c,
-          },
+    await conn.auth.nextStep({
+      authId: authID!,
+      step: {
+        oneofKind: "choice",
+        choice: {
+          choice: c,
         },
-      })
-    ).response
+      },
+    }).response
   );
 };
 
 const goBack = () => {
-  conn.auth.stepBack(
-    StepBackRequest.create({
-      authId: authID,
-    })
-  );
+  conn.auth.stepBack({
+    authId: authID!,
+  });
 };
 
 const doneClicked = async () => {
   try {
     onAuthStep(
-      await conn.auth.nextStep(
-        NextStepRequest.create({
-          authId: authID,
-          step: {
-            oneofKind: "form",
-            form: {
-              fields: formStep.formFieldValues.map((f, i) => {
-                const field: NextStepRequest_FormFields = NextStepRequest_FormFields.create();
-                if (formStep.formFields?.[i].type === "number")
-                  field.field = {
-                    oneofKind: "number",
-                    number: f.toString(),
-                  };
-                else if (
-                  formStep.formFields?.[i].type === "password" ||
-                  formStep.formFields?.[i].type === "new-password"
-                )
-                  field.field = {
-                    oneofKind: "bytes",
-                    bytes: new TextEncoder().encode(f as string),
-                  };
-                else
-                  field.field = {
-                    oneofKind: "string",
-                    string: f as string,
-                  };
-                return field;
-              }),
-            },
+      await conn.auth.nextStep({
+        authId: authID!,
+        step: {
+          oneofKind: "form",
+          form: {
+            fields: formStep.formFieldValues.map((f, i) => {
+              const field: NextStepRequest_FormFields = NextStepRequest_FormFields.create();
+              if (formStep.formFields?.[i].type === "number")
+                field.field = {
+                  oneofKind: "number",
+                  number: f.toString(),
+                };
+              else if (
+                formStep.formFields?.[i].type === "password" ||
+                formStep.formFields?.[i].type === "new-password"
+              )
+                field.field = {
+                  oneofKind: "bytes",
+                  bytes: new TextEncoder().encode(f as string),
+                };
+              else
+                field.field = {
+                  oneofKind: "string",
+                  string: f as string,
+                };
+              return field;
+            }),
           },
-        })
-      ).response
+        },
+      }).response
     );
   } catch (e) {
     const resp = e as Response;
@@ -143,20 +133,19 @@ const onAuthStep = (step: AuthStep) => {
 };
 
 onMounted(async () => {
-  const resp = await conn.auth.beginAuth(Empty.create());
+  const resp = await conn.auth.beginAuth({});
   authID = resp.response.authId;
-  authStream = conn.auth.streamSteps(
-    StreamStepsRequest.create({
-      authId: resp.response.authId,
-    })
-  );
+  authStream = conn.auth.streamSteps({
+    authId: resp.response.authId,
+  });
   authStream.response.onMessage(onAuthStep);
   onAuthStep(
-    await conn.auth.nextStep(
-      NextStepRequest.create({
-        authId: resp.response.authId,
-      })
-    ).response
+    await conn.auth.nextStep({
+      authId: resp.response.authId,
+      step: {
+        oneofKind: undefined,
+      },
+    }).response
   );
 });
 

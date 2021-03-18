@@ -1,4 +1,4 @@
 export interface IGuildEntry {
-  guildId: number;
+  guildId: string;
   host: string;
 }
