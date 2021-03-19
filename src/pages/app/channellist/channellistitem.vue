@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 import { defineProps } from "vue";
+import { useRouter } from "vue-router";
+
 import HListItem from "~/components/HListItem.vue";
 import { useAppRoute } from "~/logics/location";
 import { appState } from "~/store/app";
@@ -9,12 +11,27 @@ const props = defineProps<{
 }>();
 
 const route = useAppRoute();
+const router = useRouter();
 
 const data = appState.getChannel(route.value.host, props.id);
+
+const onClick = () => {
+  router.push({
+    params: {
+      channelid: props.id,
+    },
+    hash: `#${route.value.host}`,
+  });
+};
 </script>
 
 <template>
-  <h-list-item>
+  <h-list-item
+    :selected="props.id === route.channelid"
+    class="rounded"
+    @click="onClick"
+  >
+    <mdi-pound class="mr-1 text-lg" />
     {{ data.name }}
   </h-list-item>
 </template>

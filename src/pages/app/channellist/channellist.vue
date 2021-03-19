@@ -16,6 +16,7 @@ const channelList = computed(
 
 const fetchChannels = async () => {
   if (channelList.value) return;
+  if (!route.value.host) return;
   const conn = await getOrFederate(route.value.host);
   const resp = await conn.chat.getGuildChannels({
     guildId: route.value.guildid as string,
@@ -54,11 +55,13 @@ watch([route], async () => {
 </script>
 
 <template>
-  <h-list class="bg-harmonydark-800 flex-1 p-3">
-    <channel-list-item
-      v-for="channel in channelList"
-      :id="channel"
-      :key="channel"
-    />
-  </h-list>
+  <div class="bg-harmonydark-800 flex-1 p-3">
+    <h-list>
+      <channel-list-item
+        v-for="channel in channelList"
+        :id="channel"
+        :key="channel"
+      />
+    </h-list>
+  </div>
 </template>
