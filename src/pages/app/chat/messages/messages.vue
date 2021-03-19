@@ -19,8 +19,14 @@ onMounted(async () => {
     guildId: route.value.guildid as string,
     beforeMessage: "0",
   });
+  appState.setChannelMessages(
+    route.value.host,
+    route.value.channelid as string,
+    resp.response.messages.map((msg) => msg.messageId)
+  );
 });
 </script>
 <template>
-  <h1 v-for="message in channel.messages" :key="message" />
+  {{ channel.messages?.length || 0 }}
+  <h1 v-for="message in channel.messages" :key="message">hello</h1>
 </template>

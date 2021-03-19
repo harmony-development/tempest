@@ -940,9 +940,9 @@
     "@hapi/hoek" "^8.3.0"
 
 "@harmony-dev/harmony-web-sdk@^5.0.38":
-  version "5.0.38"
-  resolved "https://registry.yarnpkg.com/@harmony-dev/harmony-web-sdk/-/harmony-web-sdk-5.0.38.tgz#0c04e66531d2263165c2ca3409bcb699400efdf4"
-  integrity sha512-PRqmrei0TQxBIbjl4XL1qE81WP/trrL7rBZS6LAwPV8hosfi9PRNI2A3Q0Cp1CZY6lcPIHMXXW8kssMQ/SwopA==
+  version "5.0.40"
+  resolved "https://registry.yarnpkg.com/@harmony-dev/harmony-web-sdk/-/harmony-web-sdk-5.0.40.tgz#a9eb7b62f96cbeb9765cfa2a9805cecede5d0a5b"
+  integrity sha512-Xo8tF3JhrSM8rCQdYeWdjROK0XvRZEcfqKQFzXOmeWuC+KrPJBM68xA/VTZMKJW1xoOFcva5DouBlrpO3z35gw==
   dependencies:
     "@protobuf-ts/plugin" "^1.0.12"
     "@protobuf-ts/runtime" "^1.0.12"

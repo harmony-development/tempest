@@ -50,11 +50,24 @@ class AppState extends Store<IAppState> {
       [channelID: string]: IChannelData;
     }
   ) {
-    const data = this.getHost(host);
-    Object.assign(data.channels, channels);
+    const hostData = this.getHost(host);
+    for (const [channelID, data] of Object.entries(channels)) {
+      hostData.channels[channelID] = {
+        ...hostData.channels[channelID],
+        ...data,
+      };
+    }
+  }
+
+  setChannelMessages(host: string, channelID: string, messages: string[]) {
+    const chan = this.getChannel(host, channelID);
+    chan.messages = messages;
   }
 }
 
 export const appState = new AppState({
   data: {},
 });
+
+// @ts-ignore
+window.appState = appState;

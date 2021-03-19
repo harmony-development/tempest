@@ -1,7 +1,7 @@
 export interface IChannelData {
   name?: string;
   kind?: string;
-  messages?: number[];
+  messages?: string[];
   unread?: boolean;
   reachedTop?: boolean;
   typing?: {
