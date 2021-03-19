@@ -4,6 +4,9 @@ import { onMounted, ref } from "vue";
 import GuildList from "./guildlist/guildlist.vue";
 import ChannelList from "./channellist/channellist.vue";
 import Chat from "./chat/chat.vue";
+import MemberList from "./memberlist/memberlist.vue";
+import HBtn from "~/components/HBtn.vue";
+
 import HDrawer from "~/components/HDrawer.vue";
 import { session, host, isLoggedIn } from "~/logics/app";
 import { getChatStream } from "~/logics/connections";
@@ -34,9 +37,28 @@ if (!isLoggedIn()) {
       <channel-list />
     </h-drawer>
     <div class="flex flex-col flex-1">
+      <div class="flex bg-harmonydark-800 p-2">
+        <h-btn variant="text" icon @click="leftDrawerOpen = !leftDrawerOpen">
+          <mdi-menu />
+        </h-btn>
+        <div class="flex-1" />
+        <h-btn variant="text" icon @click="rightDrawerOpen = !rightDrawerOpen">
+          <ic-round-group />
+        </h-btn>
+      </div>
       <chat />
     </div>
-    <h-drawer v-model="rightDrawerOpen"> </h-drawer>
-    <div class="bg-harmonydark-800 p-3">member list</div>
+    <div id="right-drawer-root" />
+    <h-drawer
+      v-if="mounted"
+      v-model="rightDrawerOpen"
+      class="flex w-3/4 overflow-visible sm:w-1/2 md:w-60"
+      mount-point="#right-drawer-root"
+      right
+    >
+      <div class="bg-harmonydark-800 w-full p-3">
+        <member-list />
+      </div>
+    </h-drawer>
   </div>
 </template>

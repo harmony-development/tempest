@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { defineProps, onMounted, ref } from "vue";
+import { computed, defineProps } from "vue";
 import { parseHMC } from "~/logics/harmonyAPI";
 import { useAppRoute } from "~/logics/location";
 import { appState } from "~/store/app";
@@ -8,15 +8,16 @@ const route = useAppRoute();
 const props = defineProps<{
   userid: string;
 }>();
+const host = appState.getHost(route.value.host);
 
-const src = ref<string | undefined>(undefined);
-
-onMounted(async () => {
-  const user = appState.getUser(route.value.host, props.userid);
-  if (!user?.avatar) return;
-  src.value = parseHMC(user?.avatar, route.value.host);
+const src = computed(() => {
+  const avatar = host.users[props.userid]?.avatar;
+  if (!avatar) return;
+  return parseHMC(avatar, route.value.host);
 });
 </script>
 <template>
-  <img v-if="src" :src="src" />
+  <div class="rounded-full bg-gray-500">
+    <img :src="src" class="rounded-full" />
+  </div>
 </template>

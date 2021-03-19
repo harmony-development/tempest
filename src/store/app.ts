@@ -54,12 +54,17 @@ class AppState extends Store<IAppState> {
   }
 
   getUser(host: string, userID: string) {
-    return this.getHost(host).users[userID];
+    const data = this.getHost(host);
+    return data.users[userID];
   }
 
   setGuildInfo(host: string, guildID: string, info: IGuildInfo) {
     const data = this.getGuild(host, guildID);
     Object.assign(data, info);
+  }
+
+  setGuildMembers(host: string, guildID: string, members: string[]) {
+    this.getGuild(host, guildID).members = members;
   }
 
   setGuildChannels(host: string, guildID: string, channels: string[]) {
@@ -73,7 +78,6 @@ class AppState extends Store<IAppState> {
       [channelID: string]: IChannelData;
     }
   ) {
-    const hostData = this.getHost(host);
     for (const [channelID, data] of Object.entries(channels)) {
       const channel = this.getChannel(host, channelID);
       Object.assign(channel, data);
