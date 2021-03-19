@@ -34,7 +34,6 @@ const fetchChannels = async () => {
       obj[c.channelId] = {
         name: c.channelName,
         kind: "text",
-        messages: [],
         unread: false,
         reachedTop: false,
         typing: {},
@@ -48,8 +47,8 @@ onMounted(async () => {
   await fetchChannels();
 });
 
-watch([route], async () => {
-  console.log("hi");
+watch(route, async (curr, prev) => {
+  if (curr.guildid === prev.guildid && curr.host === prev.host) return;
   await fetchChannels();
 });
 </script>
