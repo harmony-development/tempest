@@ -14,7 +14,7 @@ const value = useVModel(props, "modelValue", emit);
 </script>
 <template>
   <div class="input-parent">
-    <input
+    <textarea
       v-model="value"
       :name="props.name"
       :type="props.type"
@@ -32,11 +32,11 @@ const value = useVModel(props, "modelValue", emit);
 }
 
 .input-label {
-  @apply text-md top-0 origin-0 p-2.5 duration-300 absolute pointer-events-none;
+  @apply text-md top-0 origin-0 p-2.5 duration-300 absolute pointer-events-none dark:text-harmonydark-200;
 }
 
 .input-input {
-  @apply bg-transparent text-md z-1 w-full p-2 mt-2 block appearance-none focus:outline-none pl-3;
+  @apply bg-transparent text-md z-1 w-full p-2 mt-2 block appearance-none focus:outline-none pl-3 resize-none;
 }
 
 .input-parent:focus-within > .input-label,
