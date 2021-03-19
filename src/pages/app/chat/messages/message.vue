@@ -3,6 +3,7 @@ import { computed, defineProps } from "vue";
 import { userID } from "~/logics/app";
 import { useAppRoute } from "~/logics/location";
 import { appState } from "~/store/app";
+import Avatar from "~/components/Avatar.vue";
 
 const route = useAppRoute();
 const props = defineProps<{
@@ -16,6 +17,7 @@ const isOwnMessage = computed(() => message.author === userID.value);
 
 <template>
   <div :class="{ message: true, 'own-msg': isOwnMessage }">
+    <avatar class="h-6 mr-4 w-6" :userid="message?.author" />
     <div :class="{ bubble: true, 'own-bubble': isOwnMessage }">
       <p>{{ message?.content }}</p>
     </div>

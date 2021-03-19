@@ -2,6 +2,7 @@ import { Store } from "./store";
 import { IChannelData } from "./types/channel";
 import { IGuildData, IGuildInfo } from "./types/guild";
 import { IMessageData } from "./types/message";
+import { IUserData } from "./types/user";
 
 interface IAppState {
   data: {
@@ -15,6 +16,9 @@ interface IAppState {
       messages: {
         [messageid: string]: IMessageData;
       };
+      users: {
+        [userid: string]: IUserData;
+      };
     };
   };
 }
@@ -22,7 +26,12 @@ interface IAppState {
 class AppState extends Store<IAppState> {
   getHost(host: string) {
     if (!this.state.data[host])
-      this.state.data[host] = { guilds: {}, channels: {}, messages: {} };
+      this.state.data[host] = {
+        guilds: {},
+        channels: {},
+        messages: {},
+        users: {},
+      };
     return this.state.data[host];
   }
 
@@ -42,6 +51,10 @@ class AppState extends Store<IAppState> {
 
   getMessage(host: string, messageID: string) {
     return this.getHost(host).messages[messageID];
+  }
+
+  getUser(host: string, userID: string) {
+    return this.getHost(host).users[userID];
   }
 
   setGuildInfo(host: string, guildID: string, info: IGuildInfo) {
@@ -80,6 +93,16 @@ class AppState extends Store<IAppState> {
   setChannelMessages(host: string, channelID: string, messages: string[]) {
     const chan = this.getChannel(host, channelID);
     chan.messages = messages;
+  }
+
+  setUserData(
+    host: string,
+    users: {
+      [userid: string]: IUserData;
+    }
+  ) {
+    const hostData = this.getHost(host);
+    Object.assign(hostData.users, users);
   }
 }
 
