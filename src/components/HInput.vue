@@ -29,7 +29,9 @@ const input = ref<HTMLInputElement | undefined>(undefined);
         :type="props.type"
         class="input-input"
         placeholder=" "
-        role="textarea"
+        multiline
+        :rows="2"
+        wrap="hard"
       />
       <input
         v-else
@@ -56,7 +58,7 @@ const input = ref<HTMLInputElement | undefined>(undefined);
 }
 
 .input-input {
-  @apply bg-transparent text-md z-1 w-full p-3 block appearance-none focus:outline-none pl-3 resize-none whitespace-pre;
+  @apply bg-transparent text-md z-1 w-full p-3 block appearance-none focus:outline-none pl-3 resize-none break-words;
 }
 
 .input-parent:focus-within > .input-label,

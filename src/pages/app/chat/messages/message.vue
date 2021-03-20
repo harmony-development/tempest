@@ -47,7 +47,7 @@ const displayDate = computed(() => convertDate(message.value.createdAt));
   </div>
 </template>
 
-<style lang="postcss">
+<style lang="postcss" scoped>
 .menu {
   @apply invisible;
 }

@@ -64,13 +64,13 @@ if (!isLoggedIn()) {
         </h-btn>
       </div>
       <chat v-if="route.guildid && route.host" />
-      <div v-else class="flex-1 flex justify-center items-center flex-col">
+      <div v-else class="flex flex-col flex-1 justify-center items-center">
         <ic-round-group
-          class="text-6xl rounded-full bg-gray-400 bg-opacity-30 p-3 mb-4"
+          class="rounded-full bg-gray-400 bg-opacity-30 mb-4 p-3 text-6xl"
         />
         <h1
           v-t="'app.no-guild-selected'"
-          class="text-md lg:text-xl text-blue-200"
+          class="text-md text-blue-200 lg:text-xl"
         ></h1>
       </div>
     </div>

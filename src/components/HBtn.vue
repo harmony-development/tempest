@@ -81,6 +81,14 @@ const buttonClasses = {
   }
 }
 
+.plain {
+  &.text {
+    &:hover {
+      @apply bg-white bg-opacity-10;
+    }
+  }
+}
+
 @variants disabled {
   .btn.text {
     @apply text-gray-500;

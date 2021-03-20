@@ -3,13 +3,16 @@ import { SendMessageRequest } from "@harmony-dev/harmony-web-sdk/dist/lib/protoc
 import { onStartTyping } from "@vueuse/core";
 
 import { ref } from "vue";
+import AttachmentBtn from "./AttachmentBtn.vue";
+import type { IAttachment } from "./types";
+import AttachmentsList from "./AttachmentsList.vue";
 import HInput from "~/components/HInput.vue";
-import HBtn from "~/components/HBtn.vue";
 import { getOrFederate } from "~/logics/connections";
 import { useAppRoute } from "~/logics/location";
 
 const content = ref("");
 const focus = ref(false);
+const attachments = ref<IAttachment[]>([]);
 const route = useAppRoute();
 
 const onKeyDown = async (ev: KeyboardEvent) => {
@@ -32,18 +35,20 @@ onStartTyping(() => {
 });
 </script>
 <template>
-  <h-input
-    ref="input"
-    v-model="content"
-    class="bg-harmonydark-700"
-    label="Send Message"
-    :focus="focus"
-    @keydown="onKeyDown"
-  >
-    <template #pre-input>
-      <h-btn class="ml-2" icon variant="text">
-        <mdi-image />
-      </h-btn>
-    </template>
-  </h-input>
+  <div class="flex flex-col">
+    <attachments-list v-model="attachments" />
+    <h-input
+      ref="input"
+      v-model="content"
+      class="bg-harmonydark-700"
+      label="Send Message"
+      :focus="focus"
+      multiline
+      @keydown="onKeyDown"
+    >
+      <template #pre-input>
+        <attachment-btn v-model="attachments" />
+      </template>
+    </h-input>
+  </div>
 </template>
