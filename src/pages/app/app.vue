@@ -10,8 +10,10 @@ import HBtn from "~/components/HBtn.vue";
 import HDrawer from "~/components/HDrawer.vue";
 import { session, host, isLoggedIn } from "~/logics/app";
 import { getStream } from "~/logics/connections";
+import { useAppRoute } from "~/logics/location";
 
 const router = useRouter();
+const route = useAppRoute();
 const leftDrawerOpen = ref(false);
 const rightDrawerOpen = ref(false);
 const mounted = ref(false);
@@ -36,17 +38,17 @@ if (!isLoggedIn()) {
     <h-drawer
       v-if="mounted"
       v-model="leftDrawerOpen"
-      class="flex w-3/4 overflow-visible sm:w-1/2 md:w-80"
+      class="flex w-3/4 overflow-visible sm:w-1/2 md:w-70"
     >
       <guild-list />
-      <channel-list />
+      <channel-list v-if="route.guildid && route.host" />
     </h-drawer>
     <div class="flex flex-col flex-1">
       <div class="flex bg-harmonydark-800 p-2">
         <h-btn
           variant="text"
           icon
-          class="lg:invisible"
+          class="md:invisible"
           @click="leftDrawerOpen = !leftDrawerOpen"
         >
           <mdi-menu />
@@ -55,25 +57,32 @@ if (!isLoggedIn()) {
         <h-btn
           variant="text"
           icon
-          class="lg:invisible"
+          class="md:invisible"
           @click="rightDrawerOpen = !rightDrawerOpen"
         >
           <ic-round-group />
         </h-btn>
       </div>
-      <chat />
+      <chat v-if="route.guildid && route.host" />
+      <div v-else class="flex-1 flex justify-center items-center flex-col">
+        <ic-round-group
+          class="text-6xl rounded-full bg-gray-400 bg-opacity-30 p-3 mb-4"
+        />
+        <h1
+          v-t="'app.no-guild-selected'"
+          class="text-md lg:text-xl text-blue-200"
+        ></h1>
+      </div>
     </div>
     <div id="right-drawer-root" />
     <h-drawer
       v-if="mounted"
       v-model="rightDrawerOpen"
-      class="flex w-3/4 overflow-visible sm:w-1/2 md:w-60"
+      class="flex flex-col w-3/4 overflow-visible sm:w-1/2 md:w-60"
       mount-point="#right-drawer-root"
       right
     >
-      <div class="bg-harmonydark-800 w-full p-3">
-        <member-list />
-      </div>
+      <member-list />
     </h-drawer>
   </div>
 </template>

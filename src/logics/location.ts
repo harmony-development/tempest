@@ -11,6 +11,6 @@ export const useAppRoute = () => {
   return computed(() => ({
     guildid: route.params.guildid,
     channelid: route.params.channelid,
-    host: route.hash.substr(1),
+    host: decodeURIComponent(route.hash.substr(1)),
   }));
 };

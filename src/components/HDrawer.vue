@@ -38,11 +38,11 @@ const setOpen = (val: boolean) => {
 
 <style lang="postcss" scoped>
 .overlay {
-  @apply fixed w-full h-full top-0 left-0 z-10 lg:z-auto overflow-auto bg-gray-500 bg-opacity-10 lg:hidden;
+  @apply fixed w-full h-full top-0 left-0 z-10 md:z-auto overflow-auto bg-gray-500 bg-opacity-10 md:hidden;
 }
 
 .drawer {
-  @apply h-full bg-harmonydark-700 transform fixed lg:static overflow-auto ease-in-out transition duration-150 z-30 lg:z-auto;
+  @apply h-full bg-harmonydark-700 transform fixed md:static overflow-auto ease-in-out transition duration-150 z-30 md:z-auto;
 
   &.left {
     @apply top-0 left-0;
@@ -54,10 +54,10 @@ const setOpen = (val: boolean) => {
 }
 
 .closed.left {
-  @apply -translate-x-full lg:transform-none;
+  @apply -translate-x-full md:transform-none;
 }
 
 .closed.right {
-  @apply translate-x-200 lg:transform-none;
+  @apply translate-x-200 md:transform-none;
 }
 </style>

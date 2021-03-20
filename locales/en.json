@@ -1,4 +1,8 @@
 {
+  "app": {
+    "no-channel-selected": "Select a channel to talk in",
+    "no-guild-selected": "Select a guild to start chatting"
+  },
   "app-name": "Tempest",
   "auth": {
     "add-server": "Add Server",

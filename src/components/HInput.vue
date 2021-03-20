@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useVModel } from "@vueuse/core";
 
-import { defineProps, defineEmit, watch, ref } from "vue";
+import { defineProps, defineEmit, ref } from "vue";
 
 const emit = defineEmit(["update:modelValue"]);
 const props = defineProps<{
@@ -10,6 +10,7 @@ const props = defineProps<{
   type?: string;
   modelValue?: string;
   focus?: boolean;
+  multiline?: boolean;
 }>();
 const value = useVModel(props, "modelValue", emit);
 const input = ref<HTMLInputElement | undefined>(undefined);
@@ -17,6 +18,16 @@ const input = ref<HTMLInputElement | undefined>(undefined);
 <template>
   <div class="input-parent">
     <textarea
+      v-if="props.multiline"
+      ref="input"
+      v-model="value"
+      :name="props.name"
+      :type="props.type"
+      class="input-input"
+      placeholder=" "
+    />
+    <input
+      v-else
       ref="input"
       v-model="value"
       :name="props.name"
