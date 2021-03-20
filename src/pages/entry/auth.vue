@@ -37,7 +37,7 @@ const formStep = reactive<{
 let authStream: AuthStream | undefined;
 let authID: string | undefined;
 
-const conn = new Connection(selectedHost);
+const conn = new Connection(selectedHost.value);
 
 const selectChoice = async (c: string) => {
   onAuthStep(

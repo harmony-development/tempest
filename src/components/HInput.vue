@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useVModel } from "@vueuse/core";
 
-import { defineProps, defineEmit } from "vue";
+import { defineProps, defineEmit, watch, ref } from "vue";
 
 const emit = defineEmit(["update:modelValue"]);
 const props = defineProps<{
@@ -9,12 +9,15 @@ const props = defineProps<{
   name?: string;
   type?: string;
   modelValue?: string;
+  focus?: boolean;
 }>();
 const value = useVModel(props, "modelValue", emit);
+const input = ref<HTMLInputElement | undefined>(undefined);
 </script>
 <template>
   <div class="input-parent">
     <textarea
+      ref="input"
       v-model="value"
       :name="props.name"
       :type="props.type"

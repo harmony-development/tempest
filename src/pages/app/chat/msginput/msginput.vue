@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { SendMessageRequest } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/chat/v1/messages";
+import { onStartTyping } from "@vueuse/core";
 
 import { ref } from "vue";
 import HInput from "~/components/HInput.vue";
@@ -7,6 +8,7 @@ import { getOrFederate } from "~/logics/connections";
 import { useAppRoute } from "~/logics/location";
 
 const content = ref("");
+const focus = ref(false);
 const route = useAppRoute();
 
 const onKeyDown = async (ev: KeyboardEvent) => {
@@ -23,12 +25,18 @@ const onKeyDown = async (ev: KeyboardEvent) => {
     content.value = "";
   }
 };
+
+onStartTyping(() => {
+  focus.value = !focus.value;
+});
 </script>
 <template>
   <h-input
+    ref="input"
     v-model="content"
     class="bg-harmonydark-700"
     label="Send Message"
+    :focus="focus"
     @keydown="onKeyDown"
   />
 </template>

@@ -4,6 +4,7 @@ import { userID } from "~/logics/app";
 import { useAppRoute } from "~/logics/location";
 import { appState } from "~/store/app";
 import Avatar from "~/components/Avatar.vue";
+import { convertDate } from "~/logics/time";
 
 const route = useAppRoute();
 const props = defineProps<{
@@ -17,6 +18,7 @@ const user = computed(() =>
   appState.getUser(route.value.host, message.value.author)
 );
 const isOwnMessage = computed(() => message.value.author === userID.value);
+const displayDate = computed(() => convertDate(message.value.createdAt));
 </script>
 
 <template>
@@ -31,6 +33,7 @@ const isOwnMessage = computed(() => message.value.author === userID.value);
         {{ user?.username || message.author }}
       </p>
       <p>{{ message?.content }}</p>
+      <p class="mt-1 text-right text-sm text-gray-300">{{ displayDate }}</p>
     </div>
     <avatar
       v-if="isOwnMessage"
@@ -50,10 +53,10 @@ const isOwnMessage = computed(() => message.value.author === userID.value);
 }
 
 .bubble {
-  @apply rounded bg-green-500 min-h-12 max-w-full sm:max-w-3/4 p-4 pt-3 items-center break-all whitespace-pre-line;
+  @apply rounded bg-green-700 min-h-12 max-w-full sm:max-w-3/4 px-4 py-3 items-center break-all whitespace-pre-line;
 }
 
 .own-bubble {
-  @apply bg-blue-500;
+  @apply bg-blue-700;
 }
 </style>

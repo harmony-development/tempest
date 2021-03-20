@@ -9,7 +9,7 @@ import HBtn from "~/components/HBtn.vue";
 
 import HDrawer from "~/components/HDrawer.vue";
 import { session, host, isLoggedIn } from "~/logics/app";
-import { getChatStream } from "~/logics/connections";
+import { getStream } from "~/logics/connections";
 
 const router = useRouter();
 const leftDrawerOpen = ref(false);
@@ -21,8 +21,13 @@ onMounted(() => (mounted.value = true));
 if (!isLoggedIn()) {
   router.push("/entry/serverselect");
 } else {
-  const stream = await getChatStream(host.value, session.value);
-  console.log(stream);
+  const stream = await getStream(host.value, session.value);
+  stream.request.send({
+    request: {
+      oneofKind: "subscribeToHomeserverEvents",
+      subscribeToHomeserverEvents: {},
+    },
+  });
 }
 </script>
 <template>
@@ -38,11 +43,21 @@ if (!isLoggedIn()) {
     </h-drawer>
     <div class="flex flex-col flex-1">
       <div class="flex bg-harmonydark-800 p-2">
-        <h-btn variant="text" icon @click="leftDrawerOpen = !leftDrawerOpen">
+        <h-btn
+          variant="text"
+          icon
+          class="lg:invisible"
+          @click="leftDrawerOpen = !leftDrawerOpen"
+        >
           <mdi-menu />
         </h-btn>
         <div class="flex-1" />
-        <h-btn variant="text" icon @click="rightDrawerOpen = !rightDrawerOpen">
+        <h-btn
+          variant="text"
+          icon
+          class="lg:invisible"
+          @click="rightDrawerOpen = !rightDrawerOpen"
+        >
           <ic-round-group />
         </h-btn>
       </div>

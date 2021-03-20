@@ -94,9 +94,25 @@ class AppState extends Store<IAppState> {
     Object.assign(hostData.messages, messages);
   }
 
-  setChannelMessages(host: string, channelID: string, messages: string[]) {
+  setChannelMessages(
+    host: string,
+    channelID: string,
+    messages: string[],
+    prepend?: boolean
+  ) {
     const chan = this.getChannel(host, channelID);
-    chan.messages = messages;
+    if (prepend) chan.messages?.unshift(...messages);
+    else chan.messages = messages;
+  }
+
+  addMessage(
+    host: string,
+    channelID: string,
+    messageID: string,
+    data: IMessageData
+  ) {
+    this.getHost(host).messages[messageID] = data;
+    this.getChannel(host, channelID).messages?.push(messageID);
   }
 
   setUserData(

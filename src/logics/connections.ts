@@ -13,10 +13,6 @@ const pendingFederations: {
   [host: string]: Promise<Connection>;
 } = {};
 
-export const newConnection = (host: string) => {
-  return connections[host] || (connections[host] = new Connection(host));
-};
-
 export const getOrFederate = (targetHost: string) => {
   if (connections[targetHost]) return connections[targetHost];
   if (pendingFederations[targetHost]) return pendingFederations[targetHost];
@@ -42,7 +38,7 @@ export const getOrFederate = (targetHost: string) => {
   return pendingFederations[targetHost];
 };
 
-export const getChatStream = async (host: string, session?: string) => {
+export const getStream = async (host: string, session?: string) => {
   if (chatStreams[host]) return chatStreams[host];
   const conn = await getOrFederate(host);
   if (session) {
@@ -50,7 +46,7 @@ export const getChatStream = async (host: string, session?: string) => {
   }
   const stream = conn.chat.streamEvents();
   chatStreams[host] = stream;
-  stream.response.onMessage(eventStreamHandler(stream));
+  stream.response.onMessage(eventStreamHandler(host, stream));
   stream.response.onComplete(closeStreamHandler(stream));
   return stream;
 };
