@@ -6,14 +6,18 @@ import { appState } from "~/store/app";
 
 const route = useAppRoute();
 const props = defineProps<{
-  userid: string;
+  userid?: string;
+  uri?: string;
 }>();
 const host = appState.getHost(route.value.host);
 
 const src = computed(() => {
-  const avatar = host.users[props.userid]?.avatar;
-  if (!avatar) return;
-  return parseHMC(avatar, route.value.host);
+  if (props.uri) return parseHMC(props.uri, route.value.host);
+  if (props.userid) {
+    const avatar = host.users[props.userid]?.avatar;
+    if (!avatar) return;
+    return parseHMC(avatar, route.value.host);
+  }
 });
 </script>
 <template>

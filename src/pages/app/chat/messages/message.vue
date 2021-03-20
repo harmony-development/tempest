@@ -27,10 +27,14 @@ const displayDate = computed(() => convertDate(message.value.createdAt));
     <avatar
       :class="{ avatar: true, 'own-avatar': isOwnMessage }"
       :userid="message?.author"
+      :uri="message?.override?.avatar"
     />
     <div :class="{ bubble: true, 'own-bubble': isOwnMessage }">
       <p class="text-sm text-gray-200">
-        {{ user?.username || message.author }}
+        <span :title="`Bridged by ${user?.username}`">
+          <mdi-link v-if="message?.override?.reason === 'bridge'" />
+        </span>
+        {{ message.override?.username || user?.username || message.author }}
       </p>
       <p>{{ message?.content }}</p>
       <p class="mt-1 text-right text-sm text-gray-300">{{ displayDate }}</p>

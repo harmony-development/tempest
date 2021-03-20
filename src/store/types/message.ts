@@ -4,4 +4,9 @@ export interface IMessageData {
   editedAt: number;
   content: string;
   pending: boolean;
+  override: {
+    username?: string;
+    avatar?: string;
+    reason?: string;
+  };
 }

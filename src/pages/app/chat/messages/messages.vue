@@ -42,6 +42,11 @@ const fetchMessages = async (msgID?: string) => {
         editedAt: Number(m.editedAt?.seconds),
         content: m.content,
         pending: false,
+        override: {
+          username: m.overrides?.name,
+          avatar: m.overrides?.avatar,
+          reason: m.overrides?.reason.oneofKind,
+        },
       };
       return obj;
     }, {})
