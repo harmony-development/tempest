@@ -5,6 +5,7 @@ import { useAppRoute } from "~/logics/location";
 import { appState } from "~/store/app";
 import Avatar from "~/components/Avatar.vue";
 import { convertDate } from "~/logics/time";
+import HBtn from "~/components/HBtn.vue";
 
 const route = useAppRoute();
 const props = defineProps<{
@@ -24,8 +25,7 @@ const displayDate = computed(() => convertDate(message.value.createdAt));
 <template>
   <div :class="{ message: true, 'own-msg': isOwnMessage }">
     <avatar
-      v-if="!isOwnMessage"
-      class="h-6 mr-4 w-6"
+      :class="{ avatar: true, 'own-avatar': isOwnMessage }"
       :userid="message?.author"
     />
     <div :class="{ bubble: true, 'own-bubble': isOwnMessage }">
@@ -35,21 +35,28 @@ const displayDate = computed(() => convertDate(message.value.createdAt));
       <p>{{ message?.content }}</p>
       <p class="mt-1 text-right text-sm text-gray-300">{{ displayDate }}</p>
     </div>
-    <avatar
-      v-if="isOwnMessage"
-      class="h-6 ml-4 w-6"
-      :userid="message?.author"
-    />
+    <div class="h-full menu">
+      <h-btn variant="text" icon dense class="mx-1">
+        <mdi-dots-vertical />
+      </h-btn>
+    </div>
   </div>
 </template>
 
 <style lang="postcss">
+.menu {
+  @apply invisible;
+}
+
 .message {
   @apply flex mb-4;
+  &:hover > .menu {
+    @apply visible;
+  }
 }
 
 .own-msg {
-  @apply justify-end;
+  @apply flex-row-reverse;
 }
 
 .bubble {
@@ -58,5 +65,17 @@ const displayDate = computed(() => convertDate(message.value.createdAt));
 
 .own-bubble {
   @apply bg-blue-700;
+}
+
+.avatar {
+  @apply h-6 w-6;
+}
+
+.avatar:not(.own-avatar) {
+  @apply mr-4;
+}
+
+.own-avatar {
+  @apply ml-4;
 }
 </style>

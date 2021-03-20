@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { defineProps } from "vue";
 
-const { variant, color, icon, raised } = defineProps<{
+const { variant, color, icon, raised, dense } = defineProps<{
   variant: "text" | "filled" | "outlined";
   color?: "primary" | "secondary";
   icon?: boolean;
   raised?: boolean;
+  dense?: boolean;
 }>();
 
 const buttonClasses = {
@@ -14,6 +15,7 @@ const buttonClasses = {
   [color || "plain"]: true,
   icon,
   raised,
+  dense,
 };
 </script>
 <template>
@@ -31,7 +33,11 @@ const buttonClasses = {
 }
 
 .icon {
-  @apply rounded-full px-3 py-3;
+  @apply rounded-full p-3;
+
+  &.dense {
+    @apply p-1;
+  }
 }
 
 .raised {
