@@ -4,6 +4,7 @@ import { onStartTyping } from "@vueuse/core";
 
 import { ref } from "vue";
 import HInput from "~/components/HInput.vue";
+import HBtn from "~/components/HBtn.vue";
 import { getOrFederate } from "~/logics/connections";
 import { useAppRoute } from "~/logics/location";
 
@@ -38,5 +39,11 @@ onStartTyping(() => {
     label="Send Message"
     :focus="focus"
     @keydown="onKeyDown"
-  />
+  >
+    <template #pre-input>
+      <h-btn class="ml-2" icon variant="text">
+        <mdi-image />
+      </h-btn>
+    </template>
+  </h-input>
 </template>
