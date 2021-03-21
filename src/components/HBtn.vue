@@ -56,18 +56,18 @@ const buttonClasses = {
 
 .primary {
   &.filled {
-    @apply bg-primary-300 text-white;
+    @apply bg-primary-400 text-white;
     &:hover {
-      @apply bg-primary-200;
+      @apply bg-primary-300;
     }
   }
   &.outlined {
-    @apply border-primary-300 border-1 text-primary-300;
+    @apply border-primary-400 border-1 text-primary-400;
   }
   &.text {
-    @apply text-primary-300;
+    @apply text-primary-400;
     &:hover {
-      @apply bg-primary-400 bg-opacity-10;
+      @apply bg-primary-300 bg-opacity-10;
     }
   }
 }

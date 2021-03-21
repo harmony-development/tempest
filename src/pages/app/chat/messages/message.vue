@@ -93,6 +93,7 @@ const editStart = async () => {
         class="bg-white border-white bg-opacity-10"
         :focus="editFocus"
         @keydown="onEditKeyDown"
+        @focusout="editing = false"
       />
       <attachment
         v-for="a in message.attachments"

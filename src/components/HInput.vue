@@ -11,6 +11,7 @@ const props = defineProps<{
   modelValue?: string;
   focus?: boolean;
   multiline?: boolean;
+  noBorder?: boolean;
 }>();
 const value = useVModel(props, "modelValue", emit);
 const input = ref<HTMLInputElement | undefined>(undefined);
@@ -24,7 +25,7 @@ watch(
 );
 </script>
 <template>
-  <div class="input-parent">
+  <div :class="{ 'input-parent': true, border: !props.noBorder }">
     <div>
       <slot name="pre-input" />
     </div>
@@ -59,6 +60,10 @@ watch(
 .input-parent {
   transition: 0.1s linear;
   @apply flex items-center outline border-2 relative rounded focus-within:border-blue-300;
+}
+
+.border {
+  @apply border-harmonydark-500;
 }
 
 .input-label {

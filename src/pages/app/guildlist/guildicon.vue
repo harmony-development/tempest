@@ -60,6 +60,7 @@ const onClick = () => {
       :src="data.picture"
       class="rounded-full object-cover outline-none h-14 w-14 inline"
       draggable="false"
+      :alt="data.name"
     />
   </button>
 </template>
