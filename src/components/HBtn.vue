@@ -26,7 +26,7 @@ const buttonClasses = {
 
 <style lang="postcss" scoped>
 .btn {
-  @apply px-4 py-2 rounded focus:outline-none transition duration-200 ease-in-out flex justify-center items-center cursor-pointer;
+  @apply px-4 py-2 rounded focus:outline-none transition duration-200 ease-in-out flex justify-center items-center cursor-pointer w-max;
   &:disabled {
     @apply pointer-events-none;
   }

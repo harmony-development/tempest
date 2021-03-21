@@ -6,6 +6,10 @@ import appVue from "./pages/app/app.vue";
 
 export const appRoutes: RouteRecordRaw[] = [
   {
+    path: "/",
+    redirect: "/entry/serverselect",
+  },
+  {
     path: "entry",
     component: entryVue,
     children: [
