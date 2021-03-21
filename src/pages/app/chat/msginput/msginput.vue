@@ -18,7 +18,7 @@ const route = useAppRoute();
 const uploadFile = async (f: File, session: string) => {
   const url = new URL(`${route.value.host}/_harmony/media/upload`);
   url.searchParams.set("filename", f.name);
-  url.searchParams.set("contentType", f.type);
+  url.searchParams.set("contentType", f.type || "text/plain");
   const data = new FormData();
   data.set("file", f);
   const headers = new Headers();

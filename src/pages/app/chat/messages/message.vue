@@ -1,17 +1,19 @@
 <script lang="ts" setup>
-import { computed, defineProps } from "vue";
+import { computed, defineProps, ref } from "vue";
+import Attachment from "./Attachment.vue";
 import { userID } from "~/logics/app";
 import { useAppRoute } from "~/logics/location";
 import { appState } from "~/store/app";
 import HImage from "~/components/HImage.vue";
 import { convertDate } from "~/logics/time";
 import HBtn from "~/components/HBtn.vue";
+import { getOrFederate } from "~/logics/connections";
 
 const route = useAppRoute();
 const props = defineProps<{
   messageid: string;
 }>();
-
+const menuOpen = ref(false);
 const message = computed(() =>
   appState.getMessage(route.value.host, props.messageid)
 );
@@ -20,6 +22,15 @@ const user = computed(() =>
 );
 const isOwnMessage = computed(() => message.value.author === userID.value);
 const displayDate = computed(() => convertDate(message.value.createdAt));
+
+const deleteMessage = async () => {
+  const conn = await getOrFederate(route.value.host);
+  await conn.chat.deleteMessage({
+    guildId: route.value.guildid as string,
+    channelId: route.value.channelid as string,
+    messageId: props.messageid,
+  });
+};
 </script>
 
 <template>
@@ -38,13 +49,32 @@ const displayDate = computed(() => convertDate(message.value.createdAt));
         {{ message.override?.username || user?.username || message.author }}
       </p>
       <p>{{ message?.content }}</p>
-      <h-image v-for="a in message.attachments" :key="a.id" :uri="a.id" />
+      <attachment
+        v-for="a in message.attachments"
+        :key="a.id"
+        :attachment="a"
+        class="mt-2"
+      />
       <p class="mt-1 text-right text-sm text-gray-300">{{ displayDate }}</p>
     </div>
     <div class="h-full menu">
-      <h-btn variant="text" icon dense class="mx-1">
-        <mdi-dots-vertical />
-      </h-btn>
+      <h-menu v-model="menuOpen">
+        <template #activator="{ toggle }">
+          <h-btn variant="text" icon dense class="mx-1" @click="toggle">
+            <mdi-dots-vertical />
+          </h-btn>
+        </template>
+        <h-list class="bg-black">
+          <h-list-item v-if="isOwnMessage">
+            <mdi-pencil class="mr-1" />
+            Edit Message
+          </h-list-item>
+          <h-list-item class="text-red-400" @click="deleteMessage">
+            <mdi-delete class="mr-1" />
+            Delete Message
+          </h-list-item>
+        </h-list>
+      </h-menu>
     </div>
   </div>
 </template>

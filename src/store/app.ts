@@ -115,6 +115,12 @@ class AppState extends Store<IAppState> {
     this.getChannel(host, channelID).messages?.push(messageID);
   }
 
+  deleteMessage(host: string, channelID: string, messageID: string) {
+    delete this.getHost(host).messages[messageID];
+    const msgs = this.getChannel(host, channelID).messages;
+    msgs?.splice(msgs.indexOf(messageID));
+  }
+
   setUserData(
     host: string,
     users: {

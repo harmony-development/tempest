@@ -19,14 +19,14 @@ const buttonClasses = {
 };
 </script>
 <template>
-  <button v-wave :class="buttonClasses">
+  <a v-wave :class="buttonClasses">
     <slot />
-  </button>
+  </a>
 </template>
 
 <style lang="postcss" scoped>
 .btn {
-  @apply px-4 py-2 rounded focus:outline-none transition duration-200 ease-in-out flex justify-center items-center;
+  @apply px-4 py-2 rounded focus:outline-none transition duration-200 ease-in-out flex justify-center items-center cursor-pointer;
   &:disabled {
     @apply pointer-events-none;
   }

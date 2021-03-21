@@ -5,7 +5,6 @@ import { ChatStream } from "~/types";
 export const eventStreamHandler = (host: string, stream: ChatStream) => {
   console.log("h");
   return (ev: Event) => {
-    console.log("HI");
     switch (ev.event.oneofKind) {
       case "sentMessage": {
         const msg = ev.event.sentMessage.message;
@@ -21,8 +20,17 @@ export const eventStreamHandler = (host: string, stream: ChatStream) => {
               avatar: msg.overrides?.avatar,
               username: msg.overrides?.name,
             },
+            attachments: msg.attachments,
           });
         }
+        break;
+      }
+      case "deletedMessage": {
+        appState.deleteMessage(
+          host,
+          ev.event.deletedMessage.channelId,
+          ev.event.deletedMessage.messageId
+        );
       }
     }
   };
