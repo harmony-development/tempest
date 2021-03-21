@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useVModel } from "@vueuse/core";
 
-import { defineProps, defineEmit, ref } from "vue";
+import { defineProps, defineEmit, ref, watch } from "vue";
 
 const emit = defineEmit(["update:modelValue"]);
 const props = defineProps<{
@@ -14,6 +14,13 @@ const props = defineProps<{
 }>();
 const value = useVModel(props, "modelValue", emit);
 const input = ref<HTMLInputElement | undefined>(undefined);
+
+watch(
+  () => props.focus,
+  () => {
+    input.value?.focus();
+  }
+);
 </script>
 <template>
   <div class="input-parent">
@@ -50,7 +57,7 @@ const input = ref<HTMLInputElement | undefined>(undefined);
 <style lang="postcss" scoped>
 .input-parent {
   transition: 0.1s linear;
-  @apply flex items-center outline border-2 relative border-gray-300 dark:border-harmonydark-500 rounded focus-within:border-blue-300;
+  @apply flex items-center outline border-2 relative rounded focus-within:border-blue-300;
 }
 
 .input-label {

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { computed, defineProps, ref } from "vue";
+import { computed, defineProps, nextTick, ref } from "vue";
+import { UpdateMessageRequest } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/chat/v1/messages";
 import Attachment from "./Attachment.vue";
 import { userID } from "~/logics/app";
 import { useAppRoute } from "~/logics/location";
@@ -7,6 +8,7 @@ import { appState } from "~/store/app";
 import HImage from "~/components/HImage.vue";
 import { convertDate } from "~/logics/time";
 import HBtn from "~/components/HBtn.vue";
+import HInput from "~/components/HInput.vue";
 import { getOrFederate } from "~/logics/connections";
 
 const route = useAppRoute();
@@ -14,6 +16,9 @@ const props = defineProps<{
   messageid: string;
 }>();
 const menuOpen = ref(false);
+const editing = ref(false);
+const editText = ref("");
+const editFocus = ref(false);
 const message = computed(() =>
   appState.getMessage(route.value.host, props.messageid)
 );
@@ -30,6 +35,38 @@ const deleteMessage = async () => {
     channelId: route.value.channelid as string,
     messageId: props.messageid,
   });
+};
+
+const editMessage = async (content: string) => {
+  const conn = await getOrFederate(route.value.host);
+  await conn.chat.updateMessage(
+    UpdateMessageRequest.create({
+      guildId: route.value.guildid as string,
+      channelId: route.value.channelid as string,
+      messageId: props.messageid,
+      content,
+      updateContent: true,
+    })
+  );
+};
+
+const onEditKeyDown = async (ev: KeyboardEvent) => {
+  if (ev.key === "Enter" && !ev.shiftKey) {
+    ev.preventDefault();
+    editMessage(editText.value);
+    editing.value = false;
+  }
+  if (ev.key === "Escape") {
+    ev.preventDefault();
+    editing.value = false;
+  }
+};
+
+const editStart = async () => {
+  editing.value = true;
+  editText.value = message.value.content;
+  await nextTick();
+  editFocus.value = !editFocus.value;
 };
 </script>
 
@@ -48,7 +85,15 @@ const deleteMessage = async () => {
         </span>
         {{ message.override?.username || user?.username || message.author }}
       </p>
-      <p>{{ message?.content }}</p>
+      <p v-if="!editing">{{ message?.content }}</p>
+      <h-input
+        v-if="editing"
+        v-model="editText"
+        multiline
+        class="bg-white border-white bg-opacity-10"
+        :focus="editFocus"
+        @keydown="onEditKeyDown"
+      />
       <attachment
         v-for="a in message.attachments"
         :key="a.id"
@@ -64,8 +109,8 @@ const deleteMessage = async () => {
             <mdi-dots-vertical />
           </h-btn>
         </template>
-        <h-list class="bg-black">
-          <h-list-item v-if="isOwnMessage">
+        <h-list class="bg-black" @click="menuOpen = false">
+          <h-list-item v-if="isOwnMessage" @click="editStart">
             <mdi-pencil class="mr-1" />
             Edit Message
           </h-list-item>

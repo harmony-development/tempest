@@ -31,6 +31,22 @@ export const eventStreamHandler = (host: string, stream: ChatStream) => {
           ev.event.deletedMessage.channelId,
           ev.event.deletedMessage.messageId
         );
+        break;
+      }
+      case "editedMessage": {
+        const edited = ev.event.editedMessage;
+        appState.updateMessage(host, edited.messageId, {
+          ...(edited.updateContent && { content: edited.content }),
+          ...(edited.updateAttachments && { attachments: edited.attachments }),
+          ...(edited.overrides && {
+            override: {
+              username: edited.overrides.name,
+              reason: edited.overrides.reason.oneofKind,
+              avatar: edited.overrides.avatar,
+            },
+          }),
+          editedAt: +edited.editedAt!.seconds,
+        });
       }
     }
   };

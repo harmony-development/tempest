@@ -78,7 +78,7 @@ onStartTyping(() => {
     <h-input
       ref="input"
       v-model="content"
-      class="bg-harmonydark-700"
+      class="bg-harmonydark-700 border-harmonydark-800"
       label="Send Message"
       :focus="focus"
       multiline

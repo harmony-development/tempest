@@ -121,6 +121,14 @@ class AppState extends Store<IAppState> {
     msgs?.splice(msgs.indexOf(messageID));
   }
 
+  updateMessage(
+    host: string,
+    messageID: string,
+    messageData: Partial<IMessageData>
+  ) {
+    Object.assign(this.getHost(host).messages[messageID], messageData);
+  }
+
   setUserData(
     host: string,
     users: {
