@@ -18,7 +18,8 @@ const input = ref<HTMLInputElement | undefined>(undefined);
 watch(
   () => props.focus,
   () => {
-    input.value?.focus();
+    if (!input.value) return;
+    input.value.focus();
   }
 );
 </script>

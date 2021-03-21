@@ -76,7 +76,6 @@ onStartTyping(() => {
   <div class="flex flex-col">
     <attachments-list v-model="attachments" />
     <h-input
-      ref="input"
       v-model="content"
       class="bg-harmonydark-700 border-harmonydark-800"
       label="Send Message"
