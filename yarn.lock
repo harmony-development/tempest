@@ -3526,6 +3526,11 @@ parse5@6.0.1:
   resolved "https://registry.yarnpkg.com/parse5/-/parse5-6.0.1.tgz#e1a1c085c569b3dc08321184f19a39cc27f7c30b"
   integrity sha512-Ofn/CTFzRGTTxwpNEs9PP93gXShHcTq255nzRYSKe8AkVpZY7e1fpmTfOyoIvjP5HG7Z2ZM7VS9PPhQGW2pOpw==
 
+patch-vue-directive-ssr@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/patch-vue-directive-ssr/-/patch-vue-directive-ssr-0.0.1.tgz#2eac731f59cdb766d4d613bc24e522ded6ff1bb8"
+  integrity sha512-n84llktHah+EXUGo+RvmTJcAQJQVW0kHHHiJ34ZSLijzhHi32zCMjCc5VAFv4jmdC91bpaYGPk0cDW1D8hQ3GQ==
+
 path-exists@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/path-exists/-/path-exists-3.0.0.tgz#ce0ebeaa5f78cb18925ea7d810d7b59b010fd515"

@@ -85,12 +85,11 @@ export default defineConfig({
       enforce: "post",
     },
   ],
-  // // https://github.com/antfu/vite-ssg
-  // ssgOptions: {
-  //   script: "async defer",
-  //   formatting: "minify",
-  // },
-
+  // https://github.com/antfu/vite-ssg
+  ssgOptions: {
+    script: "async defer",
+    formatting: "minify",
+  },
   optimizeDeps: {
     include: ["vue", "vue-router", "@vueuse/core"],
     exclude: ["vue-demi", "v-wave"],

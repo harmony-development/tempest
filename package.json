@@ -2,7 +2,8 @@
   "private": true,
   "scripts": {
     "build": "cross-env NODE_ENV=production vite build",
-    "dev": "vite --port 3333 --force"
+    "dev": "vite --port 3333 --force",
+    "preview": "vite preview"
   },
   "dependencies": {
     "@harmony-dev/harmony-web-sdk": "^5.0.38",
@@ -30,6 +31,7 @@
     "eslint": "^7.22.0",
     "eslint-config-prettier": "^8.1.0",
     "markdown-it-prism": "^2.1.6",
+    "patch-vue-directive-ssr": "^0.0.1",
     "pnpm": "^5.18.7",
     "postcss-nested": "^5.0.5",
     "prettier": "^2.2.1",
