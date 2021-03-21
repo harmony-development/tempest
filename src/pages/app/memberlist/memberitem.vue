@@ -3,7 +3,7 @@ import { defineProps } from "vue";
 import HListItem from "~/components/HListItem.vue";
 import { useAppRoute } from "~/logics/location";
 import { appState } from "~/store/app";
-import Avatar from "~/components/Avatar.vue";
+import HImage from "~/components/HImage.vue";
 
 const props = defineProps<{
   userid: string;
@@ -15,7 +15,7 @@ const user = appState.getUser(route.value.host, props.userid);
 
 <template>
   <h-list-item>
-    <avatar :userid="props.userid" class="h-8 mr-3 w-8" />
+    <h-image :userid="props.userid" class="h-8 mr-3 w-8" rounded />
     {{ user?.username }}
   </h-list-item>
 </template>

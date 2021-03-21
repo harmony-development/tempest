@@ -16,6 +16,11 @@ export const eventStreamHandler = (host: string, stream: ChatStream) => {
             editedAt: Number(msg.editedAt?.seconds),
             content: msg.content,
             pending: false,
+            override: {
+              reason: msg.overrides?.reason.oneofKind,
+              avatar: msg.overrides?.avatar,
+              username: msg.overrides?.name,
+            },
           });
         }
       }

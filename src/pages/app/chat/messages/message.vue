@@ -3,7 +3,7 @@ import { computed, defineProps } from "vue";
 import { userID } from "~/logics/app";
 import { useAppRoute } from "~/logics/location";
 import { appState } from "~/store/app";
-import Avatar from "~/components/Avatar.vue";
+import HImage from "~/components/HImage.vue";
 import { convertDate } from "~/logics/time";
 import HBtn from "~/components/HBtn.vue";
 
@@ -24,10 +24,11 @@ const displayDate = computed(() => convertDate(message.value.createdAt));
 
 <template>
   <div :class="{ message: true, 'own-msg': isOwnMessage }">
-    <avatar
+    <h-image
       :class="{ avatar: true, 'own-avatar': isOwnMessage }"
       :userid="message?.author"
       :uri="message?.override?.avatar"
+      rounded
     />
     <div :class="{ bubble: true, 'own-bubble': isOwnMessage }">
       <p class="text-sm text-gray-200">
@@ -37,6 +38,7 @@ const displayDate = computed(() => convertDate(message.value.createdAt));
         {{ message.override?.username || user?.username || message.author }}
       </p>
       <p>{{ message?.content }}</p>
+      <h-image v-for="a in message.attachments" :key="a.id" :uri="a.id" />
       <p class="mt-1 text-right text-sm text-gray-300">{{ displayDate }}</p>
     </div>
     <div class="h-full menu">

@@ -43,7 +43,7 @@ if (!isLoggedIn()) {
       <guild-list />
       <channel-list v-if="route.guildid && route.host" />
     </h-drawer>
-    <div class="flex flex-col flex-1">
+    <div class="flex flex-col flex-1 min-w-0">
       <div class="flex bg-harmonydark-800 p-2">
         <h-btn
           variant="text"

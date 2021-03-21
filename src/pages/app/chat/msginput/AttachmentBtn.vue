@@ -23,10 +23,12 @@ const selectFileComplete = (e: Event) => {
     ];
   }
 };
+
+const onClick = () => fileUpload.value?.click();
 </script>
 
 <template>
-  <h-btn class="ml-2" icon variant="text" @click="fileUpload?.click()">
+  <h-btn class="ml-2" icon variant="text" @click="onClick">
     <mdi-image />
   </h-btn>
   <input

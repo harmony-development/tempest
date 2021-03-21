@@ -8,6 +8,7 @@ const route = useAppRoute();
 const props = defineProps<{
   userid?: string;
   uri?: string;
+  rounded?: boolean;
 }>();
 const host = appState.getHost(route.value.host);
 
@@ -21,7 +22,7 @@ const src = computed(() => {
 });
 </script>
 <template>
-  <div class="rounded-full bg-gray-500">
-    <img :src="src" class="rounded-full" />
+  <div class="bg-gray-500" :class="{ 'rounded-full': props.rounded }">
+    <img :src="src" :class="{ 'rounded-full': props.rounded }" />
   </div>
 </template>

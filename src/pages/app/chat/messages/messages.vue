@@ -47,6 +47,7 @@ const fetchMessages = async (msgID?: string) => {
           avatar: m.overrides?.avatar,
           reason: m.overrides?.reason.oneofKind,
         },
+        attachments: m.attachments,
       };
       return obj;
     }, {})

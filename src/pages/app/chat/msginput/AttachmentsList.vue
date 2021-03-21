@@ -30,11 +30,8 @@ const removeAttachment = (idx: number) => {
         :src="img.preview"
         class="attachment"
       />
-      <div
-        v-else
-        class="bg-harmonydark-900 h-32 max-w-42 p-3 overflow-hidden overflow-ellipsis"
-      >
-        <p class="whitespace-nowrap overflow-ellipsis">
+      <div v-else class="bg-harmonydark-900 h-32 max-w-42 p-3 overflow-hidden">
+        <p class="whitespace-nowrap overflow-ellipsis overflow-hidden">
           <mdi-file class="mr-2 text-lg" />{{ img.file.name }}
         </p>
         <p class="text-sm bottom-2 left-2 text-gray-200 absolute">

@@ -15,18 +15,56 @@ const focus = ref(false);
 const attachments = ref<IAttachment[]>([]);
 const route = useAppRoute();
 
+const uploadFile = async (f: File, session: string) => {
+  const url = new URL(`${route.value.host}/_harmony/media/upload`);
+  url.searchParams.set("filename", f.name);
+  url.searchParams.set("contentType", f.type);
+  const data = new FormData();
+  data.set("file", f);
+  const headers = new Headers();
+  headers.set("Authorization", session || "");
+  const resp = await fetch(url.toString(), {
+    body: data,
+    method: "POST",
+    headers,
+  });
+  const asJSON = await resp.json();
+  return {
+    id: asJSON.id,
+  };
+};
+
+const sendMessage = async () => {
+  const localID = Math.floor(Math.random() * 1000);
+  const conn = await getOrFederate(route.value.host);
+  let uploadAttachments = undefined as string[] | undefined;
+  let uploadPromises = [] as Promise<void>[];
+  if (attachments.value.length > 0) {
+    uploadAttachments = [];
+    uploadPromises = attachments.value.map(async (f) => {
+      const resp = await uploadFile(f.file, conn.getSession()!);
+      if (f.preview) URL.revokeObjectURL(f.preview);
+      uploadAttachments?.push(resp.id);
+    });
+  }
+  await Promise.all(uploadPromises);
+  await conn.chat.sendMessage(
+    SendMessageRequest.create({
+      guildId: route.value.guildid as string,
+      channelId: route.value.channelid as string,
+      content: content.value,
+      echoId: localID.toString(),
+      attachments: uploadAttachments,
+    })
+  );
+  content.value = "";
+  attachments.value = [];
+};
+
 const onKeyDown = async (ev: KeyboardEvent) => {
   if (ev.key === "Enter" && !ev.shiftKey) {
     ev.preventDefault();
-    const conn = await getOrFederate(route.value.host);
-    await conn.chat.sendMessage(
-      SendMessageRequest.create({
-        guildId: route.value.guildid as string,
-        channelId: route.value.channelid as string,
-        content: content.value,
-      })
-    );
-    content.value = "";
+    await sendMessage();
   }
 };
 
