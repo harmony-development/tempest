@@ -6,5 +6,5 @@ dayjs.extend(UTC);
 dayjs.extend(calendar);
 
 export const convertDate = (date: number) => {
-  return dayjs.unix(date || 0).format("hh:mm");
+  return dayjs.unix(date || 0).calendar();
 };

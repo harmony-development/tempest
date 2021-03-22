@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { computed, defineProps, nextTick, ref } from "vue";
+import { computed, defineProps, nextTick, ref, watch } from "vue";
 import { UpdateMessageRequest } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/chat/v1/messages";
+import DOMPurify from "dompurify";
 import Attachment from "./Attachment.vue";
 import { userID } from "~/logics/app";
 import { useAppRoute } from "~/logics/location";
@@ -12,6 +13,7 @@ import HInput from "~/components/HInput.vue";
 import HList from "~/components/HList.vue";
 import HListItem from "~/components/HListItem.vue";
 import { getOrFederate } from "~/logics/connections";
+import { conv } from "~/logics/markdown";
 
 const route = useAppRoute();
 const props = defineProps<{
@@ -29,6 +31,10 @@ const user = computed(() =>
 );
 const isOwnMessage = computed(() => message.value.author === userID.value);
 const displayDate = computed(() => convertDate(message.value.createdAt));
+const editedAtDate = computed(() => convertDate(message.value.editedAt));
+const sanitized = computed(() =>
+  DOMPurify.sanitize(conv.makeHtml(message.value.content))
+);
 
 const deleteMessage = async () => {
   const conn = await getOrFederate(route.value.host);
@@ -87,7 +93,7 @@ const editStart = async () => {
         </span>
         {{ message.override?.username || user?.username || message.author }}
       </p>
-      <p v-if="!editing">{{ message?.content }}</p>
+      <p v-if="!editing" class="content-out" v-html="sanitized" />
       <h-input
         v-if="editing"
         v-model="editText"
@@ -103,7 +109,10 @@ const editStart = async () => {
         :attachment="a"
         class="mt-2"
       />
-      <p class="mt-1 text-right text-sm text-gray-300">{{ displayDate }}</p>
+      <p class="mt-1 text-right text-sm text-gray-300">
+        {{ displayDate }}
+        <i v-if="message.editedAt">(Edited {{ editedAtDate }})</i>
+      </p>
     </div>
     <div class="h-full menu">
       <h-menu v-model="menuOpen">
@@ -128,6 +137,37 @@ const editStart = async () => {
 </template>
 
 <style lang="postcss" scoped>
+.content-out >>> .codeblock {
+  width: 100%;
+  display: block;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-all;
+  white-space: pre-wrap;
+  padding-right: 12px;
+  @apply w-full block break-all pr-2 rounded-md bg-black;
+}
+.content-out >>> .codeblock > code {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-all;
+  width: 100%;
+  display: block;
+  padding: 8px;
+  padding-left: 12px;
+}
+.content-out >>> .msg-p {
+  margin-bottom: 0px;
+  width: auto;
+}
+.content-out >>> .emoji {
+  height: 1em;
+  vertical-align: middle;
+}
+.content-out >>> .big-emoji {
+  height: 3em;
+}
+
 .menu {
   @apply invisible;
 }
