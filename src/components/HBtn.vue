@@ -33,7 +33,7 @@ const buttonClasses = {
 }
 
 .icon {
-  @apply rounded-full p-3;
+  @apply rounded-full p-3 w-auto;
 
   &.dense {
     @apply p-1;

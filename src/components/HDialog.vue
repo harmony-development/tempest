@@ -18,7 +18,7 @@ const open = useVModel(props, "modelValue", emit);
         @click="open = false"
       >
         <div
-          class="bg-white shadow-xl p-4 dark:bg-harmonydark-900"
+          class="bg-white shadow-xl p-4 dark:bg-harmonydark-900 w-7/8 sm:w-3/ md:w-1/2 lg:w-1/3"
           v-bind="$attrs"
           @click.stop=""
         >

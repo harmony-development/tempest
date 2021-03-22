@@ -9,6 +9,8 @@ import HImage from "~/components/HImage.vue";
 import { convertDate } from "~/logics/time";
 import HBtn from "~/components/HBtn.vue";
 import HInput from "~/components/HInput.vue";
+import HList from "~/components/HList.vue";
+import HListItem from "~/components/HListItem.vue";
 import { getOrFederate } from "~/logics/connections";
 
 const route = useAppRoute();

@@ -1,11 +1,28 @@
 import { Event } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/chat/v1/streaming";
 import { appState } from "~/store/app";
+import { guildListState } from "~/store/guildList";
 import { ChatStream } from "~/types";
 
 export const eventStreamHandler = (host: string, stream: ChatStream) => {
-  console.log("h");
   return (ev: Event) => {
     switch (ev.event.oneofKind) {
+      case "guildAddedToList": {
+        const guild = ev.event.guildAddedToList;
+        if (guild) {
+          guildListState.addGuild({
+            guildId: guild.guildId,
+            host: guild.homeserver,
+          });
+        }
+        break;
+      }
+      case "guildRemovedFromList": {
+        guildListState.removeGuild(
+          ev.event.guildRemovedFromList.homeserver,
+          ev.event.guildRemovedFromList.guildId
+        );
+        break;
+      }
       case "sentMessage": {
         const msg = ev.event.sentMessage.message;
         if (msg) {

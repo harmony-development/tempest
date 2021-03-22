@@ -23,7 +23,7 @@ const i18nMenu = ref(false);
           <ic-round-translate />
         </h-btn>
       </template>
-      <h-list>
+      <h-list class="bg-black">
         <h-list-item
           v-for="lang in availableLocales"
           :key="lang"

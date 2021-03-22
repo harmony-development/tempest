@@ -1,5 +1,15 @@
 {
   "app": {
+    "guild-dialog": {
+      "create": "Create",
+      "create-guild": "Create Guild",
+      "create-input": "Guild Name",
+      "join": "Join",
+      "join-guild": "Join Guild",
+      "join-input": "Invite code",
+      "to-create": "Create guild?",
+      "to-join": "Join guild?"
+    },
     "no-channel-selected": "Select a channel to talk in",
     "no-guild-selected": "Select a guild to start chatting"
   },
@@ -21,6 +31,7 @@
   "button": {
     "about": "About",
     "back": "Back",
+    "cancel": "Cancel",
     "go": "GO",
     "home": "Home",
     "next": "Next",

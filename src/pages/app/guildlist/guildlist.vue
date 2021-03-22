@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted } from "vue";
 import GuildIcon from "./guildicon.vue";
+import GuildBtn from "./GuildBtn.vue";
 import { guildListState } from "~/store/guildList";
 import { getStream, homeserverConn } from "~/logics/connections";
 import { host } from "~/logics/app";
@@ -38,5 +39,6 @@ onMounted(async () => {
       :key="`${guild.guildId}:${guild.host}`"
       :host="guild.host"
     />
+    <guild-btn />
   </div>
 </template>

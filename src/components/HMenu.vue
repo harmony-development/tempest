@@ -29,8 +29,12 @@ function updateMenuPos() {
   const activatorBbox = activator.value!.getBoundingClientRect();
   const menuBbox = menu.value!.getBoundingClientRect();
 
-  x.value = activatorBbox.x - menuBbox.width + activatorBbox.width;
-  y.value = activatorBbox.y + activatorBbox.height;
+  // we want a slight offset (12) to make menus look nicer when on the edge
+  x.value = Math.max(
+    activatorBbox.x - menuBbox.width + activatorBbox.width,
+    12
+  );
+  y.value = Math.max(activatorBbox.y + activatorBbox.height, 12);
 }
 
 async function toggle(ev: MouseEvent) {

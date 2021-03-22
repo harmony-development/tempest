@@ -24,19 +24,19 @@ const doneClicked = () => {
 </script>
 
 <template>
-  <h-dialog v-model="open" class="w-7/8 sm:w-3/ md:w-1/2 lg:w-1/3">
+  <h-dialog v-model="open">
     <h1 v-t="'auth.add-server'" class="text-lg" />
+    <h-input v-model="name" class="mb-2" :label="$t('auth.server-name')" />
     <h-input
-      v-model="name"
-      class="mb-2"
-      :label="$t('auth.server-name')"
+      v-model="host"
+      :label="$t('auth.server-address')"
+      class="border-harmonydark-500"
     />
-    <h-input v-model="host" :label="$t('auth.server-address')" class="border-harmonydark-500" />
     <div class="flex mt-4 justify-end">
       <h-btn
         variant="text"
         color="secondary"
-        class=" mr-2"
+        class="mr-2"
         @click="open = false"
       >
         Cancel

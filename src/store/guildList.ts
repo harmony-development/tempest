@@ -13,6 +13,16 @@ class GuildListState extends Store<IGuildListState> {
   setGuildList(list: IGuildEntry[]) {
     this.state.guildList = list;
   }
+
+  addGuild(entry: IGuildEntry) {
+    this.state.guildList?.push(entry);
+  }
+
+  removeGuild(host: string, id: string) {
+    this.state.guildList = this.state.guildList?.filter(
+      (v) => v.guildId !== id || v.host !== host
+    );
+  }
 }
 
 export const guildListState = new GuildListState({});
