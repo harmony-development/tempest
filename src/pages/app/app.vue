@@ -5,6 +5,8 @@ import GuildList from "./guildlist/guildlist.vue";
 import ChannelList from "./channellist/channellist.vue";
 import Chat from "./chat/chat.vue";
 import MemberList from "./memberlist/memberlist.vue";
+import ChannelHeader from "./channelheader/ChannelHeader.vue"
+import GuildHeader from "./guildheader/GuildHeader.vue"
 import HBtn from "~/components/HBtn.vue";
 
 import HDrawer from "~/components/HDrawer.vue";
@@ -41,10 +43,13 @@ if (!isLoggedIn()) {
       class="flex w-3/4 overflow-visible sm:w-1/2 md:w-70"
     >
       <guild-list />
-      <channel-list v-if="route.guildid && route.host" />
+      <div class="bg-harmonydark-800 flex-1">
+        <guild-header v-if="route.guildid && route.host" />
+        <channel-list v-if="route.guildid && route.host" />
+      </div>
     </h-drawer>
     <div class="flex flex-col flex-1 min-w-0">
-      <div class="flex bg-harmonydark-800 p-2">
+      <div class="flex bg-harmonydark-800 p-1">
         <h-btn
           variant="text"
           icon
@@ -53,7 +58,9 @@ if (!isLoggedIn()) {
         >
           <mdi-menu />
         </h-btn>
-        <div class="flex-1" />
+        <div class="flex-1 flex items-center">
+          <channel-header />
+        </div>
         <h-btn
           variant="text"
           icon

@@ -54,13 +54,11 @@ watch(route, async (curr, prev) => {
 </script>
 
 <template>
-  <div class="bg-harmonydark-800 flex-1 p-3">
-    <h-list>
-      <channel-list-item
-        v-for="channel in channelList"
-        :id="channel"
-        :key="channel"
-      />
-    </h-list>
-  </div>
+  <h-list>
+    <channel-list-item
+      v-for="channel in channelList"
+      :id="channel"
+      :key="channel"
+    />
+  </h-list>
 </template>

@@ -137,7 +137,7 @@ const editStart = async () => {
 </template>
 
 <style lang="postcss" scoped>
-.content-out >>> .codeblock {
+.content-out:deep(.codeblock) {
   width: 100%;
   display: block;
   word-wrap: break-word;

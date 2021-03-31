@@ -1,5 +1,10 @@
 {
   "app": {
+    "add-channel": "Add Channel",
+    "add-channel-dialog": {
+      "name": "Channel Name",
+      "title": "Add Channel"
+    },
     "guild-dialog": {
       "create": "Create",
       "create-guild": "Create Guild",
