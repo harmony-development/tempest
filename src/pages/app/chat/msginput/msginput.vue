@@ -48,15 +48,25 @@ const sendMessage = async () => {
     });
   }
   await Promise.all(uploadPromises);
-  await conn.chat.sendMessage(
-    SendMessageRequest.create({
-      guildId: route.value.guildid as string,
-      channelId: route.value.channelid as string,
-      content: content.value,
-      echoId: localID.toString(),
-      attachments: uploadAttachments,
-    })
-  );
+  if (uploadAttachments && uploadAttachments.length < 0) {
+    throw "unimplemented"
+  } else {
+    await conn.chat.sendMessage(
+      SendMessageRequest.create({
+        guildId: route.value.guildid as string,
+        channelId: route.value.channelid as string,
+        content: {
+          content: {
+            oneofKind: "textMessage",
+            textMessage: {
+              content: content.value,
+            },
+          }
+        },
+        echoId: localID.toString(),
+      })
+    );
+  }
   content.value = "";
   attachments.value = [];
 };
