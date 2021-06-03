@@ -30,7 +30,7 @@ onMounted(async () => {
       const resp = await conn.chat.getGuild({ guildId: props.id });
       appState.setGuildInfo(guildHost, props.id, {
         name: resp.response.guildName,
-        picture: parseHMC(resp.response.guildPicture, guildHost),
+        picture: parseHMC(resp.response.guildPicture, guildHost.replace(/\/$/, "")),
       });
     } catch (e) {
       if (e instanceof Response) {

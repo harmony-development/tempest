@@ -40,14 +40,13 @@ const fetchMessages = async (msgID?: string) => {
         author: m.authorId,
         createdAt: Number(m.createdAt?.seconds),
         editedAt: Number(m.editedAt?.seconds),
-        content: m.content,
+        content: m.content!,
         pending: false,
         override: {
           username: m.overrides?.name,
           avatar: m.overrides?.avatar,
           reason: m.overrides?.reason.oneofKind,
         },
-        attachments: m.attachments,
       };
       return obj;
     }, {})

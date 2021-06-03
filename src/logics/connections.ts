@@ -14,14 +14,17 @@ const pendingFederations: {
 } = {};
 
 export const getOrFederate = (targetHost: string) => {
-  if (connections[targetHost]) return connections[targetHost];
-  if (pendingFederations[targetHost]) return pendingFederations[targetHost];
+  const normalised = new URL(targetHost).hostname
+  console.warn(new URL(targetHost))
+
+  if (connections[normalised]) return connections[normalised];
+  if (pendingFederations[normalised]) return pendingFederations[normalised];
   if (targetHost === host.value) {
     const conn = new Connection(targetHost);
-    connections[targetHost] = conn;
+    connections[normalised] = conn;
     return conn;
   }
-  pendingFederations[targetHost] = (async () => {
+  pendingFederations[normalised] = (async () => {
     const federateResp = await connections[host.value].auth.federate({
       target: targetHost,
     });
@@ -31,11 +34,11 @@ export const getOrFederate = (targetHost: string) => {
       domain: host.value.replace("https://", ""),
     });
     conn.setSession(loginResp.response.sessionToken);
-    connections[targetHost] = conn;
-    delete pendingFederations[targetHost];
+    connections[normalised] = conn;
+    delete pendingFederations[normalised];
     return conn;
   })();
-  return pendingFederations[targetHost];
+  return pendingFederations[normalised];
 };
 
 export const getStream = async (host: string, session?: string) => {

@@ -1,19 +1,23 @@
 <script lang="ts" setup>
-import { computed, defineProps, nextTick, ref, watch } from "vue";
-import { UpdateMessageRequest } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/chat/v1/messages";
+import { computed, defineProps, nextTick, ref } from "vue";
+import { UpdateMessageTextRequest } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/chat/v1/messages";
 import DOMPurify from "dompurify";
-import Attachment from "./Attachment.vue";
+import { ContentEmbed, ContentFiles, ContentText } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/harmonytypes/v1/types";
+import FileMessage from "./file.vue";
+import EmbedMessage from "./embeds.vue";
+import TextMessage from "./text.vue";
 import { userID } from "~/logics/app";
 import { useAppRoute } from "~/logics/location";
 import { appState } from "~/store/app";
 import HImage from "~/components/HImage.vue";
 import { convertDate } from "~/logics/time";
 import HBtn from "~/components/HBtn.vue";
-import HInput from "~/components/HInput.vue";
 import HList from "~/components/HList.vue";
 import HListItem from "~/components/HListItem.vue";
 import { getOrFederate } from "~/logics/connections";
 import { conv } from "~/logics/markdown";
+import Unsupported from "./unsupported.vue";
+
 
 const route = useAppRoute();
 const props = defineProps<{
@@ -30,11 +34,10 @@ const user = computed(() =>
   appState.getUser(route.value.host, message.value.author)
 );
 const isOwnMessage = computed(() => message.value.author === userID.value);
-const displayDate = computed(() => convertDate(message.value.createdAt));
-const editedAtDate = computed(() => convertDate(message.value.editedAt));
-const sanitized = computed(() =>
-  DOMPurify.sanitize(conv.makeHtml(message.value.content))
-);
+
+const messageType = computed(() => {
+  return message.value.content.content.oneofKind
+})
 
 const deleteMessage = async () => {
   const conn = await getOrFederate(route.value.host);
@@ -47,13 +50,12 @@ const deleteMessage = async () => {
 
 const editMessage = async (content: string) => {
   const conn = await getOrFederate(route.value.host);
-  await conn.chat.updateMessage(
-    UpdateMessageRequest.create({
+  await conn.chat.updateMessageText(
+    UpdateMessageTextRequest.create({
       guildId: route.value.guildid as string,
       channelId: route.value.channelid as string,
       messageId: props.messageid,
-      content,
-      updateContent: true,
+      newContent: content,
     })
   );
 };
@@ -71,11 +73,17 @@ const onEditKeyDown = async (ev: KeyboardEvent) => {
 };
 
 const editStart = async () => {
+  if (message.value.content.content.oneofKind !== "textMessage") {
+    return
+  }
   editing.value = true;
-  editText.value = message.value.content;
+  editText.value = message.value.content.content.textMessage.content;
   await nextTick();
   editFocus.value = !editFocus.value;
 };
+const content = computed(() => {
+  return message.value.content.content
+})
 </script>
 
 <template>
@@ -86,34 +94,14 @@ const editStart = async () => {
       :uri="message?.override?.avatar"
       rounded
     />
-    <div :class="{ bubble: true, 'own-bubble': isOwnMessage }">
-      <p class="text-sm text-gray-200">
-        <span :title="`Bridged by ${user?.username}`">
-          <mdi-link v-if="message?.override?.reason === 'bridge'" />
-        </span>
-        {{ message.override?.username || user?.username || message.author }}
-      </p>
-      <p v-if="!editing" class="content-out" v-html="sanitized" />
-      <h-input
-        v-if="editing"
-        v-model="editText"
-        multiline
-        class="bg-white border-white bg-opacity-10"
-        :focus="editFocus"
-        @keydown="onEditKeyDown"
-        @focusout="editing = false"
-      />
-      <attachment
-        v-for="a in message.attachments"
-        :key="a.id"
-        :attachment="a"
-        class="mt-2"
-      />
-      <p class="mt-1 text-right text-sm text-gray-300">
-        {{ displayDate }}
-        <i v-if="message.editedAt">(Edited {{ editedAtDate }})</i>
-      </p>
-    </div>
+
+    <!-- begin switch -->
+    <FileMessage v-if="content.oneofKind === 'filesMessage'" :messageid="messageid" :content="content.filesMessage"> </FileMessage>
+    <!-- <EmbedMessage v-else-if="messageType === 'embedMessage'"> </EmbedMessage> -->
+    <TextMessage v-else-if="content.oneofKind === 'textMessage'" :messageid="messageid" :content="content.textMessage"> </TextMessage>
+    <unsupported v-else> </unsupported>
+    <!-- end switch -->
+
     <div class="h-full menu">
       <h-menu v-model="menuOpen">
         <template #activator="{ toggle }">
@@ -203,3 +191,4 @@ const editStart = async () => {
   @apply ml-4;
 }
 </style>
+
