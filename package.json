@@ -6,7 +6,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@harmony-dev/harmony-web-sdk": "^5.0.55",
+    "@harmony-dev/harmony-web-sdk": "^5.0.56",
     "@protobuf-ts/runtime-rpc": "^1.0.12",
     "@vueuse/core": "^4.4.1",
     "@vueuse/head": "^0.3.2",
