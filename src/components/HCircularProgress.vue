@@ -1,3 +1,3 @@
 <template>
-  <mdi-loading class="animate-spin text-2xl" />
+  <mdi-loading class="w-min animate-spin text-4xl" />
 </template>

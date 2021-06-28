@@ -14,9 +14,7 @@ const pendingFederations: {
 } = {};
 
 export const getOrFederate = (targetHost: string) => {
-  const normalised = new URL(targetHost).hostname
-  console.warn(new URL(targetHost))
-
+  const normalised = new URL(targetHost).hostname;
   if (connections[normalised]) return connections[normalised];
   if (pendingFederations[normalised]) return pendingFederations[normalised];
   if (targetHost === host.value) {

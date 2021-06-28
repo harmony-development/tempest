@@ -54,10 +54,7 @@ class AppState extends Store<IAppState> {
   }
 
   getUser(host: string, userID: string) {
-    console.warn(`host: ${host}, userID: ${userID}`)
     const data = this.getHost(host);
-    console.warn(this.state.data)
-    console.warn(data.users[userID])
     return data.users[userID];
   }
 

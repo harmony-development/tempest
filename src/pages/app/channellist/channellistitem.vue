@@ -18,9 +18,9 @@ const data = appState.getChannel(route.value.host, props.id);
 const onClick = () => {
   router.push({
     params: {
+      host: route.value.host,
       channelid: props.id,
     },
-    hash: `#${route.value.host}`,
   });
 };
 </script>

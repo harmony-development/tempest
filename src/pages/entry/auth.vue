@@ -2,14 +2,13 @@
 import { onMounted, ref, reactive, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { Connection } from "@harmony-dev/harmony-web-sdk";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import {
   AuthStep,
   AuthStep_Form_FormField,
   NextStepRequest_FormFields,
 } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/auth/v1/auth";
 import type { AuthStream } from "~/types";
-import { useHashValue } from "~/logics/location";
 import { host, session, userID } from "~/logics/app";
 import HCircularProgress from "~/components/HCircularProgress.vue";
 import HList from "~/components/HList.vue";
@@ -18,9 +17,11 @@ import HBtn from "~/components/HBtn.vue";
 import HInput from "~/components/HInput.vue";
 import HNewPassword from "~/components/HNewPassword.vue";
 
-const selectedHost = useHashValue();
+const route = useRoute();
 const i18n = useI18n();
 const router = useRouter();
+
+const selectedHost = computed(() => route.params.host as string);
 
 const currentStep = ref<"loading" | "choice" | "form">("loading");
 const canGoBack = ref(false);
@@ -65,7 +66,8 @@ const doneClicked = async () => {
         oneofKind: "form",
         form: {
           fields: formStep.formFieldValues.map((f, i) => {
-            const field: NextStepRequest_FormFields = NextStepRequest_FormFields.create();
+            const field: NextStepRequest_FormFields =
+              NextStepRequest_FormFields.create();
             if (formStep.formFields?.[i].type === "number")
               field.field = {
                 oneofKind: "number",
@@ -90,15 +92,12 @@ const doneClicked = async () => {
       },
     });
   } catch (e) {
-    const resp = e as Response;
-    resp
-      .text()
-      .then((v) => (error.value = v.substr(2)))
-      .catch(() => (error.value = resp.statusText || resp.status.toString()));
+    error.value = e.code;
   }
 };
 
 const onAuthStep = (step: AuthStep) => {
+  error.value = "";
   switch (step.step.oneofKind) {
     case "choice": {
       choiceStep.title = step.step.choice.title;
@@ -120,8 +119,10 @@ const onAuthStep = (step: AuthStep) => {
       session.value = step.step.session.sessionToken;
       userID.value = step.step.session.userId;
       router.push({
-        path: "/app",
-        hash: `#${encodeURIComponent(selectedHost.value)}`,
+        name: "app",
+        params: {
+          host: selectedHost.value,
+        },
       });
     }
   }

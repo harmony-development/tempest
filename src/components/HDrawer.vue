@@ -21,19 +21,17 @@ const setOpen = (val: boolean) => {
 
 <template>
   <div v-show="open" class="overlay" @click.self="setOpen(false)"></div>
-  <Teleport :to="props.mountPoint || '#drawer-root'">
-    <div
-      :class="{
-        drawer: true,
-        closed: !open,
-        right: right,
-        left: !right,
-      }"
-      v-bind="$attrs"
-    >
-      <slot />
-    </div>
-  </Teleport>
+  <div
+    :class="{
+      drawer: true,
+      closed: !open,
+      right: right,
+      left: !right,
+    }"
+    v-bind="$attrs"
+  >
+    <slot />
+  </div>
 </template>
 
 <style lang="postcss" scoped>

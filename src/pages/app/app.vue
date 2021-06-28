@@ -50,46 +50,31 @@ if (!isLoggedIn()) {
     </h-drawer>
     <div class="flex flex-col flex-1 min-w-0">
       <div class="flex bg-harmonydark-800 p-1">
-        <h-btn
-          variant="text"
-          icon
-          class="md:invisible"
-          @click="leftDrawerOpen = !leftDrawerOpen"
-        >
+        <h-btn variant="text" icon class="md:invisible" @click="leftDrawerOpen = !leftDrawerOpen">
           <mdi-menu />
         </h-btn>
-        <div class="flex-1 flex items-center">
+        <div class="flex flex-1 items-center">
           <channel-header />
         </div>
-        <h-btn
-          variant="text"
-          icon
-          class="md:invisible"
-          @click="rightDrawerOpen = !rightDrawerOpen"
-        >
+        <h-btn variant="text" icon class="md:invisible" @click="rightDrawerOpen = !rightDrawerOpen">
           <ic-round-group />
         </h-btn>
       </div>
       <chat v-if="route.guildid && route.host" />
       <div v-else class="flex flex-col flex-1 justify-center items-center">
-        <ic-round-group
-          class="rounded-full bg-gray-400 bg-opacity-30 mb-4 p-3 text-6xl"
-        />
-        <h1
-          v-t="'app.no-guild-selected'"
-          class="text-md text-blue-200 lg:text-xl"
-        ></h1>
+        <ic-round-group class="rounded-full bg-gray-400 bg-opacity-30 mb-4 p-3 text-6xl" />
+        <h1 v-t="'app.no-guild-selected'" class="text-md text-blue-200 lg:text-xl"></h1>
       </div>
     </div>
-    <div id="right-drawer-root" />
-    <h-drawer
-      v-if="mounted"
-      v-model="rightDrawerOpen"
-      class="flex flex-col w-3/4 overflow-visible sm:w-1/2 md:w-60"
-      mount-point="#right-drawer-root"
-      right
-    >
-      <member-list />
-    </h-drawer>
+    <div id="right-drawer-root">
+      <h-drawer
+        v-if="mounted"
+        v-model="rightDrawerOpen"
+        class="flex flex-col w-3/4 overflow-visible sm:w-1/2 md:w-60"
+        right
+      >
+        <member-list />
+      </h-drawer>
+    </div>
   </div>
 </template>

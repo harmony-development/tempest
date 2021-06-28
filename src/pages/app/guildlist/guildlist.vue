@@ -25,14 +25,14 @@ onMounted(async () => {
   guildListState.setGuildList(
     resp.response.guilds.map((g) => ({
       guildId: g.guildId,
-      host: g.host,
+      host: g.host || host.value,
     }))
   );
 });
 </script>
 
 <template>
-  <div class="bg-harmonydark-700 p-3">
+  <div class="bg-harmonydark-700 p-2">
     <guild-icon
       v-for="guild in guildList"
       :id="guild.guildId"

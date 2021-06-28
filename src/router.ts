@@ -18,13 +18,15 @@ export const appRoutes: RouteRecordRaw[] = [
         component: serverselectVue,
       },
       {
-        path: "auth",
+        name: "authpage",
+        path: "auth/:host?",
         component: authVue,
       },
     ],
   },
   {
-    path: "app/:guildid?/:channelid?/:messageid?",
+    name: "app",
+    path: "app/:host/:guildid?/:channelid?/:messageid?",
     component: appVue,
   },
 ];

@@ -1,23 +1,18 @@
 <script lang="ts" setup>
 import { computed, defineProps, nextTick, ref } from "vue";
 import { UpdateMessageTextRequest } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/chat/v1/messages";
-import DOMPurify from "dompurify";
-import { ContentEmbed, ContentFiles, ContentText } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/harmonytypes/v1/types";
 import FileMessage from "./file.vue";
-import EmbedMessage from "./embeds.vue";
 import TextMessage from "./text.vue";
+import Unsupported from "./unsupported.vue";
 import { userID } from "~/logics/app";
 import { useAppRoute } from "~/logics/location";
 import { appState } from "~/store/app";
 import HImage from "~/components/HImage.vue";
-import { convertDate } from "~/logics/time";
 import HBtn from "~/components/HBtn.vue";
 import HList from "~/components/HList.vue";
 import HListItem from "~/components/HListItem.vue";
 import { getOrFederate } from "~/logics/connections";
 import { conv } from "~/logics/markdown";
-import Unsupported from "./unsupported.vue";
-
 
 const route = useAppRoute();
 const props = defineProps<{
@@ -36,8 +31,8 @@ const user = computed(() =>
 const isOwnMessage = computed(() => message.value.author === userID.value);
 
 const messageType = computed(() => {
-  return message.value.content.content.oneofKind
-})
+  return message.value.content.content.oneofKind;
+});
 
 const deleteMessage = async () => {
   const conn = await getOrFederate(route.value.host);
@@ -74,7 +69,7 @@ const onEditKeyDown = async (ev: KeyboardEvent) => {
 
 const editStart = async () => {
   if (message.value.content.content.oneofKind !== "textMessage") {
-    return
+    return;
   }
   editing.value = true;
   editText.value = message.value.content.content.textMessage.content;
@@ -82,8 +77,8 @@ const editStart = async () => {
   editFocus.value = !editFocus.value;
 };
 const content = computed(() => {
-  return message.value.content.content
-})
+  return message.value.content.content;
+});
 </script>
 
 <template>
@@ -96,9 +91,19 @@ const content = computed(() => {
     />
 
     <!-- begin switch -->
-    <FileMessage v-if="content.oneofKind === 'filesMessage'" :messageid="messageid" :content="content.filesMessage"> </FileMessage>
+    <FileMessage
+      v-if="content.oneofKind === 'filesMessage'"
+      :messageid="messageid"
+      :content="content.filesMessage"
+    >
+    </FileMessage>
     <!-- <EmbedMessage v-else-if="messageType === 'embedMessage'"> </EmbedMessage> -->
-    <TextMessage v-else-if="content.oneofKind === 'textMessage'" :messageid="messageid" :content="content.textMessage"> </TextMessage>
+    <TextMessage
+      v-else-if="content.oneofKind === 'textMessage'"
+      :messageid="messageid"
+      :content="content.textMessage"
+    >
+    </TextMessage>
     <unsupported v-else> </unsupported>
     <!-- end switch -->
 
@@ -125,37 +130,6 @@ const content = computed(() => {
 </template>
 
 <style lang="postcss" scoped>
-.content-out:deep(.codeblock) {
-  width: 100%;
-  display: block;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  word-break: break-all;
-  white-space: pre-wrap;
-  padding-right: 12px;
-  @apply w-full block break-all pr-2 rounded-md bg-black;
-}
-.content-out >>> .codeblock > code {
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  word-break: break-all;
-  width: 100%;
-  display: block;
-  padding: 8px;
-  padding-left: 12px;
-}
-.content-out >>> .msg-p {
-  margin-bottom: 0px;
-  width: auto;
-}
-.content-out >>> .emoji {
-  height: 1em;
-  vertical-align: middle;
-}
-.content-out >>> .big-emoji {
-  height: 3em;
-}
-
 .menu {
   @apply invisible;
 }
@@ -191,4 +165,3 @@ const content = computed(() => {
   @apply ml-4;
 }
 </style>
-

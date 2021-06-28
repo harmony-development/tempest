@@ -21,11 +21,12 @@ const onNextClicked = () => {
   if (host.includes("://")) host = `https${host.substr(host.indexOf("://"))}`;
   else host = `https://${host}`;
   const parsed = new URL(host);
-  router.push(
-    `/entry/auth#${encodeURIComponent(
-      `https://${parsed.hostname}:${parsed.port || "2289"}`
-    )}`
-  );
+  router.push({
+    name: "authpage",
+    params: {
+      host: `https://${parsed.hostname}:${parsed.port || "2289"}`,
+    },
+  });
 };
 </script>
 

@@ -104,7 +104,9 @@ useEventListener(messagesContainer, "scroll", scrollHandler);
 </script>
 <template>
   <div ref="messagesContainer" class="flex-1 p-4 overflow-x-auto">
-    <h-circular-progress class="my-1 text-center w-full" />
+    <div class="text-center">
+      <h-circular-progress class="my-1 text-center" />
+    </div>
     <message v-for="message in messages" :key="message" :messageid="message" />
   </div>
 </template>

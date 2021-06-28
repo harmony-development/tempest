@@ -23,7 +23,7 @@ const i18nMenu = ref(false);
           <ic-round-translate />
         </h-btn>
       </template>
-      <h-list class="bg-black">
+      <h-list class="bg-white dark:bg-black">
         <h-list-item
           v-for="lang in availableLocales"
           :key="lang"
@@ -39,10 +39,26 @@ const i18nMenu = ref(false);
     </h-btn>
   </h-app-bar>
   <div
-    class="flex h-full w-full items-center justify-center background sm:justify-start"
+    class="
+      flex
+      h-full
+      w-full
+      items-center
+      justify-center
+      background
+      sm:justify-start
+    "
   >
     <div
-      class="bg-white rounded p-6 w-11/12 sm:m-12 sm:w-2/3 md:w-5/12 dark:bg-harmonydark-800"
+      class="
+        bg-white
+        rounded
+        p-6
+        w-11/12
+        sm:m-12 sm:w-2/3
+        md:w-5/12
+        dark:bg-harmonydark-800
+      "
     >
       <router-view />
     </div>

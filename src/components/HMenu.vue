@@ -1,11 +1,7 @@
 <script setup lang="ts">
-import {
-  debouncedWatch,
-  onClickOutside,
-  useVModel,
-  useWindowSize,
-} from "@vueuse/core";
-import { computed, nextTick, ref, defineProps, defineEmit } from "vue";
+import { onClickOutside, useVModel } from "@vueuse/core";
+import { computed, nextTick, defineProps, defineEmit } from "vue";
+import { updateMenuPos, useFloatingPos } from "~/composeables/useFloatingPos";
 
 const props = defineProps<{
   modelValue: boolean;
@@ -14,46 +10,19 @@ const emit = defineEmit(["update:modelValue"]);
 
 const open = useVModel(props, "modelValue", emit);
 
-const { width, height } = useWindowSize();
-
-const x = ref(0);
-const y = ref(0);
-const menu = ref<HTMLDivElement | null>(null);
-const activator = ref<Element | null>(null);
+const { x, y, menu, activator } = useFloatingPos(open);
 
 onClickOutside(menu, () => {
   open.value = false;
 });
-
-function updateMenuPos() {
-  const activatorBbox = activator.value!.getBoundingClientRect();
-  const menuBbox = menu.value!.getBoundingClientRect();
-
-  // we want a slight offset (12) to make menus look nicer when on the edge
-  x.value = Math.max(
-    activatorBbox.x - menuBbox.width + activatorBbox.width,
-    12
-  );
-  y.value = Math.max(activatorBbox.y + activatorBbox.height, 12);
-}
 
 async function toggle(ev: MouseEvent) {
   open.value = true;
   await nextTick();
   const el = ev.currentTarget as Element;
   activator.value = el;
-  updateMenuPos();
+  updateMenuPos(activator, menu, x, y);
 }
-
-debouncedWatch(
-  [width, height],
-  () => {
-    if (props.modelValue && activator) updateMenuPos();
-  },
-  {
-    debounce: 150,
-  }
-);
 
 const menuStyle = computed(() => {
   return {

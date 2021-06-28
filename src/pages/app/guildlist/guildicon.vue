@@ -30,7 +30,10 @@ onMounted(async () => {
       const resp = await conn.chat.getGuild({ guildId: props.id });
       appState.setGuildInfo(guildHost, props.id, {
         name: resp.response.guildName,
-        picture: parseHMC(resp.response.guildPicture, guildHost.replace(/\/$/, "")),
+        picture: parseHMC(
+          resp.response.guildPicture,
+          guildHost.replace(/\/$/, "")
+        ),
       });
     } catch (e) {
       if (e instanceof Response) {
@@ -43,9 +46,9 @@ onMounted(async () => {
 const onClick = () => {
   router.push({
     params: {
+      host: host.value,
       guildid: props.id,
     },
-    hash: `#${host.value}`,
   });
 };
 </script>
@@ -69,7 +72,16 @@ const onClick = () => {
         <img
           v-show="!imageError"
           :src="data.picture"
-          class="rounded-full object-cover outline-none text-center leading-14 text-4xl w-full h-full"
+          class="
+            rounded-full
+            h-full
+            object-cover
+            outline-none
+            text-center
+            w-full
+            text-4xl
+            leading-14
+          "
           draggable="false"
           :alt="data.name"
           @error="imageError = true"
