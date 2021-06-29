@@ -7,7 +7,14 @@ const dialogOpen = ref(false);
 </script>
 
 <template>
-  <h-btn variant="outlined" color="primary" icon @click="dialogOpen = true">
+  <h-btn
+    class="flex-shrink-0"
+    style="aspect-ratio: 1"
+    variant="outlined"
+    color="primary"
+    icon
+    @click="dialogOpen = true"
+  >
     <mdi-account-multiple-plus class="text-xl" />
   </h-btn>
   <guild-dialog v-model="dialogOpen" />

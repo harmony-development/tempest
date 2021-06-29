@@ -3,7 +3,6 @@ import { SendMessageRequest } from "@harmony-dev/harmony-web-sdk/dist/lib/protoc
 import { onStartTyping } from "@vueuse/core";
 
 import { ref } from "vue";
-import { Attachment } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/harmonytypes/v1/types";
 import AttachmentBtn from "./AttachmentBtn.vue";
 import type { IAttachment } from "./types";
 import AttachmentsList from "./AttachmentsList.vue";
@@ -21,7 +20,7 @@ interface UploadedFile {
   contentType: string;
   id: string;
   size: number;
-};
+}
 
 const uploadFile = async (f: File, session: string) => {
   const url = new URL(`${route.value.host}/_harmony/media/upload`);
@@ -62,12 +61,12 @@ const sendMessage = async () => {
   if (uploadAttachments && uploadAttachments.length > 0) {
     const mapped = uploadAttachments.map((it) => ({
       name: it.name,
-      contentType: it.contentType,
+      type: it.contentType,
       id: it.id,
       size: it.size,
       caption: "",
-    } as unknown as Attachment));
-    mapped[mapped?.length-1].caption = content.value
+    }));
+    mapped[mapped?.length - 1].caption = content.value;
 
     await conn.chat.sendMessage(
       SendMessageRequest.create({
@@ -78,8 +77,8 @@ const sendMessage = async () => {
             oneofKind: "filesMessage",
             filesMessage: {
               attachments: mapped,
-            }
-          }
+            },
+          },
         },
         echoId: localID.toString(),
       })
@@ -94,8 +93,8 @@ const sendMessage = async () => {
             oneofKind: "textMessage",
             textMessage: {
               content: content.value,
-            }
-          }
+            },
+          },
         },
         echoId: localID.toString(),
       })
@@ -121,7 +120,7 @@ onStartTyping(() => {
     <attachments-list v-model="attachments" />
     <h-input
       v-model="content"
-      class="bg-harmonydark-700 border-harmonydark-800"
+      class="dark:bg-harmonydark-700 dark:border-harmonydark-800"
       label="Send Message"
       :focus="focus"
       multiline

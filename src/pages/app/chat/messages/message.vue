@@ -11,8 +11,9 @@ import HImage from "~/components/HImage.vue";
 import HBtn from "~/components/HBtn.vue";
 import HList from "~/components/HList.vue";
 import HListItem from "~/components/HListItem.vue";
+import HMenu from "~/components/HMenu.vue";
 import { getOrFederate } from "~/logics/connections";
-import { conv } from "~/logics/markdown";
+import { convertDate } from "~/logics/time";
 
 const route = useAppRoute();
 const props = defineProps<{
@@ -28,10 +29,14 @@ const message = computed(() =>
 const user = computed(() =>
   appState.getUser(route.value.host, message.value.author)
 );
+
 const isOwnMessage = computed(() => message.value.author === userID.value);
 
-const messageType = computed(() => {
-  return message.value.content.content.oneofKind;
+const displayDate = computed(() => {
+  return convertDate(message.value.createdAt);
+});
+const editedAtDate = computed(() => {
+  return convertDate(message.value.editedAt);
 });
 
 const deleteMessage = async () => {
@@ -89,32 +94,40 @@ const content = computed(() => {
       :uri="message?.override?.avatar"
       rounded
     />
+    <div :class="{ bubble: true, 'own-bubble': isOwnMessage }">
+      <p class="text-sm dark:text-gray-200 text-gray-500">
+        <span :title="`Bridged by ${user?.username}`">
+          <mdi-link v-if="message?.override?.reason === 'bridge'" />
+        </span>
+        {{ message.override?.username || user?.username || message.author }}
+      </p>
+      <FileMessage
+        v-if="content.oneofKind === 'filesMessage'"
+        :content="content.filesMessage"
+      />
+      <!-- <EmbedMessage v-else-if="messageType === 'embedMessage'"> </EmbedMessage> -->
+      <TextMessage
+        v-else-if="content.oneofKind === 'textMessage'"
+        :content="content.textMessage"
+      />
+      <unsupported v-else> </unsupported>
+      <p class="mt-1 text-right text-sm text-gray-700 dark:text-gray-300">
+        {{ displayDate }}
+        <i v-if="message.editedAt > 0">(Edited {{ editedAtDate }})</i>
+      </p>
+    </div>
 
-    <!-- begin switch -->
-    <FileMessage
-      v-if="content.oneofKind === 'filesMessage'"
-      :messageid="messageid"
-      :content="content.filesMessage"
-    >
-    </FileMessage>
-    <!-- <EmbedMessage v-else-if="messageType === 'embedMessage'"> </EmbedMessage> -->
-    <TextMessage
-      v-else-if="content.oneofKind === 'textMessage'"
-      :messageid="messageid"
-      :content="content.textMessage"
-    >
-    </TextMessage>
-    <unsupported v-else> </unsupported>
-    <!-- end switch -->
-
-    <div class="h-full menu">
+    <div class="h-full">
       <h-menu v-model="menuOpen">
         <template #activator="{ toggle }">
-          <h-btn variant="text" icon dense class="mx-1" @click="toggle">
+          <h-btn variant="text" icon dense class="mx-1 menu" @click="toggle">
             <mdi-dots-vertical />
           </h-btn>
         </template>
-        <h-list class="bg-black" @click="menuOpen = false">
+        <h-list
+          class="bg-light-400 dark:bg-black w-max overflow-hidden"
+          @click="menuOpen = false"
+        >
           <h-list-item v-if="isOwnMessage" @click="editStart">
             <mdi-pencil class="mr-1" />
             Edit Message
@@ -136,7 +149,7 @@ const content = computed(() => {
 
 .message {
   @apply flex mb-4;
-  &:hover > .menu {
+  &:hover .menu {
     @apply visible;
   }
 }
@@ -146,15 +159,17 @@ const content = computed(() => {
 }
 
 .bubble {
-  @apply rounded bg-green-700 min-h-12 max-w-full sm:max-w-3/4 px-4 py-3 items-center break-all whitespace-pre-line;
+  @apply rounded dark:border-green-300 border-green-600 border-1 min-h-12 max-w-full bg-light-400 dark:bg-harmonydark-700
+  sm:max-w-3/4 px-4 py-3 items-center break-all 
+  whitespace-pre-line;
 }
 
 .own-bubble {
-  @apply bg-blue-700;
+  @apply dark:border-blue-300 border-blue-700;
 }
 
 .avatar {
-  @apply h-6 w-6;
+  @apply h-6 w-6 flex-shrink-0;
 }
 
 .avatar:not(.own-avatar) {

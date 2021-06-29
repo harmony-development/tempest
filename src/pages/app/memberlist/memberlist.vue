@@ -1,62 +1,40 @@
 <script lang="ts" setup>
-import { computed, onMounted, watch } from "vue";
+import { onMounted, watch } from "vue";
 import MemberItem from "./memberitem.vue";
-import { getOrFederate } from "~/logics/connections";
-import { useAppRoute } from "~/logics/location";
-import { appState } from "~/store/app";
-import type { IUserData } from "~/store/types/user";
 
+import ProfileDropdown from "./ProfileDropdown.vue";
+import { useFetchMembers, useMemberList } from "~/logics/fetcher";
+import { useAppRoute } from "~/logics/location";
+
+const fetchMembers = useFetchMembers();
+const members = useMemberList();
 const route = useAppRoute();
 
-const members = computed(
-  () =>
-    appState.getGuild(route.value.host, route.value.guildid as string).members
-);
-
-const fetchMembers = async () => {
-  if (!route.value.host || !route.value.guildid) return;
-  const conn = await getOrFederate(route.value.host);
-  const members = await conn.chat.getGuildMembers({
-    guildId: route.value.guildid as string,
-  });
-  const data = await conn.chat.getUserBulk({
-    userIds: members.response.members.filter((v) => v !== "0"),
-  });
-  appState.setUserData(
-    route.value.host,
-    data.response.users.reduce<{
-      [userid: string]: IUserData;
-    }>((obj, u, idx) => {
-      obj[members.response.members[idx]] = {
-        username: u.userName,
-        avatar: u.userAvatar,
-        status: u.userStatus,
-        bot: u.isBot,
-      };
-      return obj;
-    }, {})
-  );
-  appState.setGuildMembers(
-    route.value.host,
-    route.value.guildid as string,
-    members.response.members
-  );
-};
-
 onMounted(async () => {
-  if (!members.value) await fetchMembers();
+  if (!members.value) await fetchMembers(route.value.host, route.value.guildid);
 });
 
 watch(route, async (val, old) => {
   if (!members.value && (val.guildid !== old.guildid || val.host !== old.host))
-    await fetchMembers();
+    await fetchMembers(route.value.host, route.value.guildid);
 });
 </script>
 
 <template>
-  <div class="bg-harmonydark-800 w-full flex-1 p-3">
-    <member-item v-for="member in members" :key="member" :userid="member"
-      >hi</member-item
+  <div class="bg-white dark:bg-harmonydark-800 w-full flex-1 p-5">
+    <div
+      class="
+        bg-light-300
+        dark:bg-harmonydark-900
+        rounded-lg
+        h-full
+        flex flex-col
+      "
     >
+      <div class="flex-1">
+        <member-item v-for="member in members" :key="member" :userid="member" />
+      </div>
+      <profile-dropdown />
+    </div>
   </div>
 </template>

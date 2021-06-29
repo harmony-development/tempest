@@ -42,11 +42,11 @@ export function updateMenuPos(
 ) {
   const activatorBbox = activator.value!.getBoundingClientRect();
   const menuBbox = menu.value!.getBoundingClientRect();
-
   // we want a slight offset (12) to make menus look nicer when on the edge
-  x.value = Math.max(
-    activatorBbox.x - menuBbox.width + activatorBbox.width,
-    12
-  );
-  y.value = Math.max(activatorBbox.y + activatorBbox.height, 12);
+  x.value = -menuBbox.width + activatorBbox.width;
+  let targetY = activatorBbox.height;
+  if (targetY + activatorBbox.y + menuBbox.height > window.innerHeight) {
+    targetY = -menuBbox.height;
+  }
+  y.value = targetY;
 }

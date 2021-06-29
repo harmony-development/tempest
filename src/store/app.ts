@@ -105,6 +105,10 @@ class AppState extends Store<IAppState> {
     else chan.messages = messages;
   }
 
+  setReachedTop(host: string, channelID: string, reachedTop: boolean) {
+    this.getChannel(host, channelID).reachedTop = reachedTop;
+  }
+
   addMessage(
     host: string,
     channelID: string,
@@ -118,7 +122,7 @@ class AppState extends Store<IAppState> {
   deleteMessage(host: string, channelID: string, messageID: string) {
     delete this.getHost(host).messages[messageID];
     const msgs = this.getChannel(host, channelID).messages;
-    msgs?.splice(msgs.indexOf(messageID));
+    msgs?.splice(msgs.indexOf(messageID), 1);
   }
 
   updateMessage(

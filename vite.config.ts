@@ -8,6 +8,7 @@ import WindiCSS from "vite-plugin-windicss";
 import { VitePWA } from "vite-plugin-pwa";
 import VueI18n from "@intlify/vite-plugin-vue-i18n";
 import visualizer from "rollup-plugin-visualizer";
+import ViteFonts from "vite-plugin-fonts";
 
 export default defineConfig({
   resolve: {
@@ -18,6 +19,12 @@ export default defineConfig({
   plugins: [
     Vue({
       include: [/\.vue$/],
+    }),
+
+    ViteFonts({
+      google: {
+        families: ["Roboto"],
+      },
     }),
 
     // https://github.com/JohnCampionJr/vite-plugin-vue-layouts

@@ -28,7 +28,7 @@ const onClick = () => {
 <template>
   <h-list-item
     :selected="props.id === route.channelid"
-    class="rounded"
+    class="rounded overflow-ellipsis"
     @click="onClick"
   >
     <mdi-pound class="mr-1 text-lg" />

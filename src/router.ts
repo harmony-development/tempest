@@ -10,23 +10,23 @@ export const appRoutes: RouteRecordRaw[] = [
     redirect: "/entry/serverselect",
   },
   {
-    path: "entry",
+    path: "/entry",
     component: entryVue,
     children: [
       {
-        path: "serverselect",
+        path: "/serverselect",
         component: serverselectVue,
       },
       {
         name: "authpage",
-        path: "auth/:host?",
+        path: "/auth/:host?",
         component: authVue,
       },
     ],
   },
   {
     name: "app",
-    path: "app/:host/:guildid?/:channelid?/:messageid?",
+    path: "/app/:host/:guildid?/:channelid?/:messageid?",
     component: appVue,
   },
 ];

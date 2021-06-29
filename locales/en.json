@@ -5,6 +5,9 @@
       "name": "Channel Name",
       "title": "Add Channel"
     },
+    "error-occured": {
+      "title": "Error Occured"
+    },
     "guild-dialog": {
       "create": "Create",
       "create-guild": "Create Guild",
@@ -15,8 +18,16 @@
       "to-create": "Create guild?",
       "to-join": "Join guild?"
     },
+    "image-view": {
+      "open-original": "Open Original"
+    },
     "no-channel-selected": "Select a channel to talk in",
-    "no-guild-selected": "Select a guild to start chatting"
+    "no-guild-selected": "Select a guild to start chatting",
+    "profile": "Profile",
+    "profile-dropdown": {
+      "settings": "Settings",
+      "theme": "Toggle Theme"
+    }
   },
   "app-name": "Tempest",
   "auth": {

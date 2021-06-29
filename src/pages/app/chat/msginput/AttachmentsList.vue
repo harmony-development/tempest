@@ -18,7 +18,14 @@ const removeAttachment = (idx: number) => {
 
 <template>
   <div
-    class="flex flex-row bg-harmonydark-600 w-auto max-h-42 p-2 overflow-auto"
+    class="
+      flex flex-row
+      dark:bg-harmonydark-600
+      w-auto
+      max-h-42
+      p-2
+      overflow-auto
+    "
   >
     <div
       v-for="(img, i) in attachments"
@@ -30,7 +37,10 @@ const removeAttachment = (idx: number) => {
         :src="img.preview"
         class="attachment"
       />
-      <div v-else class="bg-harmonydark-900 h-32 max-w-42 p-3 overflow-hidden">
+      <div
+        v-else
+        class="dark:bg-harmonydark-900 h-32 max-w-42 p-3 overflow-hidden"
+      >
         <p class="whitespace-nowrap overflow-ellipsis overflow-hidden">
           <mdi-file class="mr-2 text-lg" />{{ img.file.name }}
         </p>

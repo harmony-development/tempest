@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
-import { onMounted, ref } from "vue";
+import { onErrorCaptured, onMounted, ref } from "vue";
 import GuildList from "./guildlist/guildlist.vue";
 import ChannelList from "./channellist/channellist.vue";
 import Chat from "./chat/chat.vue";
 import MemberList from "./memberlist/memberlist.vue";
-import ChannelHeader from "./channelheader/ChannelHeader.vue"
-import GuildHeader from "./guildheader/GuildHeader.vue"
+import ChannelHeader from "./channelheader/ChannelHeader.vue";
+import GuildHeader from "./guildheader/GuildHeader.vue";
+import ErrorDialog from "./ErrorDialog.vue";
 import HBtn from "~/components/HBtn.vue";
 
 import HDrawer from "~/components/HDrawer.vue";
@@ -19,51 +20,77 @@ const route = useAppRoute();
 const leftDrawerOpen = ref(false);
 const rightDrawerOpen = ref(false);
 const mounted = ref(false);
+const errorDialogOpen = ref(false);
+const error = ref<Error | undefined>(undefined);
 
 onMounted(() => (mounted.value = true));
 
 if (!isLoggedIn()) {
   router.push("/entry/serverselect");
 } else {
-  const stream = await getStream(host.value, session.value);
-  stream.request.send({
-    request: {
-      oneofKind: "subscribeToHomeserverEvents",
-      subscribeToHomeserverEvents: {},
-    },
-  });
+  (async () => {
+    const stream = await getStream(host.value, session.value);
+    stream.request.send({
+      request: {
+        oneofKind: "subscribeToHomeserverEvents",
+        subscribeToHomeserverEvents: {},
+      },
+    });
+  })();
 }
+
+onErrorCaptured((err) => {
+  error.value = err;
+  errorDialogOpen.value = true;
+});
 </script>
 <template>
+  <h-dialog v-model="errorDialogOpen">
+    <error-dialog :err="error" />
+  </h-dialog>
   <div class="flex h-full w-full overflow-auto">
-    <div id="drawer-root" />
     <h-drawer
       v-if="mounted"
       v-model="leftDrawerOpen"
       class="flex w-3/4 overflow-visible sm:w-1/2 md:w-70"
     >
       <guild-list />
-      <div class="bg-harmonydark-800 flex-1">
+      <div class="bg-light-400 dark:bg-harmonydark-800 flex-1">
         <guild-header v-if="route.guildid && route.host" />
         <channel-list v-if="route.guildid && route.host" />
       </div>
     </h-drawer>
     <div class="flex flex-col flex-1 min-w-0">
-      <div class="flex bg-harmonydark-800 p-1">
-        <h-btn variant="text" icon class="md:invisible" @click="leftDrawerOpen = !leftDrawerOpen">
+      <div class="flex bg-light-500 dark:bg-harmonydark-800 p-1">
+        <h-btn
+          variant="text"
+          icon
+          class="md:invisible"
+          @click="leftDrawerOpen = !leftDrawerOpen"
+        >
           <mdi-menu />
         </h-btn>
         <div class="flex flex-1 items-center">
           <channel-header />
         </div>
-        <h-btn variant="text" icon class="md:invisible" @click="rightDrawerOpen = !rightDrawerOpen">
+        <h-btn
+          variant="text"
+          icon
+          class="md:invisible"
+          @click="rightDrawerOpen = !rightDrawerOpen"
+        >
           <ic-round-group />
         </h-btn>
       </div>
       <chat v-if="route.guildid && route.host" />
       <div v-else class="flex flex-col flex-1 justify-center items-center">
-        <ic-round-group class="rounded-full bg-gray-400 bg-opacity-30 mb-4 p-3 text-6xl" />
-        <h1 v-t="'app.no-guild-selected'" class="text-md text-blue-200 lg:text-xl"></h1>
+        <ic-round-group
+          class="rounded-full bg-gray-400 bg-opacity-30 mb-4 p-3 text-6xl"
+        />
+        <h1
+          v-t="'app.no-guild-selected'"
+          class="text-md text-blue-200 lg:text-xl"
+        ></h1>
       </div>
     </div>
     <div id="right-drawer-root">

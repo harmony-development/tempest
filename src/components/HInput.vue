@@ -63,7 +63,7 @@ watch(
 }
 
 .border {
-  @apply border-harmonydark-500;
+  @apply dark:border-harmonydark-500;
 }
 
 .input-label {

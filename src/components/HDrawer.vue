@@ -40,7 +40,7 @@ const setOpen = (val: boolean) => {
 }
 
 .drawer {
-  @apply h-full bg-harmonydark-700 transform fixed md:static overflow-auto ease-in-out transition duration-150 z-30 md:z-auto;
+  @apply h-full dark:bg-harmonydark-700 transform fixed md:static overflow-auto ease-in-out transition duration-150 z-30 md:z-auto;
 
   &.left {
     @apply top-0 left-0;

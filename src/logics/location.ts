@@ -7,9 +7,9 @@ export const useAppRoute = () => {
     () =>
       route.params as {
         host: string;
-        guildid?: string;
-        channelid?: string;
-        messageid?: string;
+        guildid: string;
+        channelid: string;
+        messageid: string;
       }
   );
 };

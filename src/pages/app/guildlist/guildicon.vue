@@ -48,6 +48,8 @@ const onClick = () => {
     params: {
       host: host.value,
       guildid: props.id,
+      channelid: "",
+      messageid: "",
     },
   });
 };
@@ -104,7 +106,7 @@ const onClick = () => {
 }
 
 .bg {
-  @apply bg-gray-600;
+  @apply bg-gray-200 dark:bg-gray-600;
 }
 
 .selected {

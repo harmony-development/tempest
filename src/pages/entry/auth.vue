@@ -10,7 +10,7 @@ import {
 } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/auth/v1/auth";
 import type { AuthStream } from "~/types";
 import { host, session, userID } from "~/logics/app";
-import HCircularProgress from "~/components/HCircularProgress.vue";
+import HCircularProgress from "~/components/HSpinner.vue";
 import HList from "~/components/HList.vue";
 import HListItem from "~/components/HListItem.vue";
 import HBtn from "~/components/HBtn.vue";

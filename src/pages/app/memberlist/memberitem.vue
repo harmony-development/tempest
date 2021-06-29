@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { defineProps } from "vue";
+import { computed, defineProps } from "vue";
 import HListItem from "~/components/HListItem.vue";
 import { useAppRoute } from "~/logics/location";
 import { appState } from "~/store/app";
@@ -10,12 +10,12 @@ const props = defineProps<{
 }>();
 const route = useAppRoute();
 
-const user = appState.getUser(route.value.host, props.userid);
+const user = computed(() => appState.getUser(route.value.host, props.userid));
 </script>
 
 <template>
-  <h-list-item>
+  <h-list-item class="rounded">
     <h-image :userid="props.userid" class="h-8 mr-3 w-8" rounded />
-    {{ user?.username }}
+    <p class="flex-1">{{ user?.username }}</p>
   </h-list-item>
 </template>

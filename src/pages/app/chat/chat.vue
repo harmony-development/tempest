@@ -11,7 +11,10 @@ const route = useAppRoute();
     <mdi-pound
       class="text-6xl rounded-full bg-gray-400 bg-opacity-30 p-3 mb-4"
     />
-    <h1 v-t="'app.no-channel-selected'" class="text-xl text-blue-200"></h1>
+    <h1
+      v-t="'app.no-channel-selected'"
+      class="text-xl text-blue-900 dark:text-blue-200"
+    ></h1>
   </div>
   <msg-input />
 </template>

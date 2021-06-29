@@ -10,12 +10,13 @@ const props = defineProps<{
   uri?: string;
   rounded?: boolean;
 }>();
-const host = appState.getHost(route.value.host);
+
+const host = computed(() => appState.getHost(route.value.host));
 
 const src = computed(() => {
   if (props.uri) return parseHMC(props.uri, route.value.host);
   if (props.userid) {
-    const avatar = host.users[props.userid]?.avatar;
+    const avatar = host.value.users[props.userid]?.avatar;
     if (!avatar) return;
     return parseHMC(avatar, route.value.host);
   }

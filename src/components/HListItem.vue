@@ -20,7 +20,7 @@ const props = defineProps<{
 
 <style lang="postcss" scoped>
 .list-item {
-  @apply flex items-center w-full py-2 px-4 cursor-pointer select-none transition duration-200;
+  @apply flex items-center w-full py-2 px-4 cursor-pointer select-none transition duration-100;
 
   &:hover {
     @apply bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10;

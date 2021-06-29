@@ -32,7 +32,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="bg-harmonydark-700 p-2">
+  <div class="bg-white dark:bg-harmonydark-700 p-2">
     <guild-icon
       v-for="guild in guildList"
       :id="guild.guildId"

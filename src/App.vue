@@ -16,7 +16,7 @@ useHead({
       <router-view />
     </template>
     <template #fallback>
-      <h-circular-progress />
+      <h-spinner />
     </template>
   </Suspense>
 </template>
