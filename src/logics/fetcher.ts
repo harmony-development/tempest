@@ -71,7 +71,6 @@ export const useFetchChannelList = () => {
           name: c.channelName,
           kind: "text",
           unread: false,
-          reachedTop: false,
           typing: {},
         };
         return obj;

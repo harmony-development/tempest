@@ -6,6 +6,7 @@ import { updateMenuPos, useFloatingPos } from "~/composeables/useFloatingPos";
 const props = defineProps<{
   modelValue: boolean;
   full?: boolean;
+  closeOnClick?: boolean;
 }>();
 const emit = defineEmit(["update:modelValue"]);
 
@@ -35,7 +36,9 @@ const menuStyle = computed(() => {
 
 <template>
   <div class="relative">
-    <slot name="activator" :toggle="toggle" />
+    <div>
+      <slot name="activator" :toggle="toggle" />
+    </div>
     <transition name="menu">
       <div
         v-show="open"
@@ -52,7 +55,7 @@ const menuStyle = computed(() => {
 
 <style lang="postcss" scoped>
 .menu {
-  @apply z-50 absolute;
+  @apply z-50 absolute overflow-hidden;
 }
 
 .fullwidth {

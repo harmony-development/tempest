@@ -36,7 +36,7 @@ onMounted(async () => {
 
 watch(route, async (curr, prev) => {
   if (curr.channelid === prev.channelid && curr.host === prev.host) return;
-  if (!curr.channelid) return;
+  if (!curr.channelid || reachedTop.value) return;
   await fetchMessages(
     route.value.host,
     route.value.guildid,
@@ -65,6 +65,7 @@ watch(
 );
 
 const scrollHandler = useThrottleFn(async (ev: Event) => {
+  if (reachedTop.value) return;
   const target = ev.target as HTMLDivElement;
   const previousScrollPos = target.scrollHeight - target.scrollTop;
   if (target.scrollTop === 0) {

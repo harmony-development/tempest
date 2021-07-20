@@ -8,12 +8,14 @@ import MemberList from "./memberlist/memberlist.vue";
 import ChannelHeader from "./channelheader/ChannelHeader.vue";
 import GuildHeader from "./guildheader/GuildHeader.vue";
 import ErrorDialog from "./ErrorDialog.vue";
+import UserSettings from "./UserSettings/UserSettings.vue";
 import HBtn from "~/components/HBtn.vue";
 
 import HDrawer from "~/components/HDrawer.vue";
 import { session, host, isLoggedIn } from "~/logics/app";
 import { getStream } from "~/logics/connections";
 import { useAppRoute } from "~/logics/location";
+import Alert from "~/components/Alert.vue";
 
 const router = useRouter();
 const route = useAppRoute();
@@ -45,9 +47,10 @@ onErrorCaptured((err) => {
 });
 </script>
 <template>
-  <h-dialog v-model="errorDialogOpen">
+  <user-settings />
+  <alert v-model="errorDialogOpen">
     <error-dialog :err="error" />
-  </h-dialog>
+  </alert>
   <div class="flex h-full w-full overflow-auto">
     <h-drawer
       v-if="mounted"

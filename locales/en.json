@@ -6,7 +6,7 @@
       "title": "Add Channel"
     },
     "error-occured": {
-      "title": "Error Occured"
+      "title": "Error"
     },
     "guild-dialog": {
       "create": "Create",
@@ -27,6 +27,9 @@
     "profile-dropdown": {
       "settings": "Settings",
       "theme": "Toggle Theme"
+    },
+    "user-settings": {
+      "title": "Settings and Preferences"
     }
   },
   "app-name": "Tempest",
@@ -51,6 +54,7 @@
     "go": "GO",
     "home": "Home",
     "next": "Next",
+    "ok": "OK",
     "toggle_dark": "Toggle dark mode",
     "toggle_langs": "Change languages"
   },
@@ -65,6 +69,8 @@
   },
   "h": {
     "bad-email": "Invalid Email",
-    "incorrect-password": "Incorrect Password"
+    "incorrect-password": "Incorrect Password",
+    "not-enough-permissions": "You don't have permissions to perform this action",
+    "is-owner": "You cannot leave the guild because you are the owner"
   }
 }

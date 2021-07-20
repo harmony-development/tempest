@@ -1,11 +1,18 @@
 <script lang="ts" setup>
+import { RpcError } from "@protobuf-ts/runtime-rpc";
 import { computed, defineProps } from "@vue/runtime-core";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps<{
   err?: Error;
 }>();
 
+const i18n = useI18n();
+
 const errorText = computed(() => {
+  if (props.err && props.err instanceof RpcError) {
+    return i18n.t(props.err?.code, props.err?.message);
+  }
   return props.err?.name;
 });
 </script>

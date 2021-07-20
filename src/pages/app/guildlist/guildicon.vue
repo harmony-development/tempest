@@ -2,6 +2,7 @@
 import { computed, defineProps, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import GuildIconMenu from "./GuildIconMenu.vue";
+import HMenu from "~/components/HMenu.vue";
 import { host } from "~/logics/app";
 import { getOrFederate } from "~/logics/connections";
 import { parseHMC } from "~/logics/harmonyAPI";
