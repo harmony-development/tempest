@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import GuildDialog from "./GuildDialog/GuildDialog.vue";
-import HBtn from "~/components/HBtn.vue";
+import HBtn from "~/components/shared/HBtn.vue";
 
 const dialogOpen = ref(false);
 </script>

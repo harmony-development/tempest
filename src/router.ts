@@ -12,8 +12,10 @@ export const appRoutes: RouteRecordRaw[] = [
   {
     path: "/entry",
     component: entryVue,
+    redirect: "/entry/serverselect",
     children: [
       {
+        name: "serverselect",
         path: "serverselect",
         component: serverselectVue,
       },

@@ -8,7 +8,7 @@ import { userID } from "~/logics/app";
 import { useAppRoute } from "~/logics/location";
 import { appState } from "~/store/app";
 import HImage from "~/components/HImage.vue";
-import HBtn from "~/components/HBtn.vue";
+import HBtn from "~/components/shared/HBtn.vue";
 import HList from "~/components/HList.vue";
 import HListItem from "~/components/HListItem.vue";
 import HMenu from "~/components/HMenu.vue";

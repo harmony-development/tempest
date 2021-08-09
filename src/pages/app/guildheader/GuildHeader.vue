@@ -3,7 +3,7 @@ import { computed, ref } from "vue";
 import AddChannelDialog from "./AddChannelDialog.vue";
 import { useAppRoute } from "~/logics/location";
 import { appState } from "~/store/app";
-import HBtn from "~/components/HBtn.vue";
+import HBtn from "~/components/shared/HBtn.vue";
 
 const route = useAppRoute();
 const addChannelOpen = ref(false);

@@ -2,7 +2,7 @@
 import { defineEmit, defineProps } from "vue";
 import { useVModel } from "@vueuse/core";
 import type { IAttachment } from "./types";
-import HBtn from "~/components/HBtn.vue";
+import HBtn from "~/components/shared/HBtn.vue";
 
 const props = defineProps<{
   modelValue: IAttachment[];

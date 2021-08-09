@@ -1,13 +1,10 @@
 <script lang="ts" setup>
-import { useVModel } from "@vueuse/core";
-import { defineEmit, defineProps } from "vue";
+import { computed } from "vue";
 import HDialog from "./HDialog.vue";
-import HBtn from "./HBtn.vue";
-const props = defineProps<{
-  modelValue: boolean;
-}>();
-const emit = defineEmit(["update:modelValue"]);
-const open = useVModel(props, "modelValue", emit);
+import HBtn from "./shared/HBtn.vue";
+import { promptState } from "~/store/prompt";
+
+const open = computed(() => promptState.state.promptOpen);
 </script>
 
 <template>
@@ -19,7 +16,7 @@ const open = useVModel(props, "modelValue", emit);
           v-t="'button.ok'"
           color="primary"
           variant="text"
-          @click="open = false"
+          @click="promptState.resolve()"
         />
       </div>
     </div>

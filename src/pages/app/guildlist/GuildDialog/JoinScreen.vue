@@ -2,7 +2,7 @@
 import { defineEmit, defineProps, ref } from "vue";
 import { useVModel } from "@vueuse/core";
 import HInput from "~/components/HInput.vue";
-import HBtn from "~/components/HBtn.vue";
+import HBtn from "~/components/shared/HBtn.vue";
 import { parseHarmonyURI } from "~/logics/harmonyAPI";
 import { useAppRoute } from "~/logics/location";
 import { getOrFederate, homeserverConn } from "~/logics/connections";

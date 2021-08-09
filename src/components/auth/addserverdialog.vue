@@ -3,7 +3,7 @@ import { defineProps, defineEmit, ref } from "vue";
 import { useVModel } from "@vueuse/core";
 import HDialog from "~/components/HDialog.vue";
 import HInput from "~/components/HInput.vue";
-import HBtn from "~/components/HBtn.vue";
+import HBtn from "~/components/shared/HBtn.vue";
 import { hostList } from "~/logics/entry";
 
 const props = defineProps<{

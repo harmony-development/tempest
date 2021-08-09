@@ -3,7 +3,7 @@ import type { Attachment } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/
 import { computed, defineProps, ref } from "vue";
 import { parseHMC } from "~/logics/harmonyAPI";
 import { useAppRoute } from "~/logics/location";
-import HBtn from "~/components/HBtn.vue";
+import HBtn from "~/components/shared/HBtn.vue";
 import HDialog from "~/components/HDialog.vue";
 
 const props = defineProps<{

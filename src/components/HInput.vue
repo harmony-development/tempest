@@ -59,19 +59,15 @@ watch(
 <style lang="postcss" scoped>
 .input-parent {
   transition: 0.1s linear;
-  @apply flex items-center outline border-2 relative rounded focus-within:border-blue-300;
-}
-
-.border {
-  @apply dark:border-harmonydark-500;
+  @apply dark:bg-harmonydark-900 flex items-center border-2 relative rounded dark:border-harmonydark-500 focus-within:border-blue-300;
 }
 
 .input-label {
-  @apply text-md top-0 origin-0 p-3 pt-3 duration-300 absolute pointer-events-none dark:text-harmonydark-200;
+  @apply top-0 p-3 pt-3 duration-300 absolute pointer-events-none dark:text-harmonydark-200;
 }
 
 .input-input {
-  @apply bg-transparent text-md z-1 w-full p-3 block appearance-none focus:outline-none pl-3 resize-none break-words;
+  @apply bg-transparent z-1 w-full p-3 block appearance-none focus:outline-none pl-3 resize-none break-words;
 }
 
 .input-parent:focus-within > .input-label,

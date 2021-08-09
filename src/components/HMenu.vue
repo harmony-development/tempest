@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onClickOutside, useVModel } from "@vueuse/core";
-import { computed, nextTick, defineProps, defineEmit } from "vue";
+import { computed, nextTick, defineProps, defineEmits } from "vue";
 import { updateMenuPos, useFloatingPos } from "~/composeables/useFloatingPos";
 
 const props = defineProps<{
@@ -8,7 +8,7 @@ const props = defineProps<{
   full?: boolean;
   closeOnClick?: boolean;
 }>();
-const emit = defineEmit(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue"]);
 
 const open = useVModel(props, "modelValue", emit);
 

@@ -60,17 +60,29 @@
   },
   "buttons": {
     "back": "Back",
-    "done": "Done"
+    "done": "Done",
+    "next": "Next"
+  },
+  "common": {
+    "loading": "Loading"
   },
   "entry": {
+    "auth": {
+      "return-to-selection": "Return to server selection"
+    },
+    "fatal-error": "Unable to contact server",
     "serverselect": {
       "title": "Select a Server"
+    },
+    "error": {
+      "sending-choice": "Unable to send choice",
+      "sending-form": "Unable to send form"
     }
   },
   "h": {
     "bad-email": "Invalid Email",
     "incorrect-password": "Incorrect Password",
-    "not-enough-permissions": "You don't have permissions to perform this action",
-    "is-owner": "You cannot leave the guild because you are the owner"
+    "is-owner": "You cannot leave the guild because you are the owner",
+    "not-enough-permissions": "You don't have permissions to perform this action"
   }
 }

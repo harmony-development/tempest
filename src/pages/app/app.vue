@@ -9,7 +9,7 @@ import ChannelHeader from "./channelheader/ChannelHeader.vue";
 import GuildHeader from "./guildheader/GuildHeader.vue";
 import ErrorDialog from "./ErrorDialog.vue";
 import UserSettings from "./UserSettings/UserSettings.vue";
-import HBtn from "~/components/HBtn.vue";
+import HBtn from "~/components/shared/HBtn.vue";
 
 import HDrawer from "~/components/HDrawer.vue";
 import { session, host, isLoggedIn } from "~/logics/app";

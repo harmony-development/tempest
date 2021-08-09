@@ -3,7 +3,8 @@
   "scripts": {
     "build": "cross-env NODE_ENV=production vite build",
     "dev": "vite --port 3333 --force",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "jest src"
   },
   "dependencies": {
     "@harmony-dev/harmony-web-sdk": "^5.0.59",
@@ -26,15 +27,18 @@
     "@iconify/json": "^1.1.378",
     "@intlify/vite-plugin-vue-i18n": "^2.3.2",
     "@types/dompurify": "^2.2.3",
+    "@types/jest": "^26.0.24",
     "@types/rollup-plugin-visualizer": "^4.2.1",
     "@types/showdown": "^1.9.4",
     "@typescript-eslint/eslint-plugin": "^4.28.4",
     "@vitejs/plugin-vue": "^1.2.5",
     "@vue/compiler-sfc": "^3.1.5",
     "@vue/server-renderer": "^3.1.5",
+    "@vue/test-utils": "^2.0.0-rc.11",
     "cross-env": "^7.0.3",
     "eslint": "^7.31.0",
     "eslint-config-prettier": "^8.3.0",
+    "jest": "^27.0.6",
     "markdown-it-prism": "^2.1.8",
     "patch-vue-directive-ssr": "^0.0.1",
     "pnpm": "^6.10.3",
@@ -42,6 +46,7 @@
     "prettier": "^2.3.2",
     "rollup-plugin-analyzer": "^4.0.0",
     "rollup-plugin-visualizer": "^5.5.2",
+    "ts-jest": "^27.0.4",
     "typescript": "^4.3.5",
     "vite": "2.3.8",
     "vite-plugin-components": "^0.11.5",
@@ -50,6 +55,7 @@
     "vite-plugin-pwa": "^0.8.1",
     "vite-plugin-vue-layouts": "^0.3.1",
     "vite-plugin-windicss": "^1.2.5",
-    "vite-ssg": "^0.11.4"
+    "vite-ssg": "^0.11.4",
+    "vue-jest": "^5.0.0-alpha.10"
   }
 }

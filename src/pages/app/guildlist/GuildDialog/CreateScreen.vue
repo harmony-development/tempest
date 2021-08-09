@@ -2,7 +2,7 @@
 import { defineEmit, defineProps, ref } from "vue";
 import { useVModel } from "@vueuse/core";
 import HInput from "~/components/HInput.vue";
-import HBtn from "~/components/HBtn.vue";
+import HBtn from "~/components/shared/HBtn.vue";
 import { homeserverConn } from "~/logics/connections";
 import { host } from "~/logics/app";
 

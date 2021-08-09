@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import AddServerDialog from "./addserverdialog.vue";
+import AddServerDialog from "../../components/auth/addserverdialog.vue";
 import HList from "~/components/HList.vue";
 import HListItem from "~/components/HListItem.vue";
 import HSpacer from "~/components/HSpacer.vue";
-import HBtn from "~/components/HBtn.vue";
+import HBtn from "~/components/shared/HBtn.vue";
 import { hostList } from "~/logics/entry";
+import { parseUserHost } from "~/logics/utils/parsing";
 
 const router = useRouter();
 
@@ -17,14 +18,10 @@ const removeServer = (idx: number) => {
   hostList.value.splice(idx, 1);
 };
 const onNextClicked = () => {
-  let host = selectedHost.value!;
-  if (host.includes("://")) host = `https${host.substr(host.indexOf("://"))}`;
-  else host = `https://${host}`;
-  const parsed = new URL(host);
   router.push({
     name: "authpage",
     params: {
-      host: `https://${parsed.hostname}:${parsed.port || "2289"}`,
+      host: parseUserHost(selectedHost.value!),
     },
   });
 };
@@ -69,7 +66,6 @@ const onNextClicked = () => {
     </h-list>
 
     <div class="flex justify-end">
-      <h-btn v-t="'button.back'" :variant="'text'" disabled class="mr-1" />
       <h-btn
         v-t="'button.next'"
         :variant="'filled'"

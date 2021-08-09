@@ -1,3 +1,3 @@
 <template>
-  <fontisto-spinner-fidget class="w-min animate-spin text-4xl inline-block" />
+  <mdi-loading class="w-min animate-spin inline-block" />
 </template>
