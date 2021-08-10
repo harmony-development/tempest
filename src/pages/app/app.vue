@@ -8,7 +8,7 @@ import MemberList from "./MemberList/memberlist.vue";
 import ChannelHeader from "./ChannelHeader/ChannelHeader.vue";
 import GuildHeader from "./GuildHeader/GuildHeader.vue";
 import ErrorDialog from "./ErrorDialog.vue";
-import UserSettings from "./UserSettings/UserSettings.vue";
+import UserSettings from "./Dialogs/UserSettings/UserSettings.vue";
 import HBtn from "~/components/shared/HBtn.vue";
 
 import HDrawer from "~/components/HDrawer.vue";

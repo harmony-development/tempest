@@ -5,6 +5,7 @@ import { useAppRoute } from "~/logics/location";
 import { appState } from "~/store/app";
 
 const route = useAppRoute();
+
 const props = defineProps<{
   userid?: string;
   uri?: string;
