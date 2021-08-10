@@ -21,7 +21,7 @@ watch(route, async (val, old) => {
 </script>
 
 <template>
-  <div class="bg-white dark:bg-harmonydark-800 w-full flex-1 p-5">
+  <div class="bg-white dark:bg-harmonydark-800 w-full flex-1 p-2">
     <div
       class="
         bg-light-300

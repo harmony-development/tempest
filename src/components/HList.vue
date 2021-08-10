@@ -1,5 +1,5 @@
 <template>
-  <ol class="rounded-lg shadow-sm overflow-hidden">
+  <ol class="shadow-sm overflow-hidden">
     <slot />
   </ol>
 </template>

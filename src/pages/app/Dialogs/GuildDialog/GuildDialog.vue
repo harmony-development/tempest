@@ -14,7 +14,7 @@ const screen = ref<"create" | "join">("join");
 </script>
 
 <template>
-  <h-dialog v-model="open">
+  <h-dialog v-model="open" compact>
     <join-screen
       v-if="screen === 'join'"
       v-model:open="open"

@@ -4,7 +4,7 @@ import { useVModel } from "@vueuse/core";
 
 const props = defineProps<{
   modelValue: boolean;
-  compact: boolean;
+  compact?: boolean;
 }>();
 const emit = defineEmit(["update:modelValue"]);
 const open = useVModel(props, "modelValue", emit);

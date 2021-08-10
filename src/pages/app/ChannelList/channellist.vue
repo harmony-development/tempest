@@ -26,7 +26,7 @@ watch(route, async (curr, prev) => {
 </script>
 
 <template>
-  <h-list>
+  <h-list class="rounded-b-sm">
     <channel-list-item
       v-for="channel in channelList"
       :id="channel"

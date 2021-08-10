@@ -17,9 +17,10 @@ const src = computed(() => {
   if (props.uri) return parseHMC(props.uri, route.value.host);
   if (props.userid) {
     const avatar = host.value.users[props.userid]?.avatar;
-    if (!avatar) return;
+    if (!avatar) return undefined;
     return parseHMC(avatar, route.value.host);
   }
+  return undefined;
 });
 </script>
 <template>

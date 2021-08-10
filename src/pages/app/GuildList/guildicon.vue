@@ -98,7 +98,7 @@ const onClick = () => {
 
 <style lang="postcss" scoped>
 .guild-icon {
-  @apply outline-none rounded-full border-2 border-transparent block mb-1 transform duration-100 h-14 w-14;
+  @apply outline-none rounded-full border-2 border-transparent block transform duration-100 h-14 w-14;
 
   &:hover {
     transform: translateY(-3px);

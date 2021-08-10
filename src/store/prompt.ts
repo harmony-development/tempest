@@ -14,7 +14,7 @@ interface IPromptState {
 }
 
 class PromptState extends Store<IPromptState> {
-  prompt(type: PromptType, content: string): Promise<void> {
+  async prompt(type: PromptType, content: string): Promise<void> {
     this.state.promptType = type;
     this.state.content = content;
     const promptPromise = new Promise<void>((resolve, reject) => {

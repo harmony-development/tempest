@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import { onErrorCaptured, onMounted, ref } from "vue";
-import GuildList from "./guildlist/guildlist.vue";
-import ChannelList from "./channellist/channellist.vue";
-import Chat from "./chat/chat.vue";
-import MemberList from "./memberlist/memberlist.vue";
-import ChannelHeader from "./channelheader/ChannelHeader.vue";
-import GuildHeader from "./guildheader/GuildHeader.vue";
+import GuildList from "./GuildList/GuildList.vue";
+import ChannelList from "./ChannelList/channellist.vue";
+import Chat from "./Chat/chat.vue";
+import MemberList from "./MemberList/memberlist.vue";
+import ChannelHeader from "./ChannelHeader/ChannelHeader.vue";
+import GuildHeader from "./GuildHeader/GuildHeader.vue";
 import ErrorDialog from "./ErrorDialog.vue";
 import UserSettings from "./UserSettings/UserSettings.vue";
 import HBtn from "~/components/shared/HBtn.vue";
@@ -64,26 +64,25 @@ onErrorCaptured((err) => {
       </div>
     </h-drawer>
     <div class="flex flex-col flex-1 min-w-0">
-      <div class="flex bg-light-500 dark:bg-harmonydark-800 p-1">
-        <h-btn
-          variant="text"
-          icon
-          class="md:invisible"
-          @click="leftDrawerOpen = !leftDrawerOpen"
-        >
-          <mdi-menu />
-        </h-btn>
+      <div class="flex bg-light-500 dark:bg-harmonydark-800 p-1 md:p-3">
+        <div class="md:hidden">
+          <h-btn variant="text" icon @click="leftDrawerOpen = !leftDrawerOpen">
+            <mdi-menu />
+          </h-btn>
+        </div>
         <div class="flex flex-1 items-center">
           <channel-header />
         </div>
-        <h-btn
-          variant="text"
-          icon
-          class="md:invisible"
-          @click="rightDrawerOpen = !rightDrawerOpen"
-        >
-          <ic-round-group />
-        </h-btn>
+        <div class="md:hidden">
+          <h-btn
+            variant="text"
+            icon
+            class="md:hidden"
+            @click="rightDrawerOpen = !rightDrawerOpen"
+          >
+            <ic-round-group />
+          </h-btn>
+        </div>
       </div>
       <chat v-if="route.guildid && route.host" />
       <div v-else class="flex flex-col flex-1 justify-center items-center">
@@ -98,7 +97,6 @@ onErrorCaptured((err) => {
     </div>
     <div id="right-drawer-root">
       <h-drawer
-        v-if="mounted"
         v-model="rightDrawerOpen"
         class="flex flex-col w-3/4 overflow-visible sm:w-1/2 md:w-60"
         right

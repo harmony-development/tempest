@@ -95,9 +95,15 @@ const content = computed(() => {
       rounded
     />
     <div :class="{ bubble: true, 'own-bubble': isOwnMessage }">
-      <p class="text-sm dark:text-gray-200 text-gray-500">
-        <span :title="`Bridged by ${user?.username}`">
-          <mdi-link v-if="message?.override?.reason === 'bridge'" />
+      <p
+        class="text-xs dark:text-gray-200 text-gray-500 flex items-center gap-1"
+      >
+        <span
+          v-if="message?.override?.reason === 'bridge'"
+          :title="`Bridged by ${user?.username}`"
+          class="flex align-middle"
+        >
+          <mdi-link />
         </span>
         {{ message.override?.username || user?.username || message.author }}
       </p>
@@ -111,7 +117,7 @@ const content = computed(() => {
         :content="content.textMessage"
       />
       <unsupported v-else> </unsupported>
-      <p class="mt-1 text-right text-sm text-gray-700 dark:text-gray-300">
+      <p class="mt-1 text-right text-xs text-gray-700 dark:text-gray-300">
         {{ displayDate }}
         <i v-if="message.editedAt > 0">(Edited {{ editedAtDate }})</i>
       </p>
@@ -159,13 +165,9 @@ const content = computed(() => {
 }
 
 .bubble {
-  @apply rounded dark:border-green-300 border-green-600 border-1 min-h-12 max-w-full bg-light-400 dark:bg-harmonydark-700
+  @apply rounded border-harmonydark-500 border-1 min-h-12 max-w-full bg-light-400 dark:bg-harmonydark-700
   sm:max-w-3/4 px-4 py-3 items-center break-all 
   whitespace-pre-line;
-}
-
-.own-bubble {
-  @apply dark:border-blue-300 border-blue-700;
 }
 
 .avatar {

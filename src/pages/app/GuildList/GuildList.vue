@@ -32,13 +32,14 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="bg-white dark:bg-harmonydark-700 p-2">
-    <guild-icon
+  <div class="bg-white dark:bg-harmonydark-700 p-2 flex flex-col gap-2">
+    <template
       v-for="guild in guildList"
-      :id="guild.guildId"
       :key="`${guild.guildId}:${guild.host}`"
-      :host="guild.host"
-    />
+    >
+      <guild-icon :id="guild.guildId" :host="guild.host" />
+      <hr class="border-harmonydark-500" />
+    </template>
     <guild-btn />
   </div>
 </template>
