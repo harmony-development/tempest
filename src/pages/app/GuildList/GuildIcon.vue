@@ -61,13 +61,12 @@ const onClick = () => {
     <template #activator="{ toggle }">
       <button
         v-wave
+        v-tippy="{ content: data.name, placement: 'right' }"
         :class="{
           'guild-icon': true,
           selected,
-          'hint--right': true,
           bg: imageError,
         }"
-        :aria-label="data.name"
         @click.prevent.stop="onClick"
         @mousedown.prevent=""
         @contextmenu.prevent="toggle"

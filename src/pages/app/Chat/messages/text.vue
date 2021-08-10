@@ -33,4 +33,8 @@ const sanitized = computed(() => {
 .content-out >>> .big-emoji {
   height: 3em;
 }
+
+.content-out >>> a {
+  @apply text-primary-300 underline;
+}
 </style>

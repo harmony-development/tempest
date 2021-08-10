@@ -48,6 +48,7 @@ specifiers:
   vue-jest: ^5.0.0-alpha.10
   vue-popperjs: ^2.3.0
   vue-router: ^4.0.10
+  vue-tippy: ^6.0.0-alpha.32
   vue3-click-away: ^1.2.1
 
 dependencies:
@@ -64,6 +65,7 @@ dependencies:
   vue-i18n: 9.1.7_vue@3.1.5
   vue-popperjs: 2.3.0
   vue-router: 4.0.10_vue@3.1.5
+  vue-tippy: 6.0.0-alpha.32_vue@3.1.5
   vue3-click-away: 1.2.1
 
 devDependencies:
@@ -1969,6 +1971,10 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.11.1
     dev: true
+
+  /@popperjs/core/2.9.3:
+    resolution: {integrity: sha512-xDu17cEfh7Kid/d95kB6tZsLOmSWKCZKtprnhVepjsSaCij+lM3mItSJDuuHDMbCWTh8Ejmebwb+KONcCJ0eXQ==}
+    dev: false
 
   /@protobuf-ts/plugin-framework/1.0.13:
     resolution: {integrity: sha512-Wvopo8tKh+lfqZK2A7kEygYhvsTMcbzm7r78mBylMBYBNY31ojwW00koF2Tgb0RZ0yGGUik/pWb6P2DWEiRB1g==}
@@ -6397,6 +6403,12 @@ packages:
     resolution: {integrity: sha512-8hmiGIJMDlwjg7dlJ4yKGLK8EsYqKgPWbG3b4wjJddKNwc7N7Dpn08Df4szr/sZdMVeOstrdYSsqzX6BYbcB+w==}
     dev: true
 
+  /tippy.js/6.3.1:
+    resolution: {integrity: sha512-JnFncCq+rF1dTURupoJ4yPie5Cof978inW6/4S6kmWV7LL9YOSEVMifED3KdrVPEG+Z/TFH2CDNJcQEfaeuQww==}
+    dependencies:
+      '@popperjs/core': 2.9.3
+    dev: false
+
   /tmpl/1.0.4:
     resolution: {integrity: sha1-I2QN17QtAEM5ERQIIOXPRA5SHdE=}
     dev: true
@@ -6892,6 +6904,15 @@ packages:
   /vue-template-es2015-compiler/1.9.1:
     resolution: {integrity: sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==}
     dev: true
+
+  /vue-tippy/6.0.0-alpha.32_vue@3.1.5:
+    resolution: {integrity: sha512-nU8d39ElTuFVp6W0oWfqb6JdQdNEYTSBIBSHX9FZRH/fJTSF2AcqVlwwHyNY1QCLQAbhNRZgf/k11xt8GdMaZg==}
+    peerDependencies:
+      vue: ^3.0.0
+    dependencies:
+      tippy.js: 6.3.1
+      vue: 3.1.5
+    dev: false
 
   /vue/3.1.5:
     resolution: {integrity: sha512-Ho7HNb1nfDoO+HVb6qYZgeaobt1XbY6KXFe4HGs1b9X6RhkWG/113n4/SrtM1LUclM6OrP/Se5aPHHvAPG1iVQ==}

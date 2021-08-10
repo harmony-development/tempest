@@ -1,14 +1,7 @@
-import { createApp } from "vue";
-import HTooltipVue from "~/components/HTooltip.vue";
+import VueTippy from "vue-tippy";
 import { UserModule } from "~/types";
+import "tippy.js/dist/tippy.css";
 
 export const install: UserModule = async ({ app }) => {
-  app.directive("tooltip", {
-    mounted(el: HTMLElement, { value }) {
-      const tooltip = createApp(HTooltipVue, {
-        activator: el,
-      }).mount(el);
-      el.addEventListener("mouseenter", tooltip);
-    },
-  });
+  app.use(VueTippy);
 };
