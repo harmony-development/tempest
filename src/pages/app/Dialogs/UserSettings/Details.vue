@@ -21,9 +21,12 @@ const pending = reactive<{
   _previewAvatar?: string;
   avatar?: File;
   username?: string;
+  isBot?: boolean;
 }>({
+  _previewAvatar: undefined,
   username: undefined,
   avatar: undefined,
+  isBot: undefined,
 });
 
 const fileUpload = ref<HTMLInputElement | undefined>();
@@ -46,7 +49,7 @@ const onAvatarClick = async () => {
   const res = await selectFile(fileUpload.value!);
   if (!res) return;
 
-  const selectedFile = res.item(0);
+  const selectedFile = res[0];
   if (!selectedFile) return;
 
   pending._previewAvatar = URL.createObjectURL(selectedFile);

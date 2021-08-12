@@ -33,3 +33,19 @@ export function parseHMC(uri: string, defaultHost: string) {
   }
   return `${defaultHost}/_harmony/media/download/${encodeURIComponent(uri)}`;
 }
+
+function isValidHttpUrl(string: string) {
+  let url;
+
+  try {
+    url = new URL(string);
+  } catch (_) {
+    return false;
+  }
+
+  return url.protocol === "http:" || url.protocol === "https:";
+}
+
+export function parseLinks(text: string) {
+  return text.split(/\s+/).filter((v) => isValidHttpUrl(v));
+}

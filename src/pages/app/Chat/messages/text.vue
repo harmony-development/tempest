@@ -3,11 +3,18 @@ import { ContentText } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/harm
 import DOMPurify from "dompurify";
 import { computed, defineProps } from "vue";
 import { conv } from "~/logics/markdown";
+import { parseLinks } from "~/logics/utils/parsing";
+
 const props = defineProps<{
   content: ContentText;
 }>();
+
 const sanitized = computed(() => {
   return DOMPurify.sanitize(conv.makeHtml(props.content.content));
+});
+
+const links = computed(() => {
+  return parseLinks(props.content.content);
 });
 </script>
 
