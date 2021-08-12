@@ -5,8 +5,9 @@ import GuildIconMenu from "./GuildIconMenu.vue";
 import HMenu from "~/components/HMenu.vue";
 import { host } from "~/logics/app";
 import { getOrFederate } from "~/logics/connections";
-import { parseHMC } from "~/logics/harmonyAPI";
+import { parseHMC } from "~/logics/utils/parsing";
 import { appState } from "~/store/app";
+import HImage from "~/components/HImage.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -18,7 +19,6 @@ const props = defineProps<{
 const guildHost = props.host || host.value;
 
 const guildMenu = ref(false);
-const imageError = ref(false);
 const error = ref<string | undefined>(undefined);
 
 const selected = computed(() => props.id === route.params.guildid);
@@ -65,30 +65,19 @@ const onClick = () => {
         :class="{
           'guild-icon': true,
           selected,
-          bg: imageError,
         }"
         @click.prevent.stop="onClick"
         @mousedown.prevent=""
         @contextmenu.prevent="toggle"
       >
-        <img
-          v-show="!imageError"
-          :src="data.picture"
-          class="
-            rounded-full
-            h-full
-            object-cover
-            outline-none
-            text-center
-            w-full
-            text-4xl
-            leading-14
-          "
+        <h-image
+          :uri="data.picture"
+          :fallback="data.name"
+          rounded
+          class="object-cover"
           draggable="false"
           :alt="data.name"
-          @error="imageError = true"
         />
-        <p v-if="imageError" class="text-xl">{{ data.name?.[0] }}</p>
       </button>
     </template>
     <guild-icon-menu :id="props.id" :host="guildHost" />

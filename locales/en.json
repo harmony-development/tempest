@@ -29,7 +29,11 @@
       "theme": "Toggle Theme"
     },
     "user-settings": {
-      "title": "Settings and Preferences"
+      "email": "Email",
+      "reset": "Reset",
+      "save": "Save Profile",
+      "title": "Settings and Preferences",
+      "username": "Username"
     }
   },
   "app-name": "Tempest",
@@ -51,6 +55,7 @@
     "about": "About",
     "back": "Back",
     "cancel": "Cancel",
+    "edit": "Edit",
     "go": "GO",
     "home": "Home",
     "next": "Next",
@@ -61,7 +66,8 @@
   "buttons": {
     "back": "Back",
     "done": "Done",
-    "next": "Next"
+    "next": "Next",
+    "save": "Save"
   },
   "common": {
     "loading": "Loading"
@@ -70,13 +76,13 @@
     "auth": {
       "return-to-selection": "Return to server selection"
     },
-    "fatal-error": "Unable to contact server",
-    "serverselect": {
-      "title": "Select a Server"
-    },
     "error": {
       "sending-choice": "Unable to send choice",
       "sending-form": "Unable to send form"
+    },
+    "fatal-error": "Unable to contact server",
+    "serverselect": {
+      "title": "Select a Server"
     }
   },
   "h": {

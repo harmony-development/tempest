@@ -7,7 +7,7 @@ import HBtn from "~/components/shared/HBtn.vue";
 const props = defineProps<{
   modelValue: IAttachment[];
 }>();
-const emit = defineEmit(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue"]);
 const attachments = useVModel(props, "modelValue", emit);
 
 const removeAttachment = (idx: number) => {

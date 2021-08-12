@@ -9,7 +9,7 @@ import { hostList } from "~/logics/entry";
 const props = defineProps<{
   modelValue: boolean;
 }>();
-const emit = defineEmit(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue"]);
 const open = useVModel(props, "modelValue", emit);
 const name = ref("");
 const host = ref("");

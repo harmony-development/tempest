@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 import { useVModel } from "@vueuse/core";
-import { defineEmit, defineProps, ref } from "vue";
+import { defineProps, ref } from "vue";
 import type { IAttachment } from "./types";
 import HBtn from "~/components/shared/HBtn.vue";
 
 const props = defineProps<{
   modelValue: IAttachment[];
 }>();
-const emit = defineEmit(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue"]);
 const files = useVModel(props, "modelValue", emit);
 const fileUpload = ref<HTMLInputElement | undefined>(undefined);
 

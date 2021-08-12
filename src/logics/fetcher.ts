@@ -6,6 +6,15 @@ import { IUserData } from "~/store/types/user";
 import { IChannelData } from "~/store/types/channel";
 import { IMessageData } from "~/store/types/message";
 
+export const useUser = (
+  userID: string | undefined,
+  host: string | undefined
+) => {
+  return computed(() =>
+    host && userID ? appState.getUser(host, userID) : undefined
+  );
+};
+
 export const useMemberList = () => {
   const route = useAppRoute();
   return computed(

@@ -64,6 +64,17 @@ export const eventStreamHandler = (host: string, stream: ChatStream) => {
           }),
           editedAt: +edited.editedAt!.seconds,
         });
+        break;
+      }
+      case "profileUpdated": {
+        const event = ev.event.profileUpdated;
+        appState.updateUser(host, event.userId, {
+          ...(event.updateUsername && { username: event.newUsername }),
+          ...(event.updateAvatar && { avatar: event.newAvatar }),
+          ...(event.updateIsBot && { bot: event.isBot }),
+          ...(event.updateStatus && { status: event.newStatus }),
+        });
+        break;
       }
     }
   };

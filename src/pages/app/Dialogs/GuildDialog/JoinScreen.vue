@@ -3,7 +3,7 @@ import { defineEmit, defineProps, ref } from "vue";
 import { useVModel } from "@vueuse/core";
 import HInput from "~/components/HInput.vue";
 import HBtn from "~/components/shared/HBtn.vue";
-import { parseHarmonyURI } from "~/logics/harmonyAPI";
+import { parseHarmonyURI } from "~/logics/utils/parsing";
 import { useAppRoute } from "~/logics/location";
 import { getOrFederate, homeserverConn } from "~/logics/connections";
 
@@ -11,7 +11,7 @@ const props = defineProps<{
   open: boolean;
   screen: "join" | "create";
 }>();
-const emit = defineEmit(["update:open", "update:screen"]);
+const emit = defineEmits(["update:open", "update:screen"]);
 const route = useAppRoute();
 const open = useVModel(props, "open", emit);
 const screen = useVModel(props, "screen", emit);

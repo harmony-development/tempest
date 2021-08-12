@@ -9,7 +9,7 @@ import { dialogState } from "~/store/dialogs";
     <div>
       <h1 v-t="'app.user-settings.title'" class="text-lg" />
     </div>
-    <div>
+    <div class="flex flex-col gap-2 mt-2">
       <Details />
     </div>
   </HDialog>

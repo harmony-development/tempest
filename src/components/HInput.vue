@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { useVModel } from "@vueuse/core";
 
-import { defineProps, defineEmit, ref, watch } from "vue";
+import { defineProps, ref, watch } from "vue";
 
-const emit = defineEmit(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue"]);
+
 const props = defineProps<{
   label?: string;
   name?: string;
@@ -12,16 +13,15 @@ const props = defineProps<{
   focus?: boolean;
   multiline?: boolean;
   noBorder?: boolean;
+  dense?: boolean;
 }>();
+
 const value = useVModel(props, "modelValue", emit);
 const input = ref<HTMLInputElement | undefined>(undefined);
 
 watch(
   () => props.focus,
-  () => {
-    if (!input.value) return;
-    input.value.focus();
-  }
+  () => input.value?.focus()
 );
 </script>
 <template>
@@ -49,6 +49,7 @@ watch(
         :name="props.name"
         :type="props.type"
         class="input-input"
+        :class="{ dense }"
         placeholder=" "
       />
       <label :for="props.name" class="input-label">{{ props.label }}</label>
@@ -68,6 +69,10 @@ watch(
 
 .input-input {
   @apply bg-transparent z-1 w-full p-3 block appearance-none focus:outline-none pl-3 resize-none break-words;
+}
+
+.dense {
+  @apply p-1;
 }
 
 .input-parent:focus-within > .input-label,

@@ -10,7 +10,7 @@ const props = defineProps<{
   mountPoint?: string;
   right?: boolean;
 }>();
-const emit = defineEmit(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue"]);
 
 const open = useVModel(props, "modelValue", emit);
 

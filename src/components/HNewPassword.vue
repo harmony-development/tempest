@@ -2,7 +2,7 @@
 import { ref, defineEmit } from "vue";
 import HInput from "./HInput.vue";
 
-const emit = defineEmit(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue"]);
 
 const pass = ref("");
 const confirmPass = ref("");

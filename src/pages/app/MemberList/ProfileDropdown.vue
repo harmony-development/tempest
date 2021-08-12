@@ -1,11 +1,14 @@
 <script lang="ts" setup>
 import { ref } from "vue";
-import { userID } from "~/logics/app";
+import { host, userID } from "~/logics/app";
 import HMenu from "~/components/HMenu.vue";
 import { isDark } from "~/logics";
 import { dialogState } from "~/store/dialogs";
+import { useUser } from "~/logics/fetcher";
 
 const open = ref(false);
+
+const ownUser = useUser(userID.value, host.value);
 
 const openUserSettings = () => {
   open.value = false;
@@ -21,7 +24,7 @@ const openUserSettings = () => {
         @click="toggle"
       >
         <h-image :userid="userID" class="h-8 mr-3 w-8" rounded />
-        <p v-t="'app.profile'" class="flex-1" />
+        <p class="flex-1">{{ ownUser?.username }}</p>
         <mdi-chevron-down v-if="open" />
         <mdi-chevron-up v-else />
       </h-list-item>

@@ -10,7 +10,6 @@ import {
 } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/auth/v1/auth";
 import { useRoute, useRouter } from "vue-router";
 import { computed, onMounted, reactive, ref } from "vue";
-import { RpcError } from "@protobuf-ts/runtime-rpc";
 import { session, userID } from "../app";
 import { AuthStream } from "~/types";
 

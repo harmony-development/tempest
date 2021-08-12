@@ -3,6 +3,7 @@ import { SendMessageRequest } from "@harmony-dev/harmony-web-sdk/dist/lib/protoc
 import { onStartTyping } from "@vueuse/core";
 
 import { ref } from "vue";
+import { UploadedFile } from "@harmony-dev/harmony-web-sdk";
 import AttachmentBtn from "./AttachmentBtn.vue";
 import type { IAttachment } from "./types";
 import AttachmentsList from "./AttachmentsList.vue";
@@ -15,35 +16,6 @@ const focus = ref(false);
 const attachments = ref<IAttachment[]>([]);
 const route = useAppRoute();
 
-interface UploadedFile {
-  name: string;
-  contentType: string;
-  id: string;
-  size: number;
-}
-
-const uploadFile = async (f: File, session: string) => {
-  const url = new URL(`${route.value.host}/_harmony/media/upload`);
-  url.searchParams.set("filename", f.name);
-  url.searchParams.set("contentType", f.type || "text/plain");
-  const data = new FormData();
-  data.set("file", f);
-  const headers = new Headers();
-  headers.set("Authorization", session || "");
-  const resp = await fetch(url.toString(), {
-    body: data,
-    method: "POST",
-    headers,
-  });
-  const asJSON = await resp.json();
-  return {
-    name: f.name,
-    contentType: f.type,
-    id: asJSON.id,
-    size: f.size,
-  } as UploadedFile;
-};
-
 const sendMessage = async () => {
   const localID = Math.floor(Math.random() * 1000);
   const conn = await getOrFederate(route.value.host);
@@ -52,7 +24,7 @@ const sendMessage = async () => {
   if (attachments.value.length > 0) {
     uploadAttachments = [];
     uploadPromises = attachments.value.map(async (f) => {
-      const resp = await uploadFile(f.file, conn.getSession()!);
+      const resp = await conn.uploadFile(f.file);
       if (f.preview) URL.revokeObjectURL(f.preview);
       uploadAttachments?.push(resp);
     });

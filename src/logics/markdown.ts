@@ -1,6 +1,6 @@
 import { Converter } from "showdown";
 import { host } from "./app";
-import { parseHMC } from "./harmonyAPI";
+import { parseHMC } from "~/logics/utils/parsing";
 
 const markdownClasses: {
   [key: string]: string;

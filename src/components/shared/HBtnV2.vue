@@ -6,6 +6,8 @@ defineProps<{
   outlined?: boolean;
   icon?: boolean;
   disabled?: boolean;
+  filled?: boolean;
+  loading?: boolean;
 }>();
 </script>
 
@@ -17,11 +19,20 @@ defineProps<{
       rounded,
       outlined,
       icon,
-      'non-text': !icon,
+      text: !icon,
       disabled,
+      filled,
     }"
   >
-    <slot />
+    <div
+      v-if="loading"
+      class="absolute w-full h-full flex justify-center items-center"
+    >
+      <h-spinner />
+    </div>
+    <div :class="{ disabled: loading }">
+      <slot />
+    </div>
   </a>
 </template>
 
@@ -29,7 +40,7 @@ defineProps<{
 .btn {
   @apply bg-white bg-opacity-0 transition duration-100 
   rounded-sm cursor-pointer flex justify-center 
-  align-middle w-min select-none;
+  items-center w-min select-none whitespace-nowrap relative;
 }
 
 .disabled {
@@ -44,7 +55,7 @@ defineProps<{
   @apply p-2;
 }
 
-.non-text {
+.text {
   @apply px-4 py-2;
 }
 
@@ -57,6 +68,6 @@ defineProps<{
 }
 
 .filled {
-  @apply bg-primary-300;
+  @apply bg-primary-500 hover:bg-primary-400;
 }
 </style>

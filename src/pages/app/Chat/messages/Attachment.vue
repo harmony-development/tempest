@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { Attachment } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/harmonytypes/v1/types";
 import { computed, defineProps, ref } from "vue";
-import { parseHMC } from "~/logics/harmonyAPI";
+import { parseHMC } from "~/logics/utils/parsing";
 import { useAppRoute } from "~/logics/location";
 import HBtn from "~/components/shared/HBtn.vue";
 import HDialog from "~/components/HDialog.vue";

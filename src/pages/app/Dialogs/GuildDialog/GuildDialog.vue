@@ -8,7 +8,7 @@ import HDialog from "~/components/HDialog.vue";
 const props = defineProps<{
   modelValue: boolean;
 }>();
-const emit = defineEmit(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue"]);
 const open = useVModel(props, "modelValue", emit);
 const screen = ref<"create" | "join">("join");
 </script>

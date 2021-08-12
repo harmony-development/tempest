@@ -10,7 +10,7 @@ const props = defineProps<{
   open: boolean;
   screen: "join" | "create";
 }>();
-const emit = defineEmit(["update:open", "update:screen"]);
+const emit = defineEmits(["update:open", "update:screen"]);
 
 const open = useVModel(props, "open", emit);
 const screen = useVModel(props, "screen", emit);

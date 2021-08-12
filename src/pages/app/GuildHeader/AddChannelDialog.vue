@@ -13,7 +13,7 @@ import HSpinner from "~/components/HSpinner.vue";
 const props = defineProps<{
   modelValue: boolean;
 }>();
-const emit = defineEmit(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue"]);
 const open = useVModel(props, "modelValue", emit);
 const route = useAppRoute();
 
