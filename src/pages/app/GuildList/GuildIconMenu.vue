@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { defineProps } from "@vue/runtime-core";
-import { getOrFederate } from "~/logics/connections";
+import { getOrFederate } from "~/logic/connections";
 
 const props = defineProps<{
   host: string;

@@ -7,7 +7,7 @@ import HBtn from "~/components/shared/HBtn.vue";
 import HMenu from "~/components/HMenu.vue";
 import HList from "~/components/HList.vue";
 import HListItem from "~/components/HListItem.vue";
-import { toggleDark } from "~/logics/dark";
+import { toggleDark } from "~/logic/dark";
 
 const { availableLocales, locale } = useI18n();
 const i18nMenu = ref(false);

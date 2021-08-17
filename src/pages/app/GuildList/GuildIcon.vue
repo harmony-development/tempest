@@ -3,9 +3,9 @@ import { computed, defineProps, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import GuildIconMenu from "./GuildIconMenu.vue";
 import HMenu from "~/components/HMenu.vue";
-import { host } from "~/logics/app";
-import { getOrFederate } from "~/logics/connections";
-import { parseHMC } from "~/logics/utils/parsing";
+import { host } from "~/logic/app";
+import { getOrFederate } from "~/logic/connections";
+import { parseHMC } from "~/logic/utils/parsing";
 import { appState } from "~/store/app";
 import HImage from "~/components/HImage.vue";
 
@@ -75,6 +75,7 @@ const onClick = () => {
           :fallback="data.name"
           rounded
           class="object-cover"
+          style="aspect-ratio: 1"
           draggable="false"
           :alt="data.name"
         />

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useVModel } from "@vueuse/core";
+import HInput from "~/components/HInput.vue";
 
 const props = defineProps<{
   name: string;
@@ -12,7 +13,7 @@ const model = useVModel(props, "modelValue", emit);
 </script>
 
 <template>
-  <h-card dark class="w-full flex justify-between items-center">
+  <h-card darkened class="w-full flex justify-between items-center">
     <div class="w-full flex flex-col gap-1">
       <p class="text-gray-300 text-sm">{{ name }}</p>
       <h-input

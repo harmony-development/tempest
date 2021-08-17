@@ -1,18 +1,43 @@
 <script setup lang="ts">
-import { onClickOutside, useVModel } from "@vueuse/core";
-import { computed, nextTick, defineProps, defineEmits } from "vue";
-import { updateMenuPos, useFloatingPos } from "~/composeables/useFloatingPos";
+import {
+  debouncedWatch,
+  onClickOutside,
+  useVModel,
+  useWindowSize,
+} from "@vueuse/core";
+import { computed, nextTick, defineProps, defineEmits, ref } from "vue";
 
 const props = defineProps<{
   modelValue: boolean;
   full?: boolean;
   closeOnClick?: boolean;
+  direction?: "left" | "right" | "bottom" | "top";
 }>();
 const emit = defineEmits(["update:modelValue"]);
 
 const open = useVModel(props, "modelValue", emit);
 
-const { x, y, menu, activator } = useFloatingPos(open);
+const { width, height } = useWindowSize();
+
+const x = ref(0);
+const y = ref(0);
+const menu = ref<HTMLDivElement | null>(null);
+const activator = ref<Element | null>(null);
+
+const updateMenuPos = () => {
+  const activatorBbox = activator.value!.getBoundingClientRect();
+  const menuBbox = menu.value!.getBoundingClientRect();
+
+  if (props.direction === "left") {
+    x.value = -menuBbox.width;
+  } else {
+    let targetY = activatorBbox.height;
+    if (targetY + activatorBbox.y + menuBbox.height > window.innerHeight) {
+      targetY = -menuBbox.height;
+    }
+    y.value = targetY;
+  }
+};
 
 onClickOutside(menu, () => {
   open.value = false;
@@ -23,8 +48,18 @@ async function toggle(ev: MouseEvent) {
   await nextTick();
   const el = ev.currentTarget as Element;
   activator.value = el;
-  updateMenuPos(activator, menu, x, y);
+  updateMenuPos();
 }
+
+debouncedWatch(
+  [width, height],
+  () => {
+    if (open.value && activator) updateMenuPos();
+  },
+  {
+    debounce: 150,
+  }
+);
 
 const menuStyle = computed(() => {
   return {
@@ -55,7 +90,7 @@ const menuStyle = computed(() => {
 
 <style lang="postcss" scoped>
 .menu {
-  @apply z-50 absolute overflow-hidden;
+  @apply z-100 absolute overflow-hidden;
 }
 
 .fullwidth {

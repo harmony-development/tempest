@@ -8,8 +8,8 @@ import AttachmentBtn from "./AttachmentBtn.vue";
 import type { IAttachment } from "./types";
 import AttachmentsList from "./AttachmentsList.vue";
 import HInput from "~/components/HInput.vue";
-import { getOrFederate } from "~/logics/connections";
-import { useAppRoute } from "~/logics/location";
+import { getOrFederate } from "~/logic/connections";
+import { useAppRoute } from "~/logic/location";
 
 const content = ref("");
 const focus = ref(false);
@@ -96,6 +96,7 @@ onStartTyping(() => {
       label="Send Message"
       :focus="focus"
       multiline
+      :rows="1"
       @keydown="onKeyDown"
     >
       <template #pre-input>

@@ -2,7 +2,7 @@
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import AddChannelDialog from "./AddChannelDialog.vue";
-import { useAppRoute } from "~/logics/location";
+import { useAppRoute } from "~/logic/location";
 import { appState } from "~/store/app";
 import HBtn from "~/components/shared/HBtn.vue";
 

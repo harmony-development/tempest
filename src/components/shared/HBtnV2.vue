@@ -30,7 +30,7 @@ defineProps<{
     >
       <h-spinner />
     </div>
-    <div :class="{ disabled: loading }">
+    <div class="flex" :class="{ disabled: loading }">
       <slot />
     </div>
   </a>

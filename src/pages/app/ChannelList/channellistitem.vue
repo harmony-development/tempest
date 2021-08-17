@@ -3,7 +3,7 @@ import { defineProps } from "vue";
 import { useRouter } from "vue-router";
 
 import HListItem from "~/components/HListItem.vue";
-import { useAppRoute } from "~/logics/location";
+import { useAppRoute } from "~/logic/location";
 import { appState } from "~/store/app";
 
 const props = defineProps<{

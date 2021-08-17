@@ -3,8 +3,8 @@ import { defineEmit, defineProps, ref } from "vue";
 import { useVModel } from "@vueuse/core";
 import HInput from "~/components/HInput.vue";
 import HBtn from "~/components/shared/HBtn.vue";
-import { homeserverConn } from "~/logics/connections";
-import { host } from "~/logics/app";
+import { homeserverConn } from "~/logic/connections";
+import { host } from "~/logic/app";
 
 const props = defineProps<{
   open: boolean;
@@ -22,10 +22,6 @@ const createClicked = async () => {
     guildName: name.value,
     pictureUrl: "",
     metadata: undefined,
-  });
-  await homeConn.chat.addGuildToGuildList({
-    guildId: guild.response.guildId,
-    homeserver: host.value,
   });
   open.value = false;
 };

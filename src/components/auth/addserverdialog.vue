@@ -4,7 +4,7 @@ import { useVModel } from "@vueuse/core";
 import HDialog from "~/components/HDialog.vue";
 import HInput from "~/components/HInput.vue";
 import HBtn from "~/components/shared/HBtn.vue";
-import { hostList } from "~/logics/entry";
+import { hostList } from "~/logic/entry";
 
 const props = defineProps<{
   modelValue: boolean;

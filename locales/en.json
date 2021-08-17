@@ -34,6 +34,13 @@
       "save": "Save Profile",
       "title": "Settings and Preferences",
       "username": "Username"
+    },
+    "user-status": {
+      "0": "Online",
+      "1": "Streaming",
+      "2": "Do Not Disturb",
+      "3": "Idle",
+      "4": "Offline"
     }
   },
   "app-name": "Tempest",

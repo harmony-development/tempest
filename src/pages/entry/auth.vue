@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { useAuthManager } from "~/logics/api/auth";
+import { useAuthManager } from "~/logic/api/auth";
 import HListItem from "~/components/HListItem.vue";
 import HSpinner from "~/components/HSpinner.vue";
 const {

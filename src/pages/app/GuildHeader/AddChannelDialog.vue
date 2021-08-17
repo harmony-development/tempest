@@ -6,8 +6,8 @@ import { defineEmit, defineProps, ref } from "vue";
 import { RpcError } from "@protobuf-ts/runtime-rpc";
 import HDialog from "~/components/HDialog.vue";
 import HInput from "~/components/HInput.vue";
-import { getOrFederate } from "~/logics/connections";
-import { useAppRoute } from "~/logics/location";
+import { getOrFederate } from "~/logic/connections";
+import { useAppRoute } from "~/logic/location";
 import HSpinner from "~/components/HSpinner.vue";
 
 const props = defineProps<{

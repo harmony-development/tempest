@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { onMounted, watch } from "vue";
-import MemberItem from "./memberitem.vue";
+import MemberItem from "./MemberItem.vue";
 
 import ProfileDropdown from "./ProfileDropdown.vue";
-import { useFetchMembers, useMemberList } from "~/logics/fetcher";
-import { useAppRoute } from "~/logics/location";
+import { useFetchMembers, useMemberList } from "~/logic/fetcher";
+import { useAppRoute } from "~/logic/location";
 
 const fetchMembers = useFetchMembers();
 const members = useMemberList();

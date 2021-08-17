@@ -1,6 +1,6 @@
 import { Converter } from "showdown";
 import { host } from "./app";
-import { parseHMC } from "~/logics/utils/parsing";
+import { parseHMC } from "~/logic/utils/parsing";
 
 const markdownClasses: {
   [key: string]: string;

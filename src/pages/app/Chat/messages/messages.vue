@@ -3,9 +3,9 @@ import { computed, nextTick, onMounted, ref, watch } from "vue";
 import { useEventListener, useThrottleFn } from "@vueuse/core";
 import Message from "./message.vue";
 import HSpinner from "~/components/HSpinner.vue";
-import { useAppRoute } from "~/logics/location";
+import { useAppRoute } from "~/logic/location";
 import { appState } from "~/store/app";
-import { useFetchMessages, useMessageList } from "~/logics/fetcher";
+import { useFetchMessages, useMessageList } from "~/logic/fetcher";
 
 const route = useAppRoute();
 

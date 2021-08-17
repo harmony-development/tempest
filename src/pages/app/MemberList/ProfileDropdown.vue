@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { ref } from "vue";
-import { host, userID } from "~/logics/app";
+import { host, userID } from "~/logic/app";
 import HMenu from "~/components/HMenu.vue";
-import { isDark } from "~/logics";
+import { isDark } from "~/logic";
 import { dialogState } from "~/store/dialogs";
-import { useUser } from "~/logics/fetcher";
+import { useUser } from "~/logic/fetcher";
 
 const open = ref(false);
 

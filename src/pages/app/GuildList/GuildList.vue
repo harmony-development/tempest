@@ -3,8 +3,8 @@ import { computed, onMounted } from "vue";
 import GuildIcon from "./GuildIcon.vue";
 import GuildBtn from "./GuildBtn.vue";
 import { guildListState } from "~/store/guildList";
-import { getStream, homeserverConn } from "~/logics/connections";
-import { host } from "~/logics/app";
+import { getStream, homeserverConn } from "~/logic/connections";
+import { host } from "~/logic/app";
 
 const guildList = computed(() => guildListState.getGuildList() || []);
 

@@ -6,8 +6,8 @@ import HList from "~/components/HList.vue";
 import HListItem from "~/components/HListItem.vue";
 import HSpacer from "~/components/HSpacer.vue";
 import HBtn from "~/components/shared/HBtn.vue";
-import { hostList } from "~/logics/entry";
-import { parseUserHost } from "~/logics/utils/parsing";
+import { hostList } from "~/logic/entry";
+import { parseUserHost } from "~/logic/utils/parsing";
 
 const router = useRouter();
 

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed } from "vue";
-import { useAppRoute } from "~/logics/location";
+import { useAppRoute } from "~/logic/location";
 import { appState } from "~/store/app";
 
 const route = useAppRoute();

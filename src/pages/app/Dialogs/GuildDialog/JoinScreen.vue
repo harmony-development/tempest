@@ -3,9 +3,9 @@ import { defineEmit, defineProps, ref } from "vue";
 import { useVModel } from "@vueuse/core";
 import HInput from "~/components/HInput.vue";
 import HBtn from "~/components/shared/HBtn.vue";
-import { parseHarmonyURI } from "~/logics/utils/parsing";
-import { useAppRoute } from "~/logics/location";
-import { getOrFederate, homeserverConn } from "~/logics/connections";
+import { parseHarmonyURI } from "~/logic/utils/parsing";
+import { useAppRoute } from "~/logic/location";
+import { getOrFederate, homeserverConn } from "~/logic/connections";
 
 const props = defineProps<{
   open: boolean;
@@ -20,13 +20,8 @@ const inputCode = ref("");
 const joinClicked = async () => {
   const { host, code } = parseHarmonyURI(inputCode.value, route.value.host);
   const conn = await getOrFederate(host);
-  const homeConn = await homeserverConn();
-  const guild = await conn.chat.joinGuild({
+  await conn.chat.joinGuild({
     inviteId: code,
-  });
-  await homeConn.chat.addGuildToGuildList({
-    guildId: guild.response.guildId,
-    homeserver: host,
   });
   open.value = false;
 };

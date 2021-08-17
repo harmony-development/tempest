@@ -4,11 +4,11 @@ import { computed, reactive, ref } from "@vue/reactivity";
 import { ProfileUpdateRequest } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/chat/v1/profile";
 import Preference from "./Preference.vue";
 import HImage from "~/components/HImage.vue";
-import { host, userID } from "~/logics/app";
+import { host, userID } from "~/logic/app";
 import { appState } from "~/store/app";
-import { selectFile } from "~/logics/utils/fileSelect";
-import { resetObject } from "~/logics/utils/common";
-import { getOrFederate } from "~/logics/connections";
+import { selectFile } from "~/logic/utils/fileSelect";
+import { resetObject } from "~/logic/utils/common";
+import { getOrFederate } from "~/logic/connections";
 
 const { t } = useI18n();
 
@@ -86,6 +86,7 @@ const saveProfile = async () => {
         :userid="userID"
         :uri="pending._previewAvatar"
         class="mb-4 w-24 rounded-full select-none cursor-pointer"
+        style="aspect-ratio: 1"
         @click="onAvatarClick"
       />
       <Preference

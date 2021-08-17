@@ -4,7 +4,7 @@ import { onErrorCaptured, onMounted, ref } from "vue";
 import GuildList from "./GuildList/GuildList.vue";
 import ChannelList from "./ChannelList/channellist.vue";
 import Chat from "./Chat/chat.vue";
-import MemberList from "./MemberList/memberlist.vue";
+import MemberList from "./MemberList/MemberList.vue";
 import ChannelHeader from "./ChannelHeader/ChannelHeader.vue";
 import GuildHeader from "./GuildHeader/GuildHeader.vue";
 import ErrorDialog from "./ErrorDialog.vue";
@@ -12,9 +12,9 @@ import UserSettings from "./Dialogs/UserSettings/UserSettings.vue";
 import HBtn from "~/components/shared/HBtn.vue";
 
 import HDrawer from "~/components/HDrawer.vue";
-import { session, host, isLoggedIn } from "~/logics/app";
-import { getStream } from "~/logics/connections";
-import { useAppRoute } from "~/logics/location";
+import { session, host, isLoggedIn } from "~/logic/app";
+import { getStream } from "~/logic/connections";
+import { useAppRoute } from "~/logic/location";
 import Alert from "~/components/Alert.vue";
 
 const router = useRouter();

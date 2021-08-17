@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import Messages from "./messages/messages.vue";
 import MsgInput from "./msginput/msginput.vue";
-import { useAppRoute } from "~/logics/location";
+import { useAppRoute } from "~/logic/location";
 
 const route = useAppRoute();
 </script>

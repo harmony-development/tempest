@@ -4,7 +4,7 @@ export interface IMessageData {
   author: string;
   createdAt: number;
   editedAt: number;
-  content: Content;
+  content?: Content;
   pending: boolean;
   override: {
     username?: string;

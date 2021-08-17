@@ -2,22 +2,22 @@
 import { defineProps } from "vue";
 
 defineProps<{
-  dark?: boolean;
+  darkened?: boolean;
 }>();
 </script>
 
 <template>
-  <div class="p-3 border-2" :class="{ dark, light: !dark }">
+  <div class="p-3 border-2" :class="{ darkened, normal: !darkened }">
     <slot />
   </div>
 </template>
 
 <style lang="postcss" scoped>
-.dark {
-  @apply border-harmonydark-800 bg-harmonydark-900;
+.darkened {
+  @apply dark:border-harmonydark-800 dark:bg-harmonydark-900 border-light-700 bg-light-400;
 }
 
-.light {
-  @apply border-harmonydark-700 bg-harmonydark-800;
+.normal {
+  @apply dark:border-harmonydark-700 dark:bg-harmonydark-800;
 }
 </style>

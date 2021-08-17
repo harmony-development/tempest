@@ -19,6 +19,12 @@ const props = defineProps<{
 const value = useVModel(props, "modelValue", emit);
 const input = ref<HTMLInputElement | undefined>(undefined);
 
+const resizeInput = () => {
+  if (!input.value) return;
+  input.value.style.height = "5px";
+  input.value.style.height = `${Math.min(input.value.scrollHeight, 200)}px`;
+};
+
 watch(
   () => props.focus,
   () => input.value?.focus()
@@ -36,11 +42,11 @@ watch(
         v-model="value"
         :name="props.name"
         :type="props.type"
-        class="input-input"
+        class="input-input overflow-hidden"
         placeholder=" "
         multiline
-        :rows="2"
         wrap="hard"
+        @input="resizeInput"
       />
       <input
         v-else
@@ -68,7 +74,7 @@ watch(
 }
 
 .input-input {
-  @apply bg-transparent z-1 w-full p-3 block appearance-none focus:outline-none pl-3 resize-none break-words;
+  @apply max-h-200 bg-transparent z-1 w-full p-3 block appearance-none focus:outline-none pl-3 resize-none break-words;
 }
 
 .dense {

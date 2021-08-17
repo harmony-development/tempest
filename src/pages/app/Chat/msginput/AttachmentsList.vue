@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { defineEmit, defineProps } from "vue";
+import { defineProps } from "vue";
 import { useVModel } from "@vueuse/core";
 import type { IAttachment } from "./types";
 import HBtn from "~/components/shared/HBtn.vue";
@@ -14,6 +14,11 @@ const removeAttachment = (idx: number) => {
   URL.revokeObjectURL(attachments.value[idx].preview);
   attachments.value.splice(idx, 1);
 };
+
+const removeAllAttachments = () => {
+  attachments.value.forEach((v) => URL.revokeObjectURL(v.preview));
+  attachments.value = [];
+};
 </script>
 
 <template>
@@ -27,6 +32,22 @@ const removeAttachment = (idx: number) => {
       overflow-auto
     "
   >
+    <div
+      v-if="attachments.length > 0"
+      class="
+        px-2
+        flex
+        justify-center
+        items-center
+        border-r-2 border-primary-400
+        rounded-l
+        bg-harmonydark-800
+      "
+    >
+      <h-btn-v2 icon rounded @click="removeAllAttachments">
+        <mdi-close />
+      </h-btn-v2>
+    </div>
     <div
       v-for="(img, i) in attachments"
       :key="img.preview"
@@ -59,7 +80,7 @@ const removeAttachment = (idx: number) => {
 
 <style lang="postcss" scoped>
 .attachment {
-  @apply object-cover h-32;
+  @apply object-cover h-32 max-w-48;
 }
 
 .attachment-root:hover {

@@ -3,8 +3,8 @@ import { computed, onMounted, watch } from "vue";
 import ChannelListItem from "./channellistitem.vue";
 import HList from "~/components/HList.vue";
 import { appState } from "~/store/app";
-import { useAppRoute } from "~/logics/location";
-import { useFetchChannelList } from "~/logics/fetcher";
+import { useAppRoute } from "~/logic/location";
+import { useFetchChannelList } from "~/logic/fetcher";
 
 const route = useAppRoute();
 

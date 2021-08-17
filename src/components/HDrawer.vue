@@ -36,11 +36,11 @@ const setOpen = (val: boolean) => {
 
 <style lang="postcss" scoped>
 .overlay {
-  @apply fixed w-full h-full top-0 left-0 z-10 md:z-auto overflow-auto bg-gray-500 bg-opacity-10 md:hidden;
+  @apply fixed w-full h-full top-0 left-0 z-10 md:z-auto bg-gray-500 bg-opacity-10 md:hidden;
 }
 
 .drawer {
-  @apply h-full dark:bg-harmonydark-700 transform fixed md:static overflow-auto ease-in-out transition duration-150 z-30 md:z-auto;
+  @apply h-full overflow-visible dark:bg-harmonydark-700 transform fixed md:static ease-in-out transition duration-150 z-30 md:z-auto;
 
   &.left {
     @apply top-0 left-0;

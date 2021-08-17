@@ -1,19 +1,18 @@
 <script lang="ts" setup>
 import { computed, defineProps, nextTick, ref } from "vue";
-import { UpdateMessageTextRequest } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/chat/v1/messages";
 import FileMessage from "./file.vue";
 import TextMessage from "./text.vue";
 import Unsupported from "./unsupported.vue";
-import { userID } from "~/logics/app";
-import { useAppRoute } from "~/logics/location";
+import { userID } from "~/logic/app";
+import { useAppRoute } from "~/logic/location";
 import { appState } from "~/store/app";
 import HImage from "~/components/HImage.vue";
 import HBtn from "~/components/shared/HBtn.vue";
 import HList from "~/components/HList.vue";
 import HListItem from "~/components/HListItem.vue";
 import HMenu from "~/components/HMenu.vue";
-import { getOrFederate } from "~/logics/connections";
-import { convertDate } from "~/logics/time";
+import { getOrFederate } from "~/logic/connections";
+import { convertDate } from "~/logic/time";
 
 const route = useAppRoute();
 const props = defineProps<{
@@ -48,32 +47,8 @@ const deleteMessage = async () => {
   });
 };
 
-const editMessage = async (content: string) => {
-  const conn = await getOrFederate(route.value.host);
-  await conn.chat.updateMessageText(
-    UpdateMessageTextRequest.create({
-      guildId: route.value.guildid as string,
-      channelId: route.value.channelid as string,
-      messageId: props.messageid,
-      newContent: content,
-    })
-  );
-};
-
-const onEditKeyDown = async (ev: KeyboardEvent) => {
-  if (ev.key === "Enter" && !ev.shiftKey) {
-    ev.preventDefault();
-    editMessage(editText.value);
-    editing.value = false;
-  }
-  if (ev.key === "Escape") {
-    ev.preventDefault();
-    editing.value = false;
-  }
-};
-
 const editStart = async () => {
-  if (message.value.content.content.oneofKind !== "textMessage") {
+  if (message.value.content?.content.oneofKind !== "textMessage") {
     return;
   }
   editing.value = true;
@@ -82,7 +57,7 @@ const editStart = async () => {
   editFocus.value = !editFocus.value;
 };
 const content = computed(() => {
-  return message.value.content.content;
+  return message.value.content?.content;
 });
 </script>
 
@@ -108,13 +83,15 @@ const content = computed(() => {
         {{ message.override?.username || user?.username || message.author }}
       </p>
       <FileMessage
-        v-if="content.oneofKind === 'filesMessage'"
+        v-if="content?.oneofKind === 'filesMessage'"
         :content="content.filesMessage"
       />
       <!-- <EmbedMessage v-else-if="messageType === 'embedMessage'"> </EmbedMessage> -->
       <TextMessage
-        v-else-if="content.oneofKind === 'textMessage'"
+        v-else-if="content?.oneofKind === 'textMessage'"
+        v-model:editing="editing"
         :content="content.textMessage"
+        :messageid="messageid"
       />
       <unsupported v-else> </unsupported>
       <p class="mt-1 text-right text-xs text-gray-700 dark:text-gray-300">

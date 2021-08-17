@@ -37,7 +37,6 @@ export const eventStreamHandler = (host: string, stream: ChatStream) => {
               avatar: msg.overrides?.avatar,
               username: msg.overrides?.name,
             },
-            attachments: msg.attachments,
           });
         }
         break;

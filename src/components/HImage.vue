@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, defineProps, ref } from "vue";
-import { parseHMC } from "~/logics/utils/parsing";
-import { useAppRoute } from "~/logics/location";
+import { parseHMC } from "~/logic/utils/parsing";
+import { useAppRoute } from "~/logic/location";
 import { appState } from "~/store/app";
 
 const route = useAppRoute();
@@ -9,7 +9,7 @@ const route = useAppRoute();
 const props = defineProps<{
   userid?: string;
   fallback?: string;
-  hmcURI?: string;
+  hmcUri?: string;
   uri?: string;
   rounded?: boolean;
 }>();
@@ -20,7 +20,7 @@ const host = computed(() => appState.getHost(route.value.host));
 
 const src = computed(() => {
   if (props.uri) return props.uri;
-  if (props.hmcURI) return parseHMC(props.hmcURI, route.value.host);
+  if (props.hmcUri) return parseHMC(props.hmcUri, route.value.host);
   if (props.userid) {
     const avatar = host.value.users[props.userid]?.avatar;
     if (!avatar) return undefined;
@@ -39,7 +39,6 @@ const fallback = computed(() => {
 </script>
 <template>
   <div
-    style="aspect-ratio: 1"
     class="bg-gray-500 flex items-center justify-center overflow-hidden"
     :class="{ 'rounded-full': rounded }"
   >
