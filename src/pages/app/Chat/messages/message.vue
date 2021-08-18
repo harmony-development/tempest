@@ -6,7 +6,7 @@ import Unsupported from "./unsupported.vue";
 import { userID } from "~/logic/app";
 import { useAppRoute } from "~/logic/location";
 import { appState } from "~/store/app";
-import HImage from "~/components/HImage.vue";
+import HImage from "~/components/shared/Image/HImage.vue";
 import HBtn from "~/components/shared/HBtn.vue";
 import HList from "~/components/HList.vue";
 import HListItem from "~/components/HListItem.vue";

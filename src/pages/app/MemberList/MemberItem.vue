@@ -5,7 +5,7 @@ import { UserStatus } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/harmo
 import HListItem from "~/components/HListItem.vue";
 import { useAppRoute } from "~/logic/location";
 import { appState } from "~/store/app";
-import HImage from "~/components/HImage.vue";
+import HImage from "~/components/shared/Image/HImage.vue";
 import HMenu from "~/components/HMenu.vue";
 
 const props = defineProps<{
@@ -24,7 +24,7 @@ const user = computed(() => appState.getUser(route.value.host, props.userid));
   <HMenu v-model="menuOpen" direction="left">
     <template #activator="{ toggle }">
       <h-list-item class="rounded" @click="toggle">
-        <h-image :userid="props.userid" class="h-8 mr-3 w-8" rounded />
+        <h-image square :userid="props.userid" class="h-8 mr-3 w-8" rounded />
         <p class="flex-1">{{ user?.username }}</p>
       </h-list-item>
     </template>
@@ -33,6 +33,7 @@ const user = computed(() => appState.getUser(route.value.host, props.userid));
         <h-image
           :userid="props.userid"
           class="w-12 rounded-full border-2"
+          square
           :class="{
             'border-green-400': user.status === UserStatus.STREAMING,
             'border-green-400': user.status === UserStatus.ONLINE_UNSPECIFIED,

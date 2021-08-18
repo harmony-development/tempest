@@ -1,5 +1,12 @@
+<script lang="ts" setup>
+const showDevHeader = import.meta.env.DEV;
+</script>
+
 <template>
-  <router-view />
+  <div class="flex flex-col h-full">
+    <dev-header v-if="showDevHeader" />
+    <router-view />
+  </div>
 </template>
 
 <style lang="postcss">

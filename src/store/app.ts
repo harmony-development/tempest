@@ -1,3 +1,7 @@
+import {
+  FetchLinkMetadataResponse,
+  MediaMetadata,
+} from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/mediaproxy/v1/mediaproxy";
 import { Store } from "./store";
 import { IChannelData } from "./types/channel";
 import { IGuildData, IGuildInfo } from "./types/guild";
@@ -21,6 +25,9 @@ interface IAppState {
       };
     };
   };
+  linkPreviews: {
+    [url: string]: FetchLinkMetadataResponse["data"];
+  };
 }
 
 class AppState extends Store<IAppState> {
@@ -33,6 +40,14 @@ class AppState extends Store<IAppState> {
         users: {},
       };
     return this.state.data[host];
+  }
+
+  getPreview(url: string) {
+    return this.state.linkPreviews[url];
+  }
+
+  setPreview(url: string, preview: FetchLinkMetadataResponse["data"]) {
+    this.state.linkPreviews[url] = preview;
   }
 
   getGuild(host: string, guildID: string) {
@@ -150,6 +165,7 @@ class AppState extends Store<IAppState> {
 
 export const appState = new AppState({
   data: {},
+  linkPreviews: {},
 });
 
 // @ts-ignore

@@ -7,7 +7,7 @@ import { host } from "~/logic/app";
 import { getOrFederate } from "~/logic/connections";
 import { parseHMC } from "~/logic/utils/parsing";
 import { appState } from "~/store/app";
-import HImage from "~/components/HImage.vue";
+import HImage from "~/components/shared/Image/HImage.vue";
 
 const route = useRoute();
 const router = useRouter();

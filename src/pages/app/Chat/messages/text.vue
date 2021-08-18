@@ -1,17 +1,16 @@
 <script lang="ts" setup>
 import { UpdateMessageTextRequest } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/chat/v1/messages";
-import {
-  Attachment,
-  ContentText,
-} from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/harmonytypes/v1/types";
+import { ContentText } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/harmonytypes/v1/types";
 import { useVModel } from "@vueuse/core";
 import DOMPurify from "dompurify";
-import { computed, defineProps, reactive, ref, watch } from "vue";
-import AttachmentVue from "./Attachment.vue";
+import { computed, defineProps, ref, watch } from "vue";
+import MediaEmbed from "./Embeds/MediaEmbed.vue";
+import SiteEmbed from "./Embeds/SiteEmbed.vue";
 import { getOrFederate } from "~/logic/connections";
 import { useAppRoute } from "~/logic/location";
 import { conv } from "~/logic/markdown";
 import { parseLinks } from "~/logic/utils/parsing";
+import { appState } from "~/store/app";
 
 const props = defineProps<{
   content: ContentText;
@@ -24,9 +23,6 @@ const editing = useVModel(props, "editing", emit);
 const route = useAppRoute();
 
 const editText = ref("");
-const previewLinks = reactive<{
-  [key: string]: Attachment;
-}>({});
 
 const editMessage = async (content: string) => {
   const conn = await getOrFederate(route.value.host);
@@ -60,35 +56,25 @@ const links = computed(() => {
   return parseLinks(props.content.content);
 });
 
+const previewLinks = computed(() =>
+  links.value
+    .map((url) => ({
+      url,
+      preview: appState.getPreview(url),
+    }))
+    .filter((preview) => !!preview.preview)
+);
+
 watch(
   links,
   async () => {
     const conn = await getOrFederate(route.value.host);
     links.value.forEach(async (url) => {
-      if (previewLinks[url]) return;
+      if (appState.getPreview(url)) return;
       const { response } = await conn.mediaProxy.fetchLinkMetadata({
         url,
       });
-
-      if (response.data.oneofKind === "isMedia") {
-        const media = response.data.isMedia;
-        previewLinks[url] = {
-          id: url,
-          name: response.data.oneofKind,
-          type: media.mimetype,
-          size: 0,
-          caption: "",
-        };
-      } else if (response.data.oneofKind === "isSite") {
-        const site = response.data.isSite;
-        previewLinks[url] = {
-          id: site.image,
-          name: response.data.isSite.siteTitle,
-          type: site.kind,
-          size: 0,
-          caption: "",
-        };
-      }
+      appState.setPreview(url, response.data);
     });
   },
   {
@@ -107,11 +93,17 @@ watch(
     @keydown="onEditKeyDown"
   />
   <p v-else class="content-out whitespace-pre-wrap" v-html="sanitized" />
-  <AttachmentVue
-    v-for="value in previewLinks"
-    :key="value.id"
-    :attachment="value"
-  />
+  <template v-for="value in previewLinks" :key="value.src">
+    <MediaEmbed
+      v-if="value.preview.oneofKind === 'isMedia'"
+      :media-embed="value.preview.isMedia"
+      :src="value.url"
+    />
+    <SiteEmbed
+      v-if="value.preview.oneofKind === 'isSite'"
+      :site-embed="value.preview.isSite"
+    />
+  </template>
 </template>
 
 <style lang="postcss" scoped>

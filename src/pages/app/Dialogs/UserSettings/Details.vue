@@ -3,7 +3,7 @@ import { useI18n } from "vue-i18n";
 import { computed, reactive, ref } from "@vue/reactivity";
 import { ProfileUpdateRequest } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/chat/v1/profile";
 import Preference from "./Preference.vue";
-import HImage from "~/components/HImage.vue";
+import HImage from "~/components/shared/Image/HImage.vue";
 import { host, userID } from "~/logic/app";
 import { appState } from "~/store/app";
 import { selectFile } from "~/logic/utils/fileSelect";

@@ -12,6 +12,8 @@ const props = defineProps<{
   hmcUri?: string;
   uri?: string;
   rounded?: boolean;
+  square?: boolean;
+  fileName?: boolean;
 }>();
 
 const loadError = ref(false);
@@ -39,8 +41,8 @@ const fallback = computed(() => {
 </script>
 <template>
   <div
-    class="bg-gray-500 flex items-center justify-center overflow-hidden"
-    :class="{ 'rounded-full': rounded }"
+    class="bg-harmonydark-500 flex items-center justify-center overflow-hidden"
+    :class="{ 'rounded-full': rounded, square }"
   >
     <img
       v-show="!loadError"
@@ -51,3 +53,9 @@ const fallback = computed(() => {
     <p v-if="loadError || !src" class="text-xl">{{ fallback?.[0] }}</p>
   </div>
 </template>
+
+<style lang="postcss" scoped>
+.square {
+  aspect-ratio: 1;
+}
+</style>

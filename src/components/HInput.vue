@@ -9,6 +9,7 @@ const props = defineProps<{
   label?: string;
   name?: string;
   type?: string;
+  rows?: number;
   modelValue?: string;
   focus?: boolean;
   multiline?: boolean;
@@ -42,6 +43,7 @@ watch(
         v-model="value"
         :name="props.name"
         :type="props.type"
+        :rows="props.rows"
         class="input-input overflow-hidden"
         placeholder=" "
         multiline
