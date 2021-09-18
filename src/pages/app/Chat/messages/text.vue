@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { UpdateMessageTextRequest } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/chat/v1/messages";
-import { ContentText } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/harmonytypes/v1/types";
+import { UpdateMessageTextRequest } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
+import { ContentText } from "@harmony-dev/harmony-web-sdk/dist/gen/harmonytypes/v1/types";
 import { useVModel } from "@vueuse/core";
 import DOMPurify from "dompurify";
 import { computed, defineProps, ref, watch } from "vue";

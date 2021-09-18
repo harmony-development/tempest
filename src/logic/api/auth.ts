@@ -7,7 +7,7 @@ import {
   NextStepRequest,
   NextStepRequest_FormFields,
   Session,
-} from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/auth/v1/auth";
+} from "@harmony-dev/harmony-web-sdk/dist/gen/auth/v1/auth";
 import { useRoute, useRouter } from "vue-router";
 import { computed, onMounted, reactive, ref } from "vue";
 import { session, userID } from "../app";
@@ -55,7 +55,7 @@ function getFormField(
     case "new-password":
       return {
         oneofKind: "bytes",
-        bytes: new TextEncoder().encode(f as string),
+        bytes: new TextEncoder().encode(f),
       };
     default:
       return {

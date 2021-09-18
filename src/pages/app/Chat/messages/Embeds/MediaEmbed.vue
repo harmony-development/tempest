@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { MediaMetadata } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/mediaproxy/v1/mediaproxy";
+import { MediaMetadata } from "@harmony-dev/harmony-web-sdk/dist/gen/mediaproxy/v1/mediaproxy";
 import Attachment from "~/components/shared/Image/Attachment.vue";
 
 defineProps<{

@@ -11,7 +11,7 @@ const { t } = useI18n();
 
 const addChannelOpen = ref(false);
 const guildName = computed(
-  () => appState.getGuild(route.value.host, route.value.guildid as string).name
+  () => appState.getGuild(route.value.host, route.value.guildid).name
 );
 </script>
 

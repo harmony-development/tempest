@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { SiteMetadata } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/mediaproxy/v1/mediaproxy";
+import { SiteMetadata } from "@harmony-dev/harmony-web-sdk/dist/gen/mediaproxy/v1/mediaproxy";
 import ViewableImage from "~/components/shared/Image/ViewableImage.vue";
 
 defineProps<{
@@ -23,6 +23,6 @@ defineProps<{
     <p class="text-gray-400">
       {{ siteEmbed.description }}
     </p>
-    <ViewableImage :image-src="siteEmbed.image" />
+    <ViewableImage v-if="!!siteEmbed.image" :image-src="siteEmbed.image" />
   </div>
 </template>

@@ -6,11 +6,11 @@ import {
 import {
   AuthStep,
   StreamStepsRequest,
-} from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/auth/v1/auth";
+} from "@harmony-dev/harmony-web-sdk/dist/gen/auth/v1/auth";
 import {
   Event,
   StreamEventsRequest,
-} from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/chat/v1/streaming";
+} from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/streaming";
 
 export type UserModule = (ctx: ViteSSGContext) => void;
 

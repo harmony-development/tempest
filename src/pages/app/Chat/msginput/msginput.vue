@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { SendMessageRequest } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/chat/v1/messages";
+import { SendMessageRequest } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
 import { onStartTyping } from "@vueuse/core";
 
 import { ref } from "vue";
@@ -42,8 +42,8 @@ const sendMessage = async () => {
 
     await conn.chat.sendMessage(
       SendMessageRequest.create({
-        guildId: route.value.guildid as string,
-        channelId: route.value.channelid as string,
+        guildId: route.value.guildid,
+        channelId: route.value.channelid,
         content: {
           content: {
             oneofKind: "filesMessage",
@@ -58,8 +58,8 @@ const sendMessage = async () => {
   } else {
     await conn.chat.sendMessage(
       SendMessageRequest.create({
-        guildId: route.value.guildid as string,
-        channelId: route.value.channelid as string,
+        guildId: route.value.guildid,
+        channelId: route.value.channelid,
         content: {
           content: {
             oneofKind: "textMessage",

@@ -7,7 +7,12 @@ const dialogOpen = ref(false);
 </script>
 
 <template>
-  <outlined-btn primary style="aspect-ratio: 1" @click="dialogOpen = true">
+  <outlined-btn
+    primary
+    style="aspect-ratio: 1"
+    class="p-4"
+    @click="dialogOpen = true"
+  >
     <mdi-account-multiple-plus class="text-xl" />
   </outlined-btn>
   <guild-dialog v-model="dialogOpen" />

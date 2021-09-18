@@ -15,6 +15,10 @@ export const useUser = (
   );
 };
 
+export const useMessage = (host: string, messageID: string) => {
+  return computed(() => appState.getMessage(host, messageID));
+};
+
 export const useMemberList = () => {
   const route = useAppRoute();
   return computed(
@@ -46,7 +50,7 @@ export const useFetchMembers = () => {
         return obj;
       }, {})
     );
-    appState.setGuildMembers(host, guildid as string, members.response.members);
+    appState.setGuildMembers(host, guildid, members.response.members);
   };
 };
 
@@ -64,7 +68,7 @@ export const useFetchChannelList = () => {
     if (!host || !guildID) return;
     const conn = await getOrFederate(host);
     const resp = await conn.chat.getGuildChannels({
-      guildId: guildID as string,
+      guildId: guildID,
     });
     appState.setGuildChannels(
       host,

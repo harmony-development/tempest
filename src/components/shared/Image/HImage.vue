@@ -48,6 +48,7 @@ const fallback = computed(() => {
       v-show="!loadError"
       :src="src"
       :class="{ 'rounded-full': props.rounded }"
+      loading="lazy"
       @error="loadError = true"
     />
     <p v-if="loadError || !src" class="text-xl">{{ fallback?.[0] }}</p>

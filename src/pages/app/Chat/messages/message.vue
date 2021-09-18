@@ -5,14 +5,14 @@ import TextMessage from "./text.vue";
 import Unsupported from "./unsupported.vue";
 import { userID } from "~/logic/app";
 import { useAppRoute } from "~/logic/location";
-import { appState } from "~/store/app";
 import HImage from "~/components/shared/Image/HImage.vue";
 import HBtn from "~/components/shared/HBtn.vue";
 import HList from "~/components/HList.vue";
 import HListItem from "~/components/HListItem.vue";
 import HMenu from "~/components/HMenu.vue";
 import { getOrFederate } from "~/logic/connections";
-import { convertDate } from "~/logic/time";
+import { useDate } from "~/logic/time";
+import { useMessage, useUser } from "~/logic/fetcher";
 
 const route = useAppRoute();
 const props = defineProps<{
@@ -22,27 +22,20 @@ const menuOpen = ref(false);
 const editing = ref(false);
 const editText = ref("");
 const editFocus = ref(false);
-const message = computed(() =>
-  appState.getMessage(route.value.host, props.messageid)
-);
-const user = computed(() =>
-  appState.getUser(route.value.host, message.value.author)
-);
+const message = useMessage(route.value.host, props.messageid);
+const user = useUser(message.value.author, route.value.host);
 
 const isOwnMessage = computed(() => message.value.author === userID.value);
 
-const displayDate = computed(() => {
-  return convertDate(message.value.createdAt);
-});
-const editedAtDate = computed(() => {
-  return convertDate(message.value.editedAt);
-});
+const displayDate = useDate(message.value.createdAt);
+
+const editedAtDate = useDate(message.value.editedAt);
 
 const deleteMessage = async () => {
   const conn = await getOrFederate(route.value.host);
   await conn.chat.deleteMessage({
-    guildId: route.value.guildid as string,
-    channelId: route.value.channelid as string,
+    guildId: route.value.guildid,
+    channelId: route.value.channelid,
     messageId: props.messageid,
   });
 };

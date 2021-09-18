@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ContentFiles } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/harmonytypes/v1/types";
+import { ContentFiles } from "@harmony-dev/harmony-web-sdk/dist/gen/harmonytypes/v1/types";
 import { defineProps } from "vue";
 import Attachment from "../../../../components/shared/Image/Attachment.vue";
 

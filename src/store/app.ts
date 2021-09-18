@@ -1,7 +1,4 @@
-import {
-  FetchLinkMetadataResponse,
-  MediaMetadata,
-} from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/mediaproxy/v1/mediaproxy";
+import { FetchLinkMetadataResponse } from "@harmony-dev/harmony-web-sdk/dist/gen/mediaproxy/v1/mediaproxy";
 import { Store } from "./store";
 import { IChannelData } from "./types/channel";
 import { IGuildData, IGuildInfo } from "./types/guild";
@@ -159,6 +156,7 @@ class AppState extends Store<IAppState> {
   }
 
   updateUser(host: string, userID: string, userData: Partial<IUserData>) {
+    console.log(userData);
     Object.assign(this.getHost(host).users[userID], userData);
   }
 }

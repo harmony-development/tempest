@@ -6,8 +6,7 @@ import { appState } from "~/store/app";
 const route = useAppRoute();
 
 const channelName = computed(
-  () =>
-    appState.getChannel(route.value.host, route.value.channelid as string).name
+  () => appState.getChannel(route.value.host, route.value.channelid).name
 );
 </script>
 

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { CreateChannelRequest } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/chat/v1/channels";
+import { CreateChannelRequest } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/channels";
 
 import { useVModel } from "@vueuse/core";
 import { defineEmit, defineProps, ref } from "vue";
@@ -27,7 +27,7 @@ const doneClicked = async () => {
     const conn = await getOrFederate(route.value.host);
     await conn.chat.createChannel(
       CreateChannelRequest.create({
-        guildId: route.value.guildid as string,
+        guildId: route.value.guildid,
         channelName: name.value,
         isCategory: false,
       })

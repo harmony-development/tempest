@@ -1,4 +1,4 @@
-import { Event } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/chat/v1/streaming";
+import { Event } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/streaming";
 import { appState } from "~/store/app";
 import { guildListState } from "~/store/guildList";
 import { ChatStream } from "~/types";
@@ -52,15 +52,9 @@ export const eventStreamHandler = (host: string, stream: ChatStream) => {
       case "editedMessage": {
         const edited = ev.event.editedMessage;
         appState.updateMessage(host, edited.messageId, {
-          ...(edited.updateContent && { content: edited.content }),
-          ...(edited.updateAttachments && { attachments: edited.attachments }),
-          ...(edited.overrides && {
-            override: {
-              username: edited.overrides.name,
-              reason: edited.overrides.reason.oneofKind,
-              avatar: edited.overrides.avatar,
-            },
-          }),
+          // TODO FIX THIS
+          // Edit events only work for text messages in the protocol!
+          // Also overrides can't be edited!
           editedAt: +edited.editedAt!.seconds,
         });
         break;
@@ -68,10 +62,10 @@ export const eventStreamHandler = (host: string, stream: ChatStream) => {
       case "profileUpdated": {
         const event = ev.event.profileUpdated;
         appState.updateUser(host, event.userId, {
-          ...(event.updateUsername && { username: event.newUsername }),
-          ...(event.updateAvatar && { avatar: event.newAvatar }),
-          ...(event.updateIsBot && { bot: event.isBot }),
-          ...(event.updateStatus && { status: event.newStatus }),
+          ...(event.newUsername && { username: event.newUsername }),
+          ...(event.newAvatar && { avatar: event.newAvatar }),
+          ...(event.newIsBot && { bot: event.newIsBot }),
+          ...(event.newStatus && { status: event.newStatus }),
         });
         break;
       }

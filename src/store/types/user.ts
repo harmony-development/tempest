@@ -1,4 +1,4 @@
-import { UserStatus } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/harmonytypes/v1/types";
+import { UserStatus } from "@harmony-dev/harmony-web-sdk/dist/gen/harmonytypes/v1/types";
 
 export interface IUserData {
   username?: string;

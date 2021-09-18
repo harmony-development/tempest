@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, defineProps, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { UserStatus } from "@harmony-dev/harmony-web-sdk/dist/lib/protocol/harmonytypes/v1/types";
+import { UserStatus } from "@harmony-dev/harmony-web-sdk/dist/gen/harmonytypes/v1/types";
 import HListItem from "~/components/HListItem.vue";
 import { useAppRoute } from "~/logic/location";
 import { appState } from "~/store/app";

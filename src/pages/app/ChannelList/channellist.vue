@@ -9,8 +9,7 @@ import { useFetchChannelList } from "~/logic/fetcher";
 const route = useAppRoute();
 
 const channelList = computed(
-  () =>
-    appState.getGuild(route.value.host, route.value.guildid as string).channels
+  () => appState.getGuild(route.value.host, route.value.guildid).channels
 );
 
 const fetchChannels = useFetchChannelList();
