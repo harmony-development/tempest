@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useVModel } from "@vueuse/core";
 
-import { defineProps, ref, watch } from "vue";
+import { defineProps, ref, watch, nextTick } from "vue";
 
 const emit = defineEmits(["update:modelValue"]);
 
@@ -28,7 +28,10 @@ const resizeInput = () => {
 
 watch(
   () => props.focus,
-  () => input.value?.focus()
+  async () => {
+    await nextTick();
+    input.value?.focus();
+  }
 );
 </script>
 <template>

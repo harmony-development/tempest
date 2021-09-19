@@ -56,8 +56,8 @@ const i18nMenu = ref(false);
           rounded
           p-6
           w-11/12
-          sm:m-12 sm:w-2/3
-          md:w-5/12
+          sm:m-12
+          md:w-150
           dark:bg-harmonydark-800
         "
       >

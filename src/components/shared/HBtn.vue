@@ -19,9 +19,9 @@ const buttonClasses = {
 };
 </script>
 <template>
-  <a v-wave :class="buttonClasses">
+  <button v-wave :class="buttonClasses">
     <slot />
-  </a>
+  </button>
 </template>
 
 <style lang="postcss" scoped>
@@ -31,6 +31,9 @@ const buttonClasses = {
     cursor-pointer w-max select-none;
   &:disabled {
     @apply pointer-events-none;
+  }
+  &:focus-visible {
+    @apply ring ring-2 ring-primary-300;
   }
 }
 

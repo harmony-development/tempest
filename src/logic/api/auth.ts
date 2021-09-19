@@ -92,7 +92,8 @@ export const useAuthManager = () => {
   const back = async () => {
     goingBack.value = true;
     try {
-      if (!canGoBack.value) goToServerSelect();
+      if (!canGoBack.value || currentStep.value === "loading")
+        goToServerSelect();
       await authManager.sendBack();
     } catch {
       goToServerSelect();

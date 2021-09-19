@@ -4,8 +4,6 @@ import { useVModel } from "@vueuse/core";
 
 const props = defineProps<{
   modelValue: boolean;
-  compact?: boolean;
-  unsized?: boolean;
 }>();
 const emit = defineEmits(["update:modelValue"]);
 const open = useVModel(props, "modelValue", emit);
@@ -33,8 +31,15 @@ const open = useVModel(props, "modelValue", emit);
         @mousedown="open = false"
       >
         <div
-          class="bg-white shadow-xl p-4 dark:bg-harmonydark-900"
-          :class="{ sized: !unsized, compact }"
+          class="
+            bg-white
+            shadow-xl
+            p-4
+            dark:bg-harmonydark-900
+            w-7/8
+            sm:w-4/5
+            lg:w-120
+          "
           v-bind="$attrs"
           @mousedown.stop=""
         >
@@ -46,14 +51,6 @@ const open = useVModel(props, "modelValue", emit);
 </template>
 
 <style lang="postcss" scoped>
-.sized {
-  @apply w-7/8 sm:w-4/5 lg:w-2/3;
-}
-
-.compact {
-  @apply w-full w-2/3 sm:w-1/2 lg:w-1/3;
-}
-
 .dialog-enter-active,
 .dialog-leave-active {
   @apply transform;
