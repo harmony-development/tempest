@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { defineAsyncComponent, ref } from "vue";
 import { useRouter } from "vue-router";
-import AddServerDialog from "../../components/auth/addserverdialog.vue";
+import { useEventListener } from "@vueuse/core";
 import HList from "~/components/HList.vue";
 import HListItem from "~/components/HListItem.vue";
 import HSpacer from "~/components/HSpacer.vue";
@@ -9,10 +9,18 @@ import HBtn from "~/components/shared/HBtn.vue";
 import { hostList } from "~/logic/entry";
 import { parseUserHost } from "~/logic/utils/parsing";
 
+import HDialog from "~/components/HDialog.vue";
+import { useHotKeys } from "~/logic/utils/hotkey";
+
+const AddServerDialog = defineAsyncComponent(
+  () => import("../../components/auth/addserverdialog.vue")
+);
+
 const router = useRouter();
 
 const addServerOpen = ref(false);
 const selectedHost = ref<string | undefined>(undefined);
+const selectedIdx = ref<number>(0);
 
 const removeServer = (idx: number) => {
   hostList.value.splice(idx, 1);
@@ -25,25 +33,44 @@ const onNextClicked = () => {
     },
   });
 };
+
+const changeSelection = (idx: number) => {
+  selectedIdx.value = idx;
+  selectedHost.value = hostList.value[idx].host;
+};
+
+useHotKeys((ev) => {
+  ev.key === "a" && (addServerOpen.value = true);
+  ev.key === "d" && removeServer(selectedIdx.value);
+  ev.key === "Enter" && onNextClicked();
+  const num = parseInt(ev.key);
+  isFinite(num) && num <= hostList.value.length && changeSelection(num - 1);
+});
 </script>
 
 <template>
-  <div>
+  <form @submit.prevent="onNextClicked">
     <h1 v-t="'entry.serverselect.title'" class="text-xl mb-4" />
     <h-btn
       v-t="'auth.add-server'"
       class="mb-4"
       variant="filled"
       color="primary"
+      type="button"
       @click="addServerOpen = true"
     />
-    <add-server-dialog v-model="addServerOpen" />
+    <kbd class="ml-2">a</kbd>
+    <h-dialog v-model="addServerOpen">
+      <add-server-dialog v-if="addServerOpen" v-model="addServerOpen" />
+    </h-dialog>
     <h-list class="bg-white mb-4 dark:bg-harmonydark-700">
       <h-list-item
         v-for="(entry, idx) in hostList"
         :key="entry.host"
         :selected="selectedHost === entry.host"
-        @click="selectedHost = entry.host"
+        class="flex gap-3"
+        @click="changeSelection(idx)"
+        @keydown="onServerKeyPress(idx, $event)"
       >
         <div>
           <p class="text-sm">
@@ -53,10 +80,14 @@ const onNextClicked = () => {
             {{ entry.host }}
           </p>
         </div>
+        <kbd>
+          {{ idx + 1 }}
+        </kbd>
         <h-spacer />
         <h-btn
           icon
           variant="text"
+          type="button"
           @pointerdown.stop
           @click.stop="removeServer(idx)"
         >
@@ -68,11 +99,12 @@ const onNextClicked = () => {
     <div class="flex justify-end">
       <h-btn
         v-t="'button.next'"
-        :variant="'filled'"
-        :color="'primary'"
+        variant="filled"
+        color="primary"
         :disabled="!selectedHost"
+        type="submit"
         @click="onNextClicked"
       />
     </div>
-  </div>
+  </form>
 </template>

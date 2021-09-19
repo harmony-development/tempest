@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useVModel } from "@vueuse/core";
 
-import { defineProps, ref, watch, nextTick } from "vue";
+import { defineProps, ref, watch, nextTick, onMounted } from "vue";
 
 const emit = defineEmits(["update:modelValue"]);
 
@@ -15,6 +15,7 @@ const props = defineProps<{
   multiline?: boolean;
   noBorder?: boolean;
   dense?: boolean;
+  required?: boolean;
 }>();
 
 const value = useVModel(props, "modelValue", emit);
@@ -26,10 +27,13 @@ const resizeInput = () => {
   input.value.style.height = `${Math.min(input.value.scrollHeight, 200)}px`;
 };
 
+onMounted(() => {
+  if (props.focus) input.value?.focus();
+});
+
 watch(
   () => props.focus,
   async () => {
-    await nextTick();
     input.value?.focus();
   }
 );
@@ -47,6 +51,7 @@ watch(
         :name="props.name"
         :type="props.type"
         :rows="props.rows"
+        :required="props.required"
         class="input-input overflow-hidden"
         placeholder=" "
         multiline
@@ -59,6 +64,7 @@ watch(
         v-model="value"
         :name="props.name"
         :type="props.type"
+        :required="props.required"
         class="input-input"
         :class="{ dense }"
         placeholder=" "

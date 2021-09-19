@@ -1,19 +1,22 @@
 <script setup lang="ts">
 import { defineProps, defineEmits } from "vue";
-import { useVModel } from "@vueuse/core";
+import { onKeyStroke, useVModel } from "@vueuse/core";
+import PopInTransition from "~/components/shared/Transition/PopInTransition.vue";
 
 const props = defineProps<{
   modelValue: boolean;
 }>();
 const emit = defineEmits(["update:modelValue"]);
 const open = useVModel(props, "modelValue", emit);
+
+onKeyStroke("Escape", () => (open.value = false));
 </script>
 
 <template>
   <Teleport to="#app">
-    <transition name="dialog">
+    <pop-in-transition>
       <div
-        v-show="open"
+        v-if="open"
         class="
           bg-white
           flex
@@ -46,19 +49,6 @@ const open = useVModel(props, "modelValue", emit);
           <slot />
         </div>
       </div>
-    </transition>
+    </pop-in-transition>
   </Teleport>
 </template>
-
-<style lang="postcss" scoped>
-.dialog-enter-active,
-.dialog-leave-active {
-  @apply transform;
-  transition: opacity 0.05s linear, transform 0.05s linear;
-}
-
-.dialog-enter-from,
-.dialog-leave-to {
-  @apply opacity-0 -translate-y-2;
-}
-</style>

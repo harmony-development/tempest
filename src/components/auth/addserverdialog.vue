@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { defineProps, defineEmit, ref, watch } from "vue";
+import { defineProps, ref, computed } from "vue";
 import { useVModel } from "@vueuse/core";
-import HDialog from "~/components/HDialog.vue";
+import { FocusTrap } from "focus-trap-vue";
 import HInput from "~/components/HInput.vue";
 import HBtn from "~/components/shared/HBtn.vue";
+
 import { hostList } from "~/logic/entry";
 
 const props = defineProps<{
@@ -14,19 +15,23 @@ const open = useVModel(props, "modelValue", emit);
 const name = ref("");
 const host = ref("");
 
+const disabled = computed(() => !name.value || !host.value);
+
 const doneClicked = () => {
   hostList.value.push({
     name: name.value,
     host: host.value,
   });
+  name.value = "";
+  host.value = "";
   open.value = false;
 };
 </script>
 
 <template>
-  <h-dialog v-model="open">
-    <h1 v-t="'auth.add-server'" class="text-lg mb-4" />
-    <form @submit.prevent="doneClicked">
+  <focus-trap :active="open">
+    <form @submit.prevent="">
+      <h1 v-t="'auth.add-server'" class="text-lg mb-4" />
       <h-input
         v-model="name"
         class="mb-2"
@@ -43,6 +48,7 @@ const doneClicked = () => {
           variant="text"
           color="secondary"
           class="mr-2"
+          type="button"
           @click="open = false"
         >
           Cancel
@@ -50,7 +56,7 @@ const doneClicked = () => {
         <h-btn
           variant="text"
           color="primary"
-          :disabled="!host || !name"
+          :disabled="disabled"
           type="submit"
           @click="doneClicked"
         >
@@ -58,5 +64,5 @@ const doneClicked = () => {
         </h-btn>
       </div>
     </form>
-  </h-dialog>
+  </focus-trap>
 </template>

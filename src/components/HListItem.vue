@@ -13,6 +13,7 @@ const props = defineProps<{
       'list-item': true,
       selected: props.selected,
     }"
+    tabindex="0"
   >
     <slot />
   </li>
@@ -24,6 +25,10 @@ const props = defineProps<{
 
   &:hover {
     @apply bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10;
+  }
+
+  &:focus-visible {
+    @apply ring ring-2 ring-primary-300;
   }
 }
 

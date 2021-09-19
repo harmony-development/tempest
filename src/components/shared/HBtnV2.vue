@@ -39,7 +39,7 @@ defineProps<{
 <style lang="postcss" scoped>
 .btn {
   @apply bg-white bg-opacity-0 transition duration-100 
-  rounded-sm cursor-pointer flex justify-center 
+  rounded-sm cursor-pointer inline-flex justify-center 
   items-center w-min select-none whitespace-nowrap relative;
 }
 

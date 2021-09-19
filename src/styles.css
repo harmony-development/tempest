@@ -1,0 +1,3 @@
+kbd {
+  @apply p-1 py-0 rounded-sm shadow-black shadow-lg bg-harmonydark-900 border-harmonydark-400 border-1 text-xs inline-block;
+}
