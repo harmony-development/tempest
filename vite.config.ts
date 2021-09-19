@@ -2,8 +2,10 @@ import path from "path";
 import { defineConfig } from "vite";
 import Vue from "@vitejs/plugin-vue";
 import Layouts from "vite-plugin-vue-layouts";
-import ViteIcons, { ViteIconsResolver } from "vite-plugin-icons";
-import ViteComponents from "vite-plugin-components";
+import Icons from 'unplugin-icons/vite'
+import IconsResolver from 'unplugin-icons/resolver'
+import Components from 'unplugin-vue-components/vite'
+import AutoImport from 'unplugin-auto-import/vite'
 import WindiCSS from "vite-plugin-windicss";
 import { VitePWA } from "vite-plugin-pwa";
 import VueI18n from "@intlify/vite-plugin-vue-i18n";
@@ -21,6 +23,17 @@ export default defineConfig({
       include: [/\.vue$/],
     }),
 
+    AutoImport({
+      imports: [
+        'vue',
+        'vue-router',
+        'vue-i18n',
+        '@vueuse/head',
+        '@vueuse/core',
+      ],
+      dts: true,
+    }),
+
     ViteFonts({
       google: {
         families: ["Roboto"],
@@ -30,13 +43,14 @@ export default defineConfig({
     // https://github.com/JohnCampionJr/vite-plugin-vue-layouts
     Layouts(),
     // https://github.com/antfu/vite-plugin-components
-    ViteComponents({
+    Components({
       // allow auto load markdown components under `./src/components/`
       extensions: ["vue"],
+      dts: true,
       // auto import icons
       customComponentResolvers: [
         // https://github.com/antfu/vite-plugin-icons
-        ViteIconsResolver({
+        IconsResolver({
           componentPrefix: "",
           // enabledCollections: ['carbon']
         }),
@@ -44,7 +58,7 @@ export default defineConfig({
     }),
 
     // https://github.com/antfu/vite-plugin-icons
-    ViteIcons(),
+    Icons(),
 
     // https://github.com/antfu/vite-plugin-windicss
     WindiCSS({
@@ -92,6 +106,11 @@ export default defineConfig({
       enforce: "post",
     },
   ],
+  server: {
+    fs: {
+      strict: true,
+    }
+  },
   // https://github.com/antfu/vite-ssg
   ssgOptions: {
     script: "async",

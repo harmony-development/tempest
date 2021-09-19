@@ -19,6 +19,8 @@ const {
   error,
 } = useAuthManager();
 
+const [command, ...args] = undefined.split(" ");
+
 const { t } = useI18n();
 
 const formFilled = computed(() => {
