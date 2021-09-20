@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { useEventListener } from "@vueuse/core";
 import { useAuthManager } from "~/logic/api/auth";
 import HListItem from "~/components/HListItem.vue";
 import HSpinner from "~/components/HSpinner.vue";
@@ -18,8 +17,6 @@ const {
   choices,
   error,
 } = useAuthManager();
-
-const [command, ...args] = undefined.split(" ");
 
 const { t } = useI18n();
 

@@ -6,6 +6,7 @@ import {
 import {
   AuthStep,
   StreamStepsRequest,
+  StreamStepsResponse,
 } from "@harmony-dev/harmony-web-sdk/dist/gen/auth/v1/auth";
 import {
   Event,
@@ -14,6 +15,9 @@ import {
 
 export type UserModule = (ctx: ViteSSGContext) => void;
 
-export type AuthStream = ServerStreamingCall<StreamStepsRequest, AuthStep>;
+export type AuthStream = ServerStreamingCall<
+  StreamStepsRequest,
+  StreamStepsResponse
+>;
 
 export type ChatStream = DuplexStreamingCall<StreamEventsRequest, Event>;

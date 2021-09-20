@@ -2,8 +2,8 @@ lockfileVersion: 5.3
 
 specifiers:
   '@antfu/eslint-config': ^0.9.0
-  '@harmony-dev/harmony-web-sdk': ^5.0.63
-  '@iconify/json': ^1.1.403
+  '@harmony-dev/harmony-web-sdk': ^5.0.66
+  '@iconify/json': ^1.1.404
   '@intlify/vite-plugin-vue-i18n': ^2.4.0
   '@protobuf-ts/runtime-rpc': ^2.0.6
   '@types/dompurify': ^2.2.3
@@ -57,7 +57,7 @@ specifiers:
   vue3-click-away: ^1.2.1
 
 dependencies:
-  '@harmony-dev/harmony-web-sdk': 5.0.63
+  '@harmony-dev/harmony-web-sdk': 5.0.67
   '@protobuf-ts/runtime-rpc': 2.0.6
   '@vueuse/core': 6.4.1_vue@3.2.12
   '@vueuse/head': 0.6.0_vue@3.2.12
@@ -77,7 +77,7 @@ dependencies:
 
 devDependencies:
   '@antfu/eslint-config': 0.9.0_eslint@7.32.0+typescript@4.4.3
-  '@iconify/json': 1.1.403
+  '@iconify/json': 1.1.404
   '@intlify/vite-plugin-vue-i18n': 2.4.0_vite@2.5.10+vue-i18n@9.1.7
   '@types/dompurify': 2.2.3
   '@types/jest': 27.0.1
@@ -103,7 +103,7 @@ devDependencies:
   ts-jest: 27.0.5_77a678c07bcdbdfd88181ff63fe325b2
   typescript: 4.4.3
   unplugin-auto-import: 0.4.6_@vueuse+core@6.4.1+vite@2.5.10
-  unplugin-icons: 0.11.3_bb95034bcf609147e95709faffdd4405
+  unplugin-icons: 0.11.3_4242227f15d365faebe5884deb26575d
   unplugin-vue-components: 0.15.2_vite@2.5.10+vue@3.2.12
   vite: 2.5.10
   vite-plugin-fonts: 0.2.2_vite@2.5.10
@@ -1397,11 +1397,11 @@ packages:
       - supports-color
     dev: true
 
-  /@harmony-dev/harmony-web-sdk/5.0.63:
-    resolution: {integrity: sha512-0sUUWLjLYQQLPQSN0HpevJg5VPs5yXXR+PLuD5dPxgDdpdTCJACd6GGVH/w0alhsLyLSkra89Knf/i/6+V9fiQ==}
+  /@harmony-dev/harmony-web-sdk/5.0.67:
+    resolution: {integrity: sha512-GKUY0EvrEk3+Q7BKJARECHwHuQOrho15r7noOhN0DShFrp9BGZxE+FPwlj8HcSaDF02vyPyo+ggheIDXRzwuwQ==}
     dependencies:
-      '@protobuf-ts/runtime': 1.0.13
-      '@protobuf-ts/runtime-rpc': 1.0.13
+      '@protobuf-ts/runtime': 2.0.6
+      '@protobuf-ts/runtime-rpc': 2.0.6
     dev: false
 
   /@humanwhocodes/config-array/0.5.0:
@@ -1423,8 +1423,8 @@ packages:
     resolution: {integrity: sha512-LFelJDOLZ6JHlmlAkgrvmcu4hpNPB91KYcr4f60D/exzU1eNOb4/KCVHIydGHIQFaOacIOD+Xy+B7P1z812cZg==}
     dev: true
 
-  /@iconify/json/1.1.403:
-    resolution: {integrity: sha512-4auVoKLtg22PhXZKGHckUwaRDMFiatdQxfHjqH862lQvr/NxCPs8Qg5+95LRHDZatFd1pvu7SJukwFkpHcleVA==}
+  /@iconify/json/1.1.404:
+    resolution: {integrity: sha512-/77BdzRhxQYKnL8Ri2XO5metGcmUTKtoorSscWapQpYhSRTWc6M8UaBVQt+Dn+SMNhiF3vBy7DuKGb7mq7eraw==}
     dev: true
 
   /@intlify/bundle-utils/0.2.0:
@@ -1749,20 +1749,10 @@ packages:
     resolution: {integrity: sha512-HnUhk1Sy9IuKrxEMdIRCxpIqPw6BFsbYSEUO9p/hNw5sMld/+3OLMWQP80F8/db9qsv3qUjs7ZR5bS/R+iinXw==}
     dev: false
 
-  /@protobuf-ts/runtime-rpc/1.0.13:
-    resolution: {integrity: sha512-ct/fCm3UJk/sg3yKpvCd6ylbRVkj+LiV+xD95BWTw0w4t/29VYwT8MhZqlJbN0qSfkkH4/jWTrwv9yePDEjPWg==}
-    dependencies:
-      '@protobuf-ts/runtime': 1.0.13
-    dev: false
-
   /@protobuf-ts/runtime-rpc/2.0.6:
     resolution: {integrity: sha512-is7PUKt7rA9xRZwpRd120M3PlSW+TVVAwgCy6AmlZOQp7CWN8qa7ng520sDSQYlYZWRIsUoJLiwF6PykQy2Tyg==}
     dependencies:
       '@protobuf-ts/runtime': 2.0.6
-    dev: false
-
-  /@protobuf-ts/runtime/1.0.13:
-    resolution: {integrity: sha512-uvYYBUtG4eCYMxo+mzxN8SHvpL/l7PbHEmOpXEnDCwBj/wJ+Ezj8+TlEFjjRWpnFidka+SMdDOXPWSyJv2iNAw==}
     dev: false
 
   /@protobuf-ts/runtime/2.0.6:
@@ -6893,7 +6883,7 @@ packages:
       - webpack
     dev: true
 
-  /unplugin-icons/0.11.3_bb95034bcf609147e95709faffdd4405:
+  /unplugin-icons/0.11.3_4242227f15d365faebe5884deb26575d:
     resolution: {integrity: sha512-qJMi1YBv6QN2R6lu+l7dR+W3LXmen09/h2OzD9324YOvRM6ElsmaCWvc5uuvAVUSpSuuAKfb+Ay1lCIfpb34RA==}
     peerDependencies:
       '@iconify/json': '*'
@@ -6912,7 +6902,7 @@ packages:
         optional: true
     dependencies:
       '@antfu/utils': 0.3.0
-      '@iconify/json': 1.1.403
+      '@iconify/json': 1.1.404
       '@iconify/json-tools': 1.0.10
       '@vue/compiler-sfc': 3.2.12
       has-pkg: 0.0.1

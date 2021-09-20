@@ -185,11 +185,14 @@ export const useAuthManager = () => {
   onMounted(async () => {
     try {
       await authManager.start();
-      authManager.stream?.response.onMessage(onStepOuter);
+      authManager.stream?.responses.onMessage((resp) =>
+        onStepOuter(resp.step!)
+      );
       onStepOuter(
-        await authManager.nextStep({ oneofKind: undefined }).response
+        (await authManager.nextStep({ oneofKind: undefined }).response).step!
       );
     } catch (e) {
+      console.warn(e);
       currentStep.value = "fatal";
     }
   });

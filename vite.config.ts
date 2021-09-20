@@ -2,10 +2,10 @@ import path from "path";
 import { defineConfig } from "vite";
 import Vue from "@vitejs/plugin-vue";
 import Layouts from "vite-plugin-vue-layouts";
-import Icons from 'unplugin-icons/vite'
-import IconsResolver from 'unplugin-icons/resolver'
-import Components from 'unplugin-vue-components/vite'
-import AutoImport from 'unplugin-auto-import/vite'
+import Icons from "unplugin-icons/vite";
+import IconsResolver from "unplugin-icons/resolver";
+import Components from "unplugin-vue-components/vite";
+import AutoImport from "unplugin-auto-import/vite";
 import WindiCSS from "vite-plugin-windicss";
 import { VitePWA } from "vite-plugin-pwa";
 import VueI18n from "@intlify/vite-plugin-vue-i18n";
@@ -25,11 +25,11 @@ export default defineConfig({
 
     AutoImport({
       imports: [
-        'vue',
-        'vue-router',
-        'vue-i18n',
-        '@vueuse/head',
-        '@vueuse/core',
+        "vue",
+        "vue-router",
+        "vue-i18n",
+        "@vueuse/head",
+        "@vueuse/core",
       ],
       dts: true,
     }),
@@ -48,7 +48,7 @@ export default defineConfig({
       extensions: ["vue"],
       dts: true,
       // auto import icons
-      customComponentResolvers: [
+      resolvers: [
         // https://github.com/antfu/vite-plugin-icons
         IconsResolver({
           componentPrefix: "",
@@ -98,18 +98,17 @@ export default defineConfig({
     }),
     {
       ...visualizer({
-        gzipSize: true,
+        template: "sunburst",
         brotliSize: true,
-        template: "treemap",
       }),
-      apply: "build",
       enforce: "post",
+      apply: "build",
     },
   ],
   server: {
     fs: {
       strict: true,
-    }
+    },
   },
   // https://github.com/antfu/vite-ssg
   ssgOptions: {

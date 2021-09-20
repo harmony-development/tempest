@@ -70,7 +70,6 @@ useHotKeys((ev) => {
         :selected="selectedHost === entry.host"
         class="flex gap-3"
         @click="changeSelection(idx)"
-        @keydown="onServerKeyPress(idx, $event)"
       >
         <div>
           <p class="text-sm">

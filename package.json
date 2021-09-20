@@ -3,11 +3,12 @@
   "scripts": {
     "build": "cross-env NODE_ENV=production vite build",
     "dev": "vite --port 3333",
+    "dev:force": "vite --port 3333 --force",
     "preview": "vite preview",
     "test": "jest src"
   },
   "dependencies": {
-    "@harmony-dev/harmony-web-sdk": "^5.0.63",
+    "@harmony-dev/harmony-web-sdk": "^5.0.66",
     "@protobuf-ts/runtime-rpc": "^2.0.6",
     "@vueuse/core": "^6.4.1",
     "@vueuse/head": "^0.6.0",
@@ -27,7 +28,7 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.9.0",
-    "@iconify/json": "^1.1.403",
+    "@iconify/json": "^1.1.404",
     "@intlify/vite-plugin-vue-i18n": "^2.4.0",
     "@types/dompurify": "^2.2.3",
     "@types/jest": "^27.0.1",
