@@ -12,6 +12,7 @@ import {
   Event,
   StreamEventsRequest,
 } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/streaming";
+import { StreamEventsResponse } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/stream";
 
 export type UserModule = (ctx: ViteSSGContext) => void;
 
@@ -20,4 +21,7 @@ export type AuthStream = ServerStreamingCall<
   StreamStepsResponse
 >;
 
-export type ChatStream = DuplexStreamingCall<StreamEventsRequest, Event>;
+export type ChatStream = DuplexStreamingCall<
+  StreamEventsRequest,
+  StreamEventsResponse
+>;

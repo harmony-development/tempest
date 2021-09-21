@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { defineAsyncComponent, ref } from "vue";
 import { useRouter } from "vue-router";
-import { useEventListener } from "@vueuse/core";
 import HList from "~/components/HList.vue";
 import HListItem from "~/components/HListItem.vue";
 import HSpacer from "~/components/HSpacer.vue";
@@ -10,7 +9,6 @@ import { hostList } from "~/logic/entry";
 import { parseUserHost } from "~/logic/utils/parsing";
 
 import HDialog from "~/components/HDialog.vue";
-import { useHotKeys } from "~/logic/utils/hotkey";
 
 const AddServerDialog = defineAsyncComponent(
   () => import("../../components/auth/addserverdialog.vue")
@@ -38,18 +36,10 @@ const changeSelection = (idx: number) => {
   selectedIdx.value = idx;
   selectedHost.value = hostList.value[idx].host;
 };
-
-useHotKeys((ev) => {
-  ev.key === "a" && (addServerOpen.value = true);
-  ev.key === "d" && removeServer(selectedIdx.value);
-  ev.key === "Enter" && onNextClicked();
-  const num = parseInt(ev.key);
-  isFinite(num) && num <= hostList.value.length && changeSelection(num - 1);
-});
 </script>
 
 <template>
-  <form @submit.prevent="onNextClicked">
+  <form @submit.prevent="">
     <h1 v-t="'entry.serverselect.title'" class="text-xl mb-4" />
     <h-btn
       v-t="'auth.add-server'"
@@ -59,7 +49,6 @@ useHotKeys((ev) => {
       type="button"
       @click="addServerOpen = true"
     />
-    <kbd class="ml-2">a</kbd>
     <h-dialog v-model="addServerOpen">
       <add-server-dialog v-if="addServerOpen" v-model="addServerOpen" />
     </h-dialog>
@@ -79,9 +68,6 @@ useHotKeys((ev) => {
             {{ entry.host }}
           </p>
         </div>
-        <kbd>
-          {{ idx + 1 }}
-        </kbd>
         <h-spacer />
         <h-btn
           icon

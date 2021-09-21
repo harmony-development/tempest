@@ -1,14 +1,13 @@
 <script lang="ts" setup>
-import { computed } from "vue";
 import HDialog from "./HDialog.vue";
 import HBtn from "./shared/HBtn.vue";
-import { promptState } from "~/store/prompt";
+import { usePromptState } from "~/store/prompt";
 
-const open = computed(() => promptState.state.promptOpen);
+const promptState = usePromptState();
 </script>
 
 <template>
-  <HDialog v-model="open" compact>
+  <HDialog v-model="promptState.open">
     <div>
       <slot />
       <div class="flex flex-row-reverse">

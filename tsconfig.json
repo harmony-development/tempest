@@ -16,7 +16,8 @@
     "types": ["vite/client", "vite-plugin-vue-layouts/client", "@types/jest"],
     "paths": {
       "~/*": ["src/*"]
-    }
+    },
+    "noErrorTruncation": true
   },
   "exclude": ["dist", "node_modules"]
 }

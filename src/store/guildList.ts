@@ -1,34 +1,25 @@
+import { defineStore } from "pinia";
 import { Store } from "./store";
 import { IGuildEntry } from "./types/guildList";
 
-interface IGuildListState {
-  guildList?: IGuildEntry[];
-}
-
-class GuildListState extends Store<IGuildListState> {
-  getGuildList() {
-    return this.state.guildList;
-  }
-
-  setGuildList(list: IGuildEntry[]) {
-    this.state.guildList = list.map((it) => ({
-      guildId: it.guildId,
-      host: new URL(it.host).origin,
-    }));
-  }
-
-  addGuild(entry: IGuildEntry) {
-    this.state.guildList?.push(entry);
-  }
-
-  removeGuild(host: string, id: string) {
-    this.state.guildList = this.state.guildList?.filter(
-      (v) => v.guildId !== id || v.host !== host
-    );
-  }
-}
-
-export const guildListState = new GuildListState({});
-
-// @ts-ignore
-window.guildListState = guildListState;
+export const useGuildListState = defineStore("guild list", {
+  state: () => ({
+    guilds: [] as IGuildEntry[],
+  }),
+  actions: {
+    setGuildList(list: IGuildEntry[]) {
+      this.guilds = list.map((guild) => ({
+        guildId: guild.guildId,
+        host: new URL(guild.host).origin,
+      }));
+    },
+    addGuild(guild: IGuildEntry) {
+      this.guilds.push(guild);
+    },
+    removeGuild(host: string, guildId: string) {
+      this.guilds = this.guilds.filter(
+        (guild) => guild.guildId !== guildId || guild.host !== host
+      );
+    },
+  },
+});

@@ -12,7 +12,7 @@ defineProps<{
 </script>
 
 <template>
-  <a
+  <button
     v-wave
     class="btn"
     :class="{
@@ -33,7 +33,7 @@ defineProps<{
     <div class="flex" :class="{ disabled: loading }">
       <slot />
     </div>
-  </a>
+  </button>
 </template>
 
 <style lang="postcss" scoped>

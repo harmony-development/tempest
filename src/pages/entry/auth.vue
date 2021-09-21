@@ -4,7 +4,6 @@ import { useI18n } from "vue-i18n";
 import { useAuthManager } from "~/logic/api/auth";
 import HListItem from "~/components/HListItem.vue";
 import HSpinner from "~/components/HSpinner.vue";
-import { useHotKeys } from "~/logic/utils/hotkey";
 const {
   sendChoice,
   sendForm,
@@ -23,12 +22,6 @@ const { t } = useI18n();
 const formFilled = computed(() => {
   return formFieldValues.every((v) => !!v);
 });
-
-useHotKeys((ev) => {
-  if (document.activeElement?.tagName === "INPUT") return;
-  ev.preventDefault();
-  ev.key === "b" && back();
-});
 </script>
 
 <template>
@@ -38,7 +31,6 @@ useHotKeys((ev) => {
         <h-spinner v-if="goingBack" />
         <mdi-arrow-left v-else />
       </h-btn-v2>
-      <kbd class="ml-1">b</kbd>
       <h3 v-if="title" class="text-lg ml-4">
         {{ t(`h.auth.${title}`) }}
       </h3>
@@ -68,13 +60,13 @@ useHotKeys((ev) => {
       />
     </div>
     <div v-if="currentStep === 'choice'">
-      <h-list class="bg-harmonydark-900">
+      <h-list class="bg-harmonydark-700">
         <h-list-item v-for="c in choices" :key="c" @click="sendChoice(c)">
           {{ c }}
         </h-list-item>
       </h-list>
     </div>
-    <div v-if="currentStep === 'form'">
+    <form v-if="currentStep === 'form'" @submit.prevent="">
       <div class="flex flex-col gap-2 mb-3">
         <template v-for="(f, i) in formFields" :key="f.name">
           <h-input
@@ -89,10 +81,11 @@ useHotKeys((ev) => {
           v-t="'buttons.next'"
           outlined
           :disabled="!formFilled"
+          type="submit"
           @click="sendForm(formFieldValues)"
         />
       </div>
-    </div>
+    </form>
   </div>
 </template>
 

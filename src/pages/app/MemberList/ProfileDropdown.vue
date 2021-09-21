@@ -3,16 +3,17 @@ import { ref } from "vue";
 import { host, userID } from "~/logic/app";
 import HMenu from "~/components/HMenu.vue";
 import { isDark } from "~/logic";
-import { dialogState } from "~/store/dialogs";
 import { useUser } from "~/logic/fetcher";
+import { useDialogState } from "~/store/dialogs";
 
+const dialogState = useDialogState();
 const open = ref(false);
 
 const ownUser = useUser(userID.value, host.value);
 
 const openUserSettings = () => {
   open.value = false;
-  dialogState.toggleUserSettingsDialog();
+  dialogState.userSettings = !dialogState.userSettings;
 };
 </script>
 

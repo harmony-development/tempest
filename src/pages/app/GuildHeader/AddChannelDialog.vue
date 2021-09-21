@@ -42,7 +42,7 @@ const doneClicked = async () => {
 </script>
 
 <template>
-  <h-dialog v-model="open" compact>
+  <h-dialog v-model="open">
     <h1 v-t="'app.add-channel-dialog.title'" class="text-lg" />
     <h-input
       v-model="name"
