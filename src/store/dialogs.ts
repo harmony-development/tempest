@@ -1,7 +1,15 @@
-import { defineStore } from "pinia";
+import { Store } from "./store";
 
-export const useDialogState = defineStore("dialogs", {
-  state: () => ({
-    userSettings: false,
-  }),
+interface IDialogsState {
+  userSettingsOpen: boolean;
+}
+
+class DialogsState extends Store<IDialogsState> {
+  toggleUserSettingsDialog() {
+    this.state.userSettingsOpen = !this.state.userSettingsOpen;
+  }
+}
+
+export const dialogState = new DialogsState({
+  userSettingsOpen: false,
 });

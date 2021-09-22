@@ -1,35 +1,41 @@
-import { defineStore } from "pinia";
+import { Store } from "./store";
 
 export enum PromptType {
   CONFIRMATION,
   ALERT,
 }
 
-export const usePromptState = defineStore("prompt", {
-  state: () => ({
-    open: false,
-    type: PromptType.ALERT,
-    content: undefined as string | undefined,
-    resolve: undefined as undefined | (() => void),
-    reject: undefined as undefined | (() => void),
-  }),
-  actions: {
-    prompt(type: PromptType, content: string): Promise<void> {
-      this.type = type;
-      this.content = content;
-      const promptPromise = new Promise<void>((resolve, reject) => {
-        this.resolve = resolve;
-        this.reject = reject;
-      });
-      return promptPromise;
-    },
-    resolve() {
-      this.open = false;
-      this.resolve();
-    },
-    reject() {
-      this.open = false;
-      this.reject();
-    },
-  },
+interface IPromptState {
+  promptOpen: boolean;
+  promptType: PromptType;
+  content?: string;
+  resolve?: () => void;
+  reject?: () => void;
+}
+
+class PromptState extends Store<IPromptState> {
+  async prompt(type: PromptType, content: string): Promise<void> {
+    this.state.promptType = type;
+    this.state.content = content;
+    const promptPromise = new Promise<void>((resolve, reject) => {
+      this.state.resolve = resolve;
+      this.state.reject = reject;
+    });
+    return promptPromise;
+  }
+
+  resolve() {
+    this.state.promptOpen = false;
+    this.state.resolve?.();
+  }
+
+  reject() {
+    this.state.promptOpen = false;
+    this.state.reject?.();
+  }
+}
+
+export const promptState = new PromptState({
+  promptOpen: false,
+  promptType: PromptType.ALERT,
 });

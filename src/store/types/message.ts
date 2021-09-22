@@ -1,4 +1,4 @@
-import { Content } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
+import { Content } from "@harmony-dev/harmony-web-sdk/dist/gen/harmonytypes/v1/types";
 
 export interface IMessageData {
   author: string;
