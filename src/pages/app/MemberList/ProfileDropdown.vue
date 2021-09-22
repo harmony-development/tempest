@@ -4,16 +4,15 @@ import { host, userID } from "~/logic/app";
 import HMenu from "~/components/HMenu.vue";
 import { isDark } from "~/logic";
 import { useUser } from "~/logic/fetcher";
-import { useDialogState } from "~/store/dialogs";
+import { dialogState } from "~/store/dialogs";
 
-const dialogState = useDialogState();
 const open = ref(false);
 
 const ownUser = useUser(userID.value, host.value);
 
 const openUserSettings = () => {
   open.value = false;
-  dialogState.userSettings = !dialogState.userSettings;
+  dialogState.state.userSettingsOpen = !dialogState.state.userSettingsOpen;
 };
 </script>
 

@@ -1,13 +1,11 @@
 <script lang="ts" setup>
 import HDialog from "./HDialog.vue";
 import HBtn from "./shared/HBtn.vue";
-import { usePromptState } from "~/store/prompt";
-
-const promptState = usePromptState();
+import { promptState } from "~/store/prompt";
 </script>
 
 <template>
-  <HDialog v-model="promptState.open">
+  <HDialog v-model="promptState.state.promptOpen">
     <div>
       <slot />
       <div class="flex flex-row-reverse">
@@ -15,7 +13,7 @@ const promptState = usePromptState();
           v-t="'button.ok'"
           color="primary"
           variant="text"
-          @click="promptState.resolve()"
+          @click="promptState.state.resolve?.()"
         />
       </div>
     </div>

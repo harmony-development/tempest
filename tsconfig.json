@@ -17,7 +17,6 @@
     "paths": {
       "~/*": ["src/*"]
     },
-    "noErrorTruncation": true
   },
   "exclude": ["dist", "node_modules"]
 }
