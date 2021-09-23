@@ -1,11 +1,9 @@
 import { Store } from "./store";
 import { IGuildEntry } from "./types/guildList";
 
-interface IGuildListState {
+class GuildListState extends Store<{
   guildList?: IGuildEntry[];
-}
-
-class GuildListState extends Store<IGuildListState> {
+}> {
   getGuildList() {
     return this.state.guildList;
   }
@@ -30,5 +28,5 @@ class GuildListState extends Store<IGuildListState> {
 
 export const guildListState = new GuildListState({});
 
-// @ts-ignore
+// @ts-ignorew
 window.guildListState = guildListState;

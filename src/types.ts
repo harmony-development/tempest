@@ -4,14 +4,10 @@ import {
   ServerStreamingCall,
 } from "@protobuf-ts/runtime-rpc";
 import {
-  AuthStep,
   StreamStepsRequest,
   StreamStepsResponse,
 } from "@harmony-dev/harmony-web-sdk/dist/gen/auth/v1/auth";
-import {
-  Event,
-  StreamEventsRequest,
-} from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/streaming";
+import { StreamEventsRequest } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/streaming";
 import { StreamEventsResponse } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/stream";
 
 export type UserModule = (ctx: ViteSSGContext) => void;

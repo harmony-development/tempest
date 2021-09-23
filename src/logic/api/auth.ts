@@ -10,7 +10,7 @@ import {
 } from "@harmony-dev/harmony-web-sdk/dist/gen/auth/v1/auth";
 import { useRoute, useRouter } from "vue-router";
 import { computed, onMounted, reactive, ref } from "vue";
-import { session, userID } from "../app";
+import { host, session, userID } from "../app";
 import { AuthStream } from "~/types";
 
 export class AuthManager {
@@ -153,6 +153,7 @@ export const useAuthManager = () => {
   };
 
   const onSession = (s: Session) => {
+    host.value = selectedHost.value;
     session.value = s.sessionToken;
     userID.value = s.userId;
     router.push({

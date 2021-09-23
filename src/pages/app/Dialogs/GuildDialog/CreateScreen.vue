@@ -12,18 +12,18 @@ const props = defineProps<{
 }>();
 const emit = defineEmits(["update:open", "update:screen"]);
 
-const open = useVModel(props, "open", emit);
-const screen = useVModel(props, "screen", emit);
+const openModel = useVModel(props, "open", emit);
+const screenModel = useVModel(props, "screen", emit);
 const name = ref("");
 
 const createClicked = async () => {
   const homeConn = await homeserverConn();
-  const guild = await homeConn.chat.createGuild({
-    guildName: name.value,
-    pictureUrl: "",
+  await homeConn.chat.createGuild({
+    name: name.value,
+    picture: "",
     metadata: undefined,
   });
-  open.value = false;
+  openModel.value = false;
 };
 </script>
 <template>
@@ -33,14 +33,14 @@ const createClicked = async () => {
     :label="$t('app.guild-dialog.create-input')"
     class="mb-2"
   />
-  <h-link v-t="'app.guild-dialog.to-join'" @click="screen = 'join'" />
+  <h-link v-t="'app.guild-dialog.to-join'" @click="screenModel = 'join'" />
   <div class="flex justify-end">
     <h-btn
       v-t="'button.cancel'"
       variant="text"
       color="secondary"
       class="mr-1"
-      @click="open = false"
+      @click="openModel = false"
     />
     <h-btn
       v-t="'app.guild-dialog.create'"

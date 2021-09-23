@@ -1,19 +1,16 @@
 <script setup lang="ts">
-import { computed, onMounted } from "vue";
 import GuildIcon from "./GuildIcon.vue";
 import GuildBtn from "./GuildBtn.vue";
-import { guildListState } from "~/store/guildList";
-import { getStream, homeserverConn } from "~/logic/connections";
+import { getStream } from "~/logic/connections";
 import { host } from "~/logic/app";
+import { useGuildList } from "~/logic/api/api";
 
-const guildList = computed(() => guildListState.getGuildList() || []);
+const guildList = useGuildList(host.value);
 
-onMounted(async () => {
-  const conn = await homeserverConn();
-  const resp = await conn.chat.getGuildList({});
-  resp.response.guilds.forEach(async (g) => {
+watch(guildList, (guilds) => {
+  guilds?.forEach(async (g) => {
     const stream = await getStream(g.host || host.value);
-    stream.request.send({
+    stream?.request.send({
       request: {
         oneofKind: "subscribeToGuild",
         subscribeToGuild: {
@@ -22,12 +19,6 @@ onMounted(async () => {
       },
     });
   });
-  guildListState.setGuildList(
-    resp.response.guilds.map((g) => ({
-      guildId: g.guildId,
-      host: g.host || host.value,
-    }))
-  );
 });
 </script>
 

@@ -40,7 +40,10 @@ export const getOrFederate = (targetHost: string) => {
   return pendingFederations[normalised]!;
 };
 
-export const getStream = async (host: string, session?: string) => {
+export const getStream = async (
+  host: string,
+  session?: string
+): Promise<ChatStream | undefined> => {
   if (chatStreams[host]) return chatStreams[host];
   const conn = await getOrFederate(host);
   if (session) {
@@ -50,7 +53,7 @@ export const getStream = async (host: string, session?: string) => {
   chatStreams[host] = stream;
   stream.responses.onMessage((ev) => pubsub(host));
   stream.responses.onComplete(closeStreamHandler(stream));
-  return stream;
+  return new Promise(() => stream);
 };
 
 export const homeserverConn = () => {
