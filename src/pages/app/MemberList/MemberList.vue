@@ -1,23 +1,12 @@
 <script lang="ts" setup>
-import { onMounted, watch } from "vue";
 import MemberItem from "./MemberItem.vue";
 
 import ProfileDropdown from "./ProfileDropdown.vue";
-import { useFetchMembers, useMemberList } from "~/logic/fetcher";
 import { useAppRoute } from "~/logic/location";
+import { useMemberList } from "~/logic/api/api";
 
-const fetchMembers = useFetchMembers();
-const members = useMemberList();
 const route = useAppRoute();
-
-onMounted(async () => {
-  if (!members.value) await fetchMembers(route.value.host, route.value.guildid);
-});
-
-watch(route, async (val, old) => {
-  if (!members.value && (val.guildid !== old.guildid || val.host !== old.host))
-    await fetchMembers(route.value.host, route.value.guildid);
-});
+const members = useMemberList(route.value.host, route.value.guildid);
 </script>
 
 <template>

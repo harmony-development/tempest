@@ -156,7 +156,6 @@ class AppState extends Store<IAppState> {
   }
 
   updateUser(host: string, userID: string, userData: Partial<IUserData>) {
-    console.log(userData);
     Object.assign(this.getHost(host).users[userID], userData);
   }
 }

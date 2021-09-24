@@ -28,11 +28,11 @@ onMounted(async () => {
   if (!data.value.name || !data.value.picture) {
     try {
       const conn = await getOrFederate(guildHost);
-      const resp = await conn.chat.getGuild({ guildId: props.id });
+      const { response } = await conn.chat.getGuild({ guildId: props.id });
       appState.setGuildInfo(guildHost, props.id, {
-        name: resp.response.guildName,
+        name: response.guild!.name,
         picture: parseHMC(
-          resp.response.guildPicture,
+          response.guild!.picture,
           guildHost.replace(/\/$/, "")
         ),
       });

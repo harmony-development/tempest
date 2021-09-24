@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, defineProps, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { UserStatus } from "@harmony-dev/harmony-web-sdk/dist/gen/harmonytypes/v1/types";
+import { UserStatus } from "@harmony-dev/harmony-web-sdk/dist/gen/profile/v1/types";
 import HListItem from "~/components/HListItem.vue";
 import { useAppRoute } from "~/logic/location";
 import { appState } from "~/store/app";
@@ -36,9 +36,9 @@ const user = computed(() => appState.getUser(route.value.host, props.userid));
           square
           :class="{
             'border-green-400': user.status === UserStatus.STREAMING,
-            'border-green-400': user.status === UserStatus.ONLINE_UNSPECIFIED,
+            'border-green-400': user.status === UserStatus.ONLINE,
             'border-yellow-400': user.status === UserStatus.IDLE,
-            'border-gray-400': user.status === UserStatus.OFFLINE,
+            'border-gray-400': user.status === UserStatus.OFFLINE_UNSPECIFIED,
           }"
         />
         <div>

@@ -1,10 +1,9 @@
 <script lang="ts" setup>
-import { defineEmit, defineProps, ref } from "vue";
+import { defineProps, ref } from "vue";
 import { useVModel } from "@vueuse/core";
 import HInput from "~/components/HInput.vue";
 import HBtn from "~/components/shared/HBtn.vue";
 import { homeserverConn } from "~/logic/connections";
-import { host } from "~/logic/app";
 
 const props = defineProps<{
   open: boolean;

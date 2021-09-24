@@ -2,7 +2,7 @@
 import { useRouter } from "vue-router";
 import { onErrorCaptured, onMounted, ref } from "vue";
 import GuildList from "./GuildList/GuildList.vue";
-import ChannelList from "./ChannelList/channellist.vue";
+import ChannelList from "./ChannelList/ChannelList.vue";
 import Chat from "./Chat/chat.vue";
 import MemberList from "./MemberList/MemberList.vue";
 import ChannelHeader from "./ChannelHeader/ChannelHeader.vue";

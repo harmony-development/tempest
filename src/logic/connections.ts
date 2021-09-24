@@ -51,8 +51,8 @@ export const getStream = async (
   }
   const stream = conn.chat.streamEvents();
   chatStreams[host] = stream;
-  stream.responses.onMessage((ev) => pubsub(host));
-  stream.responses.onComplete(closeStreamHandler(stream));
+  stream.response.onMessage((ev) => pubsub(host));
+  stream.response.onComplete(closeStreamHandler(stream));
   return new Promise(() => stream);
 };
 
