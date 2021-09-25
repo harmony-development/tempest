@@ -77,11 +77,11 @@ watch(
 <style lang="postcss" scoped>
 .input-parent {
   transition: 0.1s linear;
-  @apply dark:bg-harmonydark-900 flex items-center border-2 relative rounded dark:border-harmonydark-500 focus-within:border-blue-300;
+  @apply bg-surface-900 flex items-center border-2 relative rounded dark:border-surface-500 focus-within:border-blue-300;
 }
 
 .input-label {
-  @apply top-0 p-3 pt-3 duration-300 absolute pointer-events-none dark:text-harmonydark-200;
+  @apply top-0 p-3 pt-3 duration-300 absolute pointer-events-none dark:text-surface-200;
 }
 
 .input-input {

@@ -13,7 +13,7 @@ const props = defineProps<{
 const route = useAppRoute();
 const router = useRouter();
 
-const data = appState.getChannel(route.value.host, props.id);
+const data = computed(() => appState.getChannel(route.value.host, props.id));
 
 const onClick = () => {
   router.push({

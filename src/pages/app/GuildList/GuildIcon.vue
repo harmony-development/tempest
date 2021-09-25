@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed, defineProps, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import GuildIconMenu from "./GuildIconMenu.vue";
+import GuildIconMenu from "./ContextMenu.vue";
+import HBtn from "~/components/shared/HBtn.vue";
 import HMenu from "~/components/HMenu.vue";
 import { host } from "~/logic/app";
 import { getOrFederate } from "~/logic/connections";
@@ -59,13 +60,14 @@ const onClick = () => {
 <template>
   <h-menu v-model="guildMenu">
     <template #activator="{ toggle }">
-      <button
-        v-wave
+      <h-btn
         v-tippy="{ content: data.name, placement: 'right' }"
+        variant="filled"
         :class="{
-          'guild-icon': true,
           selected,
         }"
+        class="w-full"
+        style="aspect-ratio: 1"
         @click.prevent.stop="onClick"
         @mousedown.prevent=""
         @contextmenu.prevent="toggle"
@@ -79,7 +81,7 @@ const onClick = () => {
           draggable="false"
           :alt="data.name"
         />
-      </button>
+      </h-btn>
     </template>
     <guild-icon-menu :id="props.id" :host="guildHost" />
   </h-menu>
@@ -96,7 +98,7 @@ const onClick = () => {
 }
 
 .bg {
-  @apply bg-gray-200 dark:bg-gray-600;
+  @apply bg-gray-200 bg-gray-600;
 }
 
 .selected {

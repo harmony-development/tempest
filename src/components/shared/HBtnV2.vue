@@ -64,7 +64,7 @@ defineProps<{
 }
 
 .outlined {
-  @apply border-1 border-white border-opacity-10 bg-harmonydark-900;
+  @apply border-1 border-white border-opacity-10 bg-surface-900;
 }
 
 .filled {

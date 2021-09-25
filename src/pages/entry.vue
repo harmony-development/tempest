@@ -24,7 +24,7 @@ const i18nMenu = ref(false);
             <ic-round-translate />
           </h-btn>
         </template>
-        <h-list class="bg-white dark:bg-black">
+        <h-list class="bg-white bg-black">
           <h-list-item
             v-for="lang in availableLocales"
             :key="lang"
@@ -50,17 +50,7 @@ const i18nMenu = ref(false);
         sm:justify-start
       "
     >
-      <div
-        class="
-          bg-white
-          rounded
-          p-6
-          w-11/12
-          sm:m-12
-          md:w-150
-          dark:bg-harmonydark-800
-        "
-      >
+      <div class="bg-white rounded p-6 w-11/12 sm:m-12 md:w-150 bg-surface-800">
         <router-view />
       </div>
     </div>

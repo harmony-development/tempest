@@ -1,22 +1,26 @@
 <script setup lang="ts">
 import { defineProps } from "vue";
 
-const { variant, color, icon, raised, dense } = defineProps<{
+const props = defineProps<{
   variant: "text" | "filled" | "outlined";
   color?: "primary" | "secondary";
   icon?: boolean;
   raised?: boolean;
   dense?: boolean;
+  square?: boolean;
 }>();
 
-const buttonClasses = {
+const { variant, color, icon, raised, dense, square } = toRefs(props);
+
+const buttonClasses = computed(() => ({
   btn: true,
-  [variant]: true,
-  [color || "plain"]: true,
-  icon,
-  raised,
-  dense,
-};
+  [variant.value]: true,
+  [color?.value || "plain"]: true,
+  icon: icon?.value,
+  raised: raised?.value,
+  dense: dense?.value,
+  square: square?.value,
+}));
 </script>
 <template>
   <button v-wave :class="buttonClasses">
@@ -26,8 +30,8 @@ const buttonClasses = {
 
 <style lang="postcss" scoped>
 .btn {
-  @apply px-4 py-2 rounded focus:outline-none transition duration-200 ease-in-out 
-    inline-flex justify-center items-center 
+  @apply px-4 py-2 rounded focus:outline-none transition duration-100 ease-in-out 
+    flex justify-center items-center 
     cursor-pointer w-max select-none;
 
   &:disabled {
@@ -37,6 +41,14 @@ const buttonClasses = {
   &:focus-visible {
     @apply ring ring-2 ring-primary-300;
   }
+
+  &:active {
+    @apply bg-white text-black ring ring-white ring-2;
+  }
+}
+
+.square {
+  aspect-ratio: 1;
 }
 
 .icon {
@@ -102,7 +114,7 @@ const buttonClasses = {
   }
 
   .btn.filled {
-    @apply bg-gray-400 dark:bg-gray-600 text-gray-500 dark:text-gray-500 bg-opacity-75;
+    @apply bg-gray-400 bg-gray-600 text-gray-500 dark:text-gray-500 bg-opacity-75;
   }
 }
 </style>

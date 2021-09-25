@@ -92,7 +92,7 @@ onStartTyping(() => {
     <attachments-list v-model="attachments" />
     <h-input
       v-model="content"
-      class="dark:bg-harmonydark-700 dark:border-harmonydark-800"
+      class="bg-surface-700 dark:border-surface-800"
       label="Send Message"
       :focus="focus"
       multiline

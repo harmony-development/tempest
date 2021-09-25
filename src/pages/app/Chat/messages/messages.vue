@@ -96,11 +96,11 @@ useEventListener(messagesContainer, "scroll", scrollHandler);
   @apply flex-1 p-4 overflow-x-auto;
 
   &::-webkit-scrollbar {
-    @apply dark:bg-harmonydark-700 w-2 transition duration-200;
+    @apply bg-surface-700 w-2 transition duration-200;
   }
 
   &::-webkit-scrollbar-thumb {
-    @apply dark:bg-black rounded;
+    @apply bg-black rounded;
   }
 }
 </style>

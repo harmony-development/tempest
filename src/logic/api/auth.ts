@@ -186,9 +186,7 @@ export const useAuthManager = () => {
   onMounted(async () => {
     try {
       await authManager.start();
-      authManager.stream?.responses.onMessage((resp) =>
-        onStepOuter(resp.step!)
-      );
+      authManager.stream?.response.onMessage((resp) => onStepOuter(resp.step!));
       onStepOuter(
         (await authManager.nextStep({ oneofKind: undefined }).response).step!
       );

@@ -1,6 +1,5 @@
 import { Connection } from "@harmony-dev/harmony-web-sdk";
 import { host } from "./app";
-import { closeStreamHandler, eventStreamHandler } from "./eventStreamHandler";
 import { pubsub } from "./api/pubsub";
 import { ChatStream } from "~/types";
 
@@ -8,7 +7,7 @@ const connections: {
   [host: string]: Connection;
 } = {};
 const chatStreams: {
-  [host: string]: ChatStream | undefined;
+  [host: string]: ChatStream;
 } = {};
 const pendingFederations: {
   [host: string]: Promise<Connection> | undefined;
@@ -43,16 +42,16 @@ export const getOrFederate = (targetHost: string) => {
 export const getStream = async (
   host: string,
   session?: string
-): Promise<ChatStream | undefined> => {
+): Promise<ChatStream> => {
   if (chatStreams[host]) return chatStreams[host];
   const conn = await getOrFederate(host);
   if (session) {
     conn.setSession(session);
   }
   const stream = conn.chat.streamEvents();
+  const handler = pubsub(host);
   chatStreams[host] = stream;
-  stream.response.onMessage((ev) => pubsub(host));
-  stream.response.onComplete(closeStreamHandler(stream));
+  stream.response.onMessage((ev) => handler(ev));
   return new Promise(() => stream);
 };
 

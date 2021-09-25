@@ -14,6 +14,6 @@ const { absolute } = defineProps({
 
 <style lang="postcss" scoped>
 .appbar {
-  @apply w-full bg-gray-100 dark:bg-harmonydark-600 mx-auto p-3 flex items-center h-14;
+  @apply w-full bg-gray-100 bg-surface-600 mx-auto p-3 flex items-center h-14;
 }
 </style>

@@ -5,9 +5,18 @@ export interface IGuildEntry {
   host: string;
 }
 
-export function FromV1(entry: GuildListEntry): IGuildEntry {
+/**
+ * Converts a V1 protobuf guild list entry to a GuildEntry
+ * @param entry the guild list entry protobuf object
+ * @param defaultHost the default host for the guild. Host fields can be empty
+ * @returns an IGuildEntry representation of the guild entry
+ */
+export function FromV1(
+  entry: GuildListEntry,
+  defaultHost: string
+): IGuildEntry {
   return {
     guildId: entry.guildId,
-    host: entry.serverId,
+    host: new URL(entry.serverId || defaultHost).origin,
   };
 }

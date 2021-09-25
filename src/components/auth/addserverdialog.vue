@@ -41,7 +41,7 @@ const doneClicked = () => {
       <h-input
         v-model="host"
         :label="$t('auth.server-address')"
-        class="border-harmonydark-500"
+        class="border-surface-500"
       />
       <div class="flex mt-4 justify-end">
         <h-btn

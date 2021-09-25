@@ -9,13 +9,7 @@ defineProps<{
 
 <template>
   <div
-    class="
-      border-l-2 border-primary-400
-      p-3
-      bg-harmonydark-800
-      flex flex-col
-      gap-2
-    "
+    class="border-l-2 border-primary-400 p-3 bg-surface-800 flex flex-col gap-2"
   >
     <h-link target="_blank" :href="siteEmbed.url">
       {{ siteEmbed.pageTitle }}

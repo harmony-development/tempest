@@ -34,15 +34,7 @@ onKeyStroke("Escape", () => (open.value = false));
         @mousedown="open = false"
       >
         <div
-          class="
-            bg-white
-            shadow-xl
-            p-4
-            dark:bg-harmonydark-900
-            w-7/8
-            sm:w-4/5
-            lg:w-120
-          "
+          class="bg-white shadow-xl p-4 bg-surface-900 w-7/8 sm:w-4/5 lg:w-120"
           v-bind="$attrs"
           @mousedown.stop=""
         >

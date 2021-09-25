@@ -9,10 +9,7 @@ class GuildListState extends Store<{
   }
 
   setGuildList(list: IGuildEntry[]) {
-    this.state.guildList = list.map((it) => ({
-      guildId: it.guildId,
-      host: new URL(it.host).origin,
-    }));
+    this.state.guildList = list;
   }
 
   addGuild(entry: IGuildEntry) {

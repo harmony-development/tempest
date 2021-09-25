@@ -25,7 +25,7 @@ const props = defineProps<{
   @apply flex items-center w-full py-2 px-4 cursor-pointer select-none transition duration-100;
 
   &:hover {
-    @apply bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10;
+    @apply bg-black bg-white bg-opacity-10 bg-opacity-10;
   }
 
   &:focus-visible {
@@ -34,6 +34,6 @@ const props = defineProps<{
 }
 
 .selected {
-  @apply bg-black dark:bg-white bg-opacity-5 dark:bg-opacity-5;
+  @apply bg-black bg-white bg-opacity-5 bg-opacity-5;
 }
 </style>

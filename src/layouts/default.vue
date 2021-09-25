@@ -13,7 +13,7 @@ const showDevHeader = import.meta.env.DEV;
 html,
 body,
 #app {
-  @apply w-full h-full dark:text-white dark:bg-harmonydark-900;
+  @apply w-full h-full dark:text-white bg-surface-900;
   font-family: "Roboto";
 }
 </style>

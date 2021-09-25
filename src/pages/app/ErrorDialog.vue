@@ -13,7 +13,7 @@ const errorText = computed(() => {
   if (props.err && props.err instanceof RpcError) {
     return i18n.t(props.err?.code, props.err?.message);
   }
-  return props.err?.name;
+  return props.err;
 });
 </script>
 

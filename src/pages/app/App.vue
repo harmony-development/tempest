@@ -21,18 +21,15 @@ const router = useRouter();
 const route = useAppRoute();
 const leftDrawerOpen = ref(false);
 const rightDrawerOpen = ref(false);
-const mounted = ref(false);
 const errorDialogOpen = ref(false);
 const error = ref<Error | undefined>(undefined);
-
-onMounted(() => (mounted.value = true));
 
 if (!isLoggedIn()) {
   router.push("/entry/serverselect");
 } else {
   (async () => {
     const stream = await getStream(host.value, session.value);
-    stream.request.send({
+    stream?.request.send({
       request: {
         oneofKind: "subscribeToHomeserverEvents",
         subscribeToHomeserverEvents: {},
@@ -53,18 +50,20 @@ onErrorCaptured((err) => {
   </alert>
   <div class="flex h-full w-full overflow-auto">
     <h-drawer
-      v-if="mounted"
       v-model="leftDrawerOpen"
       class="flex w-3/4 overflow-visible sm:w-1/2 md:w-70"
     >
       <guild-list />
-      <div class="bg-light-400 dark:bg-harmonydark-800 flex-1">
-        <guild-header v-if="route.guildid && route.host" />
-        <channel-list v-if="route.guildid && route.host" />
+      <div
+        v-if="route.host && route.guildid"
+        class="bg-light-400 bg-surface-800 flex-1"
+      >
+        <guild-header />
+        <channel-list />
       </div>
     </h-drawer>
-    <div class="flex flex-col flex-1 min-w-0">
-      <div class="flex bg-light-500 dark:bg-harmonydark-800 p-1 md:p-3">
+    <!-- <div class="flex flex-col flex-1 min-w-0">
+      <div class="flex bg-light-500 bg-surface-800 p-1 md:p-3">
         <div class="md:hidden">
           <h-btn variant="text" icon @click="leftDrawerOpen = !leftDrawerOpen">
             <mdi-menu />
@@ -83,9 +82,9 @@ onErrorCaptured((err) => {
             <ic-round-group />
           </h-btn>
         </div>
-      </div>
-      <chat v-if="route.guildid && route.host" />
-      <div v-else class="flex flex-col flex-1 justify-center items-center">
+      </div> -->
+    <!-- <chat v-if="route.guildid && route.host" /> -->
+    <!-- <div v-else class="flex flex-col flex-1 justify-center items-center">
         <ic-round-group
           class="rounded-full bg-gray-400 bg-opacity-30 mb-4 p-3 text-6xl"
         />
@@ -103,6 +102,6 @@ onErrorCaptured((err) => {
       >
         <member-list />
       </h-drawer>
-    </div>
+    </div> -->
   </div>
 </template>

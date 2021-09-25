@@ -52,7 +52,7 @@ const changeSelection = (idx: number) => {
     <h-dialog v-model="addServerOpen">
       <add-server-dialog v-if="addServerOpen" v-model="addServerOpen" />
     </h-dialog>
-    <h-list class="bg-white mb-4 dark:bg-harmonydark-700">
+    <h-list class="bg-white mb-4 bg-surface-700">
       <h-list-item
         v-for="(entry, idx) in hostList"
         :key="entry.host"

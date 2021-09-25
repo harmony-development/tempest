@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useVModel } from "@vueuse/core";
-import { defineComponent, defineEmit, defineProps } from "vue";
+import { defineComponent, defineProps } from "vue";
 
 defineComponent({
   inheritAttrs: false,
@@ -40,7 +40,7 @@ const setOpen = (val: boolean) => {
 }
 
 .drawer {
-  @apply h-full overflow-visible dark:bg-harmonydark-700 transform fixed md:static ease-in-out transition duration-150 z-30 md:z-auto;
+  @apply h-full overflow-visible bg-surface-700 transform fixed md:static ease-in-out transition duration-150 z-30 md:z-auto;
 
   &.left {
     @apply top-0 left-0;

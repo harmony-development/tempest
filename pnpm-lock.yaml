@@ -5,6 +5,7 @@ specifiers:
   '@harmony-dev/harmony-web-sdk': ^0.0.1-alpha.3
   '@iconify/json': ^1.1.405
   '@intlify/vite-plugin-vue-i18n': ^2.4.0
+  '@mertasan/tailwindcss-variables': ^1.3.3
   '@protobuf-ts/runtime-rpc': ^1.0.13
   '@types/dompurify': ^2.2.3
   '@types/jest': ^27.0.2
@@ -80,6 +81,7 @@ devDependencies:
   '@antfu/eslint-config': 0.9.0_eslint@7.32.0+typescript@4.4.3
   '@iconify/json': 1.1.405
   '@intlify/vite-plugin-vue-i18n': 2.4.0_vite@2.5.10+vue-i18n@9.1.7
+  '@mertasan/tailwindcss-variables': 1.3.3
   '@types/dompurify': 2.2.3
   '@types/jest': 27.0.2
   '@types/rollup-plugin-visualizer': 4.2.1
@@ -1716,6 +1718,17 @@ packages:
       '@types/node': 16.9.6
       '@types/yargs': 16.0.4
       chalk: 4.1.2
+    dev: true
+
+  /@mertasan/tailwindcss-variables/1.3.3:
+    resolution: {integrity: sha512-iDop3vZLGjm3QIExe5I3VGMliCDw1AMB9zQJDK9BM2BvrQ1HIfN5KB2cb/ids2QIynKqQajutJJ/RPKFhpzpfw==}
+    engines: {node: '>=12.13.0'}
+    peerDependencies:
+      autoprefixer: '>=9.8.0'
+      postcss: '>=7.0.30'
+      tailwindcss: npm:@tailwindcss/postcss7-compat@^2.2.4
+    dependencies:
+      lodash: 4.17.21
     dev: true
 
   /@nodelib/fs.scandir/2.1.5:

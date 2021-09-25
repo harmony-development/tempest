@@ -41,7 +41,7 @@ const fallback = computed(() => {
 </script>
 <template>
   <div
-    class="bg-harmonydark-500 flex items-center justify-center overflow-hidden"
+    class="bg-surface-500 flex items-center justify-center overflow-hidden"
     :class="{ 'rounded-full': rounded, square }"
   >
     <img

@@ -60,7 +60,7 @@ const formFilled = computed(() => {
       />
     </div>
     <div v-if="currentStep === 'choice'">
-      <h-list class="bg-harmonydark-700">
+      <h-list class="bg-surface-700">
         <h-list-item v-for="c in choices" :key="c" @click="sendChoice(c)">
           {{ c }}
         </h-list-item>

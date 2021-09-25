@@ -1,8 +1,11 @@
-import { ChannelWithId } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/channels";
+import {
+  ChannelKind,
+  ChannelWithId,
+} from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/channels";
 
 export interface IChannelData {
   name?: string;
-  kind?: string;
+  kind?: ChannelKind;
   messages?: string[];
   unread?: boolean;
   reachedTop?: boolean;
@@ -18,7 +21,7 @@ export function toChannelDataV1(channels: ChannelWithId[]) {
     const { channel } = channelWithID;
     data[channelWithID.channelId] = {
       name: channel?.channelName,
-      kind: channel?.isCategory ? "category" : "text",
+      kind: channel?.kind,
     };
     return data;
   }, {});

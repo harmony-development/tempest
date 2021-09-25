@@ -84,6 +84,19 @@ class AppState extends Store<IAppState> {
     guild.channels = channels;
   }
 
+  addChannel(
+    host: string,
+    guildID: string,
+    channelID: string,
+    channelData: IChannelData
+  ) {
+    const guild = this.getGuild(host, guildID);
+    this.setChannelData(host, {
+      [channelID]: channelData,
+    });
+    guild.channels?.push(channelID);
+  }
+
   setChannelData(
     host: string,
     channels: {

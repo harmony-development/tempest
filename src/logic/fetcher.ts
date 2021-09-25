@@ -2,7 +2,6 @@ import { computed } from "vue";
 import { useAppRoute } from "./location";
 import { getOrFederate } from "./connections";
 import { appState } from "~/store/app";
-import { IUserData } from "~/store/types/user";
 import { IMessageData } from "~/store/types/message";
 
 export const useUser = (

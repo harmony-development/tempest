@@ -6,6 +6,7 @@ import { StreamEvent as StreamProfileEvent } from "@harmony-dev/harmony-web-sdk/
 import { guildListState } from "../../store/guildList";
 import { appState } from "../../store/app";
 import { Handler } from "./oneof";
+import { ChatStream } from "~/types";
 
 const chatEventHandlers = new Handler<StreamChatEvent["event"]>({
   guildAddedToList(_, { guildAddedToList: guild }) {
@@ -16,6 +17,16 @@ const chatEventHandlers = new Handler<StreamChatEvent["event"]>({
   },
   guildRemovedFromList(_, { guildRemovedFromList: guild }) {
     guildListState.removeGuild(guild.homeserver, guild.guildId);
+  },
+  createdChannel(host, { createdChannel }) {
+    appState.addChannel(
+      host,
+      createdChannel.guildId,
+      createdChannel.channelId,
+      {
+        name: createdChannel.name,
+      }
+    );
   },
   sentMessage(host, { sentMessage: msgEvent }) {
     const { message } = msgEvent;
@@ -74,4 +85,15 @@ export function pubsub(host: string): (ev: StreamEventsResponse) => void {
   return ({ event }: StreamEventsResponse) => {
     streamEventsHandler.handle(host, event);
   };
+}
+
+export function subscribeToGuild(stream: ChatStream, guildID: string) {
+  return stream.request.send({
+    request: {
+      oneofKind: "subscribeToGuild",
+      subscribeToGuild: {
+        guildId: guildID,
+      },
+    },
+  });
 }

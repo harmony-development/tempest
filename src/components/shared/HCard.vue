@@ -14,10 +14,10 @@ defineProps<{
 
 <style lang="postcss" scoped>
 .darkened {
-  @apply dark:border-harmonydark-800 dark:bg-harmonydark-900 border-light-700 bg-light-400;
+  @apply dark:border-surface-800 bg-surface-900 border-light-700 bg-light-400;
 }
 
 .normal {
-  @apply dark:border-harmonydark-700 dark:bg-harmonydark-800;
+  @apply dark:border-surface-700 bg-surface-800;
 }
 </style>

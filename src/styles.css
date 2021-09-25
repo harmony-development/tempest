@@ -1,3 +1,30 @@
 kbd {
-  @apply p-1 py-0 rounded-sm shadow-black shadow-lg bg-harmonydark-900 border-harmonydark-400 border-1 text-xs inline-block;
+  @apply p-1 py-0 rounded-sm shadow-black shadow-lg bg-surface-900 border-surface-400 border-1 text-xs inline-block;
 }
+
+.dark {
+  --surface-50: 245, 245, 246
+  --surface-100: 235, 235, 236
+  --surface-200: 204, 205, 209;
+  --surface-300: 174, 174, 181;
+  --surface-400: 113, 114, 125;
+  --surface-500: 52, 53, 69;
+  --surface-600: 47, 48, 62;
+  --surface-700: 39, 40, 52;
+  --surface-800: 31, 32, 41;
+  --surface-900: 25, 26, 34;
+}
+
+.default {
+  --primary-50: 236, 254, 255
+  --primary-100: 207, 250, 254
+  --primary-200: 165, 243, 252;
+  --primary-300: 103, 232, 249;
+  --primary-400: 34, 211, 238;
+  --primary-500: 6, 181, 212;
+  --primary-600: 8, 144, 178;
+  --primary-700: 14, 116, 144;
+  --primary-800: 21, 95, 117;
+  --primary-900: 22, 78, 99;
+}
+

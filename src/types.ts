@@ -7,8 +7,10 @@ import {
   StreamStepsRequest,
   StreamStepsResponse,
 } from "@harmony-dev/harmony-web-sdk/dist/gen/auth/v1/auth";
-import { StreamEventsRequest } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/streaming";
-import { StreamEventsResponse } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/stream";
+import {
+  StreamEventsRequest,
+  StreamEventsResponse,
+} from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/stream";
 
 export type UserModule = (ctx: ViteSSGContext) => void;
 

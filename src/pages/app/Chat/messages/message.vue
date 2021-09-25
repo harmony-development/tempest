@@ -101,7 +101,7 @@ const content = computed(() => {
           </h-btn>
         </template>
         <h-list
-          class="bg-light-400 dark:bg-black w-max overflow-hidden"
+          class="bg-light-400 bg-black w-max overflow-hidden"
           @click="menuOpen = false"
         >
           <h-list-item v-if="isOwnMessage" @click="editStart">
@@ -135,7 +135,7 @@ const content = computed(() => {
 }
 
 .bubble {
-  @apply rounded border-harmonydark-500 border-1 min-h-12 max-w-full bg-light-400 dark:bg-harmonydark-700
+  @apply rounded border-surface-500 border-1 min-h-12 max-w-full bg-light-400 bg-surface-700
   sm:max-w-3/4 px-4 py-3 items-center break-all 
   whitespace-pre-line;
 }

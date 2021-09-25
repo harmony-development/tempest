@@ -10,16 +10,8 @@ const members = useMemberList(route.value.host, route.value.guildid);
 </script>
 
 <template>
-  <div class="bg-white dark:bg-harmonydark-800 w-full flex-1 p-2">
-    <div
-      class="
-        bg-light-300
-        dark:bg-harmonydark-900
-        rounded-lg
-        h-full
-        flex flex-col
-      "
-    >
+  <div class="bg-white bg-surface-800 w-full flex-1 p-2">
+    <div class="bg-light-300 bg-surface-900 rounded-lg h-full flex flex-col">
       <div class="flex-1">
         <member-item v-for="member in members" :key="member" :userid="member" />
       </div>

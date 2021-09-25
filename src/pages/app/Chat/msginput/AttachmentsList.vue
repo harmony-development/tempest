@@ -22,16 +22,7 @@ const removeAllAttachments = () => {
 </script>
 
 <template>
-  <div
-    class="
-      flex flex-row
-      dark:bg-harmonydark-600
-      w-auto
-      max-h-42
-      p-2
-      overflow-auto
-    "
-  >
+  <div class="flex flex-row bg-surface-600 w-auto max-h-42 p-2 overflow-auto">
     <div
       v-if="attachments.length > 0"
       class="
@@ -41,7 +32,7 @@ const removeAllAttachments = () => {
         items-center
         border-r-2 border-primary-400
         rounded-l
-        bg-harmonydark-800
+        bg-surface-800
       "
     >
       <h-btn-v2 icon rounded @click="removeAllAttachments">
@@ -58,10 +49,7 @@ const removeAllAttachments = () => {
         :src="img.preview"
         class="attachment"
       />
-      <div
-        v-else
-        class="dark:bg-harmonydark-900 h-32 max-w-42 p-3 overflow-hidden"
-      >
+      <div v-else class="bg-surface-900 h-32 max-w-42 p-3 overflow-hidden">
         <p class="whitespace-nowrap overflow-ellipsis overflow-hidden">
           <mdi-file class="mr-2 text-lg" />{{ img.file.name }}
         </p>

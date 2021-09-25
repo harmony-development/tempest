@@ -16,7 +16,7 @@ const guildName = computed(
 </script>
 
 <template>
-  <div class="flex items-center p-3 dark:bg-harmonydark-700">
+  <div class="flex items-center p-3 bg-surface-700">
     <h1>{{ guildName }}</h1>
     <div class="flex-1" />
     <h-btn

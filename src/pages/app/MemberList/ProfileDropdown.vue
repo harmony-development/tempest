@@ -20,7 +20,7 @@ const openUserSettings = () => {
   <HMenu v-model="open" full close-on-click>
     <template #activator="{ toggle }">
       <h-list-item
-        class="rounded flex border-t-2 dark:border-harmonydark-600"
+        class="rounded flex border-t-2 dark:border-surface-600"
         @click="toggle"
       >
         <h-image :userid="userID" class="h-8 mr-3 w-8" rounded />
@@ -29,7 +29,7 @@ const openUserSettings = () => {
         <mdi-chevron-up v-else />
       </h-list-item>
     </template>
-    <div class="w-full rounded-lg overflow-hidden dark:bg-black bg-white">
+    <div class="w-full rounded-lg overflow-hidden bg-black bg-white">
       <h-list>
         <h-list-item @click="isDark = !isDark">
           <ion-moon class="mr-3 my-2" />

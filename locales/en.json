@@ -5,6 +5,9 @@
       "name": "Channel Name",
       "title": "Add Channel"
     },
+    "channels": {
+      "error": "Failed to fetch channel list"
+    },
     "error-occured": {
       "title": "Error"
     },
@@ -17,6 +20,9 @@
       "join-input": "Invite code",
       "to-create": "Create guild?",
       "to-join": "Join guild?"
+    },
+    "guilds": {
+      "error": "Failed to fetch guild list"
     },
     "image-view": {
       "open-original": "Open Original"
