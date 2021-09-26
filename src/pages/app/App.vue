@@ -16,6 +16,7 @@ import { session, host, isLoggedIn } from "~/logic/app";
 import { getStream } from "~/logic/connections";
 import { useAppRoute } from "~/logic/location";
 import Alert from "~/components/Alert.vue";
+import { promptState, PromptType } from "~/store/prompt";
 
 const router = useRouter();
 const route = useAppRoute();
@@ -38,9 +39,11 @@ if (!isLoggedIn()) {
   })();
 }
 
-onErrorCaptured((err) => {
+onErrorCaptured(async (err) => {
   error.value = err;
   errorDialogOpen.value = true;
+  await promptState.prompt(PromptType.ALERT, err.toString());
+  errorDialogOpen.value = false;
 });
 </script>
 <template>

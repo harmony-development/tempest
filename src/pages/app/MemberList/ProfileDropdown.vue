@@ -29,7 +29,7 @@ const openUserSettings = () => {
         <mdi-chevron-up v-else />
       </h-list-item>
     </template>
-    <div class="w-full rounded-lg overflow-hidden bg-black bg-white">
+    <div class="w-full rounded-lg overflow-hidden bg-surface-900">
       <h-list>
         <h-list-item @click="isDark = !isDark">
           <ion-moon class="mr-3 my-2" />

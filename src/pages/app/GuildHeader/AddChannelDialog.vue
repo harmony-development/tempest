@@ -35,7 +35,7 @@ const doneClicked = async () => {
     open.value = false;
     loading.value = false;
   } catch (e) {
-    error.value = e;
+    error.value = e as RpcError;
     loading.value = false;
   }
 };

@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { useI18n } from "vue-i18n";
 import { computed, reactive, ref } from "@vue/reactivity";
-import { ProfileUpdateRequest } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/profile";
 import Preference from "./Preference.vue";
 import HImage from "~/components/shared/Image/HImage.vue";
 import { host, userID } from "~/logic/app";
@@ -64,9 +63,9 @@ const saveProfile = async () => {
 
   const avatarID = res?.id;
 
-  await conn.chat.profileUpdate({
-    newUsername: pending.username,
-    newAvatar: avatarID,
+  await conn.profile.updateProfile({
+    newUserName: pending.username,
+    newUserAvatar: avatarID,
   });
   reset();
   saving.value = false;

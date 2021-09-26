@@ -41,11 +41,12 @@ const deleteMessage = async () => {
 };
 
 const editStart = async () => {
-  if (message.value.content?.content.oneofKind !== "textMessage") {
+  const { content } = message.value.content!;
+  if (content?.oneofKind !== "textMessage") {
     return;
   }
   editing.value = true;
-  editText.value = message.value.content.content.textMessage.content?.text;
+  editText.value = content.textMessage.content!.text;
   await nextTick();
   editFocus.value = !editFocus.value;
 };
@@ -83,7 +84,7 @@ const content = computed(() => {
       <TextMessage
         v-else-if="content?.oneofKind === 'textMessage'"
         v-model:editing="editing"
-        :content="content.textMessage"
+        :content="content.textMessage.content"
         :messageid="messageid"
       />
       <unsupported v-else> </unsupported>
@@ -101,7 +102,7 @@ const content = computed(() => {
           </h-btn>
         </template>
         <h-list
-          class="bg-light-400 bg-black w-max overflow-hidden"
+          class="bg-surface-700 w-max overflow-hidden"
           @click="menuOpen = false"
         >
           <h-list-item v-if="isOwnMessage" @click="editStart">

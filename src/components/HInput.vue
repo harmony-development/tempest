@@ -29,6 +29,7 @@ const resizeInput = () => {
 
 onMounted(() => {
   if (props.focus) input.value?.focus();
+  resizeInput();
 });
 
 watch(

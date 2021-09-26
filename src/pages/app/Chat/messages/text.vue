@@ -1,6 +1,8 @@
 <script lang="ts" setup>
-import { UpdateMessageTextRequest } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
-import { ContentText } from "@harmony-dev/harmony-web-sdk/dist/gen/harmonytypes/v1/types";
+import {
+  UpdateMessageTextRequest,
+  Content_TextContent,
+} from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
 import { useVModel } from "@vueuse/core";
 import DOMPurify from "dompurify";
 import { computed, defineProps, ref, watch } from "vue";
@@ -13,7 +15,7 @@ import { parseLinks } from "~/logic/utils/parsing";
 import { appState } from "~/store/app";
 
 const props = defineProps<{
-  content: ContentText;
+  content: Content_TextContent["content"];
   messageid: string;
   editing: boolean;
 }>();
@@ -32,7 +34,7 @@ const editMessage = async (content: string) => {
       channelId: route.value.channelid,
       messageId: props.messageid,
       newContent: {
-        text: content
+        text: content,
       },
     })
   );
@@ -51,11 +53,11 @@ const onEditKeyDown = async (ev: KeyboardEvent) => {
 };
 
 const sanitized = computed(() => {
-  return DOMPurify.sanitize(conv.makeHtml(props.content.content.text));
+  return DOMPurify.sanitize(conv.makeHtml(props.content!.text));
 });
 
 const links = computed(() => {
-  return parseLinks(props.content.content.text);
+  return parseLinks(props.content!.text);
 });
 
 const previewLinks = computed(() =>
@@ -88,7 +90,7 @@ watch(
 <template>
   <h-input
     v-if="editing"
-    :model-value="props.content.content || editing"
+    :model-value="props.content?.text"
     multiline
     class="w-full"
     @update:model-value="editText = $event"

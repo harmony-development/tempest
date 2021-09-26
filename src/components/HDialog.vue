@@ -5,7 +5,7 @@ import PopInTransition from "~/components/shared/Transition/PopInTransition.vue"
 
 const props = defineProps<{
   modelValue: boolean;
-  unsized: boolean;
+  unsized?: boolean;
 }>();
 const emit = defineEmits(["update:modelValue"]);
 const open = useVModel(props, "modelValue", emit);
@@ -35,7 +35,7 @@ onKeyStroke("Escape", () => (open.value = false));
         @mousedown="open = false"
       >
         <div
-          class="bg-white shadow-xl p-4 bg-surface-900"
+          class="shadow-xl p-4 bg-surface-900"
           :class="{ sized: !unsized }"
           v-bind="$attrs"
           @mousedown.stop=""

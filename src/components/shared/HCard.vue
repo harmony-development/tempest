@@ -14,7 +14,7 @@ defineProps<{
 
 <style lang="postcss" scoped>
 .darkened {
-  @apply dark:border-surface-800 bg-surface-900 border-light-700 bg-light-400;
+  @apply dark:border-surface-800 bg-surface-900 border-light-700;
 }
 
 .normal {

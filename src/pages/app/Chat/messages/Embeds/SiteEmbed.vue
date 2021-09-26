@@ -11,9 +11,9 @@ defineProps<{
   <div
     class="border-l-2 border-primary-400 p-3 bg-surface-800 flex flex-col gap-2"
   >
-    <h-link target="_blank" :href="siteEmbed.url">
+    <a target="_blank" :href="siteEmbed.url">
       {{ siteEmbed.pageTitle }}
-    </h-link>
+    </a>
     <p class="text-gray-400">
       {{ siteEmbed.description }}
     </p>

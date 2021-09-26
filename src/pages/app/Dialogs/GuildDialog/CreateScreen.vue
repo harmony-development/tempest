@@ -32,7 +32,7 @@ const createClicked = async () => {
     :label="$t('app.guild-dialog.create-input')"
     class="mb-2"
   />
-  <h-link v-t="'app.guild-dialog.to-join'" @click="screenModel = 'join'" />
+  <a v-t="'app.guild-dialog.to-join'" @click="screenModel = 'join'" />
   <div class="flex justify-end">
     <h-btn
       v-t="'button.cancel'"
