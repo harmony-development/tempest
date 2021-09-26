@@ -40,19 +40,14 @@ const fallback = computed(() => {
 });
 </script>
 <template>
-  <div
-    class="bg-surface-500 flex items-center justify-center overflow-hidden"
-    :class="{ 'rounded-full': rounded, square }"
-  >
-    <img
-      v-show="!loadError"
-      :src="src"
-      :class="{ 'rounded-full': props.rounded }"
-      loading="lazy"
-      @error="loadError = true"
-    />
-    <p v-if="loadError || !src" class="text-xl">{{ fallback?.[0] }}</p>
-  </div>
+  <img
+    v-show="!loadError"
+    :src="src"
+    :class="{ 'rounded-full': props.rounded }"
+    loading="lazy"
+    @error="loadError = true"
+  />
+  <p v-if="loadError || !src" class="text-xl">{{ fallback?.[0] }}</p>
 </template>
 
 <style lang="postcss" scoped>

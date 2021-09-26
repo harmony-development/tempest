@@ -62,25 +62,15 @@ const onClick = () => {
     <template #activator="{ toggle }">
       <h-btn
         v-tippy="{ content: data.name, placement: 'right' }"
-        variant="filled"
-        :class="{
-          selected,
-        }"
+        variant="outlined"
+        color="secondary"
         class="w-full"
         style="aspect-ratio: 1"
         @click.prevent.stop="onClick"
         @mousedown.prevent=""
         @contextmenu.prevent="toggle"
       >
-        <h-image
-          :uri="data.picture"
-          :fallback="data.name"
-          rounded
-          class="object-cover"
-          style="aspect-ratio: 1"
-          draggable="false"
-          :alt="data.name"
-        />
+        <h-image :uri="data.picture" :fallback="data.name" rounded />
       </h-btn>
     </template>
     <guild-icon-menu :id="props.id" :host="guildHost" />
@@ -99,9 +89,5 @@ const onClick = () => {
 
 .bg {
   @apply bg-gray-200 bg-gray-600;
-}
-
-.selected {
-  @apply border-primary-400;
 }
 </style>

@@ -1,7 +1,7 @@
 import { RouteRecordRaw } from "vue-router";
-import serverselectVue from "./pages/entry/serverselect.vue";
-import entryVue from "./pages/entry.vue";
-import authVue from "./pages/entry/auth.vue";
+import serverselectVue from "./pages/entry/ServerSelect.vue";
+import entryVue from "./pages/Entry.vue";
+import authVue from "./pages/entry/Auth.vue";
 import appVue from "./pages/app/App.vue";
 
 export const appRoutes: RouteRecordRaw[] = [
