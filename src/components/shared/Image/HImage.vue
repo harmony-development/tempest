@@ -42,16 +42,31 @@ const fallback = computed(() => {
 <template>
   <img
     v-show="!loadError"
+    width="32"
+    height="32"
     :src="src"
     :class="{ 'rounded-full': props.rounded }"
     loading="lazy"
     @error="loadError = true"
   />
-  <p v-if="loadError || !src" class="text-xl">{{ fallback?.[0] }}</p>
+  <div v-if="loadError || !src" class="grid items-center fallback">
+    <span class="text-center align-middle">
+      {{ fallback?.[0] }}
+    </span>
+  </div>
 </template>
 
 <style lang="postcss" scoped>
 .square {
   aspect-ratio: 1;
+}
+.fallback {
+  width: 32px;
+  height: 32px;
+  background-color: #3daee9;
+  border-radius: 16px;
+}
+img, .fallback {
+  margin: 0rem 0.5rem;
 }
 </style>
