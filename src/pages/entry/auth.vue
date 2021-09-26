@@ -32,7 +32,7 @@ const formFilled = computed(() => {
         <mdi-arrow-left v-else />
       </h-btn-v2>
       <h3 v-if="title" class="text-lg ml-4">
-        {{ t(`h.auth.${title}`) }}
+        {{ t(`auth.${title}`) }}
       </h3>
     </div>
 
@@ -62,7 +62,7 @@ const formFilled = computed(() => {
     <div v-if="currentStep === 'choice'">
       <h-list class="bg-surface-700">
         <h-list-item v-for="c in choices" :key="c" @click="sendChoice(c)">
-          {{ c }}
+          {{ t(`auth.${c}`) }}
         </h-list-item>
       </h-list>
     </div>
@@ -71,7 +71,7 @@ const formFilled = computed(() => {
         <template v-for="(f, i) in formFields" :key="f.name">
           <h-input
             v-model="formFieldValues[i]"
-            :label="f.name"
+            :label="t(`auth.${f.name}`)"
             :type="f.type"
           />
         </template>

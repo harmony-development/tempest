@@ -62,7 +62,8 @@
     "register": "Register",
     "server-address": "Server Address",
     "server-name": "Server Name",
-    "username": "Username"
+    "username": "Username",
+    "initial": "Welcome"
   },
   "button": {
     "about": "About",
