@@ -54,10 +54,7 @@ onErrorCaptured((err) => {
       class="flex w-3/4 overflow-visible sm:w-1/2 md:w-70"
     >
       <guild-list />
-      <div
-        v-if="route.host && route.guildid"
-        class="bg-light-400 bg-surface-800 flex-1"
-      >
+      <div v-if="route.host && route.guildid" class="bg-surface-800 flex-1">
         <guild-header />
         <channel-list />
       </div>

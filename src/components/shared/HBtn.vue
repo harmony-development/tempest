@@ -32,7 +32,7 @@ const buttonClasses = computed(() => ({
 .btn {
   @apply px-4 py-2 rounded focus:outline-none transition duration-100 ease-in-out 
     flex justify-center items-center 
-    cursor-pointer w-max select-none;
+    cursor-pointer select-none;
 
   &:disabled {
     @apply pointer-events-none;
@@ -42,13 +42,14 @@ const buttonClasses = computed(() => ({
     @apply ring ring-2 ring-primary-300;
   }
 
-  &:active {
-    @apply bg-white text-black ring ring-white ring-2;
+  &:hover {
+    @apply ring ring-current ring-2;
   }
 }
 
 .square {
   aspect-ratio: 1;
+  @apply p-2;
 }
 
 .icon {
@@ -105,6 +106,10 @@ const buttonClasses = computed(() => ({
     &:hover {
       @apply bg-white bg-opacity-10;
     }
+  }
+
+  &.outlined {
+    @apply border-current border-1 text-current;
   }
 }
 
