@@ -69,7 +69,7 @@ onErrorCaptured((err) => {
       </div>
     </div>
     <div class="flex flex-col flex-1 min-w-0">
-      <div class="flex bg-light-500 bg-surface-800 p-1 md:p-3">
+      <div class="flex bg-surface-800 p-1 md:p-3">
         <div class="md:hidden">
           <h-btn variant="text" icon @click="leftDrawerOpen = !leftDrawerOpen">
             <mdi-menu />

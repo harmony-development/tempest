@@ -6,12 +6,14 @@ import { useAppRoute } from "~/logic/location";
 import { useMemberList } from "~/logic/api/api";
 
 const route = useAppRoute();
-const members = useMemberList(route.value.host, route.value.guildid);
+const host = computed(() => route.value.host);
+const guildID = computed(() => route.value.guildid);
+const members = useMemberList(host, guildID);
 </script>
 
 <template>
-  <div class="bg-white bg-surface-800 w-full flex-1 p-2">
-    <div class="bg-light-300 bg-surface-900 rounded-lg h-full flex flex-col">
+  <div class="bg-surface-800 w-full flex-1 p-2">
+    <div class="bg-surface-900 rounded-lg h-full flex flex-col">
       <div class="flex-1">
         <member-item v-for="member in members" :key="member" :userid="member" />
       </div>
