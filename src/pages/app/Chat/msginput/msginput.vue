@@ -92,13 +92,14 @@ onStartTyping(() => {
 </script>
 <template>
   <div class="flex flex-col">
-    <attachments-list v-model="attachments" />
+    <attachments-list v-if="attachments.length" v-model="attachments" />
     <h-input
       v-model="content"
-      class="bg-surface-700 dark:border-surface-800"
-      label="Send Message"
+      class="!bg-surface-600 !rounded-none"
+      label="Write your message..."
       :focus="focus"
       multiline
+      no-border
       :rows="1"
       @keydown="onKeyDown"
     >

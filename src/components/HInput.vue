@@ -40,7 +40,7 @@ watch(
 );
 </script>
 <template>
-  <div :class="{ 'input-parent': true, border: !props.noBorder }">
+  <div class="bg-surface-900 flex items-center relative rounded dark:border-surface-500 focus-within:border-blue-300" :class="{ 'input-parent': true, 'border-2': !props.noBorder }">
     <div>
       <slot name="pre-input" />
     </div>
@@ -54,7 +54,7 @@ watch(
         :rows="props.rows"
         :required="props.required"
         class="input-input overflow-hidden"
-        placeholder=" "
+        :placeholder="props.noBorder ? props.label : ''"
         multiline
         wrap="hard"
         @input="resizeInput"
@@ -68,9 +68,9 @@ watch(
         :required="props.required"
         class="input-input"
         :class="{ dense }"
-        placeholder=" "
+        :placeholder="props.noBorder ? props.label : ''"
       />
-      <label :for="props.name" class="input-label">{{ props.label }}</label>
+      <label v-if="!noBorder" :for="props.name" class="input-label">{{ props.label }}</label>
     </div>
   </div>
 </template>
@@ -78,11 +78,10 @@ watch(
 <style lang="postcss" scoped>
 .input-parent {
   transition: 0.1s linear;
-  @apply bg-surface-900 flex items-center border-2 relative rounded dark:border-surface-500 focus-within:border-blue-300;
 }
 
 .input-label {
-  @apply top-0 p-3 pt-3 duration-300 absolute pointer-events-none dark:text-surface-200;
+  @apply top-0 p-3 pt-3 duration-300 absolute pointer-events-none dark:text-surface-200 opacity-50;
 }
 
 .input-input {
