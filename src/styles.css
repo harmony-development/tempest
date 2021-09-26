@@ -2,6 +2,14 @@ kbd {
   @apply p-1 py-0 rounded-sm shadow-black shadow-lg bg-surface-900 border-surface-400 border-1 text-xs inline-block;
 }
 
+a {
+  @apply text-primary-300
+      hover:underline
+      cursor-pointer
+      whitespace-nowrap
+      overflow-hidden overflow-ellipsis;
+}
+
 .dark {
   --surface-50: 245, 245, 246
   --surface-100: 235, 235, 236
