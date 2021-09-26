@@ -88,7 +88,11 @@ const content = computed(() => {
         :messageid="messageid"
       />
       <unsupported v-else> </unsupported>
-      <span class="float-right mt-1 pl-2 text-right text-xs text-gray-700 dark:text-gray-300 opacity-50 flex">
+      <span class="float-right mt-1 text-right text-xs text-gray-700 dark:text-gray-300 opacity-50 flex">
+        <span class="invisible">
+          {{ displayDate }}
+          <i v-if="message.editedAt > 0">(Edited {{ editedAtDate }})</i>
+        </span>
         <div class="absolute bottom-0.5 right-1">
           {{ displayDate }}
           <i v-if="message.editedAt > 0">(Edited {{ editedAtDate }})</i>

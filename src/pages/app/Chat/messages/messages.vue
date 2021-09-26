@@ -19,7 +19,7 @@ const reachedTop = computed(() => chan.value.reachedTop);
 
 const scrollToBottom = () => {
   if (messagesContainer.value)
-    messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
+    messagesContainer.value.scrollTop = 0;
 };
 
 const fetchMessages = useFetchMessages();
