@@ -21,28 +21,21 @@ const src = computed(() => parseHMC(props.imageSrc, route.value.host));
     <h-dialog v-model="dialogOpen" unsized>
       <div class="flex flex-col gap-2">
         <div class="flex">
-          <p
-            class="
-              text-gray-300
-              w-full
-              overflow-hidden overflow-ellipsis
-              w-full
-            "
-          >
+          <p class="text-gray-300 overflow-hidden overflow-ellipsis w-full">
             {{ fileName }}
           </p>
           <p>{{ size }}</p>
         </div>
-        <h-image :uri="src" class="w-50vw max-w-80vw max-h-80vh" />
+        <img :src="src" />
         <div class="flex justify-between">
-          <h-link
-            v-t="'app.image-view.open-original'"
-            target="_blank"
-            :href="src"
-          />
+          <a v-t="'app.image-view.open-original'" target="_blank" :href="src" />
         </div>
       </div>
     </h-dialog>
-    <h-image :uri="src" class="cursor-pointer" @click="dialogOpen = true" />
+    <img
+      :src="src"
+      class="cursor-pointer max-h-120"
+      @click="dialogOpen = true"
+    />
   </div>
 </template>

@@ -1,20 +1,20 @@
 <script lang="ts" setup>
-import { ContentFiles } from "@harmony-dev/harmony-web-sdk/dist/gen/harmonytypes/v1/types";
+import { Content_AttachmentContent } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
 import { defineProps } from "vue";
-import Attachment from "../../../../components/shared/Image/Attachment.vue";
+import AttachmentVue from "../../../../components/shared/Image/Attachment.vue";
 
 const props = defineProps<{
-  content: ContentFiles;
+  content: Content_AttachmentContent;
 }>();
 </script>
 
 <template>
-  <Attachment
-    v-for="a in props.content.attachments"
+  <AttachmentVue
+    v-for="a in props.content.files"
     :key="a.id"
     :file-name="a.name"
     :file-src="a.id"
-    :type="a.type"
+    :type="a.mimetype"
     :size="a.size"
     class="mt-2"
   />
