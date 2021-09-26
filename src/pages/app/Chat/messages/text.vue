@@ -111,6 +111,9 @@ watch(
 </template>
 
 <style lang="postcss" scoped>
+p {
+  @apply inline-block;
+}
 .content-out:deep(.codeblock) {
   @apply w-full block break-all break-words whitespace-pre-wrap pr-3 rounded-md bg-black;
 }

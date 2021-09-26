@@ -63,7 +63,7 @@ const content = computed(() => {
       :uri="message?.override?.avatar"
       rounded
     />
-    <div :class="{ bubble: true, 'own-bubble': isOwnMessage }">
+    <div class="max-w-48" :class="{ bubble: true, 'own-bubble': isOwnMessage }">
       <p
         class="text-xs dark:text-gray-200 text-gray-500 flex items-center gap-1"
       >
@@ -88,10 +88,10 @@ const content = computed(() => {
         :messageid="messageid"
       />
       <unsupported v-else> </unsupported>
-      <p class="mt-1 text-right text-xs text-gray-700 dark:text-gray-300">
+      <span class="float-right mt-1 pl-2 text-right text-xs text-gray-700 dark:text-gray-300">
         {{ displayDate }}
         <i v-if="message.editedAt > 0">(Edited {{ editedAtDate }})</i>
-      </p>
+      </span>
     </div>
 
     <div class="h-full">
@@ -137,7 +137,7 @@ const content = computed(() => {
 
 .bubble {
   @apply rounded border-surface-500 border-1 min-h-12 max-w-full bg-light-400 bg-surface-700
-  sm:max-w-3/4 px-4 py-3 items-center break-all 
+  sm:max-w-3/4 px-3 py-2 items-center break-all 
   whitespace-pre-line;
 }
 
