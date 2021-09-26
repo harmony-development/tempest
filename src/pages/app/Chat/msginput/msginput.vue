@@ -46,9 +46,9 @@ const sendMessage = async () => {
         channelId: route.value.channelid,
         content: {
           content: {
-            oneofKind: "filesMessage",
-            filesMessage: {
-              attachments: mapped,
+            oneofKind: "attachmentMessage",
+            attachmentMessage: {
+              files: mapped,
             },
           },
         },
@@ -64,7 +64,10 @@ const sendMessage = async () => {
           content: {
             oneofKind: "textMessage",
             textMessage: {
-              content: content.value,
+              content: {
+                text: content.value,
+                format: [],
+              },
             },
           },
         },
