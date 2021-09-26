@@ -59,8 +59,17 @@ onErrorCaptured((err) => {
         <channel-list />
       </div>
     </h-drawer>
+    <div v-if="!route.guildid" class="grid place-content-center w-full">
+      <div class="flex flex-col items-center">
+        <ic-round-group class="rounded-full bg-surface-700 mb-4 p-3 text-6xl" />
+        <span
+          v-t="'app.no-guild-selected'"
+          class="bg-surface-700 p-2 px-4 rounded-full"
+        />
+      </div>
+    </div>
     <div class="flex flex-col flex-1 min-w-0">
-      <div class="flex bg-surface-500 bg-surface-800 p-1 md:p-3">
+      <div class="flex bg-light-500 bg-surface-800 p-1 md:p-3">
         <div class="md:hidden">
           <h-btn variant="text" icon @click="leftDrawerOpen = !leftDrawerOpen">
             <mdi-menu />
@@ -81,15 +90,6 @@ onErrorCaptured((err) => {
         </div>
       </div>
       <chat v-if="route.guildid && route.host" />
-      <div v-else class="flex flex-col flex-1 justify-center items-center">
-        <ic-round-group
-          class="rounded-full bg-gray-400 bg-opacity-30 mb-4 p-3 text-6xl"
-        />
-        <h1
-          v-t="'app.no-guild-selected'"
-          class="text-md text-blue-200 lg:text-xl"
-        ></h1>
-      </div>
     </div>
     <div id="right-drawer-root">
       <h-drawer
