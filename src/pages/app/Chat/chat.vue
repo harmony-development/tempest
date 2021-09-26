@@ -6,7 +6,7 @@ import { useAppRoute } from "~/logic/location";
 const route = useAppRoute();
 </script>
 <template>
-  <div class="flex-1 flex flex-col items-center">
+  <div class="flex-1 flex flex-col items-center overflow-hidden">
     <messages v-if="route.channelid" />
     <div v-else class="flex-1 flex justify-center items-center flex-col">
       <mdi-pound
