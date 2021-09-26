@@ -59,8 +59,8 @@ onErrorCaptured((err) => {
         <channel-list />
       </div>
     </h-drawer>
-    <!-- <div class="flex flex-col flex-1 min-w-0">
-      <div class="flex bg-light-500 bg-surface-800 p-1 md:p-3">
+    <div class="flex flex-col flex-1 min-w-0">
+      <div class="flex bg-surface-500 bg-surface-800 p-1 md:p-3">
         <div class="md:hidden">
           <h-btn variant="text" icon @click="leftDrawerOpen = !leftDrawerOpen">
             <mdi-menu />
@@ -79,9 +79,9 @@ onErrorCaptured((err) => {
             <ic-round-group />
           </h-btn>
         </div>
-      </div> -->
-    <!-- <chat v-if="route.guildid && route.host" /> -->
-    <!-- <div v-else class="flex flex-col flex-1 justify-center items-center">
+      </div>
+      <chat v-if="route.guildid && route.host" />
+      <div v-else class="flex flex-col flex-1 justify-center items-center">
         <ic-round-group
           class="rounded-full bg-gray-400 bg-opacity-30 mb-4 p-3 text-6xl"
         />
@@ -99,6 +99,6 @@ onErrorCaptured((err) => {
       >
         <member-list />
       </h-drawer>
-    </div> -->
+    </div>
   </div>
 </template>

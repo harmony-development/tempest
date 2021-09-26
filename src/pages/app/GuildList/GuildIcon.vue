@@ -62,7 +62,7 @@ const onClick = () => {
     <template #activator="{ toggle }">
       <h-btn
         v-tippy="{ content: data.name, placement: 'right' }"
-        variant="outlined"
+        :variant="selected ? 'outlined' : 'text'"
         color="secondary"
         class="w-full"
         style="aspect-ratio: 1"

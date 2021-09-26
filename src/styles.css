@@ -26,5 +26,15 @@ kbd {
   --primary-700: 14, 116, 144;
   --primary-800: 21, 95, 117;
   --primary-900: 22, 78, 99;
-}
 
+  --secondary-50: 238, 242, 255
+  --secondary-100: 224, 231, 255
+  --secondary-200: 199, 210, 254;
+  --secondary-300: 165, 180, 252;
+  --secondary-400: 129, 141, 248;
+  --secondary-500: 99, 102, 241;
+  --secondary-600: 78, 70, 229;
+  --secondary-700: 68, 56, 202;
+  --secondary-800: 56, 48, 163;
+  --secondary-900: 49, 46, 129;
+}

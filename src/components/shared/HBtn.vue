@@ -74,6 +74,10 @@ const buttonClasses = computed(() => ({
   }
 }
 
+.outlined {
+  @apply border-2;
+}
+
 .primary {
   &.filled {
     @apply bg-primary-400 text-white;
@@ -82,7 +86,7 @@ const buttonClasses = computed(() => ({
     }
   }
   &.outlined {
-    @apply border-primary-400 border-1 text-primary-400;
+    @apply border-primary-400 text-primary-400;
   }
   &.text {
     @apply text-primary-400;
@@ -93,10 +97,19 @@ const buttonClasses = computed(() => ({
 }
 
 .secondary {
-  &.text {
-    @apply text-secondary-300;
+  &.filled {
+    @apply bg-secondary-400 text-white;
     &:hover {
-      @apply bg-secondary-400 bg-opacity-10;
+      @apply bg-secondary-300;
+    }
+  }
+  &.outlined {
+    @apply border-secondary-400 text-secondary-400;
+  }
+  &.text {
+    @apply text-secondary-400;
+    &:hover {
+      @apply bg-secondary-300 bg-opacity-10;
     }
   }
 }
