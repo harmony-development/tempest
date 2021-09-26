@@ -45,7 +45,7 @@ const editStart = async () => {
     return;
   }
   editing.value = true;
-  editText.value = message.value.content.content.textMessage.content;
+  editText.value = message.value.content.content.textMessage.content?.text;
   await nextTick();
   editFocus.value = !editFocus.value;
 };
@@ -76,8 +76,8 @@ const content = computed(() => {
         {{ message.override?.username || user?.username || message.author }}
       </p>
       <FileMessage
-        v-if="content?.oneofKind === 'filesMessage'"
-        :content="content.filesMessage"
+        v-if="content?.oneofKind === 'attachmentMessage'"
+        :content="content.attachmentMessage"
       />
       <!-- <EmbedMessage v-else-if="messageType === 'embedMessage'"> </EmbedMessage> -->
       <TextMessage

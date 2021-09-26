@@ -31,7 +31,9 @@ const editMessage = async (content: string) => {
       guildId: route.value.guildid,
       channelId: route.value.channelid,
       messageId: props.messageid,
-      newContent: content,
+      newContent: {
+        text: content
+      },
     })
   );
 };
@@ -49,11 +51,11 @@ const onEditKeyDown = async (ev: KeyboardEvent) => {
 };
 
 const sanitized = computed(() => {
-  return DOMPurify.sanitize(conv.makeHtml(props.content.content));
+  return DOMPurify.sanitize(conv.makeHtml(props.content.content.text));
 });
 
 const links = computed(() => {
-  return parseLinks(props.content.content);
+  return parseLinks(props.content.content.text);
 });
 
 const previewLinks = computed(() =>

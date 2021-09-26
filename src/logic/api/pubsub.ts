@@ -37,6 +37,7 @@ const chatEventHandlers = new Handler<StreamChatEvent["event"]>({
       editedAt: +(message.editedAt || 0),
       pending: false,
       override: {},
+      content: message.content
     });
   },
   deletedMessage(host, { deletedMessage }) {

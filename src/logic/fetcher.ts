@@ -1,4 +1,5 @@
 import { computed } from "vue";
+import { GetChannelMessagesRequest_Direction } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
 import { useAppRoute } from "./location";
 import { getOrFederate } from "./connections";
 import { appState } from "~/store/app";
@@ -36,7 +37,8 @@ export const useFetchMessages = () => {
     const resp = await conn.chat.getChannelMessages({
       guildId: guildID,
       channelId: channelID,
-      beforeMessage: msgID || "0",
+      direction: GetChannelMessagesRequest_Direction.BEFORE_UNSPECIFIED,
+      messageId: msgID || "0"
     });
     appState.setReachedTop(host, channelID, resp.response.reachedTop);
     appState.setMessageData(
@@ -45,15 +47,15 @@ export const useFetchMessages = () => {
         [messageID: string]: IMessageData;
       }>((obj, m) => {
         obj[m.messageId] = {
-          author: m.authorId,
-          createdAt: Number(m.createdAt?.seconds),
-          editedAt: Number(m.editedAt?.seconds),
-          content: m.content!,
+          author: m.message!.authorId,
+          createdAt: Number(m.message!.createdAt),
+          editedAt: Number(m.message!.editedAt),
+          content: m.message!.content!,
           pending: false,
           override: {
-            username: m.overrides?.name,
-            avatar: m.overrides?.avatar,
-            reason: m.overrides?.reason.oneofKind,
+            username: m.message!.overrides?.username,
+            avatar: m.message!.overrides?.avatar,
+            reason: m.message!.overrides?.reason.oneofKind,
           },
         };
         return obj;
