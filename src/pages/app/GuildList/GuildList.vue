@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import GuildIcon from "./GuildIcon.vue";
+import GuildIcon from "./GuildEntry.vue";
 import GuildBtn from "./GuildBtn.vue";
 import { host } from "~/logic/app";
 import { useGuildList } from "~/logic/api/api";

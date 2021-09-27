@@ -58,23 +58,23 @@ const onClick = () => {
 </script>
 
 <template>
-  <h-menu v-model="guildMenu">
-    <template #activator="{ toggle }">
+  <context-menu v-model="guildMenu">
+    <template #activator="{ open }">
       <h-btn
         v-tippy="{ content: data.name, placement: 'right' }"
         :variant="selected ? 'outlined' : 'text'"
         color="secondary"
         class="w-full"
-        style="aspect-ratio: 1"
+        square
         @click.prevent.stop="onClick"
         @mousedown.prevent=""
-        @contextmenu.prevent="toggle"
+        @contextmenu.prevent="open"
       >
         <h-image :uri="data.picture" :fallback="data.name" rounded />
       </h-btn>
     </template>
     <guild-icon-menu :id="props.id" :host="guildHost" />
-  </h-menu>
+  </context-menu>
 </template>
 
 <style lang="postcss" scoped>
