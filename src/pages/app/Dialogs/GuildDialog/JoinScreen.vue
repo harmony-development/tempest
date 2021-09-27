@@ -13,8 +13,8 @@ const props = defineProps<{
 }>();
 const emit = defineEmits(["update:open", "update:screen"]);
 const route = useAppRoute();
-const open = useVModel(props, "open", emit);
-const screen = useVModel(props, "screen", emit);
+const openModel = useVModel(props, "open", emit);
+const screenModel = useVModel(props, "screen", emit);
 const inputCode = ref("");
 
 const joinClicked = async () => {
@@ -23,7 +23,7 @@ const joinClicked = async () => {
   await conn.chat.joinGuild({
     inviteId: code,
   });
-  open.value = false;
+  openModel.value = false;
 };
 </script>
 <template>
@@ -33,14 +33,14 @@ const joinClicked = async () => {
     :label="$t('app.guild-dialog.join-input')"
     class="mb-2"
   />
-  <a v-t="'app.guild-dialog.to-create'" @click="screen = 'create'" />
+  <a v-t="'app.guild-dialog.to-create'" @click="screenModel = 'create'" />
   <div class="flex justify-end">
     <h-btn
       v-t="'button.cancel'"
       variant="text"
       color="secondary"
       class="mr-1"
-      @click="open = false"
+      @click="openModel = false"
     />
     <h-btn
       v-t="'app.guild-dialog.join'"

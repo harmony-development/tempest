@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useVModel } from "@vueuse/core";
 
-import { defineProps, ref, watch, nextTick, onMounted } from "vue";
+import { defineProps, ref, watch, onMounted } from "vue";
 
 const emit = defineEmits(["update:modelValue"]);
 
@@ -27,9 +27,11 @@ const resizeInput = () => {
   input.value.style.height = `${Math.min(input.value.scrollHeight, 200)}px`;
 };
 
+if (props.multiline === true) watch(value, resizeInput);
+
 onMounted(() => {
   if (props.focus) input.value?.focus();
-  resizeInput();
+  if (props.multiline) resizeInput();
 });
 
 watch(
@@ -40,7 +42,18 @@ watch(
 );
 </script>
 <template>
-  <div class="bg-surface-900 flex items-center relative rounded dark:border-surface-500 focus-within:border-blue-300" :class="{ 'input-parent': true, 'border-2': !props.noBorder }">
+  <div
+    class="
+      bg-surface-900
+      flex
+      items-center
+      relative
+      rounded
+      dark:border-surface-500
+      focus-within:border-blue-300
+    "
+    :class="{ 'input-parent': true, 'border-2': !props.noBorder }"
+  >
     <div>
       <slot name="pre-input" />
     </div>
@@ -57,7 +70,6 @@ watch(
         :placeholder="props.noBorder ? props.label : ''"
         multiline
         wrap="hard"
-        @input="resizeInput"
       />
       <input
         v-else
@@ -68,9 +80,11 @@ watch(
         :required="props.required"
         class="input-input"
         :class="{ dense }"
-        :placeholder="props.noBorder ? props.label : ''"
+        :placeholder="props.noBorder ? props.label : ' '"
       />
-      <label v-if="!noBorder" :for="props.name" class="input-label">{{ props.label }}</label>
+      <label v-if="!noBorder" :for="props.name" class="input-label">{{
+        props.label
+      }}</label>
     </div>
   </div>
 </template>

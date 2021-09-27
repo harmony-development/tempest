@@ -33,7 +33,7 @@ const sendMessage = async () => {
   if (uploadAttachments && uploadAttachments.length > 0) {
     const mapped = uploadAttachments.map((it) => ({
       name: it.name,
-      type: it.contentType,
+      mimetype: it.contentType,
       id: it.id,
       size: it.size,
       caption: "",
