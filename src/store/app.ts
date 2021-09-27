@@ -97,6 +97,15 @@ class AppState extends Store<IAppState> {
     guild.channels?.push(channelID);
   }
 
+  deleteChannel(host: string, guildID: string, channelID: string) {
+    const hostData = this.getHost(host);
+    const guildData = this.getGuild(host, guildID);
+    delete hostData.channels[channelID];
+    guildData.channels = guildData.channels?.filter(
+      (channel) => channelID !== channel
+    );
+  }
+
   setChannelData(
     host: string,
     channels: {

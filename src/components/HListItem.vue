@@ -3,6 +3,7 @@ import { defineProps } from "vue";
 
 const props = defineProps<{
   selected?: boolean;
+  danger?: boolean;
 }>();
 </script>
 
@@ -13,6 +14,7 @@ const props = defineProps<{
     :class="{
       'list-item': true,
       selected: props.selected,
+      danger,
     }"
     tabindex="0"
   >
@@ -35,5 +37,9 @@ const props = defineProps<{
 
 .selected {
   @apply bg-white bg-opacity-5 bg-opacity-5;
+}
+
+.danger {
+  @apply text-red-400;
 }
 </style>

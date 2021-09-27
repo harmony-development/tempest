@@ -28,6 +28,13 @@ const chatEventHandlers = new Handler<StreamChatEvent["event"]>({
       }
     );
   },
+  deletedChannel(host, { deletedChannel }) {
+    appState.deleteChannel(
+      host,
+      deletedChannel.guildId,
+      deletedChannel.channelId
+    );
+  },
   sentMessage(host, { sentMessage: msgEvent }) {
     const { message } = msgEvent;
     if (!message) return;
@@ -37,7 +44,7 @@ const chatEventHandlers = new Handler<StreamChatEvent["event"]>({
       editedAt: +(message.editedAt || 0),
       pending: false,
       override: {},
-      content: message.content
+      content: message.content,
     });
   },
   deletedMessage(host, { deletedMessage }) {
