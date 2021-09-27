@@ -10,6 +10,7 @@ import { ChatStream } from "~/types";
 
 const chatEventHandlers = new Handler<StreamChatEvent["event"]>({
   guildAddedToList(_, { guildAddedToList: guild }) {
+    console.log(guild);
     guildListState.addGuild({
       guildId: guild.guildId,
       host: guild.homeserver,

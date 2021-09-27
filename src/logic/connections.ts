@@ -52,7 +52,7 @@ export const getStream = async (
   const handler = pubsub(host);
   chatStreams[host] = stream;
   stream.response.onMessage((ev) => handler(ev));
-  return new Promise(() => stream);
+  return Promise.resolve(stream);
 };
 
 export const homeserverConn = () => {

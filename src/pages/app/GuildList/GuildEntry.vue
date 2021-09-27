@@ -3,7 +3,6 @@ import { computed, defineProps, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import GuildIconMenu from "./ContextMenu.vue";
 import HBtn from "~/components/shared/HBtn.vue";
-import HMenu from "~/components/HMenu.vue";
 import { host } from "~/logic/app";
 import { getOrFederate } from "~/logic/connections";
 import { parseHMC } from "~/logic/utils/parsing";
@@ -58,7 +57,7 @@ const onClick = () => {
 </script>
 
 <template>
-  <context-menu v-model="guildMenu">
+  <context-menu>
     <template #activator="{ open }">
       <h-btn
         v-tippy="{ content: data.name, placement: 'right' }"

@@ -30,6 +30,7 @@ if (!isLoggedIn()) {
 } else {
   (async () => {
     const stream = await getStream(host.value, session.value);
+    console.log(stream);
     stream?.request.send({
       request: {
         oneofKind: "subscribeToHomeserverEvents",
