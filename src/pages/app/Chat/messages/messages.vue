@@ -9,7 +9,7 @@ import { useFetchMessages, useMessageList } from "~/logic/fetcher";
 
 const route = useAppRoute();
 
-const messagesContainer = ref<HTMLDivElement | undefined>(undefined);
+const messagesContainer = ref<HTMLDivElement | null>(null);
 
 const chan = computed(() =>
   appState.getChannel(route.value.host, route.value.channelid)
@@ -19,7 +19,7 @@ const reachedTop = computed(() => chan.value.reachedTop);
 
 const scrollToBottom = () => {
   if (messagesContainer.value)
-    messagesContainer.value.scrollTop = 0;
+    messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
 };
 
 const fetchMessages = useFetchMessages();
@@ -83,11 +83,11 @@ const scrollHandler = useThrottleFn(async (ev: Event) => {
 useEventListener(messagesContainer, "scroll", scrollHandler);
 </script>
 <template>
-  <div ref="messagesContainer" class="container flex flex-col-reverse">
+  <div ref="messagesContainer" class="container flex flex-col">
     <div v-if="!reachedTop" class="text-center">
       <h-spinner class="my-1 text-center" />
     </div>
-    <message v-for="message in messages?.slice().reverse()" :key="message" :messageid="message" />
+    <message v-for="message in messages" :key="message" :messageid="message" />
   </div>
 </template>
 
