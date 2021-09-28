@@ -1,5 +1,8 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import ReloadPrompt from "./components/misc/ReloadPrompt.vue";
+</script>
 
 <template>
-  <h1>Test</h1>
+  <ReloadPrompt />
+  <h1>Tesdt</h1>
 </template>

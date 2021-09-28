@@ -2,6 +2,8 @@ import { defineConfig } from "vite";
 import path from "path";
 import vue from "@vitejs/plugin-vue";
 import visualizer from "rollup-plugin-visualizer";
+import mkcert from "vite-plugin-mkcert";
+import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
   resolve: {
@@ -11,6 +13,39 @@ export default defineConfig({
   },
   plugins: [
     vue(),
+    VitePWA({
+      includeAssets: [
+        "/favicon.svg",
+        "/favicon.ico",
+        "robots.txt",
+        "/apple-touch-icon.png",
+      ],
+      manifest: {
+        name: "Tempest",
+        short_name: "Tempest",
+        description: "Web frontend for the Harmony Protocol powered by Vue",
+        theme_color: "#2f303e",
+        icons: [
+          {
+            src: "/pwa-192x192.png",
+            sizes: "192x192",
+            type: "image/png",
+          },
+          {
+            src: "/pwa-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+          },
+          {
+            src: "/pwa-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "any maskable",
+          },
+        ],
+      },
+    }),
+    mkcert(),
     {
       ...visualizer({
         template: "sunburst",
@@ -20,4 +55,7 @@ export default defineConfig({
       apply: "build",
     },
   ],
+  server: {
+    https: true,
+  },
 });
