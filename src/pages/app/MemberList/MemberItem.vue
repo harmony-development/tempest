@@ -24,7 +24,7 @@ const user = computed(() => appState.getUser(route.value.host, props.userid));
   <HMenu v-model="menuOpen" direction="left">
     <template #activator="{ toggle }">
       <h-list-item class="rounded" @click="toggle">
-        <h-image square :userid="props.userid" class="h-8 mr-3 w-8" rounded />
+        <avatar :userid="props.userid" class="h-8 mr-3 w-8 rounded-full" />
         <p class="flex-1">{{ user?.username }}</p>
       </h-list-item>
     </template>

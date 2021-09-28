@@ -67,7 +67,7 @@ class AppState extends Store<IAppState> {
 
   getUser(host: string, userID: string) {
     const data = this.getHost(host);
-    return data.users[userID];
+    return data.users[userID] as IUserData | undefined;
   }
 
   setGuildInfo(host: string, guildID: string, info: IGuildInfo) {

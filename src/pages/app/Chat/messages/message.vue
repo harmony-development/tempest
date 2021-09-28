@@ -5,7 +5,6 @@ import TextMessage from "./text.vue";
 import Unsupported from "./unsupported.vue";
 import { userID } from "~/logic/app";
 import { useAppRoute } from "~/logic/location";
-import HImage from "~/components/shared/Image/HImage.vue";
 import HBtn from "~/components/shared/HBtn.vue";
 import HList from "~/components/HList.vue";
 import HListItem from "~/components/HListItem.vue";
@@ -57,13 +56,15 @@ const content = computed(() => {
 
 <template>
   <div :class="{ message: true, 'own-msg': isOwnMessage }">
-    <h-image
+    <avatar
       :class="{ avatar: true, 'own-avatar': isOwnMessage }"
       :userid="message?.author"
-      :uri="message?.override?.avatar"
       rounded
     />
-    <div class="max-w-48 relative" :class="{ bubble: true, 'own-bubble': isOwnMessage }">
+    <div
+      class="max-w-48 relative"
+      :class="{ bubble: true, 'own-bubble': isOwnMessage }"
+    >
       <p
         class="text-xs dark:text-gray-200 text-gray-500 flex items-center gap-1"
       >
@@ -88,7 +89,16 @@ const content = computed(() => {
         :messageid="messageid"
       />
       <unsupported v-else> </unsupported>
-      <span class="float-right mt-1 text-right text-xs text-gray-700 dark:text-gray-300 opacity-50 flex">
+      <span
+        class="
+          float-right
+          mt-1
+          text-right text-xs text-gray-700
+          dark:text-gray-300
+          opacity-50
+          flex
+        "
+      >
         <span class="invisible">
           {{ displayDate }}
           <i v-if="message.editedAt > 0">(Edited {{ editedAtDate }})</i>

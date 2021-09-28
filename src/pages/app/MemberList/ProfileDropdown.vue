@@ -23,7 +23,7 @@ const openUserSettings = () => {
         class="rounded flex border-t-2 dark:border-surface-600"
         @click="toggle"
       >
-        <h-image :userid="userID" class="h-8 mr-3 w-8" rounded />
+        <avatar v-if="userID" :userid="userID" class="h-8 mr-3 w-8" rounded />
         <p class="flex-1">{{ ownUser?.username }}</p>
         <mdi-chevron-down v-if="open" />
         <mdi-chevron-up v-else />

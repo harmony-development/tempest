@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
-import { onErrorCaptured, onMounted, ref } from "vue";
+import { onErrorCaptured, ref } from "vue";
 import GuildList from "./GuildList/GuildList.vue";
 import ChannelList from "./ChannelList/ChannelList.vue";
 import Chat from "./Chat/chat.vue";
@@ -9,6 +9,7 @@ import ChannelHeader from "./ChannelHeader/ChannelHeader.vue";
 import GuildHeader from "./GuildHeader/GuildHeader.vue";
 import ErrorDialog from "./ErrorDialog.vue";
 import UserSettings from "./Dialogs/UserSettings/UserSettings.vue";
+import GuildSettings from "./Dialogs/GuildSettings/GuildSettings.vue";
 import HBtn from "~/components/shared/HBtn.vue";
 
 import HDrawer from "~/components/HDrawer.vue";
@@ -30,7 +31,6 @@ if (!isLoggedIn()) {
 } else {
   (async () => {
     const stream = await getStream(host.value, session.value);
-    console.log(stream);
     stream?.request.send({
       request: {
         oneofKind: "subscribeToHomeserverEvents",
@@ -49,6 +49,7 @@ onErrorCaptured(async (err) => {
 </script>
 <template>
   <user-settings />
+  <guild-settings />
   <alert v-model="errorDialogOpen">
     <error-dialog :err="error" />
   </alert>

@@ -21,6 +21,10 @@
       "to-create": "Create guild?",
       "to-join": "Join guild?"
     },
+    "guild-settings": {
+      "title": "Guild Settings"
+    },
+    "guild-settings-btn": "Guild Settings",
     "guilds": {
       "error": "Failed to fetch guild list"
     },
@@ -54,6 +58,7 @@
     "add-server": "Add Server",
     "confirm-password": "Confirm Password",
     "email": "Email",
+    "initial": "Welcome",
     "initial-choice": "Select an option",
     "login": "Login",
     "mismatched-passwords": "Passwords do not match",
@@ -62,8 +67,7 @@
     "register": "Register",
     "server-address": "Server Address",
     "server-name": "Server Name",
-    "username": "Username",
-    "initial": "Welcome"
+    "username": "Username"
   },
   "button": {
     "about": "About",

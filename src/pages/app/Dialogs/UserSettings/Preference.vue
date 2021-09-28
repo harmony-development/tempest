@@ -4,7 +4,7 @@ import HInput from "~/components/HInput.vue";
 
 const props = defineProps<{
   name: string;
-  modelValue?: string | boolean;
+  modelValue?: string;
 }>();
 
 const emit = defineEmits(["update:modelValue"]);

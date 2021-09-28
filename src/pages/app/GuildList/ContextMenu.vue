@@ -17,8 +17,6 @@ const leaveGuild = async () => {
 
 <template>
   <h-list class="bg-black w-max">
-    <h-list-item class="text-red-500" @click="leaveGuild">
-      Leave Guild
-    </h-list-item>
+    <h-list-item danger @click="leaveGuild"> Leave Guild </h-list-item>
   </h-list>
 </template>

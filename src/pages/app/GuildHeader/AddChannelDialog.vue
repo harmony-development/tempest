@@ -2,7 +2,7 @@
 import { CreateChannelRequest } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/channels";
 
 import { useVModel } from "@vueuse/core";
-import { defineEmit, defineProps, ref } from "vue";
+import { defineProps, ref } from "vue";
 import { RpcError } from "@protobuf-ts/runtime-rpc";
 import HDialog from "~/components/HDialog.vue";
 import HInput from "~/components/HInput.vue";

@@ -7,6 +7,8 @@ declare module 'vue' {
     Addserverdialog: typeof import('./src/components/auth/addserverdialog.vue')['default']
     Alert: typeof import('./src/components/Alert.vue')['default']
     Attachment: typeof import('./src/components/shared/Image/Attachment.vue')['default']
+    Avatar: typeof import('./src/components/shared/Image/Avatar.vue')['default']
+    ChangeableImage: typeof import('./src/components/shared/Image/ChangeableImage.vue')['default']
     ContextMenu: typeof import('./src/components/shared/ContextMenu.vue')['default']
     DevHeader: typeof import('./src/components/DevHeader.vue')['default']
     HAppBar: typeof import('./src/components/HAppBar.vue')['default']

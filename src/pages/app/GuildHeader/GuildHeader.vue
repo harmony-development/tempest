@@ -5,6 +5,7 @@ import AddChannelDialog from "./AddChannelDialog.vue";
 import { useAppRoute } from "~/logic/location";
 import { appState } from "~/store/app";
 import HBtn from "~/components/shared/HBtn.vue";
+import { dialogState } from "~/store/dialogs";
 
 const route = useAppRoute();
 const { t } = useI18n();
@@ -20,6 +21,15 @@ const guildName = computed(
     <h1>{{ guildName }}</h1>
     <div class="flex-1" />
     <h-btn
+      v-tippy="{ content: t('app.guild-settings-btn') }"
+      icon
+      variant="text"
+      dense
+      @click="() => dialogState.toggleGuildSettingsOpen()"
+    >
+      <mdi-cog />
+    </h-btn>
+    <h-btn
       v-tippy="{ content: t('app.add-channel') }"
       icon
       variant="text"
@@ -28,6 +38,7 @@ const guildName = computed(
     >
       <mdi-plus />
     </h-btn>
+
     <add-channel-dialog v-model="addChannelOpen" />
   </div>
 </template>
