@@ -4,5 +4,7 @@ import ReloadPrompt from "./components/misc/ReloadPrompt.vue";
 
 <template>
   <ReloadPrompt />
-  <h1>Tesdt</h1>
+  <div class="h-100vh w-100vw bg-surface-800">
+    <router-view />
+  </div>
 </template>

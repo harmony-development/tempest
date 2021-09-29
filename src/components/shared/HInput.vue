@@ -1,0 +1,113 @@
+<script setup lang="ts">
+import { useVModel } from "@vueuse/core";
+
+import { defineProps, ref, watch, onMounted } from "vue";
+
+const emit = defineEmits(["update:modelValue"]);
+
+const props = defineProps<{
+  label?: string;
+  name?: string;
+  type?: string;
+  rows?: number;
+  modelValue?: string;
+  focus?: boolean;
+  multiline?: boolean;
+  noBorder?: boolean;
+  dense?: boolean;
+  required?: boolean;
+}>();
+
+const value = useVModel(props, "modelValue", emit);
+const input = ref<HTMLInputElement | undefined>(undefined);
+
+const resizeInput = () => {
+  if (!input.value) return;
+  input.value.style.height = "5px";
+  input.value.style.height = `${Math.min(input.value.scrollHeight, 200)}px`;
+};
+
+if (props.multiline === true) watch(value, resizeInput);
+
+onMounted(() => {
+  if (props.focus) input.value?.focus();
+  if (props.multiline) resizeInput();
+});
+
+watch(
+  () => props.focus,
+  async () => {
+    input.value?.focus();
+  }
+);
+</script>
+<template>
+  <div
+    class="
+      bg-surface-800
+      flex
+      items-center
+      relative
+      rounded
+      border-surface-500
+      focus-within:border-primary-300
+    "
+    :class="{ 'input-parent': true, 'border-2': !props.noBorder }"
+  >
+    <div>
+      <slot name="pre-input" />
+    </div>
+    <div class="flex-1">
+      <textarea
+        v-if="multiline"
+        ref="input"
+        v-model="value"
+        :name="props.name"
+        :type="props.type"
+        :rows="props.rows"
+        :required="props.required"
+        class="input-input overflow-hidden"
+        :placeholder="props.noBorder ? props.label : ''"
+        multiline
+        wrap="hard"
+      />
+      <input
+        v-else
+        ref="input"
+        v-model="value"
+        :name="props.name"
+        :type="props.type"
+        :required="props.required"
+        class="input-input"
+        :class="{ dense }"
+        :placeholder="props.noBorder ? props.label : ' '"
+      />
+      <label v-if="!noBorder" :for="props.name" class="input-label">{{
+        props.label
+      }}</label>
+    </div>
+  </div>
+</template>
+
+<style lang="postcss" scoped>
+.input-parent {
+  transition: 0.1s linear;
+}
+
+.input-label {
+  @apply top-0 p-3 pt-3 duration-300 absolute pointer-events-none text-surface-200 opacity-50;
+}
+
+.input-input {
+  @apply max-h-200 bg-transparent z-1 w-full p-3 block appearance-none focus:outline-none pl-3 resize-none break-words;
+}
+
+.dense {
+  @apply p-1;
+}
+
+.input-parent:focus-within > .input-label,
+.input-input:not(:placeholder-shown) + .input-label {
+  @apply p-0 text-xs transform translate-y-0.5 translate-x-2;
+}
+</style>
