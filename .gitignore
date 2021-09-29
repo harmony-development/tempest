@@ -4,4 +4,7 @@ dist
 dist-ssr
 *.local
 .env
+node_modules
 stats.html
+.direnv
+.envrc
