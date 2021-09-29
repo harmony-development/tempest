@@ -29,6 +29,7 @@ const host = ref("");
           type="submit"
           variant="text"
           color="primary"
+          :disabled="!name || !host"
           @click="$emit('done', name, host)"
         >
           Done

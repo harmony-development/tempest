@@ -37,6 +37,7 @@ const addServer = (name: string, host: string) => {
       :key="host"
       :selected="i === selectedServer"
       @click="selectedServer = i"
+      @keydown.enter="selectedServer = i"
       class="server-entry"
     >
       <div class="text-sm">
@@ -64,9 +65,10 @@ const addServer = (name: string, host: string) => {
     visibility: hidden;
   }
   &:hover,
-  &:focus-visible,
-  &:focus-within .delete-button {
-    visibility: visible;
+  &:focus-within {
+    .delete-button {
+      visibility: visible;
+    }
   }
 }
 </style>
