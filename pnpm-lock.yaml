@@ -6,6 +6,8 @@ specifiers:
   '@vitejs/plugin-vue': ^1.9.2
   '@vue/compiler-sfc': ^3.2.19
   '@vueuse/core': ^6.5.3
+  focus-trap: ^6.7.1
+  focus-trap-vue: '3'
   rollup-plugin-visualizer: ^5.5.2
   typescript: ^4.4.3
   unplugin-icons: ^0.11.4
@@ -23,6 +25,8 @@ specifiers:
 
 dependencies:
   '@vueuse/core': 6.5.3_vue@3.2.19
+  focus-trap: 6.7.1
+  focus-trap-vue: 3.2.1_focus-trap@6.7.1+vue@3.2.19
   vue: 3.2.19
   vue-router: 4.0.11_vue@3.2.19
 
@@ -2071,6 +2075,22 @@ packages:
       to-regex-range: 5.0.1
     dev: true
 
+  /focus-trap-vue/3.2.1_focus-trap@6.7.1+vue@3.2.19:
+    resolution: {integrity: sha512-nThbiBo4F9ilwEc3kOYTW63RDbOsWNdz7jWFk9CmA9/LmZ7EJgEszV2MBXaQQMceEsB7h0WuIkkfzQznU5yj+A==}
+    peerDependencies:
+      focus-trap: ^6.0.0
+      vue: ^3.0.0-rc.13
+    dependencies:
+      focus-trap: 6.7.1
+      vue: 3.2.19
+    dev: false
+
+  /focus-trap/6.7.1:
+    resolution: {integrity: sha512-a6czHbT9twVpy2RpkWQA9vIgwQgB9Nx1PIxNNUxQT4nugG/3QibwxO+tWTh9i+zSY2SFiX4pnYhTaFaQF/6ZAg==}
+    dependencies:
+      tabbable: 5.2.1
+    dev: false
+
   /follow-redirects/1.14.4_debug@4.3.2:
     resolution: {integrity: sha512-zwGkiSXC1MUJG/qmeIFH2HBJx9u0V46QGUe3YR1fXG8bXQxq7fLj0RjLZQ5nubr9qNJUZrH+xUcwXEoXNpfS+g==}
     engines: {node: '>=4.0'}
@@ -3050,6 +3070,10 @@ packages:
     dependencies:
       has-flag: 4.0.0
     dev: true
+
+  /tabbable/5.2.1:
+    resolution: {integrity: sha512-40pEZ2mhjaZzK0BnI+QGNjJO8UYx9pP5v7BGe17SORTO0OEuuaAwQTkAp8whcZvqon44wKFOikD+Al11K3JICQ==}
+    dev: false
 
   /temp-dir/2.0.0:
     resolution: {integrity: sha512-aoBAniQmmwtcKp/7BzsH8Cxzv8OL736p7v1ihGb5e9DJ9kTwGWHrQrVB5+lfVDzfGrdRzXch+ig7LHaY1JTOrg==}
