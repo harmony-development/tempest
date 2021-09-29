@@ -2,6 +2,7 @@
 import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import HBtn from "~/components/shared/HBtn.vue";
+import { parseUserHost } from "~/logic/parsing";
 import AddServerDialog from "./AddServerDialog.vue";
 import { serverList } from "./state";
 
@@ -16,6 +17,17 @@ const deleteItem = (index: number) => {
 const addServer = (name: string, host: string) => {
   serverList.value.unshift({ name, host });
   addingServer.value = false;
+};
+
+const nextClicked = () => {
+  const { host } = serverList.value[selectedServer.value];
+  if (!host) return;
+  router.push({
+    name: "auth",
+    params: {
+      host: parseUserHost(host),
+    },
+  });
 };
 </script>
 
@@ -56,7 +68,9 @@ const addServer = (name: string, host: string) => {
       </h-btn>
     </h-list-item>
   </ol>
-  <h-btn variant="outlined" class="w-min ml-auto">Next</h-btn>
+  <h-btn variant="outlined" class="w-min ml-auto" @click="nextClicked"
+    >Next</h-btn
+  >
 </template>
 
 <style lang="postcss" scoped>

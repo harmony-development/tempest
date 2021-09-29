@@ -16,7 +16,7 @@ import ServerSelect from "./ServerSelect.vue";
     <div
       class="flex flex-col gap-2 bg-surface-900 p-3 w-11/12 sm:m-12 md:w-150"
     >
-      <ServerSelect />
+      <router-view />
     </div>
   </div>
 </template>

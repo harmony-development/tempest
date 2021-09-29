@@ -3,17 +3,22 @@ import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 const routes: RouteRecordRaw[] = [
   {
     path: "/",
-    redirect: "/auth/serverselect",
+    redirect: "/entry/serverselect",
   },
   {
-    path: "/auth",
+    path: "/entry",
     redirect: "serverselect",
-    component: () => import("./views/auth/Auth.vue"),
+    component: () => import("./views/entry/Entry.vue"),
     children: [
       {
         path: "serverselect",
         name: "serverselect",
-        component: () => import("./views/auth/ServerSelect.vue"),
+        component: () => import("./views/entry/ServerSelect.vue"),
+      },
+      {
+        path: "auth/:host",
+        name: "auth",
+        component: () => import("./views/entry/Auth.vue"),
       },
     ],
   },
