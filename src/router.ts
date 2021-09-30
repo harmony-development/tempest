@@ -22,6 +22,10 @@ const routes: RouteRecordRaw[] = [
       },
     ],
   },
+  {
+    path: "/mediasoup",
+    component: () => import("./views/mediasoup/MediaSoup.vue"),
+  },
 ];
 
 export const router = createRouter({
