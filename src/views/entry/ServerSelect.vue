@@ -39,7 +39,7 @@ const nextClicked = () => {
   />
   <h1 class="text-lg font-bold">Welcome to Tempest</h1>
   <div class="text-sm w-full">
-    <h-btn variant="filled" color="secondary" @click="addingServer = true"
+    <h-btn variant="filled" color="primary" @click="addingServer = true"
       >Add Server</h-btn
     >
   </div>

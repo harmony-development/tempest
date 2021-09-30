@@ -1,7 +1,9 @@
 lockfileVersion: 5.3
 
 specifiers:
+  '@harmony-dev/harmony-web-sdk': ^0.0.1-alpha.3
   '@iconify/json': ^1.1.407
+  '@protobuf-ts/runtime-rpc': ^1
   '@types/node': ^16.10.1
   '@vitejs/plugin-vue': ^1.9.2
   '@vue/compiler-sfc': ^3.2.19
@@ -24,6 +26,7 @@ specifiers:
   workbox-window: ^6.3.0
 
 dependencies:
+  '@harmony-dev/harmony-web-sdk': 0.0.1-alpha.3
   '@vueuse/core': 6.5.3_vue@3.2.19
   focus-trap: 6.7.1
   focus-trap-vue: 3.2.1_focus-trap@6.7.1+vue@3.2.19
@@ -32,6 +35,7 @@ dependencies:
 
 devDependencies:
   '@iconify/json': 1.1.407
+  '@protobuf-ts/runtime-rpc': 1.0.13
   '@types/node': 16.10.1
   '@vitejs/plugin-vue': 1.9.2_vite@2.5.10
   '@vue/compiler-sfc': 3.2.19
@@ -1185,6 +1189,13 @@ packages:
     resolution: {integrity: sha512-8HqW8EVqjnCmWXVpqAOZf+EGESdkR27odcMMMGefgKXtar00SoYNSryGv//TELI4T3QFsECo78p+0lmalk/CFA==}
     dev: true
 
+  /@harmony-dev/harmony-web-sdk/0.0.1-alpha.3:
+    resolution: {integrity: sha512-EIItFNbXJu/qPakMKh6EQPTR+KGCMaVbgf6/wxSDxDJL3xTkWoyWvQwCnn+1Ie0YbcVRCeIOVgRI8i/hwKUw2Q==}
+    dependencies:
+      '@protobuf-ts/runtime': 1.0.13
+      '@protobuf-ts/runtime-rpc': 1.0.13
+    dev: false
+
   /@iconify/json-tools/1.0.10:
     resolution: {integrity: sha512-LFelJDOLZ6JHlmlAkgrvmcu4hpNPB91KYcr4f60D/exzU1eNOb4/KCVHIydGHIQFaOacIOD+Xy+B7P1z812cZg==}
     dev: true
@@ -1312,6 +1323,14 @@ packages:
     dependencies:
       '@octokit/openapi-types': 10.6.1
     dev: true
+
+  /@protobuf-ts/runtime-rpc/1.0.13:
+    resolution: {integrity: sha512-ct/fCm3UJk/sg3yKpvCd6ylbRVkj+LiV+xD95BWTw0w4t/29VYwT8MhZqlJbN0qSfkkH4/jWTrwv9yePDEjPWg==}
+    dependencies:
+      '@protobuf-ts/runtime': 1.0.13
+
+  /@protobuf-ts/runtime/1.0.13:
+    resolution: {integrity: sha512-uvYYBUtG4eCYMxo+mzxN8SHvpL/l7PbHEmOpXEnDCwBj/wJ+Ezj8+TlEFjjRWpnFidka+SMdDOXPWSyJv2iNAw==}
 
   /@rollup/plugin-babel/5.3.0_@babel+core@7.15.5+rollup@2.57.0:
     resolution: {integrity: sha512-9uIC8HZOnVLrLHxayq/PTzw+uS25E14KPUBh5ktF+18Mjo5yK0ToMMx6epY0uEgkjwJw0aBW4x2horYXh8juWw==}

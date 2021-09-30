@@ -8,6 +8,6 @@ export function useParams<T extends RouteParams>() {
 
 export const useAuthRoute = () => {
   return useParams<{
-    host?: string;
+    host: string;
   }>();
 };

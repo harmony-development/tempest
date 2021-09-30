@@ -16,6 +16,7 @@ const props = defineProps<{
   noBorder?: boolean;
   dense?: boolean;
   required?: boolean;
+  autocomplete?: string;
 }>();
 
 const value = useVModel(props, "modelValue", emit);
@@ -68,6 +69,7 @@ watch(
         :required="props.required"
         class="input-input overflow-hidden"
         :placeholder="props.noBorder ? props.label : ''"
+        :autocomplete="autocomplete"
         multiline
         wrap="hard"
       />
@@ -80,6 +82,7 @@ watch(
         :required="props.required"
         class="input-input"
         :class="{ dense }"
+        :autocomplete="autocomplete"
         :placeholder="props.noBorder ? props.label : ' '"
       />
       <label v-if="!noBorder" :for="props.name" class="input-label">{{
