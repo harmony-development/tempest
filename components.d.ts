@@ -4,11 +4,13 @@
 
 declare module 'vue' {
   export interface GlobalComponents {
+    GgSpinner: typeof import('~icons/gg/spinner')['default']
     HBtn: typeof import('./src/components/shared/HBtn.vue')['default']
     HDIalog: typeof import('./src/components/shared/HDIalog.vue')['default']
     HInput: typeof import('./src/components/shared/HInput.vue')['default']
     HListItem: typeof import('./src/components/shared/HListItem.vue')['default']
     HRadio: typeof import('./src/components/shared/HRadio.vue')['default']
+    HSpinner: typeof import('./src/components/shared/HSpinner.vue')['default']
     MdiAlert: typeof import('~icons/mdi/alert')['default']
     MdiArrowLeft: typeof import('~icons/mdi/arrow-left')['default']
     MdiDelete: typeof import('~icons/mdi/delete')['default']

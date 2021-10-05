@@ -7,5 +7,17 @@ a {
       hover:underline
       cursor-pointer
       whitespace-nowrap
-      overflow-hidden overflow-ellipsis;
+      overflow-hidden overflow-ellipsis select-none;
+}
+
+@layer utilities {
+  /* Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
 }
