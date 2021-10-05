@@ -1,8 +1,31 @@
 <script lang="ts" setup>
-import { ref } from "vue";
+import { computed, onMounted } from "vue";
 import GuildIcon from "./GuildIcon.vue";
+import { connectionManager } from "../../../logic/api/connections";
+import { session } from "../../../logic/store/session";
+import { chatState } from "../../../logic/store/chat";
+import { fromV1 } from "~/logic/types/guilds";
+import { useRouter } from "vue-router";
 
-const active = ref(0);
+const router = useRouter();
+
+onMounted(async () => {
+  const conn = connectionManager.get(session.value!.host);
+  const { guilds } = await conn.chat.getGuildList({}).response;
+  chatState.state.guildList = guilds.map(fromV1);
+});
+
+const guildList = computed(() => chatState.state.guildList);
+
+const goToGuild = (host: string, guildID: string) => {
+  router.push({
+    name: "chat",
+    params: {
+      host,
+      guildID,
+    },
+  });
+};
 </script>
 
 <template>
@@ -22,11 +45,11 @@ const active = ref(0);
       "
     >
       <GuildIcon
-        v-for="i in 20"
+        v-for="{ host, guildID } in guildList"
+        :key="`${host}-${guildID}`"
         name="a"
         src="a"
-        @click="active = i"
-        :active="i === active"
+        @click="goToGuild(host, guildID)"
       />
     </div>
     <button class="add-menu-pop" v-wave>

@@ -31,7 +31,7 @@ onMounted(async () => {
 
 <template>
   <Splash v-if="!sessionValidated" />
-  <div class="h-full w-full">
+  <div class="h-full w-full" v-else>
     <GuildList />
   </div>
 </template>
