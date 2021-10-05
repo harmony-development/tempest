@@ -1,11 +1,9 @@
 <script lang="ts" setup>
 import { useAuthRoute } from "../../logic/routeParams";
-import { onMounted, ref, watch } from "vue";
 import Choices from "./Choices.vue";
 import Form from "./Form.vue";
 import { AuthManager, useAuthManager } from "../../logic/api/auth";
 import { useRouter } from "vue-router";
-import { session } from "../../logic/store/session";
 
 const params = useAuthRoute();
 const router = useRouter();
@@ -18,18 +16,6 @@ const {
   sendChoice,
   sendForm,
 } = useAuthManager(params.value.host);
-
-watch(currentStep, () => {
-  if (currentStep.value?.oneofKind === "session") {
-    const { sessionToken, userId } = currentStep.value.session;
-    session.value = {
-      session: sessionToken,
-      userID: userId,
-      host: params.value.host,
-    };
-    router.push({ name: "chat" });
-  }
-});
 </script>
 
 <template>

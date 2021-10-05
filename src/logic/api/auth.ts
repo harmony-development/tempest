@@ -9,6 +9,7 @@ import {
 import { ServerStreamingCall } from "@protobuf-ts/runtime-rpc";
 import { computed, onMounted, ref, Ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { session } from "../store/session";
 
 type AuthStream = ServerStreamingCall<StreamStepsRequest, StreamStepsResponse>;
 
@@ -135,6 +136,15 @@ export const useAuthManager = (host: string) => {
   };
 
   const onStep = (step: AuthStep["step"]) => {
+    if (step.oneofKind === "session") {
+      const { sessionToken, userId } = step.session;
+      session.value = {
+        session: sessionToken,
+        userID: userId,
+        host,
+      };
+      return router.push({ name: "chat" });
+    }
     error.value = undefined;
     currentStepType.value = step.oneofKind;
     currentStep.value = step;

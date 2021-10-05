@@ -6,7 +6,5 @@ interface ISession {
   userID: string;
 }
 
-export const session = useLocalStorage<ISession | undefined>(
-  "session",
-  undefined
-);
+// NOTE: apparently `undefined` breaks how things are represented in the
+export const session = useLocalStorage<ISession | null>("session", null);
