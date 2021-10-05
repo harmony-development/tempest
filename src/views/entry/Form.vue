@@ -6,6 +6,7 @@ import { ref } from "vue";
 
 const props = defineProps<{
   form: AuthStep_Form;
+  error: unknown;
 }>();
 defineEmits<{
   (event: "done", values: string[]): void;
@@ -15,7 +16,8 @@ const fieldValues = ref<string[]>(props.form.fields.map(() => ""));
 </script>
 
 <template>
-  <p class="font-bold mb-2">{{ form.title }}</p>
+  <p class="font-bold">{{ form.title }}</p>
+  <span class="text-error">{{ props.error }}</span>
   <form class="flex flex-col gap-3" @submit.prevent="">
     <template v-for="(f, i) in form.fields">
       <h-input

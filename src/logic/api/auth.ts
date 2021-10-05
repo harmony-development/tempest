@@ -1,79 +1,172 @@
 import { Connection } from "@harmony-dev/harmony-web-sdk";
 import {
   AuthStep,
-  AuthStep_Form_FormField,
   NextStepRequest,
   NextStepRequest_FormFields,
   StreamStepsRequest,
   StreamStepsResponse,
 } from "@harmony-dev/harmony-web-sdk/dist/gen/auth/v1/auth";
 import { ServerStreamingCall } from "@protobuf-ts/runtime-rpc";
+import { computed, onMounted, ref, Ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 type AuthStream = ServerStreamingCall<StreamStepsRequest, StreamStepsResponse>;
 
 export class AuthManager {
-  authID: string;
   conn: Connection;
-  stream: AuthStream;
+  authID: string | undefined;
+  stream: AuthStream | undefined;
   currentStep: AuthStep["step"] | undefined;
 
-  private constructor(conn: Connection, stream: AuthStream, authID: string) {
-    this.conn = conn;
-    this.stream = stream;
-    this.authID = authID;
+  constructor(host: string) {
+    this.conn = new Connection(host);
   }
 
-  // AuthManager is asynchronous so it needs to use a helper function for the constructor
-  static async create(host: string) {
-    const conn = new Connection(host);
-    const { authId } = await conn.auth.beginAuth({}).response;
-    const stream = conn.auth.streamSteps({ authId: authId });
-    return new AuthManager(conn, stream, authId);
-  }
-
-  sendStep(step: NextStepRequest["step"]) {
-    return this.conn.auth.nextStep({
+  async start() {
+    const resp = await this.conn.auth.beginAuth({});
+    this.authID = resp.response.authId;
+    this.stream = this.conn.auth.streamSteps({
       authId: this.authID,
-      step,
+    });
+    return resp;
+  }
+
+  sendBack() {
+    return this.conn.auth.stepBack({
+      authId: this.authID!,
     });
   }
 
-  sendChoice(c: string) {
-    return this.sendStep({
-      oneofKind: "choice",
-      choice: {
-        choice: c,
-      },
-    });
-  }
-
-  getFormField(f: string, type: string): NextStepRequest_FormFields["field"] {
-    switch (type) {
-      case "password":
-      case "new-password":
-        return {
-          oneofKind: "bytes",
-          bytes: new TextEncoder().encode(f),
-        };
-      default:
-        return {
-          oneofKind: "string",
-          string: f.toString(),
-        };
-    }
-  }
-
-  sendForm(data: string[]) {
-    if (this.currentStep?.oneofKind !== "form") return;
-    return this.sendStep({
-      oneofKind: "form",
-      form: {
-        fields: this.currentStep.form.fields.map<NextStepRequest_FormFields>(
-          (field, i) => ({
-            field: this.getFormField(data[i], field.type),
-          })
-        ),
-      },
+  nextStep(content: NextStepRequest["step"]) {
+    return this.conn.auth.nextStep({
+      authId: this.authID!,
+      step: content,
     });
   }
 }
+
+function getFormField(
+  f: string,
+  type: string
+): NextStepRequest_FormFields["field"] {
+  switch (type) {
+    case "password":
+    case "new-password":
+      return {
+        oneofKind: "bytes",
+        bytes: new TextEncoder().encode(f),
+      };
+    default:
+      return {
+        oneofKind: "string",
+        string: f.toString(),
+      };
+  }
+}
+
+export const useAuthManager = (host: string) => {
+  const router = useRouter();
+
+  const currentStepType = ref<
+    "loading" | "fatal" | AuthStep["step"]["oneofKind"]
+  >("loading");
+  const currentStep = ref<AuthStep["step"] | undefined>();
+  const error = ref<string | undefined>(undefined);
+  const canGoBack = ref<boolean>(true);
+  const goingBack = ref<boolean>(false);
+  const title = ref<string | undefined>(undefined);
+  const choices = ref<string[]>([]);
+
+  const authManager = new AuthManager(host);
+
+  const goToServerSelect = () => {
+    router.push({
+      name: "serverselect",
+    });
+  };
+
+  const back = async () => {
+    goingBack.value = true;
+    try {
+      if (!canGoBack.value || currentStepType.value === "loading")
+        goToServerSelect();
+      await authManager.sendBack();
+    } catch (e) {
+      goToServerSelect();
+    }
+    goingBack.value = false;
+  };
+
+  const formatError = (e: any, fallback: string) => {
+    if (e instanceof Error) {
+      return e.message;
+    } else {
+      return fallback;
+    }
+  };
+
+  const sendChoice = async (c: string) => {
+    try {
+      await authManager.nextStep({
+        oneofKind: "choice",
+        choice: {
+          choice: c,
+        },
+      });
+    } catch (e) {
+      error.value = formatError(e, "entry.error.sending-choice");
+    }
+  };
+
+  const sendForm = async (values: string[]) => {
+    try {
+      if (currentStep.value?.oneofKind !== "form") return;
+      await authManager.nextStep({
+        oneofKind: "form",
+        form: {
+          fields: currentStep.value.form.fields.map((v, i) => ({
+            field: getFormField(values[i], v.type),
+          })),
+        },
+      });
+    } catch (e) {
+      error.value = formatError(e, "entry.error.sending-form");
+    }
+  };
+
+  const onStep = (step: AuthStep["step"]) => {
+    error.value = undefined;
+    currentStepType.value = step.oneofKind;
+    currentStep.value = step;
+  };
+
+  const onStepOuter = (step: AuthStep) => {
+    canGoBack.value = step.canGoBack;
+    onStep(step.step);
+  };
+
+  onMounted(async () => {
+    try {
+      await authManager.start();
+      authManager.stream?.response.onMessage((resp) => onStepOuter(resp.step!));
+      onStepOuter(
+        (await authManager.nextStep({ oneofKind: undefined }).response).step!
+      );
+    } catch (e) {
+      console.warn(e);
+      currentStepType.value = "fatal";
+    }
+  });
+
+  return {
+    back,
+    goingBack,
+    sendForm,
+    sendChoice,
+    currentStepType,
+    currentStep,
+    title,
+    choices,
+    error,
+  };
+};

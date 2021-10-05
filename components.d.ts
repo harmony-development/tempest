@@ -10,6 +10,7 @@ declare module 'vue' {
     HListItem: typeof import('./src/components/shared/HListItem.vue')['default']
     HRadio: typeof import('./src/components/shared/HRadio.vue')['default']
     MdiAlert: typeof import('~icons/mdi/alert')['default']
+    MdiArrowLeft: typeof import('~icons/mdi/arrow-left')['default']
     MdiDelete: typeof import('~icons/mdi/delete')['default']
     MdiLoading: typeof import('~icons/mdi/loading')['default']
     PopInTransition: typeof import('./src/components/transitions/PopInTransition.vue')['default']

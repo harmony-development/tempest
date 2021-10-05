@@ -22,6 +22,11 @@ const routes: RouteRecordRaw[] = [
       },
     ],
   },
+  {
+    path: "/chat",
+    name: "chat",
+    component: () => import("./views/chat/Chat.vue"),
+  },
 ];
 
 export const router = createRouter({

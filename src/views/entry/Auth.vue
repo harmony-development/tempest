@@ -1,49 +1,42 @@
 <script lang="ts" setup>
 import { useAuthRoute } from "../../logic/routeParams";
-import { Connection } from "@harmony-dev/harmony-web-sdk";
-import { onMounted, ref } from "vue";
-import {
-  AuthStep,
-  StreamStepsResponse,
-} from "@harmony-dev/harmony-web-sdk/dist/gen/auth/v1/auth";
+import { onMounted, ref, watch } from "vue";
 import Choices from "./Choices.vue";
 import Form from "./Form.vue";
-import { AuthManager } from "~/logic/api/auth";
+import { AuthManager, useAuthManager } from "../../logic/api/auth";
+import { useRouter } from "vue-router";
+import { session } from "../../logic/store/session";
 
 const params = useAuthRoute();
-let manager: AuthManager | undefined = undefined;
-const canGoBack = ref(false);
-const currentStep = ref<AuthStep["step"] | undefined>(undefined);
-const error = ref<unknown | undefined>(undefined);
+const router = useRouter();
+const {
+  back,
+  goingBack,
+  error,
+  currentStepType,
+  currentStep,
+  sendChoice,
+  sendForm,
+} = useAuthManager(params.value.host);
 
-const onStep = ({ step }: StreamStepsResponse) => {
-  console.log("step received");
-  if (!step) return;
-  canGoBack.value = step.canGoBack;
-  currentStep.value = step.step;
-};
-
-onMounted(async () => {
-  try {
-    manager = await AuthManager.create(params.value.host);
-    manager.stream.response.onMessage(onStep);
-    manager.sendStep({ oneofKind: undefined });
-  } catch (e) {
-    error.value = e;
+watch(currentStep, () => {
+  if (currentStep.value?.oneofKind === "session") {
+    const { sessionToken, userId } = currentStep.value.session;
+    session.value = {
+      session: sessionToken,
+      userID: userId,
+      host: params.value.host,
+    };
+    router.push({ name: "chat" });
   }
 });
-
-const onChoiceDone = async (c: string) => {
-  await manager?.sendChoice(c);
-};
-
-const onFormDone = async (data: string[]) => {
-  await manager?.sendForm(data);
-};
 </script>
 
 <template>
-  <div class="text-center" v-if="error">
+  <h-btn class="w-min" square variant="outlined" @click="back">
+    <mdi-arrow-left />
+  </h-btn>
+  <div class="text-center" v-if="currentStepType === 'fatal'">
     <mdi-alert class="text-3xl textgray-300" />
     <p>Failed to connect to server</p>
     <p class="text-sm text-gray-400 italic">
@@ -54,14 +47,16 @@ const onFormDone = async (data: string[]) => {
     <Choices
       v-if="currentStep?.oneofKind === 'choice'"
       :choice="currentStep.choice"
-      @done="onChoiceDone"
+      @done="sendChoice"
+      :error="error"
     />
     <Form
       v-else-if="currentStep?.oneofKind === 'form'"
       :form="currentStep.form"
-      @done="onFormDone"
+      @done="sendForm"
+      :error="error"
     />
-    <div v-else>
+    <div v-if="currentStepType === 'loading'">
       <mdi-loading class="transform animate-spin" />
     </div>
   </div>

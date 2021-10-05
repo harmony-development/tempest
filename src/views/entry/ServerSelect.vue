@@ -4,7 +4,7 @@ import { useRouter } from "vue-router";
 import HBtn from "~/components/shared/HBtn.vue";
 import { parseUserHost } from "~/logic/parsing";
 import AddServerDialog from "./AddServerDialog.vue";
-import { serverList } from "./state";
+import { serverList } from "./serverlist";
 
 const router = useRouter();
 const addingServer = ref(false);
@@ -43,7 +43,7 @@ const nextClicked = () => {
       >Add Server</h-btn
     >
   </div>
-  <ol>
+  <ol class="bg-surface-800 rounded-md overflow-hidden">
     <h-list-item
       v-for="({ name, host }, i) in serverList"
       :key="host"
@@ -68,7 +68,12 @@ const nextClicked = () => {
       </h-btn>
     </h-list-item>
   </ol>
-  <h-btn variant="outlined" class="w-min ml-auto" @click="nextClicked"
+  <h-btn
+    variant="filled"
+    color="primary"
+    class="w-min ml-auto"
+    :disabled="!serverList[selectedServer]"
+    @click="nextClicked"
     >Next</h-btn
   >
 </template>
