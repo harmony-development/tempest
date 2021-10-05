@@ -1,5 +1,8 @@
 <script lang="ts" setup>
+import { ref } from "vue";
 import GuildIcon from "./GuildIcon.vue";
+
+const active = ref(0);
 </script>
 
 <template>
@@ -18,7 +21,13 @@ import GuildIcon from "./GuildIcon.vue";
         bg-surface-900
       "
     >
-      <GuildIcon v-for="_ in 20" />
+      <GuildIcon
+        v-for="i in 20"
+        name="a"
+        src="a"
+        @click="active = i"
+        :active="i === active"
+      />
     </div>
     <button class="add-menu-pop" v-wave>
       <mdi-plus />

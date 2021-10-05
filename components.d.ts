@@ -7,6 +7,7 @@ declare module 'vue' {
     GgSpinner: typeof import('~icons/gg/spinner')['default']
     HBtn: typeof import('./src/components/shared/HBtn.vue')['default']
     HDIalog: typeof import('./src/components/shared/HDIalog.vue')['default']
+    HImg: typeof import('./src/components/shared/HImg.vue')['default']
     HInput: typeof import('./src/components/shared/HInput.vue')['default']
     HListItem: typeof import('./src/components/shared/HListItem.vue')['default']
     HRadio: typeof import('./src/components/shared/HRadio.vue')['default']
