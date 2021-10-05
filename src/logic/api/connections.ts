@@ -1,4 +1,4 @@
-import { Connection } from "@harmony-dev/harmony-web-sdk";
+import { Connection } from "@harmony-dev/harmony-web-sdk/dist/src/connection";
 import {
   StreamEventsRequest,
   StreamEventsResponse,

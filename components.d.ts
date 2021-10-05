@@ -15,6 +15,7 @@ declare module 'vue' {
     MdiArrowLeft: typeof import('~icons/mdi/arrow-left')['default']
     MdiDelete: typeof import('~icons/mdi/delete')['default']
     MdiLoading: typeof import('~icons/mdi/loading')['default']
+    MdiPlus: typeof import('~icons/mdi/plus')['default']
     PopInTransition: typeof import('./src/components/transitions/PopInTransition.vue')['default']
     ReloadPrompt: typeof import('./src/components/misc/ReloadPrompt.vue')['default']
   }

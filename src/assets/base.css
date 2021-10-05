@@ -10,6 +10,10 @@ a {
       overflow-hidden overflow-ellipsis select-none;
 }
 
+button {
+  @apply focus:outline-none focus:ring-2 focus:ring-current;
+}
+
 @layer utilities {
   /* Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {

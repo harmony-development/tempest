@@ -3,7 +3,6 @@ import { onMounted, ref } from "vue";
 import { session } from "../../logic/store/session";
 import { connectionManager } from "../../logic/api/connections";
 import { useRouter } from "vue-router";
-import HSpinner from "~/components/shared/HSpinner.vue";
 import Splash from "./Splash.vue";
 import GuildList from "./GuildList/GuildList.vue";
 
