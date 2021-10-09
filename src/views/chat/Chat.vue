@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { defineAsyncComponent, onMounted, ref } from "vue";
+import { defineAsyncComponent, onMounted, ref, computed } from "vue";
 import { session } from "../../logic/store/session";
 import { connectionManager } from "../../logic/api/connections";
 import { useRouter } from "vue-router";
@@ -13,6 +13,9 @@ import HDrawer from "~/components/shared/HDrawer.vue";
 import { uiState } from "../../logic/store/ui";
 import HDialog from "~/components/shared/HDialog.vue";
 import { useChatRoute } from "../../router";
+import { chatState } from "../../logic/store/chat";
+import Messages from "./Messages/Messages.vue";
+import MessageInput from "./MessageInput/MessageInput.vue";
 
 const AddGuild = defineAsyncComponent(() => import("./Dialogs/AddGuild.vue"));
 
@@ -20,7 +23,11 @@ const sessionValidated = ref(false);
 const leftDrawer = ref(false);
 const rightDrawer = ref(false);
 const router = useRouter();
-const { guild } = useChatRoute();
+const { host, guild, channel } = useChatRoute();
+
+const channelData = computed(() =>
+  chatState.getChannel(host.value!, guild.value!, channel.value!)
+);
 
 onMounted(async () => {
   const [conn, stream] = connectionManager.create(
@@ -56,31 +63,34 @@ onMounted(async () => {
         <ChannelList v-if="guild" />
       </div>
     </HDrawer>
-    <div class="bg-surface-900 flex-1">
+    <div class="bg-surface-900 flex-1 flex flex-col" v-if="channel">
       <h-app-bar class="bg-surface-600">
         <h-btn
           variant="text"
           icon
           dense
-          class="!lg:invisible"
+          class="!lg:hidden mr-2"
           @click="leftDrawer = true"
           aria-label="Left Drawer"
         >
           <mdi-menu />
         </h-btn>
-        Test
+        <mdi-pound class="text-lg mr-2 text-gray-300" />
+        {{ channelData.name }}
         <div class="flex-1" />
         <h-btn
           variant="text"
           icon
           dense
-          class="!lg:invisible"
+          class="!lg:hidden"
           @click="rightDrawer = true"
           aria-label="Right Drawer"
         >
           <mdi-menu />
         </h-btn>
       </h-app-bar>
+      <Messages />
+      <MessageInput />
     </div>
   </div>
 </template>

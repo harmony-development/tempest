@@ -46,7 +46,14 @@ watch(
 </script>
 
 <template>
-  <div class="w-48 bg-surface-800 border-l-3 border-surface-900 flex flex-col">
+  <div
+    class="
+      w-48
+      bg-surface-800
+      border-l-3 border-r-3 border-surface-900
+      flex flex-col
+    "
+  >
     <div class="p-2 text-base bg-surface-900 flex items-center">
       <p class="font-bold overflow-ellipsis overflow-hidden">
         {{ guildData.name }}

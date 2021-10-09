@@ -1,6 +1,11 @@
 import { Store } from "./store";
 import { session } from "./session";
 import { ChannelKind } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/channels";
+import {
+  Content,
+  Overrides,
+  Reaction,
+} from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
 
 export interface IGuildEntry {
   host: string;
@@ -9,12 +14,22 @@ export interface IGuildEntry {
 
 interface IUserData {}
 
-interface IMessageData {}
+export interface IMessageData {
+  author: string;
+  inReplyTo?: string;
+  createdAt: string;
+  editedAt?: string;
+  content?: Content;
+  reactions?: Reaction[];
+  override?: Overrides;
+}
 
 export interface IChannelData {
   name?: string;
   kind?: ChannelKind;
   messages: Record<string, IMessageData>;
+  messageList: string[];
+  messagesFetched?: boolean;
 }
 
 export interface IGuildData {
@@ -62,8 +77,18 @@ class ChatState extends Store<IChatState> {
     if (!g.channels[channelID])
       g.channels[channelID] = {
         messages: {},
+        messageList: [],
       };
     return g.channels[channelID];
+  }
+
+  getMessage(
+    host: string,
+    guildID: string,
+    channelID: string,
+    messageID: string
+  ) {
+    return this.getChannel(host, guildID, channelID).messages[messageID];
   }
 
   setGuildChannels(host: string, guildID: string, channels: string[]) {
@@ -90,6 +115,27 @@ class ChatState extends Store<IChatState> {
       ...g.channels[channelID],
       ...data,
     };
+  }
+
+  setMessageData(
+    host: string,
+    guildID: string,
+    channelID: string,
+    messageID: string,
+    data: IMessageData
+  ) {
+    const c = this.getChannel(host, guildID, channelID);
+    c.messages[messageID] = data;
+  }
+
+  setMessageList(
+    host: string,
+    guildID: string,
+    channelID: string,
+    messageList: string[]
+  ) {
+    const c = this.getChannel(host, guildID, channelID);
+    c.messageList = messageList;
   }
 }
 
