@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { onMounted, computed } from "vue";
+import HImg from "~/components/shared/HImg.vue";
 import { connectionManager } from "../../../logic/api/connections";
 import { chatState } from "../../../logic/store/chat";
 
@@ -18,6 +19,7 @@ const data = computed(() => chatState.getGuild(props.host, props.guildid));
       :src="data.owner"
       class="object-contain pointer-events-none"
       draggable="false"
+      :alt="data.name"
       :fallback="data.name?.[0]"
     />
   </div>

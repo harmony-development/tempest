@@ -7,6 +7,7 @@ import {
 } from "vue-router";
 import { session } from "./logic/store/session";
 import { computed } from "vue";
+import { toRefs } from "@vueuse/core";
 
 const routes: RouteRecordRaw[] = [
   {
@@ -51,8 +52,8 @@ router.beforeEach((to, _from, next) => {
   }
 });
 
-export const useChatRoute = () =>
-  useRoute() as RouteLocationNormalizedLoaded & {
+export const useChatRoute = () => {
+  const route = useRoute() as RouteLocationNormalizedLoaded & {
     params: {
       host?: string;
       guild?: string;
@@ -60,3 +61,12 @@ export const useChatRoute = () =>
       message?: string;
     };
   };
+  return {
+    host: computed(() => {
+      return route.params.host;
+    }),
+    guild: computed(() => route.params.guild),
+    channel: computed(() => route.params.channel),
+    message: computed(() => route.params.message),
+  };
+};

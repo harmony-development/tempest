@@ -10,7 +10,7 @@ import HBtn from "~/components/shared/HBtn.vue";
 import { useChatRoute } from "../../../router";
 import { uiState } from "../../../logic/store/ui";
 
-const route = useChatRoute();
+const { guild } = useChatRoute();
 const router = useRouter();
 
 onMounted(async () => {
@@ -65,6 +65,7 @@ const goToGuild = (host: string, guild: string) => {
         color="primary"
         square
         @click="uiState.state.addGuildDialog = true"
+        aria-label="Create / Join Guild"
       >
         <mdi-plus />
       </HBtn>
@@ -73,13 +74,13 @@ const goToGuild = (host: string, guild: string) => {
         <GuildIcon
           v-for="{ host, guildID } in guildList"
           :key="`${host}-${guildID}`"
-          :active="guildID === route.params.guild"
+          :active="guildID === guild"
           :host="host"
           :guildid="guildID"
           @click="goToGuild(host, guildID)"
         />
       </div>
-      <HBtn variant="text" square>
+      <HBtn variant="text" square aria-label="App Settings">
         <h-tempest class="text-2xl" />
       </HBtn>
     </div>

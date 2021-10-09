@@ -12,6 +12,7 @@ import ChannelList from "./ChannelList/ChannelList.vue";
 import HDrawer from "~/components/shared/HDrawer.vue";
 import { uiState } from "../../logic/store/ui";
 import HDialog from "~/components/shared/HDialog.vue";
+import { useChatRoute } from "../../router";
 
 const AddGuild = defineAsyncComponent(() => import("./Dialogs/AddGuild.vue"));
 
@@ -19,6 +20,7 @@ const sessionValidated = ref(false);
 const leftDrawer = ref(false);
 const rightDrawer = ref(false);
 const router = useRouter();
+const { guild } = useChatRoute();
 
 onMounted(async () => {
   const [conn, stream] = connectionManager.create(
@@ -51,7 +53,7 @@ onMounted(async () => {
     <HDrawer v-model="leftDrawer">
       <div class="flex h-full">
         <GuildList />
-        <ChannelList />
+        <ChannelList v-if="guild" />
       </div>
     </HDrawer>
     <div class="bg-surface-900 flex-1">
@@ -62,6 +64,7 @@ onMounted(async () => {
           dense
           class="!lg:invisible"
           @click="leftDrawer = true"
+          aria-label="Left Drawer"
         >
           <mdi-menu />
         </h-btn>
@@ -73,6 +76,7 @@ onMounted(async () => {
           dense
           class="!lg:invisible"
           @click="rightDrawer = true"
+          aria-label="Right Drawer"
         >
           <mdi-menu />
         </h-btn>
