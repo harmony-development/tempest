@@ -35,10 +35,20 @@ class ConnectionManager {
 
   get(host: string) {
     host = host || session.value!.host;
-    if (this.connections[host]) return this.connections[host];
-    const conn = new Connection(host);
-    this.connections[host] = conn;
-    return conn;
+    if (!this.connections[host]) {
+      const conn = new Connection(host);
+      this.connections[host] = conn;
+    }
+    return this.connections[host];
+  }
+
+  getStream(host: string) {
+    host = host || session.value!.host;
+    if (!this.streams[host]) {
+      const conn = this.get(host);
+      this.streams[host] = conn.chat.streamEvents();
+    }
+    return this.streams[host];
   }
 }
 

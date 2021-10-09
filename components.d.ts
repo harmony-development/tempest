@@ -20,6 +20,7 @@ declare module 'vue' {
     MdiArrowLeft: typeof import('~icons/mdi/arrow-left')['default']
     MdiCog: typeof import('~icons/mdi/cog')['default']
     MdiDelete: typeof import('~icons/mdi/delete')['default']
+    MdiDotsVertical: typeof import('~icons/mdi/dots-vertical')['default']
     MdiHashtag: typeof import('~icons/mdi/hashtag')['default']
     MdiLoading: typeof import('~icons/mdi/loading')['default']
     MdiMenu: typeof import('~icons/mdi/menu')['default']

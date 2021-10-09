@@ -12,6 +12,8 @@ const text = ref("");
 const onKeyDown = async (ev: KeyboardEvent) => {
   if (ev.key === "Enter" && !ev.shiftKey) {
     ev.preventDefault();
+    const content = text.value;
+    text.value = "";
     await connectionManager.get(host.value!).chat.sendMessage({
       guildId: guild.value!,
       channelId: channel.value!,
@@ -20,7 +22,7 @@ const onKeyDown = async (ev: KeyboardEvent) => {
           oneofKind: "textMessage",
           textMessage: {
             content: FormattedText.create({
-              text: text.value,
+              text: content,
             }),
           },
         },

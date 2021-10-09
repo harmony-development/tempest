@@ -23,6 +23,7 @@ watch(
         channelId: channel.value!,
         messageId: "0",
       }).response;
+    messages.reverse();
     messages.forEach(({ messageId, message }) =>
       chatState.setMessageData(
         host.value!,
@@ -48,6 +49,13 @@ watch(
   <div
     class="flex-1 flex flex-col bg-surface-800 p-3 gap-2 overflow-y-auto w-full"
   >
-    <Message v-for="m in messageList" :key="m" :messageid="m" />
+    <Message
+      v-for="(m, i) in messageList"
+      :key="m"
+      :messageid="m"
+      :hide-avatar="
+        channelData.messages[i]?.author === channelData.messages[i + 1]?.author
+      "
+    />
   </div>
 </template>

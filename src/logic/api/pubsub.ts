@@ -4,6 +4,7 @@ import {
 } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/stream";
 import { Handler } from "../util/oneof";
 import { chatState } from "../store/chat";
+import { convertMessageV1 } from "../conversions/messages";
 
 const chatEventsHandler = new Handler<StreamChatEvent["event"]>({
   guildAddedToList(_, { guildAddedToList: guild }) {
@@ -15,6 +16,15 @@ const chatEventsHandler = new Handler<StreamChatEvent["event"]>({
   guildRemovedFromList(_, { guildRemovedFromList: guild }) {
     chatState.state.guildList = chatState.state.guildList.filter(
       (g) => g.guildID !== guild.guildId || g.host !== guild.homeserver
+    );
+  },
+  sentMessage(host, { sentMessage }) {
+    chatState.addMessage(
+      host,
+      sentMessage.guildId,
+      sentMessage.channelId,
+      sentMessage.messageId,
+      convertMessageV1(sentMessage.message!)
     );
   },
 });

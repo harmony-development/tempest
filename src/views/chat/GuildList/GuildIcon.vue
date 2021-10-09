@@ -16,7 +16,7 @@ const data = computed(() => chatState.getGuild(props.host, props.guildid));
 <template>
   <div v-wave class="icon" :class="{ active }" style="aspect-ratio: 1">
     <HImg
-      :src="data.owner"
+      :src="data.picture"
       class="object-contain pointer-events-none"
       draggable="false"
       :alt="data.name"

@@ -22,6 +22,7 @@ function cssVarRgbHelper(cssVariable: string) {
 export default defineConfig({
   darkMode: "class",
   plugins: [typography()],
+  safelist: ["invisible"],
   theme: {
     extend: {
       colors: {

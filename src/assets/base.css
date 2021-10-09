@@ -15,6 +15,10 @@ button {
 }
 
 @layer utilities {
+  .square {
+    aspect-ratio: 1;
+  }
+
   /* Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
     display: none;

@@ -19,6 +19,7 @@ const loadFailure = ref(false);
   <div
     v-if="loadFailure || !src"
     class="flex justify-center h-full items-center"
+    v-bind="$attrs"
   >
     <p>{{ fallback }}</p>
   </div>

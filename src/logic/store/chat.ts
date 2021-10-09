@@ -111,8 +111,9 @@ class ChatState extends Store<IChatState> {
     data: Partial<IGuildData>
   ) {
     const g = this.getGuild(host, guildID);
+    const c = this.getChannel(host, guildID, channelID);
     g.channels[channelID] = {
-      ...g.channels[channelID],
+      ...c,
       ...data,
     };
   }
@@ -136,6 +137,18 @@ class ChatState extends Store<IChatState> {
   ) {
     const c = this.getChannel(host, guildID, channelID);
     c.messageList = messageList;
+  }
+
+  addMessage(
+    host: string,
+    guildID: string,
+    channelID: string,
+    messageID: string,
+    data: IMessageData
+  ) {
+    const c = this.getChannel(host, guildID, channelID);
+    this.setMessageData(host, guildID, channelID, messageID, data);
+    c.messageList.push(messageID);
   }
 }
 

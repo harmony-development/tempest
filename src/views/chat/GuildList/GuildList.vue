@@ -17,6 +17,14 @@ onMounted(async () => {
   const conn = connectionManager.get(session.value!.host);
   const { guilds } = await conn.chat.getGuildList({}).response;
   guilds.forEach(async (entry) => {
+    connectionManager.getStream(entry.serverId).request.send({
+      request: {
+        oneofKind: "subscribeToGuild",
+        subscribeToGuild: {
+          guildId: entry.guildId,
+        },
+      },
+    });
     const { guild } = await connectionManager
       .get(entry.serverId)
       .chat.getGuild({ guildId: entry.guildId }).response;
