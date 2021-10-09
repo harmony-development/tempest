@@ -4,25 +4,41 @@ import GuildIcon from "./GuildIcon.vue";
 import { connectionManager } from "../../../logic/api/connections";
 import { session } from "../../../logic/store/session";
 import { chatState } from "../../../logic/store/chat";
-import { fromV1 } from "~/logic/types/guilds";
+import { convertGuildEntryV1 } from "~/logic/conversions/guilds";
 import { useRouter } from "vue-router";
+import HBtn from "~/components/shared/HBtn.vue";
+import { useChatRoute } from "../../../router";
+import { uiState } from "../../../logic/store/ui";
 
+const route = useChatRoute();
 const router = useRouter();
 
 onMounted(async () => {
   const conn = connectionManager.get(session.value!.host);
   const { guilds } = await conn.chat.getGuildList({}).response;
-  chatState.state.guildList = guilds.map(fromV1);
+  guilds.forEach(async (entry) => {
+    const { guild } = await connectionManager
+      .get(entry.serverId)
+      .chat.getGuild({ guildId: entry.guildId }).response;
+    chatState.setGuildData(entry.serverId, entry.guildId, {
+      name: guild?.name,
+      picture: guild?.picture,
+      owner: guild?.ownerId,
+    });
+  });
+  chatState.state.guildList = guilds.map((guild) =>
+    convertGuildEntryV1(guild, session.value!.host)
+  );
 });
 
 const guildList = computed(() => chatState.state.guildList);
 
-const goToGuild = (host: string, guildID: string) => {
+const goToGuild = (host: string, guild: string) => {
   router.push({
     name: "chat",
     params: {
-      host,
-      guildID,
+      host: host || session.value!.host,
+      guild,
     },
   });
 };
@@ -34,50 +50,44 @@ const goToGuild = (host: string, guildID: string) => {
       class="
         w-18
         p-2
-        flex flex-col
-        gap-2
         h-full
         overflow-y-scroll
         no-scrollbar
         z-1
         relative
-        bg-surface-900
+        bg-surface-800
+        flex flex-col
+        gap-2
       "
     >
-      <GuildIcon
-        v-for="{ host, guildID } in guildList"
-        :key="`${host}-${guildID}`"
-        name="a"
-        src="a"
-        @click="goToGuild(host, guildID)"
-      />
+      <HBtn
+        variant="filled"
+        color="primary"
+        square
+        @click="uiState.state.addGuildDialog = true"
+      >
+        <mdi-plus />
+      </HBtn>
+      <hr class="border-gray-500" />
+      <div class="flex-1 flex flex-col gap-2">
+        <GuildIcon
+          v-for="{ host, guildID } in guildList"
+          :key="`${host}-${guildID}`"
+          :active="guildID === route.params.guild"
+          :host="host"
+          :guildid="guildID"
+          @click="goToGuild(host, guildID)"
+        />
+      </div>
+      <HBtn variant="text" square>
+        <h-tempest class="text-2xl" />
+      </HBtn>
     </div>
-    <button class="add-menu-pop" v-wave>
-      <mdi-plus />
-    </button>
   </div>
 </template>
 
 <style lang="postcss" scoped>
 .list {
   @apply h-full overflow-visible relative w-min;
-
-  &:hover > .add-menu-pop {
-    @apply left-full visible;
-  }
-}
-
-.add-menu-pop {
-  @apply absolute
-        text-xl
-        bg-primary-600
-        rounded-r-xl
-        top-1/2
-        left-0
-        flex
-        py-9
-        z-0
-        transition transition-all duration-100
-        invisible;
 }
 </style>

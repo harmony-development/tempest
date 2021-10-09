@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import HDialog from "~/components/shared/HDIalog.vue";
+import HDialog from "~/components/shared/HDialog.vue";
 import HInput from "~/components/shared/HInput.vue";
 import HBtn from "~/components/shared/HBtn.vue";
 import { ref } from "vue";

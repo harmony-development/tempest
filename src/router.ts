@@ -1,5 +1,12 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
+import {
+  createRouter,
+  createWebHashHistory,
+  RouteLocationNormalizedLoaded,
+  RouteRecordRaw,
+  useRoute,
+} from "vue-router";
 import { session } from "./logic/store/session";
+import { computed } from "vue";
 
 const routes: RouteRecordRaw[] = [
   {
@@ -24,7 +31,7 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
-    path: "/chat",
+    path: "/chat/:host?/:guild?/:channel?/:message?",
     name: "chat",
     component: () => import("./views/chat/Chat.vue"),
     meta: { auth: true },
@@ -43,3 +50,13 @@ router.beforeEach((to, _from, next) => {
     next();
   }
 });
+
+export const useChatRoute = () =>
+  useRoute() as RouteLocationNormalizedLoaded & {
+    params: {
+      host?: string;
+      guild?: string;
+      channel?: string;
+      message?: string;
+    };
+  };

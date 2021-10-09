@@ -2,7 +2,7 @@
 import { computed, defineProps, toRefs } from "vue";
 
 const props = defineProps<{
-  variant: "text" | "filled" | "outlined";
+  variant?: "text" | "filled" | "outlined";
   color?: "primary" | "secondary";
   icon?: boolean;
   raised?: boolean;
@@ -14,7 +14,7 @@ const { variant, color, icon, raised, dense, square } = toRefs(props);
 
 const buttonClasses = computed(() => ({
   btn: true,
-  [variant.value]: true,
+  [variant.value || "text"]: true,
   [color?.value || "plain"]: true,
   icon: icon?.value,
   raised: raised?.value,
@@ -30,9 +30,13 @@ const buttonClasses = computed(() => ({
 
 <style lang="postcss" scoped>
 .btn {
-  @apply px-4 py-2 rounded focus:outline-none transition duration-100 ease-in-out 
+  @apply px-4 py-2 rounded transition duration-100 ease-in-out 
     flex justify-center items-center 
     cursor-pointer select-none;
+
+  &.dense {
+    @apply p-1;
+  }
 
   &:disabled {
     @apply pointer-events-none;
@@ -54,10 +58,6 @@ const buttonClasses = computed(() => ({
 
 .icon {
   @apply rounded-full p-3 w-auto;
-
-  &.dense {
-    @apply p-1;
-  }
 }
 
 .raised {

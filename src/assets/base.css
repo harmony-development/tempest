@@ -11,7 +11,7 @@ a {
 }
 
 button {
-  @apply focus:outline-none focus:ring-2 focus:ring-current;
+  @apply outline-none focus:outline-none focus-visible:outline-none;
 }
 
 @layer utilities {
@@ -23,5 +23,23 @@ button {
   .no-scrollbar {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
+  }
+
+  .compact-scrollbar {
+    &::-webkit-scrollbar {
+      @apply w-1.5;
+    }
+    &::-webkit-scrollbar-track {
+      @apply bg-transparent;
+    }
+
+    &:hover {
+      &::-webkit-scrollbar {
+        @apply bg-surface-600;
+      }
+      &::-webkit-scrollbar-thumb {
+        @apply bg-surface-400;
+      }
+    }
   }
 }

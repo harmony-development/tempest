@@ -33,16 +33,14 @@ onKeyStroke("Escape", () => (open.value = false));
         "
         @mousedown="open = false"
       >
-        <focus-trap :active="open">
-          <div
-            class="shadow-xl p-4 bg-surface-900"
-            :class="{ sized: !unsized }"
-            v-bind="$attrs"
-            @mousedown.stop=""
-          >
-            <slot />
-          </div>
-        </focus-trap>
+        <div
+          class="shadow-xl p-4 bg-surface-900"
+          :class="{ sized: !unsized }"
+          v-bind="$attrs"
+          @mousedown.stop=""
+        >
+          <slot />
+        </div>
       </div>
     </pop-in-transition>
   </Teleport>

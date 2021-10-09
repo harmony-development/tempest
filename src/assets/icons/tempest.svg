@@ -1,0 +1,13 @@
+<svg viewBox="0 0 281 281" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M278 140.5C278 216.439 216.439 278 140.5 278C64.5608 278 3 216.439 3 140.5C3 64.5608 64.5608 3 140.5 3C216.439 3 278 64.5608 278 140.5Z" stroke="currentColor" stroke-width="6"/>
+<path d="M220.469 60.2922L60.9723 207.281C57.2735 210.69 57.1551 216.492 60.7119 220.049C64.2687 223.606 70.0708 223.488 73.4796 219.789L220.469 60.2922Z" fill="transparent" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/>
+<rect x="97" y="253.609" width="116.827" height="8.31296" rx="4.15648" transform="rotate(-45 97 253.609)" stroke="currentColor" stroke-width="5"/>
+<rect x="88" y="113.609" width="116.827" height="8.31296" rx="4.15648" transform="rotate(-45 88 113.609)" stroke="currentColor" stroke-width="5"/>
+<rect x="58" y="178.609" width="116.827" height="8.31296" rx="4.15648" transform="rotate(-45 58 178.609)" stroke="currentColor" stroke-width="5"/>
+<rect x="132" y="183.609" width="116.827" height="8.31296" rx="4.15648" transform="rotate(-45 132 183.609)" stroke="currentColor" stroke-width="5"/>
+<circle cx="90" cy="43" r="7" fill="currentColor"/>
+<circle cx="231" cy="140" r="7" fill="currentColor"/>
+<circle cx="36" cy="126" r="7" fill="currentColor"/>
+<circle cx="104" cy="215" r="7" fill="currentColor"/>
+<circle cx="220" cy="208" r="7" fill="currentColor"/>
+</svg>

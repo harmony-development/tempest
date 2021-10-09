@@ -8,6 +8,8 @@ import Icons from "unplugin-icons/vite";
 import WindiCSS from "vite-plugin-windicss";
 import Components from "unplugin-vue-components/vite";
 import IconsResolver from "unplugin-icons/resolver";
+// loader helpers
+import { FileSystemIconLoader } from "unplugin-icons/loaders";
 
 export default defineConfig({
   resolve: {
@@ -20,11 +22,15 @@ export default defineConfig({
     WindiCSS(),
     Icons({
       compiler: "vue3",
+      customCollections: {
+        h: FileSystemIconLoader("./src/assets/icons"),
+      },
     }),
     Components({
       resolvers: [
         IconsResolver({
           prefix: "",
+          customCollections: ["h"],
         }),
       ],
       dts: true,

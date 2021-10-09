@@ -4,6 +4,7 @@ import {
   StreamEventsResponse,
 } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/stream";
 import { DuplexStreamingCall } from "@protobuf-ts/runtime-rpc";
+import { session } from "../store/session";
 
 type ChatStream = DuplexStreamingCall<
   StreamEventsRequest,
@@ -33,6 +34,7 @@ class ConnectionManager {
   }
 
   get(host: string) {
+    host = host || session.value!.host;
     if (this.connections[host]) return this.connections[host];
     const conn = new Connection(host);
     this.connections[host] = conn;
