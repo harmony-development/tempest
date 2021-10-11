@@ -5,13 +5,13 @@ import { chatState } from "../../../logic/store/chat";
 import { connectionManager } from "~/logic/api/connections";
 import { convertMessageV1 } from "~/logic/conversions/messages";
 import Message from "./Message.vue";
-import { useAsyncState } from "@vueuse/core";
+import { asyncComputed } from "@vueuse/core";
 
 const { host, guild, channel } = useChatRoute();
 const channelData = computed(() =>
   chatState.getChannel(host.value!, guild.value!, channel.value!)
 );
-const { state: messageList } = useAsyncState(
+const messageList = asyncComputed(
   () => chatState.getMessageList(host.value!, guild.value!, channel.value!),
   undefined
 );

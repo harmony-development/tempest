@@ -104,23 +104,24 @@ class ChatState extends Store<IChatState> {
     return g.channels[channelID];
   }
 
-  async getUser(host: string, userId: string) {
+  getUser(host: string, userId: string) {
     const h = this.ensureHost(host);
-    if (h.users[userId]) return h.users[userId];
-    const { profile } = await connectionManager.get(host).profile.getProfile({
-      userId,
-    }).response;
-    h.users[userId] = {
-      username: profile!.userName,
-      picture: profile?.userAvatar,
-      status: profile!.userStatus,
-    };
+    this.lock.run(async () => {
+      const { profile } = await connectionManager.get(host).profile.getProfile({
+        userId,
+      }).response;
+      h.users[userId] = {
+        username: profile!.userName,
+        picture: profile?.userAvatar,
+        status: profile!.userStatus,
+      };
+    }, ["user", host, userId]);
     return h.users[userId];
   }
 
-  async getGuild(host: string, guildId: string) {
+  getGuild(host: string, guildId: string) {
     const g = this.ensureGuild(host, guildId);
-    await this.lock.run(async () => {
+    this.lock.run(async () => {
       const conn = connectionManager.get(host);
       const { guild } = await conn.chat.getGuild({ guildId }).response;
       g.data = {
@@ -132,10 +133,20 @@ class ChatState extends Store<IChatState> {
     return g;
   }
 
-  async getChannelList(host: string, guildId: string) {
+  getMemberList(host: string, guildId: string) {
+    const g = this.ensureGuild(host, guildId);
+    this.lock.run(async () => {
+      const conn = connectionManager.get(host);
+      const { members } = await conn.chat.getGuildMembers({ guildId }).response;
+      members.forEach((m) => g.members.add(m));
+    }, ["memberList", host, guildId]);
+    return g.members;
+  }
+
+  getChannelList(host: string, guildId: string) {
     const g = this.ensureGuild(host, guildId);
 
-    await this.lock.run(async () => {
+    this.lock.run(async () => {
       const { channels } = await connectionManager
         .get(host)
         .chat.getGuildChannels({ guildId }).response;
@@ -151,9 +162,9 @@ class ChatState extends Store<IChatState> {
     return g.channelList;
   }
 
-  async getMessageList(host: string, guildId: string, channelId: string) {
+  getMessageList(host: string, guildId: string, channelId: string) {
     const c = this.ensureChannel(host, guildId, channelId);
-    await this.lock.run(async () => {
+    this.lock.run(async () => {
       const { messages } = await connectionManager
         .get(host)
         .chat.getChannelMessages({
