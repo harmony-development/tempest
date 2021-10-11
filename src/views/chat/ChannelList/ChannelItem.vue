@@ -24,11 +24,11 @@ const goToChannel = () => router.push({ params: { channel: channelid } });
   <h-list-item :selected="channel === channelid" @click="goToChannel">
     <mdi-pound
       class="text-base text-gray-400"
-      v-if="data.kind === ChannelKind.TEXT_UNSPECIFIED"
+      v-if="data.data?.kind === ChannelKind.TEXT_UNSPECIFIED"
     />
     <mdi-volume class="text-lg text-gray-400" v-else />
     <span class="ml-2">
-      {{ data.name }}
+      {{ data.data?.name }}
     </span>
   </h-list-item>
 </template>

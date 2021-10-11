@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { useAsyncState } from "@vueuse/core";
 import { onMounted, computed } from "vue";
 import HImg from "~/components/shared/HImg.vue";
 import { connectionManager } from "../../../logic/api/connections";
@@ -10,17 +11,20 @@ const props = defineProps<{
   guildid: string;
 }>();
 
-const data = computed(() => chatState.getGuild(props.host, props.guildid));
+const { state: data } = useAsyncState(
+  () => chatState.getGuild(props.host, props.guildid),
+  undefined
+);
 </script>
 
 <template>
   <div v-wave class="icon" :class="{ active }" style="aspect-ratio: 1">
     <HImg
-      :src="data.picture"
+      :src="data?.data?.picture"
       class="object-contain pointer-events-none"
       draggable="false"
-      :alt="data.name"
-      :fallback="data.name?.[0]"
+      :alt="data?.data?.name"
+      :fallback="data?.data?.name?.[0]"
     />
   </div>
 </template>

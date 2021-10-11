@@ -25,14 +25,6 @@ onMounted(async () => {
         },
       },
     });
-    const { guild } = await connectionManager
-      .get(entry.serverId)
-      .chat.getGuild({ guildId: entry.guildId }).response;
-    chatState.setGuildData(entry.serverId, entry.guildId, {
-      name: guild?.name,
-      picture: guild?.picture,
-      owner: guild?.ownerId,
-    });
   });
   chatState.state.guildList = guilds.map((guild) =>
     convertGuildEntryV1(guild, session.value!.host)

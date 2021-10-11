@@ -2,11 +2,15 @@
 import { computed } from "vue";
 import { chatState } from "../../logic/store/chat";
 import HImg from "../shared/HImg.vue";
+import { useAsyncState } from "@vueuse/core";
 const { host, userid } = defineProps<{
   host?: string;
   userid: string;
 }>();
-const profile = computed(() => chatState.getUser(host, userid));
+const { state: profile } = useAsyncState(
+  () => chatState.getUser(host!, userid),
+  undefined
+);
 </script>
 
 <template>
