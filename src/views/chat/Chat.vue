@@ -16,6 +16,7 @@ import { useChatRoute } from "../../router";
 import { chatState } from "../../logic/store/chat";
 import Messages from "./Messages/Messages.vue";
 import MessageInput from "./MessageInput/MessageInput.vue";
+import MemberList from "./MemberList/MemberList.vue";
 
 const AddGuild = defineAsyncComponent(() => import("./Dialogs/AddGuild.vue"));
 
@@ -63,7 +64,7 @@ onMounted(async () => {
         <ChannelList v-if="guild" />
       </div>
     </HDrawer>
-    <div class="bg-surface-900 flex-1 flex flex-col" v-if="channel">
+    <div class="bg-surface-900 flex-1 flex flex-col">
       <h-app-bar class="bg-surface-600">
         <h-btn
           variant="text"
@@ -86,11 +87,30 @@ onMounted(async () => {
           @click="rightDrawer = true"
           aria-label="Right Drawer"
         >
-          <mdi-menu />
+          <mdi-account-multiple />
         </h-btn>
       </h-app-bar>
-      <Messages />
-      <MessageInput />
+      <template v-if="channel">
+        <Messages />
+        <MessageInput />
+      </template>
+      <div
+        class="flex-1 flex flex-col gap-4 justify-center items-center"
+        v-else
+      >
+        <div class="bg-surface-800 rounded-full p-2">
+          <mdi-pound class="text-5xl align-top text-gray-300" />
+        </div>
+        <div class="bg-surface-800 rounded-full p-2 px-4">
+          <p v-if="guild">Select a channel to start chatting</p>
+          <p v-else>Select a guild to get started</p>
+        </div>
+      </div>
     </div>
+    <HDrawer v-model="rightDrawer" right>
+      <div class="flex h-full">
+        <MemberList v-if="guild" />
+      </div>
+    </HDrawer>
   </div>
 </template>

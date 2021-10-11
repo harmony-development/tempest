@@ -4,6 +4,7 @@
 
 declare module 'vue' {
   export interface GlobalComponents {
+    Avatar: typeof import('./src/components/chat/Avatar.vue')['default']
     GgSpinner: typeof import('~icons/gg/spinner')['default']
     HAppBar: typeof import('./src/components/shared/HAppBar.vue')['default']
     HBtn: typeof import('./src/components/shared/HBtn.vue')['default']
@@ -16,6 +17,7 @@ declare module 'vue' {
     HRadio: typeof import('./src/components/shared/HRadio.vue')['default']
     HSpinner: typeof import('./src/components/shared/HSpinner.vue')['default']
     HTempest: typeof import('~icons/h/tempest')['default']
+    MdiAccountMultiple: typeof import('~icons/mdi/account-multiple')['default']
     MdiAlert: typeof import('~icons/mdi/alert')['default']
     MdiArrowLeft: typeof import('~icons/mdi/arrow-left')['default']
     MdiCog: typeof import('~icons/mdi/cog')['default']

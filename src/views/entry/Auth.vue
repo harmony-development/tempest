@@ -6,16 +6,8 @@ import { AuthManager, useAuthManager } from "../../logic/api/auth";
 import { useRouter } from "vue-router";
 
 const params = useAuthRoute();
-const router = useRouter();
-const {
-  back,
-  goingBack,
-  error,
-  currentStepType,
-  currentStep,
-  sendChoice,
-  sendForm,
-} = useAuthManager(params.value.host);
+const { back, error, currentStepType, currentStep, sendChoice, sendForm } =
+  useAuthManager(params.value.host);
 </script>
 
 <template>

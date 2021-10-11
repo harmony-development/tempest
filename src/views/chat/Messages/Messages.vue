@@ -15,28 +15,32 @@ const messageList = computed(() => channelData.value.messageList);
 watch(
   [host, guild, channel],
   async () => {
+    const currentHost = host.value;
+    const currentGuild = guild.value;
+    const currentChannel = channel.value;
+    if (!currentHost || !currentGuild || !currentChannel) return;
     if (channelData.value.messagesFetched) return;
     const { messages } = await connectionManager
-      .get(host.value!)
+      .get(currentHost!)
       .chat.getChannelMessages({
-        guildId: guild.value!,
-        channelId: channel.value!,
+        guildId: currentGuild!,
+        channelId: currentChannel!,
         messageId: "0",
       }).response;
     messages.reverse();
-    messages.forEach(({ messageId, message }) =>
+    for (const { messageId, message } of messages) {
       chatState.setMessageData(
-        host.value!,
-        guild.value!,
-        channel.value!,
+        currentHost!,
+        currentGuild!,
+        currentChannel!,
         messageId,
         convertMessageV1(message!)
-      )
-    );
+      );
+    }
     chatState.setMessageList(
-      host.value!,
-      guild.value!,
-      channel.value!,
+      currentHost!,
+      currentGuild!,
+      currentChannel!,
       messages.map((m) => m.messageId)
     );
     channelData.value.messagesFetched = true;
@@ -47,15 +51,27 @@ watch(
 
 <template>
   <div
-    class="flex-1 flex flex-col bg-surface-800 p-3 gap-2 overflow-y-auto w-full"
+    class="
+      flex-1 flex
+      justify-center
+      bg-surface-800
+      p-3
+      gap-2
+      overflow-y-auto
+      w-full
+      compact-scrollbar
+    "
   >
-    <Message
-      v-for="(m, i) in messageList"
-      :key="m"
-      :messageid="m"
-      :hide-avatar="
-        channelData.messages[i]?.author === channelData.messages[i + 1]?.author
-      "
-    />
+    <div class="flex flex-col flex-1 gap-2">
+      <Message
+        v-for="(m, i) in messageList"
+        :key="`${channel}/${m}`"
+        :messageid="m"
+        :hide-avatar="
+          channelData.messages[messageList[i]]?.author ===
+          channelData.messages[messageList[i - 1]]?.author
+        "
+      />
+    </div>
   </div>
 </template>

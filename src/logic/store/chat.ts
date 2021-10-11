@@ -6,13 +6,18 @@ import {
   Overrides,
   Reaction,
 } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
+import { UserStatus } from "@harmony-dev/harmony-web-sdk/dist/gen/profile/v1/types";
 
 export interface IGuildEntry {
   host: string;
   guildID: string;
 }
 
-interface IUserData {}
+interface IUserData {
+  username: string;
+  picture?: string;
+  status: UserStatus;
+}
 
 export interface IMessageData {
   author: string;
@@ -37,6 +42,7 @@ export interface IGuildData {
   owner?: string;
   picture?: string;
   channels: Record<string, IChannelData>;
+  members: Set<string>;
   channelList: string[];
   channelFetched?: boolean;
 }
@@ -52,7 +58,7 @@ export interface IChatState {
 }
 
 class ChatState extends Store<IChatState> {
-  getHost(host: string) {
+  getHost(host?: string) {
     host = host || session.value!.host;
     if (!this.state.hosts[host])
       this.state.hosts[host] = {
@@ -62,12 +68,18 @@ class ChatState extends Store<IChatState> {
     return this.state.hosts[host];
   }
 
+  getUser(host: string | undefined, userID: string) {
+    const h = this.getHost(host);
+    return h.users[userID];
+  }
+
   getGuild(host: string, guildID: string) {
     const h = this.getHost(host);
     if (!h.guilds[guildID])
       h.guilds[guildID] = {
         channels: {},
         channelList: [],
+        members: new Set(),
       };
     return h.guilds[guildID];
   }
