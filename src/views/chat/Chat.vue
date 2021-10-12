@@ -19,6 +19,9 @@ import MessageInput from "./MessageInput/MessageInput.vue";
 import MemberList from "./MemberList/MemberList.vue";
 
 const AddGuild = defineAsyncComponent(() => import("./Dialogs/AddGuild.vue"));
+const AddChannel = defineAsyncComponent(
+  () => import("./Dialogs/AddChannel.vue")
+);
 
 const sessionValidated = ref(false);
 const leftDrawer = ref(false);
@@ -58,6 +61,9 @@ onMounted(async () => {
     <HDialog v-model="uiState.state.addGuildDialog">
       <AddGuild v-if="uiState.state.addGuildDialog" />
     </HDialog>
+    <HDialog v-model="uiState.state.addChannelDialog">
+      <AddChannel v-if="uiState.state.addChannelDialog" />
+    </HDialog>
     <HDrawer v-model="leftDrawer">
       <div class="flex h-full">
         <GuildList />
@@ -77,7 +83,7 @@ onMounted(async () => {
           <mdi-menu />
         </h-btn>
         <mdi-pound class="text-lg mr-2 text-gray-300" />
-        {{ channelData.name }}
+        {{ channelData.data?.name }}
         <div class="flex-1" />
         <h-btn
           variant="text"

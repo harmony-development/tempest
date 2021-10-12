@@ -18,6 +18,17 @@ const chatEventsHandler = new Handler<StreamChatEvent["event"]>({
       (g) => g.guildID !== guild.guildId || g.host !== guild.homeserver
     );
   },
+  createdChannel(host, { createdChannel }) {
+    chatState.addChannel(
+      host,
+      createdChannel.guildId,
+      createdChannel.channelId,
+      {
+        name: createdChannel.name,
+        kind: 0,
+      }
+    );
+  },
   sentMessage(host, { sentMessage }) {
     chatState.addMessage(
       host,

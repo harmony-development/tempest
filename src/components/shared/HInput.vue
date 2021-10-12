@@ -63,7 +63,7 @@ watch(
         v-if="multiline"
         ref="input"
         v-model="value"
-        :name="props.name"
+        :id="props.name"
         :type="props.type"
         :rows="props.rows"
         :required="props.required"
@@ -77,7 +77,7 @@ watch(
         v-else
         ref="input"
         v-model="value"
-        :name="props.name"
+        :id="props.name"
         :type="props.type"
         :required="props.required"
         class="input-input"

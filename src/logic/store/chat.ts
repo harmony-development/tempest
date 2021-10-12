@@ -32,9 +32,9 @@ export interface IMessageData {
   override?: Overrides;
 }
 
-interface IChannelData {
-  name?: string;
-  kind?: ChannelKind;
+export interface IChannelData {
+  name: string;
+  kind: ChannelKind;
 }
 
 export interface IChannel {
@@ -43,7 +43,7 @@ export interface IChannel {
   messageList: string[];
 }
 
-interface IGuildData {
+export interface IGuildData {
   name: string;
   owner: string;
   picture?: string;
@@ -152,8 +152,8 @@ class ChatState extends Store<IChatState> {
         .chat.getGuildChannels({ guildId }).response;
       for (const { channel, channelId } of channels) {
         this.ensureChannel(host, guildId, channelId).data = {
-          name: channel?.channelName,
-          kind: channel?.kind,
+          name: channel!.channelName,
+          kind: channel!.kind,
         };
       }
       g.channelList = channels.map((c) => c.channelId);
@@ -212,7 +212,7 @@ class ChatState extends Store<IChatState> {
     host: string,
     guildID: string,
     channelID: string,
-    data: Partial<IGuild>
+    data: Partial<IChannelData>
   ) {
     const g = this.ensureGuild(host, guildID);
     const c = this.ensureChannel(host, guildID, channelID);
@@ -253,6 +253,18 @@ class ChatState extends Store<IChatState> {
     const c = this.ensureChannel(host, guildID, channelID);
     this.setMessageData(host, guildID, channelID, messageID, data);
     c.messageList.push(messageID);
+  }
+
+  addChannel(
+    host: string,
+    guildID: string,
+    channelID: string,
+    data: IChannelData
+  ) {
+    const g = this.getGuild(host, guildID);
+    const c = this.ensureChannel(host, guildID, channelID);
+    c.data = data;
+    g.channelList?.push(channelID);
   }
 }
 

@@ -62,7 +62,9 @@ const onCreateClicked = async () => {
     <HInput label="Guild Name" v-model="guildName" />
     <a @click="screen = 'join'">Join guild?</a>
     <div class="flex justify-end gap-2">
-      <HBtn variant="text" type="button" @click="close">Cancel</HBtn>
+      <HBtn color="secondary" variant="text" type="button" @click="close"
+        >Cancel</HBtn
+      >
       <HBtn
         variant="text"
         color="primary"

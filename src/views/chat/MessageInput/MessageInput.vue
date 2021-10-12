@@ -37,6 +37,7 @@ const onKeyDown = async (ev: KeyboardEvent) => {
       multiline
       no-border
       label="Write your message..."
+      name="message-input"
       :rows="1"
       class="!bg-surface-900"
       v-model="text"
