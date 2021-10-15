@@ -1,8 +1,6 @@
 <script lang="ts" setup>
-import { asyncComputed } from "@vueuse/core";
 import { onMounted, computed } from "vue";
 import HImg from "~/components/shared/HImg.vue";
-import { connectionManager } from "../../../logic/api/connections";
 import { chatState } from "../../../logic/store/chat";
 
 const props = defineProps<{
@@ -11,7 +9,7 @@ const props = defineProps<{
   guildid: string;
 }>();
 
-const data = asyncComputed(
+const data = computed(
   () => chatState.getGuild(props.host, props.guildid),
   undefined
 );

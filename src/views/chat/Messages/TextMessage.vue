@@ -15,24 +15,24 @@ const props = defineProps<{
 p {
   @apply inline-block;
 }
-.content-out:deep(.codeblock) {
+.content-out::v-deep(.codeblock) {
   @apply w-full block break-all break-words whitespace-pre-wrap pr-3 rounded-md bg-black;
 }
-.content-out >>> .codeblock > code {
+.content-out ::v-deep(.codeblock > code) {
   @apply break-all w-full block p-3 pl-4 break-all break-words whitespace-pre-wrap;
 }
-.content-out >>> .msg-p {
+.content-out ::v-deep(.msg-p) {
   margin-bottom: 0px;
   width: auto;
 }
-.content-out >>> .emoji {
+.content-out ::v-deep(.emoji) {
   height: 1em;
   vertical-align: middle;
 }
-.content-out >>> .big-emoji {
+.content-out ::v-deep(.big-emoji) {
   height: 3em;
 }
-.content-out >>> a {
+.content-out ::v-deep(a) {
   @apply text-primary-300 underline;
 }
 </style>

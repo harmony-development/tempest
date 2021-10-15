@@ -5,11 +5,10 @@ import { useChatRoute } from "../../../router";
 import HBtn from "~/components/shared/HBtn.vue";
 import { uiState } from "../../../logic/store/ui";
 import ChannelItem from "./ChannelItem.vue";
-import { asyncComputed } from "@vueuse/core";
 
 const { host, guild } = useChatRoute();
 
-const data = asyncComputed(
+const data = computed(
   () => chatState.getGuild(host.value!, guild.value!),
   undefined
 );

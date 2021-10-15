@@ -2,7 +2,6 @@
 import { computed } from "vue";
 import { chatState } from "../../../logic/store/chat";
 import { useChatRoute } from "../../../router";
-import { asyncComputed } from "@vueuse/core";
 import Avatar from "~/components/chat/Avatar.vue";
 
 const props = defineProps<{
@@ -11,7 +10,7 @@ const props = defineProps<{
 
 const { host } = useChatRoute();
 
-const data = asyncComputed(() => {
+const data = computed(() => {
   console.log(host.value, props.userid);
   return chatState.getUser(host.value!, props.userid);
 });

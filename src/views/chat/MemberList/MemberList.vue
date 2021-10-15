@@ -1,16 +1,11 @@
 <script lang="ts" setup>
-import HListItem from "~/components/shared/HListItem.vue";
-import HImg from "~/components/shared/HImg.vue";
-import { computed, watch } from "vue";
+import { computed } from "vue";
 import { chatState } from "../../../logic/store/chat";
 import { useChatRoute } from "../../../router";
-import Avatar from "~/components/chat/Avatar.vue";
-import { connectionManager } from "../../../logic/api/connections";
-import { asyncComputed } from "@vueuse/core";
 import MemberItem from "./MemberItem.vue";
 
 const { host, guild } = useChatRoute();
-const members = asyncComputed(
+const members = computed(
   () => chatState.getMemberList(host.value!, guild.value!),
   undefined
 );

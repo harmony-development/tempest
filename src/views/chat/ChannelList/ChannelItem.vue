@@ -6,7 +6,7 @@ import { useChatRoute } from "../../../router";
 import { ChannelKind } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/channels";
 import { useRouter } from "vue-router";
 
-const { channelid } = defineProps<{
+const props = defineProps<{
   channelid: string;
 }>();
 
@@ -14,10 +14,10 @@ const router = useRouter();
 const { host, guild, channel } = useChatRoute();
 
 const data = computed(() =>
-  chatState.getChannel(host?.value!, guild?.value!, channelid)
+  chatState.getChannel(host?.value!, guild?.value!, props.channelid)
 );
 
-const goToChannel = () => router.push({ params: { channel: channelid } });
+const goToChannel = () => router.push({ params: { channel: props.channelid } });
 </script>
 
 <template>

@@ -1,24 +1,22 @@
 <script lang="ts" setup>
-import { computed } from "vue";
-import { chatState } from "../../../logic/store/chat";
+import { computed, defineAsyncComponent } from "vue";
+import { IMessageData } from "../../../logic/store/chat";
 import { useChatRoute } from "../../../router";
-import TextMessage from "./TextMessage.vue";
-import HImg from "~/components/shared/HImg.vue";
 import HBtn from "~/components/shared/HBtn.vue";
 import { session } from "../../../logic/store/session";
 import Avatar from "~/components/chat/Avatar.vue";
-const { host, guild, channel, message } = useChatRoute();
-const { messageid, hideAvatar } = defineProps<{
+import TextMessage from "./TextMessage.vue";
+import EmbedMessage from "./EmbedMessage.vue";
+
+const props = defineProps<{
   messageid: string;
+  data: IMessageData;
   hideAvatar?: boolean;
 }>();
-const data = computed(() =>
-  chatState.getMessage(host.value!, guild.value!, channel.value!, messageid)
-);
 const isOwnMessage = computed(
-  () => data.value?.author === session.value?.userID
+  () => props.data?.author === session.value?.userID
 );
-const content = computed(() => data.value.content?.content);
+const content = computed(() => props.data.content?.content);
 </script>
 
 <template>
@@ -37,6 +35,10 @@ const content = computed(() => data.value.content?.content);
         v-if="content?.oneofKind === 'textMessage'"
         :content="content.textMessage.content"
       />
+      <EmbedMessage
+        v-if="content?.oneofKind === 'embedMessage'"
+        :content="content.embedMessage"
+      />
     </div>
     <div class="h-full mt-3">
       <HBtn icon dense class="text-sm messageOptions">
@@ -49,9 +51,10 @@ const content = computed(() => data.value.content?.content);
 <style lang="postcss" scoped>
 .messageBody {
   @apply bg-surface-700 bg-opacity-60
+        border-1 border-surface-500
         p-3
         px-5
-        rounded-2xl
+        rounded-xl
         break-words
         whitespace-pre-wrap
         max-w-50ch

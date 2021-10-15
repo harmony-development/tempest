@@ -1,20 +1,19 @@
 <script lang="ts" setup>
 import { useChatRoute } from "../../../router";
-import { computed, watch } from "vue";
+import { computed, ref } from "vue";
 import { chatState } from "../../../logic/store/chat";
-import { connectionManager } from "~/logic/api/connections";
-import { convertMessageV1 } from "~/logic/conversions/messages";
 import Message from "./Message.vue";
-import { asyncComputed } from "@vueuse/core";
+import { useIntersectionObserver } from "@vueuse/core";
 
+const loader = ref<HTMLElement | undefined>();
 const { host, guild, channel } = useChatRoute();
-const channelData = computed(() =>
-  chatState.getChannel(host.value!, guild.value!, channel.value!)
+const messageList = computed(() =>
+  chatState.getMessageList(host.value!, guild.value!, channel.value!)
 );
-const messageList = asyncComputed(
-  () => chatState.getMessageList(host.value!, guild.value!, channel.value!),
-  undefined
-);
+
+useIntersectionObserver(loader, ([{ isIntersecting }]) => {
+  if (isIntersecting) return;
+});
 
 const isConsecutiveMessage = (i: number) => {
   const currentHost = host.value!;
@@ -55,10 +54,12 @@ const isConsecutiveMessage = (i: number) => {
     "
   >
     <div class="flex flex-col flex-1 gap-2">
+      <mdi-loading class="text-xl animate-spin" ref="loader" />
       <Message
         v-for="(m, i) in messageList"
-        :key="`${channel}/${m}`"
+        :key="`${host}/${guild}/${channel}/${m}`"
         :messageid="m"
+        :data="chatState.getMessage(host!, guild!, channel!, m)"
         :hide-avatar="isConsecutiveMessage(i)"
       />
     </div>

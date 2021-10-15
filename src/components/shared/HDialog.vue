@@ -48,6 +48,6 @@ onKeyStroke("Escape", () => (open.value = false));
 
 <style lang="postcss" scoped>
 .sized {
-  @apply w-7/8 sm:w-4/5 lg:w-120;
+  @apply w-1/2 sm:w-80 lg:w-120;
 }
 </style>
