@@ -124,10 +124,11 @@ class ChatState extends Store<IChatState> {
     this.lock.run(async () => {
       const conn = connectionManager.get(host);
       const { guild } = await conn.chat.getGuild({ guildId }).response;
+      console.log(guild);
       g.data = {
         name: guild!.name,
         picture: guild?.picture,
-        owner: guild!.ownerId,
+        owner: guild!.ownerIds,
       };
     }, ["guild", host, guildId]);
     return g;

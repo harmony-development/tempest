@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-import { computed, defineAsyncComponent } from "vue";
+import { computed } from "vue";
 import { IMessageData } from "../../../logic/store/chat";
-import { useChatRoute } from "../../../router";
 import HBtn from "~/components/shared/HBtn.vue";
 import { session } from "../../../logic/store/session";
 import Avatar from "~/components/chat/Avatar.vue";

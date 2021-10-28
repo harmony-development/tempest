@@ -7,8 +7,8 @@ import {
   StreamStepsResponse,
 } from "@harmony-dev/harmony-web-sdk/dist/gen/auth/v1/auth";
 import { ServerStreamingCall } from "@protobuf-ts/runtime-rpc";
-import { computed, onMounted, ref, Ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 import { session } from "../store/session";
 
 type AuthStream = ServerStreamingCall<StreamStepsRequest, StreamStepsResponse>;
@@ -158,7 +158,7 @@ export const useAuthManager = (host: string) => {
   onMounted(async () => {
     try {
       await authManager.start();
-      authManager.stream?.response.onMessage((resp) => onStepOuter(resp.step!));
+      authManager.stream?.responses.onMessage((resp) => onStepOuter(resp.step!));
       onStepOuter(
         (await authManager.nextStep({ oneofKind: undefined }).response).step!
       );

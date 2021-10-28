@@ -42,13 +42,13 @@ onMounted(async () => {
     await conn.auth.checkLoggedIn({});
     sessionValidated.value = true;
     const handler = pubsub(session.value!.host);
-    stream.request.send({
+    stream.requests.send({
       request: {
         oneofKind: "subscribeToHomeserverEvents",
         subscribeToHomeserverEvents: {},
       },
     });
-    stream.response.onMessage(handler);
+    stream.responses.onMessage(handler);
   } catch (e) {
     router.push({ name: "serverselect" });
   }

@@ -2,8 +2,7 @@
 import { useAuthRoute } from "../../logic/routeParams";
 import Choices from "./Choices.vue";
 import Form from "./Form.vue";
-import { AuthManager, useAuthManager } from "../../logic/api/auth";
-import { useRouter } from "vue-router";
+import { useAuthManager } from "../../logic/api/auth";
 
 const params = useAuthRoute();
 const { back, error, currentStepType, currentStep, sendChoice, sendForm } =

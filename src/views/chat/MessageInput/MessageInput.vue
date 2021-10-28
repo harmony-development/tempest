@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import { FormattedText } from "@harmony-dev/harmony-web-sdk/dist/gen/harmonytypes/v1/types";
+import { FormattedText } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
 import HInput from "~/components/shared/HInput.vue";
 import { connectionManager } from "../../../logic/api/connections";
 import { useChatRoute } from "../../../router";
 import { ref } from "vue";
+import HBtn from "~/components/shared/HBtn.vue";
 
 const { host, guild, channel } = useChatRoute();
 
@@ -32,14 +33,17 @@ const onKeyDown = async (ev: KeyboardEvent) => {
 };
 </script>
 <template>
-  <div class="p-1">
+  <div class="flex items-center p-1 bg-surface-900">
+    <HBtn variant="text" icon>
+      <mdi-add />
+    </HBtn>
     <HInput
       multiline
       no-border
       label="Write your message..."
       name="message-input"
       :rows="1"
-      class="!bg-surface-900"
+      class="!bg-transparent"
       v-model="text"
       @keydown="onKeyDown"
     />

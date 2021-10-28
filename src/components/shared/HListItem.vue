@@ -8,6 +8,7 @@ const props = defineProps<{
 <template>
   <li
     ref="item"
+    role="button"
     v-wave
     :class="{
       'list-item': true,

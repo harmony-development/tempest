@@ -9,6 +9,7 @@ import { useRouter } from "vue-router";
 import HBtn from "~/components/shared/HBtn.vue";
 import { useChatRoute } from "../../../router";
 import { uiState } from "../../../logic/store/ui";
+import HPopover from "~/components/shared/HPopover.vue";
 
 const { guild } = useChatRoute();
 const router = useRouter();
@@ -17,7 +18,7 @@ onMounted(async () => {
   const conn = connectionManager.get(session.value!.host);
   const { guilds } = await conn.chat.getGuildList({}).response;
   guilds.forEach(async (entry) => {
-    connectionManager.getStream(entry.serverId).request.send({
+    connectionManager.getStream(entry.serverId).requests.send({
       request: {
         oneofKind: "subscribeToGuild",
         subscribeToGuild: {
@@ -80,9 +81,14 @@ const goToGuild = (host: string, guild: string) => {
           @click="goToGuild(host, guildID)"
         />
       </div>
-      <HBtn variant="text" square aria-label="App Settings">
-        <h-tempest class="text-2xl" />
-      </HBtn>
+      <HPopover placement="top">
+        <HBtn variant="outlined" color="primary" square aria-label="App Settings">
+          <h-tempest class="text-2xl" />
+        </HBtn>
+        <template #content>
+          <div class="bg-primary-700 p-4">Hello</div>
+        </template>
+      </HPopover>
     </div>
   </div>
 </template>
