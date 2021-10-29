@@ -176,7 +176,7 @@ class ChatState extends Store<IChatState> {
       for (const { message, messageId } of messages) {
         c.messages[messageId] = convertMessageV1(message!);
       }
-      c.messageList = messages.map((m) => m.messageId);
+      c.messageList = messages.map((m) => m.messageId).reverse();
     }, ["messageList", host, guildId, channelId]);
 
     return c.messageList;

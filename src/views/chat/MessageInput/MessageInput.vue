@@ -43,10 +43,15 @@ const onKeyDown = async (ev: KeyboardEvent) => {
   <div class="flex items-center p-1 bg-surface-900">
     <div class="relative">
       <PopInTransition>
-        <MessageTypePicker class="absolute bottom-[120%] picker" v-if="pickerOpen" ref="picker" />
+        <MessageTypePicker
+          class="absolute bottom-[120%] picker"
+          v-if="pickerOpen"
+          ref="picker"
+          @sent="pickerOpen = false"
+        />
       </PopInTransition>
       <HBtn variant="text" icon class="picker-button" @click="pickerOpen = true">
-        <mdi-add />
+        <mdi-add :class="{ pickerOpen }" class="transition-all duration-100" />
       </HBtn>
     </div>
     <HInput
@@ -55,9 +60,15 @@ const onKeyDown = async (ev: KeyboardEvent) => {
       label="Write your message..."
       name="message-input"
       :rows="1"
-      class="!bg-transparent"
+      class="!bg-transparent w-full"
       v-model="text"
       @keydown="onKeyDown"
     />
   </div>
 </template>
+
+<style lang="postcss" scoped>
+.pickerOpen {
+  @apply transform rotate-45;
+}
+</style>

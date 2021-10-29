@@ -1,11 +1,12 @@
 <script lang="ts" setup>
 import { useChatRoute } from "../../../router";
-import { computed, ref } from "vue";
+import { computed, nextTick, ref, watch } from 'vue';
 import { chatState } from "../../../logic/store/chat";
 import Message from "./Message.vue";
 import { useIntersectionObserver } from "@vueuse/core";
 
 const loader = ref<HTMLElement | undefined>();
+const list = ref<HTMLElement | undefined>(undefined)
 const { host, guild, channel } = useChatRoute();
 const messageList = computed(() =>
   chatState.getMessageList(host.value!, guild.value!, channel.value!)
@@ -14,6 +15,14 @@ const messageList = computed(() =>
 useIntersectionObserver(loader, ([{ isIntersecting }]) => {
   if (isIntersecting) return;
 });
+
+watch(messageList, async () => {
+  const container = list.value!
+  if (container.scrollHeight - container.scrollTop <= container.clientHeight + 80) {
+    await nextTick()
+    container.scrollTop = container.scrollHeight
+  }
+}, { deep: true })
 
 const isConsecutiveMessage = (i: number) => {
   const currentHost = host.value!;
@@ -42,16 +51,8 @@ const isConsecutiveMessage = (i: number) => {
 
 <template>
   <div
-    class="
-      flex-1 flex
-      justify-center
-      bg-surface-800
-      p-3
-      gap-2
-      overflow-y-auto
-      w-full
-      compact-scrollbar
-    "
+    class="flex-1 flex justify-center bg-surface-800 p-3 gap-2 overflow-y-auto w-full compact-scrollbar"
+    ref="list"
   >
     <div class="flex flex-col flex-1 gap-2">
       <mdi-loading class="text-xl animate-spin" ref="loader" />

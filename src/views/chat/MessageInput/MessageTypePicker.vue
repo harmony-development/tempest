@@ -1,7 +1,32 @@
 <script lang="ts" setup>
 import MessageTypeButton from './MessageTypeButton.vue';
+import { connectionManager } from '../../../logic/api/connections';
+import { useChatRoute } from '~/router';
+import { FormattedText } from '@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages';
+import { useKeyModifier } from '@vueuse/core';
 
+const { host, guild, channel } = useChatRoute();
+const shiftState = useKeyModifier('Shift')
+const emit = defineEmits(['sent']);
 
+const onWoozy = async () => {
+  await connectionManager.get(host.value!).chat.sendMessage({
+    guildId: guild.value!,
+    channelId: channel.value!,
+    content: {
+      content: {
+        oneofKind: "textMessage",
+        textMessage: {
+          content: FormattedText.create({
+            text: '🥴',
+          }),
+        },
+      },
+    },
+  });
+  if (!shiftState.value)
+    emit('sent')
+}
 </script>
 
 <template>
@@ -18,7 +43,7 @@ import MessageTypeButton from './MessageTypeButton.vue';
       <message-type-button class="bg-blue-600" label="Location">
         <mdi:crosshairs-gps />
       </message-type-button>
-      <message-type-button class="bg-blue-600" label="Woozy">
+      <message-type-button class="bg-blue-600" label="Woozy" @click="onWoozy">
         <twemoji:woozy-face />
       </message-type-button>
     </div>
