@@ -58,6 +58,7 @@ export default defineConfig({
           700: cssVarRgbHelper("surface-700"),
           800: cssVarRgbHelper("surface-800"),
           900: cssVarRgbHelper("surface-900"),
+          1000: cssVarRgbHelper("surface-1000"),
         },
         error: cssVarRgbHelper("error"),
       },

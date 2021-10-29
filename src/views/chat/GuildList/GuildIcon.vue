@@ -4,6 +4,7 @@ import HImg from "~/components/shared/HImg.vue";
 import { chatState } from "../../../logic/store/chat";
 import HTooltip from "~/components/shared/HTooltip.vue";
 
+
 const props = defineProps<{
   active?: boolean;
   host: string;
@@ -17,17 +18,22 @@ const data = computed(
 </script>
 
 <template>
-  <HTooltip :content="data.data?.name" class="icon">
-    <div v-bind="$attrs" role="button" v-wave class="icon" :class="{ active }" style="aspect-ratio: 1">
-      <HImg
-        :src="data?.data?.picture"
-        class="object-contain pointer-events-none"
-        draggable="false"
-        :alt="data?.data?.name"
-        :fallback="data?.data?.name?.[0]"
-      />
-    </div>
-  </HTooltip>
+  <div
+    v-bind="$attrs"
+    role="button"
+    v-wave
+    class="icon"
+    :class="{ active }"
+    style="aspect-ratio: 1"
+  >
+    <HImg
+      :src="data?.data?.picture"
+      class="object-contain pointer-events-none"
+      draggable="false"
+      :alt="data?.data?.name"
+      :fallback="data?.data?.name?.[0]"
+    />
+  </div>
 </template>
 
 <style lang="postcss" scoped>

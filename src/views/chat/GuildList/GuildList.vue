@@ -9,7 +9,7 @@ import { useRouter } from "vue-router";
 import HBtn from "~/components/shared/HBtn.vue";
 import { useChatRoute } from "../../../router";
 import { uiState } from "../../../logic/store/ui";
-import HPopover from "~/components/shared/HPopover.vue";
+import AppSettings from "./AppSettings.vue";
 
 const { guild } = useChatRoute();
 const router = useRouter();
@@ -48,18 +48,7 @@ const goToGuild = (host: string, guild: string) => {
 <template>
   <div class="list">
     <div
-      class="
-        w-18
-        p-2
-        h-full
-        overflow-y-scroll
-        no-scrollbar
-        z-1
-        relative
-        bg-surface-800
-        flex flex-col
-        gap-2
-      "
+      class="w-18 p-2 h-full overflow-y-scroll no-scrollbar z-1 relative bg-surface-800 flex flex-col gap-2"
     >
       <HBtn
         variant="filled"
@@ -81,14 +70,7 @@ const goToGuild = (host: string, guild: string) => {
           @click="goToGuild(host, guildID)"
         />
       </div>
-      <HPopover placement="top">
-        <HBtn variant="outlined" color="primary" square aria-label="App Settings">
-          <h-tempest class="text-2xl" />
-        </HBtn>
-        <template #content>
-          <div class="bg-primary-700 p-4">Hello</div>
-        </template>
-      </HPopover>
+      <AppSettings />
     </div>
   </div>
 </template>

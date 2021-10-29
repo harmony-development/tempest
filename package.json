@@ -8,12 +8,13 @@
   },
   "dependencies": {
     "@harmony-dev/harmony-web-sdk": "^0.0.1-alpha.14",
+    "@popperjs/core": "^2.10.2",
     "@vueuse/core": "^6.7.3",
     "focus-trap": "^6.7.1",
     "focus-trap-vue": "^3.2.1",
+    "microtip": "^0.2.2",
     "vue": "^3.2.20",
-    "vue-router": "^4.0.12",
-    "vue3-popper": "^1.3.0"
+    "vue-router": "^4.0.12"
   },
   "devDependencies": {
     "@iconify/json": "^1.1.420",

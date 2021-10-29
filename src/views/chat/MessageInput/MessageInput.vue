@@ -5,10 +5,17 @@ import { connectionManager } from "../../../logic/api/connections";
 import { useChatRoute } from "../../../router";
 import { ref } from "vue";
 import HBtn from "~/components/shared/HBtn.vue";
+import MessageTypePicker from "./MessageTypePicker.vue";
+import { onClickOutside } from '@vueuse/core';
+import PopInTransition from "~/components/transitions/PopInTransition.vue";
 
 const { host, guild, channel } = useChatRoute();
 
+const pickerOpen = ref(false)
+const picker = ref<HTMLElement | undefined>(undefined)
 const text = ref("");
+
+onClickOutside(picker, () => pickerOpen.value = false)
 
 const onKeyDown = async (ev: KeyboardEvent) => {
   if (ev.key === "Enter" && !ev.shiftKey) {
@@ -34,9 +41,14 @@ const onKeyDown = async (ev: KeyboardEvent) => {
 </script>
 <template>
   <div class="flex items-center p-1 bg-surface-900">
-    <HBtn variant="text" icon>
-      <mdi-add />
-    </HBtn>
+    <div class="relative">
+      <PopInTransition>
+        <MessageTypePicker class="absolute bottom-[120%] picker" v-if="pickerOpen" ref="picker" />
+      </PopInTransition>
+      <HBtn variant="text" icon class="picker-button" @click="pickerOpen = true">
+        <mdi-add />
+      </HBtn>
+    </div>
     <HInput
       multiline
       no-border

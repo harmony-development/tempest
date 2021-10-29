@@ -20,6 +20,9 @@ declare module 'vue' {
     HSpinner: typeof import('./src/components/shared/HSpinner.vue')['default']
     HTempest: typeof import('~icons/h/tempest')['default']
     HTooltip: typeof import('./src/components/shared/HTooltip.vue')['default']
+    'Mdi:crosshairsGps': typeof import('~icons/mdi/crosshairs-gps')['default']
+    'Mdi:file': typeof import('~icons/mdi/file')['default']
+    'Mdi:picture': typeof import('~icons/mdi/picture')['default']
     MdiAccountMultiple: typeof import('~icons/mdi/account-multiple')['default']
     MdiAdd: typeof import('~icons/mdi/add')['default']
     MdiAlert: typeof import('~icons/mdi/alert')['default']
@@ -30,6 +33,7 @@ declare module 'vue' {
     MdiHashtag: typeof import('~icons/mdi/hashtag')['default']
     MdiLoading: typeof import('~icons/mdi/loading')['default']
     MdiMenu: typeof import('~icons/mdi/menu')['default']
+    MdiMidiInput: typeof import('~icons/mdi/midi-input')['default']
     MdiPlus: typeof import('~icons/mdi/plus')['default']
     MdiPound: typeof import('~icons/mdi/pound')['default']
     MdiPoundBox: typeof import('~icons/mdi/pound-box')['default']
@@ -37,6 +41,7 @@ declare module 'vue' {
     MdiVolume: typeof import('~icons/mdi/volume')['default']
     PopInTransition: typeof import('./src/components/transitions/PopInTransition.vue')['default']
     ReloadPrompt: typeof import('./src/components/misc/ReloadPrompt.vue')['default']
+    'Twemoji:woozyFace': typeof import('~icons/twemoji/woozy-face')['default']
   }
 }
 
