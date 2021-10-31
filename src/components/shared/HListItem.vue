@@ -2,6 +2,7 @@
 import { defineProps } from "vue";
 const props = defineProps<{
   selected?: boolean;
+  dangerous?: boolean;
 }>();
 </script>
 
@@ -13,6 +14,7 @@ const props = defineProps<{
     :class="{
       'list-item': true,
       selected: props.selected,
+      dangerous,
     }"
     tabindex="0"
   >
@@ -22,7 +24,7 @@ const props = defineProps<{
 
 <style lang="postcss" scoped>
 .list-item {
-  @apply flex items-center w-full py-2 px-4 cursor-pointer select-none transition duration-100;
+  @apply flex items-center w-full py-2 px-4 cursor-pointer select-none transition duration-100 whitespace-nowrap;
   &:hover {
     @apply bg-white bg-opacity-10 bg-opacity-10;
   }
@@ -32,5 +34,9 @@ const props = defineProps<{
 }
 .selected {
   @apply bg-white bg-opacity-5 bg-opacity-5;
+}
+
+.dangerous {
+  @apply text-red-500;
 }
 </style>

@@ -55,6 +55,7 @@ const onKeyDown = async (ev: KeyboardEvent) => {
       </HBtn>
     </div>
     <HInput
+      plain
       multiline
       no-border
       label="Write your message..."

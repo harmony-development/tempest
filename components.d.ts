@@ -39,6 +39,8 @@ declare module 'vue' {
     MdiPoundBox: typeof import('~icons/mdi/pound-box')['default']
     MdiTag: typeof import('~icons/mdi/tag')['default']
     MdiVolume: typeof import('~icons/mdi/volume')['default']
+    OutlinedInput: typeof import('./src/components/shared/Inputs/OutlinedInput.vue')['default']
+    PlainInput: typeof import('./src/components/shared/Inputs/PlainInput.vue')['default']
     PopInTransition: typeof import('./src/components/transitions/PopInTransition.vue')['default']
     ReloadPrompt: typeof import('./src/components/misc/ReloadPrompt.vue')['default']
     'Twemoji:woozyFace': typeof import('~icons/twemoji/woozy-face')['default']

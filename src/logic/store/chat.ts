@@ -256,6 +256,17 @@ class ChatState extends Store<IChatState> {
     c.messageList.push(messageID);
   }
 
+  deleteMessage(
+    host: string,
+    guildID: string,
+    channelID: string,
+    messageID: string
+  ) {
+    const c = this.ensureChannel(host, guildID, channelID)
+    delete c.messages[messageID]
+    c.messageList = c.messageList.filter(f => f !== messageID)
+  }
+
   addChannel(
     host: string,
     guildID: string,

@@ -9,6 +9,9 @@ import EmbedMessage from "./EmbedMessage.vue";
 import dayjs from 'dayjs';
 import { onClickOutside } from '@vueuse/core';
 import PopInTransition from '~/components/transitions/PopInTransition.vue';
+import HListItem from '~/components/shared/HListItem.vue';
+import { connectionManager } from '../../../logic/api/connections';
+import { useChatRoute } from '../../../router';
 
 const props = defineProps<{
   messageid: string;
@@ -16,6 +19,7 @@ const props = defineProps<{
   hideAvatar?: boolean;
 }>();
 
+const { host, guild, channel } = useChatRoute()
 const optionsOpen = ref(false)
 const optionsDropdown = ref<HTMLElement | undefined>(undefined)
 
@@ -27,7 +31,15 @@ const isOwnMessage = computed(
 const content = computed(() => props.data.content?.content);
 const time = computed(() => {
   return dayjs(+props.data.createdAt * 1000).calendar()
-})
+});
+
+const onDelete = async () => {
+  await connectionManager.get(host.value!).chat.deleteMessage({
+    messageId: props.messageid,
+    guildId: guild.value!,
+    channelId: channel.value!,
+  })
+}
 </script>
 
 <template>
@@ -45,7 +57,11 @@ const time = computed(() => {
     </div>
     <div class="h-full mt-3 relative">
       <PopInTransition>
-        <div class="options-dropdown" v-if="optionsOpen" ref="optionsDropdown"></div>
+        <div class="options-dropdown overflow-hidden" v-if="optionsOpen" ref="optionsDropdown">
+          <HListItem dangerous @click="onDelete">
+            <mdi-delete />Delete Message
+          </HListItem>
+        </div>
       </PopInTransition>
       <HBtn @click="optionsOpen = true" icon dense class="text-sm messageOptions">
         <mdi-dots-vertical />
@@ -68,16 +84,16 @@ const time = computed(() => {
   box-shadow: 0px 1px 1px #00000050;
 }
 
-.options-dropdown {
-  @apply bg-black p-3 absolute left-[120%];
-}
-
 .ownMessage {
   @apply flex-row-reverse;
 
-  & > .options-dropdown {
-    @apply right-[120%];
+  & .options-dropdown {
+    left: -100%;
   }
+}
+
+.options-dropdown {
+  @apply bg-black rounded-md absolute left-[120%];
 }
 
 .messageContainer {
