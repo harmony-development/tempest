@@ -4,6 +4,7 @@ import { ref } from "vue";
 import { useChatRoute } from "../../../router";
 import { connectionManager } from "~/logic/api/connections";
 import { uiState } from "~/logic/store/ui";
+import { ChannelKind } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/channels";
 
 const { host, guild } = useChatRoute();
 const channelName = ref("");
@@ -16,7 +17,7 @@ const onCreateClicked = async () => {
     await connectionManager.get(host.value!).chat.createChannel({
       guildId: guild.value!,
       channelName: channelName.value,
-      isCategory: false,
+      kind: ChannelKind.TEXT_UNSPECIFIED,
     });
     close();
   } catch (e) {
@@ -25,23 +26,19 @@ const onCreateClicked = async () => {
 };
 </script>
 <template>
-  <form class="flex flex-col gap-2" @submit.prevent="">
+  <form class="flex flex-col gap-2" @submit.prevent>
     <h1 class="text-xl">Add Channel</h1>
     <span class="text-red-400">{{ error?.code || error }}</span>
     <HInput label="Channel Name" v-model="channelName" />
     <div class="flex justify-end gap-2">
-      <HBtn color="secondary" variant="text" type="button" @click="close">
-        Cancel
-      </HBtn>
+      <HBtn color="secondary" variant="text" type="button" @click="close">Cancel</HBtn>
       <HBtn
         variant="text"
         color="primary"
         type="submit"
         @click="onCreateClicked"
         :disabled="!channelName"
-      >
-        Create
-      </HBtn>
+      >Create</HBtn>
     </div>
   </form>
 </template>

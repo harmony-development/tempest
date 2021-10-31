@@ -8,6 +8,7 @@ import Icons from "unplugin-icons/vite";
 import WindiCSS from "vite-plugin-windicss";
 import Components from "unplugin-vue-components/vite";
 import IconsResolver from "unplugin-icons/resolver";
+import vueJsx from '@vitejs/plugin-vue-jsx'
 // loader helpers
 import { FileSystemIconLoader } from "unplugin-icons/loaders";
 
@@ -19,6 +20,7 @@ export default defineConfig({
   },
   plugins: [
     vue(),
+    vueJsx(),
     WindiCSS(),
     Icons({
       compiler: "vue3",

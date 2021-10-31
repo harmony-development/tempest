@@ -14,6 +14,6 @@ export const convertGuildEntryV1 = (
 
 export const convertGuildV1 = (entry: Guild): Partial<IGuildData> => ({
   name: entry.name,
-  owner: entry.ownerId,
+  owners: entry.ownerIds,
   picture: entry.picture,
 });

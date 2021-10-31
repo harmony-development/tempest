@@ -45,7 +45,7 @@ export interface IChannel {
 
 export interface IGuildData {
   name: string;
-  owner: string;
+  owners: string[];
   picture?: string;
 }
 
@@ -128,7 +128,7 @@ class ChatState extends Store<IChatState> {
       g.data = {
         name: guild!.name,
         picture: guild?.picture,
-        owner: guild!.ownerIds,
+        owners: guild!.ownerIds,
       };
     }, ["guild", host, guildId]);
     return g;

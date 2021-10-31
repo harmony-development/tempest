@@ -43,74 +43,90 @@ watch(
 );
 </script>
 <template>
-  <div
-    class="
-      bg-surface-800
-      flex
-      items-center
-      relative
-      rounded
-      border-surface-500
-      focus-within:border-primary-300
-    "
-    :class="{ 'input-parent': true, 'border-2': !props.noBorder }"
-  >
+  <div class="flex items-center relative rounded transition duration-100 input-parent">
     <div>
       <slot name="pre-input" />
     </div>
-    <div class="flex-1">
-      <textarea
-        v-if="multiline"
-        ref="input"
-        v-model="value"
-        :id="props.name"
-        :type="props.type"
-        :rows="props.rows"
-        :required="props.required"
-        class="input-input overflow-hidden"
-        :placeholder="props.noBorder ? props.label : ''"
-        :autocomplete="autocomplete"
-        multiline
-        wrap="hard"
-      />
-      <input
-        v-else
-        ref="input"
-        v-model="value"
-        :id="props.name"
-        :type="props.type"
-        :required="props.required"
-        class="input-input"
-        :class="{ dense }"
-        :autocomplete="autocomplete"
-        :placeholder="props.noBorder ? props.label : ' '"
-      />
-      <label v-if="!noBorder" :for="props.name" class="input-label">{{
-        props.label
-      }}</label>
-    </div>
+    <textarea
+      v-if="multiline"
+      ref="input"
+      v-model="value"
+      :id="props.name"
+      :type="props.type"
+      :rows="props.rows"
+      :required="props.required"
+      class="input-input overflow-hidden"
+      :placeholder="props.noBorder ? props.label : ''"
+      :autocomplete="autocomplete"
+      multiline
+      wrap="hard"
+    />
+    <input
+      v-else
+      ref="input"
+      v-model="value"
+      :id="props.name"
+      :type="props.type"
+      :required="props.required"
+      class="input-input"
+      :class="{ dense }"
+      :autocomplete="autocomplete"
+      :placeholder="props.noBorder ? props.label : ' '"
+    />
+    <label :for="props.name" class="input-label">{{ props.label }}</label>
+    <fieldset v-if="!noBorder" :for="props.name" class="label-wrapper">
+      <legend class="label-text">{{ props.label }}</legend>
+    </fieldset>
   </div>
 </template>
 
 <style lang="postcss" scoped>
-.input-parent {
-  transition: 0.1s linear;
+.label-wrapper {
+  @apply absolute -top-[0.6em] left-0 right-0 bottom-0 border-surface-500 border-1 transition duration-100 rounded-md px-1.5 overflow-hidden;
 }
 
 .input-label {
-  @apply top-0 p-3 pt-3 duration-300 absolute pointer-events-none text-surface-200 opacity-50;
+  @apply absolute top-1/2 left-4 transform -translate-y-1/2 pointer-events-none transition-all duration-100 text-gray-300;
+}
+
+.label-text {
+  @apply text-sm invisible max-w-[0.01px] whitespace-nowrap;
 }
 
 .input-input {
-  @apply max-h-200 bg-transparent z-1 w-full p-3 block appearance-none focus:outline-none pl-3 resize-none break-words;
+  @apply max-h-200 bg-transparent z-1 w-full p-4 block appearance-none focus:outline-none resize-none break-words;
 }
 
 .dense {
   @apply p-1;
 }
 
-.input-parent:focus-within > .input-label,
-.input-input:not(:placeholder-shown) + .input-label {
-  @apply p-0 text-xs transform translate-y-0.5 translate-x-2;
+.input-parent:hover {
+  & > .label-wrapper {
+    @apply border-white;
+  }
+}
+
+.input-parent:focus-within {
+  & > .label-wrapper {
+    @apply border-blue-300 text-blue-300;
+  }
+
+  & > .input-label {
+    @apply text-blue-300;
+  }
+}
+
+.input-parent:focus-within,
+.input-input:not(:placeholder-shown) {
+  & > .input-label,
+  & + .input-label {
+    @apply top-0.1em left-4 text-sm;
+  }
+
+  & * > .label-text,
+  & ~ fieldset > .label-text {
+    @apply max-w-full px-2;
+  }
 }
 </style>
