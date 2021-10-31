@@ -3,6 +3,7 @@ import { session } from "./session";
 import { ChannelKind } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/channels";
 import {
   Content,
+  GetChannelMessagesRequest_Direction,
   Overrides,
   Reaction,
 } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
@@ -41,6 +42,7 @@ export interface IChannel {
   data?: IChannelData;
   messages: Record<string, IMessageData>;
   messageList: string[];
+  reachedTop?: boolean;
 }
 
 export interface IGuildData {
@@ -163,22 +165,31 @@ class ChatState extends Store<IChatState> {
     return g.channelList;
   }
 
-  getMessageList(host: string, guildId: string, channelId: string) {
+  async fetchMessageList(host: string, guildId: string, channelId: string, messageId?: string, direction?: GetChannelMessagesRequest_Direction) {
     const c = this.ensureChannel(host, guildId, channelId);
-    this.lock.run(async () => {
-      const { messages } = await connectionManager
+
+    const { messages, reachedTop } = await connectionManager
         .get(host)
         .chat.getChannelMessages({
           guildId,
           channelId,
-          messageId: "0",
+          messageId: messageId || "0",
+          direction,
         }).response;
       for (const { message, messageId } of messages) {
         c.messages[messageId] = convertMessageV1(message!);
       }
+      if (messageId) {
+        c.messageList.unshift(...messages.map(m => m.messageId).reverse())
+      } else {
       c.messageList = messages.map((m) => m.messageId).reverse();
-    }, ["messageList", host, guildId, channelId]);
+      }
+      c.reachedTop = reachedTop
+  }
 
+  getMessageList(host: string, guildId: string, channelId: string, messageId?: string, direction?: GetChannelMessagesRequest_Direction) {
+    const c = this.ensureChannel(host, guildId, channelId);
+    this.lock.run(() => this.fetchMessageList(host, guildId, channelId, messageId, direction), ["messageList", host, guildId, channelId, messageId!]);
     return c.messageList;
   }
 

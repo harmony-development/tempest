@@ -5,6 +5,7 @@
 declare module 'vue' {
   export interface GlobalComponents {
     Avatar: typeof import('./src/components/chat/Avatar.vue')['default']
+    ConfirmDialog: typeof import('./src/components/shared/ConfirmDialog.vue')['default']
     GgSpinner: typeof import('~icons/gg/spinner')['default']
     HAppBar: typeof import('./src/components/shared/HAppBar.vue')['default']
     HBtn: typeof import('./src/components/shared/HBtn.vue')['default']

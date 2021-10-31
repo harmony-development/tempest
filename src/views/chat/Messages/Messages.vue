@@ -8,12 +8,18 @@ import { useIntersectionObserver } from "@vueuse/core";
 const loader = ref<HTMLElement | undefined>();
 const list = ref<HTMLElement | undefined>(undefined)
 const { host, guild, channel } = useChatRoute();
+
+const reachedTop = computed(() => chatState.getChannel(host.value!, guild.value!, channel.value!).reachedTop)
 const messageList = computed(() =>
   chatState.getMessageList(host.value!, guild.value!, channel.value!)
 );
 
-useIntersectionObserver(loader, ([{ isIntersecting }]) => {
-  if (isIntersecting) return;
+useIntersectionObserver(loader, async ([{ isIntersecting }]) => {
+  if (!isIntersecting || reachedTop.value) return;
+  const oldPos = list.value!.scrollHeight - list.value!.scrollTop;
+  await chatState.fetchMessageList(host.value!, guild.value!, channel.value!, messageList.value[0])
+  await nextTick()
+  list.value!.scrollTop = list.value!.scrollHeight - oldPos;
 });
 
 watch(messageList, async () => {
@@ -55,7 +61,9 @@ const isConsecutiveMessage = (i: number) => {
     ref="list"
   >
     <div class="flex flex-col flex-1 gap-2">
-      <mdi-loading class="text-xl animate-spin" ref="loader" />
+      <div ref="loader">
+        <mdi-loading class="text-xl animate-spin" v-if="!reachedTop" />
+      </div>
       <Message
         v-for="(m, i) in messageList"
         :key="`${host}/${guild}/${channel}/${m}`"

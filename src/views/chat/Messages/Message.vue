@@ -12,6 +12,7 @@ import PopInTransition from '~/components/transitions/PopInTransition.vue';
 import HListItem from '~/components/shared/HListItem.vue';
 import { connectionManager } from '../../../logic/api/connections';
 import { useChatRoute } from '../../../router';
+import { uiState } from '../../../logic/store/ui';
 
 const props = defineProps<{
   messageid: string;
@@ -34,6 +35,7 @@ const time = computed(() => {
 });
 
 const onDelete = async () => {
+  await uiState.openConfirm("Are you sure?", "Are you sure you would like to delete this message?")
   await connectionManager.get(host.value!).chat.deleteMessage({
     messageId: props.messageid,
     guildId: guild.value!,

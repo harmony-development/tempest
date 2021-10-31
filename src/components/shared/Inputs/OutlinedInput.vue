@@ -4,8 +4,6 @@ import { useVModel } from "@vueuse/core";
 import { defineProps, ref, watch, onMounted } from "vue";
 import PlainInput from "./PlainInput.vue";
 
-const emit = defineEmits(["update:modelValue"]);
-
 const props = defineProps<{
   label?: string;
   name?: string;

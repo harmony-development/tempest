@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, defineProps, toRefs } from "vue";
 
-const { variant, color, icon, raised, dense, square } = defineProps<{
+const props = defineProps<{
   variant?: "text" | "filled" | "outlined";
   color?: "primary" | "secondary";
   icon?: boolean;
@@ -12,12 +12,12 @@ const { variant, color, icon, raised, dense, square } = defineProps<{
 
 const buttonClasses = computed(() => ({
   btn: true,
-  [variant || "text"]: true,
-  [color || "plain"]: true,
-  icon: icon,
-  raised: raised,
-  dense: dense,
-  square: square,
+  [props.variant || "text"]: true,
+  [props.color || "plain"]: true,
+  icon: props.icon,
+  raised: props.raised,
+  dense: props.dense,
+  square: props.square,
 }));
 </script>
 <template>
