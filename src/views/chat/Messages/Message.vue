@@ -9,7 +9,7 @@ import EmbedMessage from "./EmbedMessage.vue";
 import dayjs from 'dayjs';
 import { onClickOutside } from '@vueuse/core';
 import PopInTransition from '~/components/transitions/PopInTransition.vue';
-import HListItem from '~/components/shared/HListItem.vue';
+import HListItem from '~/components/shared/Lists/HListItem.vue';
 import { connectionManager } from '../../../logic/api/connections';
 import { useChatRoute } from '../../../router';
 import { uiState } from '../../../logic/store/ui';

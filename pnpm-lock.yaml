@@ -26,7 +26,7 @@ specifiers:
   vite-plugin-mkcert: ^1.5.2
   vite-plugin-pwa: ^0.11.3
   vite-plugin-windicss: ^1.4.12
-  vue: ^3.2.20
+  vue: 3.2.20
   vue-jest: ^5.0.0-alpha.10
   vue-router: ^4.0.12
   vue-tsc: ^0.3.0
@@ -478,7 +478,6 @@ packages:
     resolution: {integrity: sha512-TEHWXf0xxpi9wKVyBCmRcSSDjbJ/cl6LUdlbYUHEaNQUJGhreJbZrXT6sR4+fZLxVUJqNRB4KyOvjuy/D9009A==}
     engines: {node: '>=6.0.0'}
     hasBin: true
-    dev: true
 
   /@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining/7.15.4_@babel+core@7.15.8:
     resolution: {integrity: sha512-eBnpsl9tlhPhpI10kU06JHnrYXwg3+V6CaP2idsCXNef0aeslpqyITXQ74Vfk5uHgY7IG7XP0yIH8b42KSzHog==}
@@ -1337,7 +1336,7 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       '@babel/code-frame': 7.15.8
-      '@babel/parser': 7.15.8
+      '@babel/parser': 7.16.0
       '@babel/types': 7.15.6
     dev: true
 
@@ -1359,7 +1358,7 @@ packages:
       '@babel/helper-function-name': 7.15.4
       '@babel/helper-hoist-variables': 7.15.4
       '@babel/helper-split-export-declaration': 7.15.4
-      '@babel/parser': 7.15.8
+      '@babel/parser': 7.16.0
       '@babel/types': 7.15.6
       debug: 4.3.2
       globals: 11.12.0
@@ -2110,7 +2109,7 @@ packages:
   /@vue/compiler-core/3.2.20:
     resolution: {integrity: sha512-vcEXlKXoPwBXFP5aUTHN9GTZaDfwCofa9Yu9bbW2C5O/QSa9Esdt7OG4+0RRd3EHEMxUvEdj4RZrd/KpQeiJbA==}
     dependencies:
-      '@babel/parser': 7.15.8
+      '@babel/parser': 7.16.0
       '@vue/shared': 3.2.20
       estree-walker: 2.0.2
       source-map: 0.6.1

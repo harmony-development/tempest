@@ -24,7 +24,8 @@ const props = defineProps<{
 
 <style lang="postcss" scoped>
 .list-item {
-  @apply flex items-center w-full py-2 px-4 cursor-pointer select-none transition duration-100 whitespace-nowrap;
+  @apply w-full py-2 px-3 cursor-pointer select-none transition duration-100 whitespace-nowrap
+         flex align-middle items-center;
   &:hover {
     @apply bg-white bg-opacity-10 bg-opacity-10;
   }

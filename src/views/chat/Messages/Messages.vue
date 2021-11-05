@@ -10,14 +10,17 @@ const list = ref<HTMLElement | undefined>(undefined)
 const { host, guild, channel } = useChatRoute();
 
 const reachedTop = computed(() => chatState.getChannel(host.value!, guild.value!, channel.value!).reachedTop)
+
 const messageList = computed(() =>
   chatState.getMessageList(host.value!, guild.value!, channel.value!)
 );
 
+const loadMoreMessages = () => chatState.fetchMessageList(host.value!, guild.value!, channel.value!, messageList.value[0])
+
 useIntersectionObserver(loader, async ([{ isIntersecting }]) => {
   if (!isIntersecting || reachedTop.value) return;
   const oldPos = list.value!.scrollHeight - list.value!.scrollTop;
-  await chatState.fetchMessageList(host.value!, guild.value!, channel.value!, messageList.value[0])
+  await loadMoreMessages()
   await nextTick()
   list.value!.scrollTop = list.value!.scrollHeight - oldPos;
 });
@@ -27,6 +30,14 @@ watch(messageList, async () => {
   if (container.scrollHeight - container.scrollTop <= container.clientHeight + 80) {
     await nextTick()
     container.scrollTop = container.scrollHeight
+  }
+}, { deep: true })
+
+watch(messageList, async () => {
+  const container = list.value!
+  await nextTick()
+  if (container.scrollHeight <= container.clientHeight) {
+    await loadMoreMessages()
   }
 }, { deep: true })
 

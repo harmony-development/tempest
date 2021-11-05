@@ -24,6 +24,7 @@ export default defineConfig({
     WindiCSS(),
     Icons({
       compiler: "vue3",
+      defaultStyle: '',
       customCollections: {
         h: FileSystemIconLoader("./src/assets/icons"),
       },

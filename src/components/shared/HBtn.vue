@@ -47,6 +47,10 @@ const buttonClasses = computed(() => ({
   &:hover {
     @apply ring ring-current ring-2;
   }
+
+  &:active {
+    box-shadow: 0px 1px 4px #00000050;
+  }
 }
 
 .square {

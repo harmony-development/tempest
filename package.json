@@ -14,7 +14,7 @@
     "focus-trap": "^6.7.1",
     "focus-trap-vue": "^3.2.1",
     "microtip": "^0.2.2",
-    "vue": "^3.2.20",
+    "vue": "3.2.20",
     "vue-router": "^4.0.12"
   },
   "devDependencies": {
