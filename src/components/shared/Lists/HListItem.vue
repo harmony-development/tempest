@@ -30,7 +30,7 @@ const props = defineProps<{
     @apply bg-white bg-opacity-10 bg-opacity-10;
   }
   &:focus-visible {
-    @apply ring ring-2 ring-primary-300;
+    @apply ring-3 ring-primary-300 ring-inset;
   }
 }
 .selected {

@@ -16,13 +16,10 @@ const members = computed(
     <div class="p-2">
       <h3 class="text-sm uppercase text-gray-400">Members</h3>
     </div>
-    <ol class="bg-surface-900 flex-1">
-      <MemberItem
-        class="gap-2 rounded-md"
-        v-for="m in members"
-        :key="m"
-        :userid="m"
-      />
-    </ol>
+    <div class="bg-surface-900 flex-1">
+      <ol class="overflow-hidden rounded-b-sm">
+        <MemberItem class="gap-2" v-for="m in members" :key="m" :userid="m" />
+      </ol>
+    </div>
   </div>
 </template>

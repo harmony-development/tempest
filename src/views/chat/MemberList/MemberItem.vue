@@ -17,10 +17,8 @@ const data = computed(() => {
 </script>
 
 <template>
-  <h-list-item class="gap-2 rounded-md">
+  <h-list-item class="gap-2">
     <Avatar :userid="userid" class="h-7 rounded-full" />
-    <p class="overflow-ellipsis overflow-hidden">
-      {{ data?.username }}
-    </p>
+    <p class="overflow-ellipsis overflow-hidden">{{ data?.username }}</p>
   </h-list-item>
 </template>

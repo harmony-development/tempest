@@ -91,7 +91,7 @@ const onDelete = async () => {
   @apply flex-row-reverse;
 
   & .options-dropdown {
-    left: -100%;
+    @apply transform -translate-x-full -left-2;
   }
 }
 
