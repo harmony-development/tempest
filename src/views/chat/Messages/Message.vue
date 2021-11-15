@@ -61,7 +61,8 @@ const onDelete = async () => {
       <PopInTransition>
         <div class="options-dropdown overflow-hidden" v-if="optionsOpen" ref="optionsDropdown">
           <HListItem dangerous @click="onDelete">
-            <mdi-delete />Delete Message
+            <mdi-delete class="mr-2" />
+            <span>Delete Message</span>
           </HListItem>
         </div>
       </PopInTransition>

@@ -36,7 +36,7 @@ watch(messageList, async () => {
 watch(messageList, async () => {
   const container = list.value!
   await nextTick()
-  if (container.scrollHeight <= container.clientHeight) {
+  if (container.scrollHeight <= container.clientHeight && !reachedTop.value) {
     await loadMoreMessages()
   }
 }, { deep: true })
