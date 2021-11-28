@@ -38,9 +38,14 @@ const chatEventsHandler = new Handler<StreamChatEvent["event"]>({
       convertMessageV1(sentMessage.message!)
     );
   },
-  deletedMessage(host, {deletedMessage}) {
-    chatState.deleteMessage(host, deletedMessage.guildId, deletedMessage.channelId, deletedMessage.messageId)
-  }
+  deletedMessage(host, { deletedMessage }) {
+    chatState.deleteMessage(
+      host,
+      deletedMessage.guildId,
+      deletedMessage.channelId,
+      deletedMessage.messageId
+    );
+  },
 });
 
 const streamEventsHandler = new Handler<StreamEventsResponse["event"]>({

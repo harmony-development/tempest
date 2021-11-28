@@ -10,7 +10,6 @@ const props = defineProps<{
   <li
     ref="item"
     role="button"
-    v-wave
     :class="{
       'list-item': true,
       selected: props.selected,
@@ -27,7 +26,10 @@ const props = defineProps<{
   @apply w-full py-2 px-3 cursor-pointer select-none transition duration-100 whitespace-nowrap
          flex align-middle items-center;
   &:hover {
-    @apply bg-white bg-opacity-10 bg-opacity-10;
+    @apply bg-white bg-opacity-10;
+  }
+  &:active {
+    @apply bg-white bg-opacity-15;
   }
   &:focus-visible {
     @apply ring-3 ring-primary-300 ring-inset;

@@ -2,8 +2,6 @@
 import { computed } from "vue";
 import HImg from "~/components/shared/HImg.vue";
 import { chatState } from "../../../logic/store/chat";
-import HTooltip from "~/components/shared/HTooltip.vue";
-
 
 const props = defineProps<{
   active?: boolean;
@@ -11,7 +9,7 @@ const props = defineProps<{
   guildid: string;
 }>();
 
-const data = computed(
+const guild = computed(
   () => chatState.getGuild(props.host, props.guildid),
   undefined
 );
@@ -27,11 +25,11 @@ const data = computed(
     style="aspect-ratio: 1"
   >
     <HImg
-      :src="data?.data?.picture"
+      :src="guild?.data?.picture"
       class="object-contain pointer-events-none"
       draggable="false"
-      :alt="data?.data?.name"
-      :fallback="data?.data?.name?.[0]"
+      :alt="guild?.data?.name"
+      :fallback="guild?.data?.name?.[0]"
     />
   </div>
 </template>

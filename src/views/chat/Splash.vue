@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { useRouter } from "vue-router";
-const router = useRouter();
 </script>
 
 <template>
@@ -12,8 +10,7 @@ const router = useRouter();
       <a
         class="text-primary-300"
         @click="$router.push({ name: 'serverselect' })"
-        >Return to main menu</a
-      >
+      >Return to main menu</a>
     </div>
   </div>
 </template>
