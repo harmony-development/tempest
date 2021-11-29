@@ -165,31 +165,53 @@ class ChatState extends Store<IChatState> {
     return g.channelList;
   }
 
-  async fetchMessageList(host: string, guildId: string, channelId: string, messageId?: string, direction?: GetChannelMessagesRequest_Direction) {
+  async fetchMessageList(
+    host: string,
+    guildId: string,
+    channelId: string,
+    messageId?: string,
+    direction?: GetChannelMessagesRequest_Direction
+  ) {
     const c = this.ensureChannel(host, guildId, channelId);
 
     const { messages, reachedTop } = await connectionManager
-        .get(host)
-        .chat.getChannelMessages({
-          guildId,
-          channelId,
-          messageId: messageId || "0",
-          direction,
-        }).response;
-      for (const { message, messageId } of messages) {
-        c.messages[messageId] = convertMessageV1(message!);
-      }
-      if (messageId) {
-        c.messageList.unshift(...messages.map(m => m.messageId).reverse())
-      } else {
+      .get(host)
+      .chat.getChannelMessages({
+        guildId,
+        channelId,
+        messageId: messageId,
+        direction,
+      }).response;
+    for (const { message, messageId } of messages) {
+      c.messages[messageId] = convertMessageV1(message!);
+    }
+    if (messageId) {
+      c.messageList.unshift(...messages.map((m) => m.messageId).reverse());
+    } else {
       c.messageList = messages.map((m) => m.messageId).reverse();
-      }
-      c.reachedTop = reachedTop
+    }
+    c.reachedTop = reachedTop;
   }
 
-  getMessageList(host: string, guildId: string, channelId: string, messageId?: string, direction?: GetChannelMessagesRequest_Direction) {
+  getMessageList(
+    host: string,
+    guildId: string,
+    channelId: string,
+    messageId?: string,
+    direction?: GetChannelMessagesRequest_Direction
+  ) {
     const c = this.ensureChannel(host, guildId, channelId);
-    this.lock.run(() => this.fetchMessageList(host, guildId, channelId, messageId, direction), ["messageList", host, guildId, channelId, messageId!]);
+    this.lock.run(
+      () =>
+        this.fetchMessageList(
+          host,
+          guildId,
+          channelId,
+          messageId,
+          direction || GetChannelMessagesRequest_Direction.BEFORE_UNSPECIFIED
+        ),
+      ["messageList", host, guildId, channelId, messageId!]
+    );
     return c.messageList;
   }
 
@@ -273,9 +295,9 @@ class ChatState extends Store<IChatState> {
     channelID: string,
     messageID: string
   ) {
-    const c = this.ensureChannel(host, guildID, channelID)
-    delete c.messages[messageID]
-    c.messageList = c.messageList.filter(f => f !== messageID)
+    const c = this.ensureChannel(host, guildID, channelID);
+    delete c.messages[messageID];
+    c.messageList = c.messageList.filter((f) => f !== messageID);
   }
 
   addChannel(
