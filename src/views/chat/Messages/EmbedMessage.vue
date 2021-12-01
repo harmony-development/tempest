@@ -10,15 +10,17 @@ function toColor(num: number) {
   return "#" + num.toString(16).padStart(6, "0");
 }
 
-const embed = computed(() => props.content.embed!);
-const color = computed(() => toColor(embed.value.color!));
+const embeds = computed(() => props.content.embeds!);
 </script>
 
 <template>
-  <div class="border-l-2 p-3 bg-surface-800" :style="{ borderColor: color }">
+  <div
+    class="border-l-2 p-3 bg-surface-800"
+    :style="{ borderColor: toColor(embed.color!) }"
+    v-for="embed in embeds"
+    :key="embed.title"
+  >
     <h1 class="font-bold">{{ embed.title }}</h1>
-    <p class="mt-2 text-xs text-gray-300">
-      {{ embed.body }}
-    </p>
+    <p class="mt-2 text-xs text-gray-300">{{ embed.body }}</p>
   </div>
 </template>

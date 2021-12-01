@@ -3,7 +3,7 @@ import { FormattedText } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/mes
 import HInput from "~/components/shared/HInput.vue";
 import { connectionManager } from "../../../logic/api/connections";
 import { useChatRoute } from "../../../router";
-import { ref } from "vue";
+import { ref, Ref } from 'vue';
 import HBtn from "~/components/shared/HBtn.vue";
 import MessageTypePicker from "./MessageTypePicker.vue";
 import { onClickOutside } from '@vueuse/core';
@@ -12,7 +12,7 @@ import PopInTransition from "~/components/transitions/PopInTransition.vue";
 const { host, guild, channel } = useChatRoute();
 
 const pickerOpen = ref(false)
-const picker = ref<HTMLElement | undefined>(undefined)
+const picker: Ref<HTMLElement | undefined> = ref<HTMLElement | undefined>(undefined)
 const text = ref("");
 
 onClickOutside(picker, () => pickerOpen.value = false)
