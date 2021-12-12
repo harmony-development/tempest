@@ -13,6 +13,8 @@ import HListItem from '~/components/shared/Lists/HListItem.vue';
 import { connectionManager } from '../../../logic/api/connections';
 import { useChatRoute } from '../../../router';
 import { uiState } from '../../../logic/store/ui';
+import AttachmentMessage from './AttachmentMessage.vue';
+import PhotosMessage from './PhotosMessage.vue';
 
 const props = defineProps<{
   messageid: string;
@@ -22,7 +24,7 @@ const props = defineProps<{
 
 const { host, guild, channel } = useChatRoute()
 const optionsOpen = ref(false)
-const optionsDropdown = ref<HTMLElement | undefined>(undefined)
+const optionsDropdown = ref<HTMLElement | undefined>()
 
 onClickOutside(optionsDropdown, () => optionsOpen.value = false)
 
@@ -52,7 +54,22 @@ const onDelete = async () => {
         v-if="content?.oneofKind === 'textMessage'"
         :content="content.textMessage.content"
       />
-      <EmbedMessage v-if="content?.oneofKind === 'embedMessage'" :content="content.embedMessage" />
+      <AttachmentMessage
+        v-else-if="content?.oneofKind === 'attachmentMessage'"
+        :content="content.attachmentMessage.files"
+      />
+      <PhotosMessage
+        v-else-if="content?.oneofKind === 'photoMessage'"
+        :content="content.photoMessage.photos"
+      />
+      <EmbedMessage
+        v-else-if="content?.oneofKind === 'embedMessage'"
+        :content="content.embedMessage"
+      />
+      <div v-else>
+        <mdi:alert class="text-4xl" />
+        <p>Unimplemented message type</p>
+      </div>
       <div class="w-full mt-2">
         <p class="time text-xs text-gray-400 float-right">{{ time }}</p>
       </div>

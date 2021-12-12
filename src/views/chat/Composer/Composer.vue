@@ -60,7 +60,7 @@ import { useChatRoute } from "../../../router";
 import { ref, Ref } from 'vue';
 import HBtn from "~/components/shared/HBtn.vue";
 import MessageTypePicker from "./MessageTypePicker.vue";
-import { onClickOutside } from '@vueuse/core';
+import { onClickOutside, useEventListener } from '@vueuse/core';
 import PopInTransition from "~/components/transitions/PopInTransition.vue";
 
 const { host, guild, channel } = useChatRoute();
@@ -75,6 +75,19 @@ const uploadQueue = ref<{
 }[]>([])
 
 onClickOutside(messageTypePicker, () => pickerOpen.value = false)
+
+useEventListener('paste' as any, (ev: ClipboardEvent) => {
+  const items = ev.clipboardData?.items
+  if (!items) return
+  for (const item of Array.from(items)) {
+    const file = item.getAsFile()
+    if (!file) continue
+    uploadQueue.value.push({
+      url: URL.createObjectURL(file),
+      file,
+    })
+  }
+})
 
 const onFilesSelected = (ev: Event) => {
   const files = (ev.target as HTMLInputElement).files!;
