@@ -15,7 +15,7 @@ import HDialog from "~/components/shared/HDialog.vue";
 import { useChatRoute } from "../../router";
 import { chatState } from "../../logic/store/chat";
 import Messages from "./Messages/Messages.vue";
-import MessageInput from "./MessageInput/MessageInput.vue";
+import Composer from "./Composer/Composer.vue";
 import MemberList from "./MemberList/MemberList.vue";
 
 const AddGuild = defineAsyncComponent(() => import("./Dialogs/AddGuild.vue"));
@@ -98,12 +98,9 @@ onMounted(async () => {
       </h-app-bar>
       <template v-if="channel">
         <Messages />
-        <MessageInput />
+        <Composer />
       </template>
-      <div
-        class="flex-1 flex flex-col gap-4 justify-center items-center"
-        v-else
-      >
+      <div class="flex-1 flex flex-col gap-4 justify-center items-center" v-else>
         <div class="bg-surface-800 rounded-full p-2">
           <mdi-pound class="text-5xl align-top text-gray-300" />
         </div>

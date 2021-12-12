@@ -23,6 +23,7 @@ declare module 'vue' {
     HTempest: typeof import('~icons/h/tempest')['default']
     HTooltip: typeof import('./src/components/shared/HTooltip.vue')['default']
     'Mdi:crosshairsGps': typeof import('~icons/mdi/crosshairs-gps')['default']
+    'Mdi:delete': typeof import('~icons/mdi/delete')['default']
     'Mdi:file': typeof import('~icons/mdi/file')['default']
     'Mdi:picture': typeof import('~icons/mdi/picture')['default']
     MdiAccountMultiple: typeof import('~icons/mdi/account-multiple')['default']
