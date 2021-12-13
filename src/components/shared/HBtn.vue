@@ -21,15 +21,16 @@ const buttonClasses = computed(() => ({
 }));
 </script>
 <template>
-  <button v-wave :class="buttonClasses">
+  <a v-wave :class="buttonClasses">
     <slot />
-  </button>
+  </a>
 </template>
 
 <style lang="postcss" scoped>
 .btn {
+  color: inherit;
   @apply px-4 py-2 rounded transition duration-100 ease-in-out 
-    flex justify-center items-center 
+    inline-flex justify-center items-center 
     cursor-pointer select-none;
 
   &.dense {

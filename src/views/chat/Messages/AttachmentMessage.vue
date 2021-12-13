@@ -2,6 +2,7 @@
 import { Content_AttachmentContent } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
 import { useChatRoute } from '../../../router';
 import { parseHMC } from '../../../logic/parsing';
+import HBtn from "~/components/shared/HBtn.vue";
 
 const { host } = useChatRoute();
 
@@ -10,16 +11,38 @@ const props = defineProps<{
 }>();
 
 const hmc = (id: string) => parseHMC(id, host.value!);
-</script>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          </script>
 
 <template>
   <div>
     <div v-for="file in content" :key="file.id">
-      <img :src="hmc(file.id)" v-if="file.mimetype.startsWith('image/')" />
+      <div class="w-400px h-36 relative" v-if="file.mimetype.startsWith('image/')">
+        <div
+          class="absolute z-1 top-0 left-0 h-full w-1/2 bg-cover bg-no-repeat"
+          :style="{ backgroundImage: `url(${hmc(file.id)})` }"
+        />
+        <div class="relative p-3 h-full z-10 image-container text-right flex flex-col">
+          <p>{{ file.name }}</p>
+          <p>{{ file.size }} Bytes</p>
+          <div class="flex-1" />
+          <div>
+            <HBtn icon target="_blank" :href="hmc(file.id)">
+              <mdi:download />
+            </HBtn>
+          </div>
+        </div>
+      </div>
       <audio controls :src="hmc(file.id)" v-else-if="file.mimetype.startsWith('audio/')" />
       <a :href="hmc(file.id)" v-else>{{ file.name }}</a>
     </div>
   </div>
 </template>
 <style lang="postcss" scoped>
+.image-container {
+  background: linear-gradient(
+    to left,
+    rgb(var(--surface-900)) 60%,
+    transparent 120%
+  );
+}
 </style>
