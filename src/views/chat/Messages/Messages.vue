@@ -9,19 +9,21 @@ const loader = ref<HTMLElement | undefined>();
 const list = ref<HTMLElement | undefined>(undefined)
 const { host, guild, channel } = useChatRoute();
 
+const filledViewport = ref(false);
+
 const reachedTop = computed(() => chatState.getChannel(host.value!, guild.value!, channel.value!).reachedTop)
 
 const messageList = computed(() =>
-  chatState.getMessageList(host.value!, guild.value!, channel.value!)
+  host.value && guild.value && channel.value ? chatState.getMessageList(host.value!, guild.value!, channel.value!) : undefined
 );
 
-const loadMoreMessages = () => chatState.fetchMessageList(host.value!, guild.value!, channel.value!, messageList.value[0])
+const loadMoreMessages = () => chatState.fetchMessageList(host.value!, guild.value!, channel.value!, messageList.value?.[0])
 
 useIntersectionObserver(loader, async ([{ isIntersecting }]) => {
   if (!isIntersecting || reachedTop.value) return;
   const oldPos = list.value!.scrollHeight - list.value!.scrollTop;
-  await loadMoreMessages()
   await nextTick()
+  await loadMoreMessages()
   list.value!.scrollTop = list.value!.scrollHeight - oldPos;
 });
 
@@ -32,6 +34,7 @@ watch(messageList, async () => {
     container.scrollTop = container.scrollHeight
   }
 }, { deep: true })
+
 watch([host, guild, channel], async () => {
   const container = list.value!
   await nextTick()
@@ -39,10 +42,18 @@ watch([host, guild, channel], async () => {
 })
 
 watch(messageList, async () => {
+  if (!messageList.value) return;
   const container = list.value!
+  // load more messages to fill viewport
   await nextTick()
   if (container.scrollHeight <= container.clientHeight && !reachedTop.value) {
+    filledViewport.value = false
     await loadMoreMessages()
+    await nextTick()
+    container.scrollTop = container.scrollHeight
+  } else {
+    filledViewport.value = true
+    console.log('filled viewport, scrolling to bottom')
   }
 }, { deep: true })
 

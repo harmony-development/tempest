@@ -19,8 +19,8 @@ const getThumbnail = (data: Uint8Array) => URL.createObjectURL(new Blob([data], 
 </script>
 
 <template>
-  <div>
-    <div v-for="file in content" :key="file.hmc" class="relative">
+  <div class="flex flex-col gap-2">
+    <div v-for="file in content" :key="file.hmc" class="relative rounded-md overflow-hidden">
       <div
         :style="{ width: '400px', maxWidth: `${file.width}px`, paddingBottom: `calc(${file.height} / ${file.width} * 100%` }"
       />

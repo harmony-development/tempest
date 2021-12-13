@@ -5,6 +5,12 @@ import {
 import { Handler } from "../util/oneof";
 import { chatState } from "../store/chat";
 import { convertMessageV1 } from "../conversions/messages";
+import { parseHMC } from "../parsing";
+import { useChatRoute, router, ChatRoute } from "../../router";
+import { useRoute } from "vue-router";
+import { useParams } from "../routeParams";
+
+let notifsGranted = false;
 
 const chatEventsHandler = new Handler<StreamChatEvent["event"]>({
   guildAddedToList(_, { guildAddedToList: guild }) {
@@ -29,7 +35,7 @@ const chatEventsHandler = new Handler<StreamChatEvent["event"]>({
       }
     );
   },
-  sentMessage(host, { sentMessage }) {
+  async sentMessage(host, { sentMessage }) {
     chatState.addMessage(
       host,
       sentMessage.guildId,
@@ -37,6 +43,55 @@ const chatEventsHandler = new Handler<StreamChatEvent["event"]>({
       sentMessage.messageId,
       convertMessageV1(sentMessage.message!)
     );
+    const guild = chatState.getGuild(host, sentMessage.guildId);
+    const channel = chatState.getChannel(
+      host,
+      sentMessage.guildId,
+      sentMessage.channelId
+    );
+    const msg = sentMessage.message!;
+    const content = msg.content?.content;
+    const user = chatState.getUser(host, msg.authorId);
+    const photoSource = msg.overrides?.avatar || user.picture;
+
+    const title = `${user.username} in #${
+      channel.data?.name || "unknown-channel"
+    } (${guild.data?.name})`;
+
+    let text: string | undefined;
+    let photo = photoSource ? parseHMC(photoSource, host) : undefined;
+    switch (content?.oneofKind) {
+      case "textMessage":
+        text = content.textMessage.content?.text;
+        break;
+      case "photoMessage":
+        text = `Uploaded ${content.photoMessage.photos
+          .map((p) => p.name)
+          .join(", ")}`;
+        break;
+      case "attachmentMessage":
+        text = `Uploaded ${content.attachmentMessage.files
+          .map((p) => p.name)
+          .join(", ")}`;
+        break;
+    }
+    if (!notifsGranted) {
+      await Notification.requestPermission();
+    }
+    const { params } = router.currentRoute.value as ChatRoute;
+    console.log(params, host, sentMessage.guildId, sentMessage.channelId);
+    if (
+      params.host == host &&
+      params.guild === sentMessage.guildId &&
+      params.channel === sentMessage.channelId
+    ) {
+      return;
+    }
+    new Notification(title, {
+      body: text || "unknown message",
+      icon: photo,
+      timestamp: +msg.createdAt,
+    });
   },
   deletedMessage(host, { deletedMessage }) {
     chatState.deleteMessage(

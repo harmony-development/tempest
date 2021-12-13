@@ -23,16 +23,16 @@ export class AsyncLock {
 
   async run<T>(fn: () => Promise<T>, path: string[]) {
     if (this.has(...path)) {
-      console.log(
-        `%cpath ${this.join(path)} already exists, no need to fetch`,
-        "color: green"
-      );
+      // console.log(
+      //   `%cpath ${this.join(path)} already exists, no need to fetch`,
+      //   "color: green"
+      // );
       return;
     }
-    console.log(
-      `%cpath ${this.join(path)} does not exist, fetching...`,
-      "color: yellow;"
-    );
+    // console.log(
+    //   `%cpath ${this.join(path)} does not exist, fetching...`,
+    //   "color: yellow;"
+    // );
     this.add(...path);
     const res = await fn();
     return res;

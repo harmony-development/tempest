@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { defineAsyncComponent, onMounted, ref, computed } from "vue";
+import { defineAsyncComponent, onMounted, ref, computed, watch } from "vue";
 import { session } from "../../logic/store/session";
 import { connectionManager } from "../../logic/api/connections";
 import { useRouter } from "vue-router";
@@ -53,6 +53,11 @@ onMounted(async () => {
     router.push({ name: "serverselect" });
   }
 });
+
+watch(guild, () => {
+  const guildObject = chatState.getGuild(host.value!, guild.value!);
+  guildObject.lastChannel && (router.push({ params: { channel: guildObject.lastChannel } }));
+})
 </script>
 
 <template>

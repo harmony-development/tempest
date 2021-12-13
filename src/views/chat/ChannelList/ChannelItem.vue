@@ -17,7 +17,10 @@ const data = computed(() =>
   chatState.getChannel(host?.value!, guild?.value!, props.channelid)
 );
 
-const goToChannel = () => router.push({ params: { channel: props.channelid } });
+const goToChannel = () => {
+  chatState.getGuild(host.value!, guild.value!).lastChannel = props.channelid;
+  router.push({ params: { channel: props.channelid } })
+};
 </script>
 
 <template>

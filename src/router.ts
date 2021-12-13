@@ -52,19 +52,19 @@ router.beforeEach((to, _from, next) => {
   }
 });
 
-export const useChatRoute = () => {
-  const route = useRoute() as RouteLocationNormalizedLoaded & {
-    params: {
-      host?: string;
-      guild?: string;
-      channel?: string;
-      message?: string;
-    };
+export interface ChatRoute extends RouteLocationNormalizedLoaded {
+  params: {
+    host?: string;
+    guild?: string;
+    channel?: string;
+    message?: string;
   };
+}
+
+export const useChatRoute = () => {
+  const route = useRoute() as ChatRoute;
   return {
-    host: computed(() => {
-      return route.params.host;
-    }),
+    host: computed(() => route.params.host),
     guild: computed(() => route.params.guild),
     channel: computed(() => route.params.channel),
     message: computed(() => route.params.message),

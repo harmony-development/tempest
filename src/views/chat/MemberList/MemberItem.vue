@@ -11,7 +11,7 @@ const props = defineProps<{
 const { host } = useChatRoute();
 
 const data = computed(() => {
-  console.log(host.value, props.userid);
+  // console.log(host.value, props.userid);
   return chatState.getUser(host.value!, props.userid);
 });
 </script>

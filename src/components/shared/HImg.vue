@@ -1,5 +1,5 @@
 <script lang="ts">
-export default defineComponent({
+defineComponent({
   inheritAttrs: false,
 });
 </script>
@@ -19,6 +19,7 @@ const loadFailure = ref(false);
   <div
     v-if="loadFailure || !src"
     class="flex justify-center h-full items-center"
+    :data-attempted="src"
     v-bind="$attrs"
   >
     <p>{{ fallback }}</p>

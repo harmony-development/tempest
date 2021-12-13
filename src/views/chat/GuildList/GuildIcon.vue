@@ -2,6 +2,7 @@
 import { computed } from "vue";
 import HImg from "~/components/shared/HImg.vue";
 import { chatState } from "../../../logic/store/chat";
+import { parseHMC } from '../../../logic/parsing';
 
 const props = defineProps<{
   active?: boolean;
@@ -12,6 +13,10 @@ const props = defineProps<{
 const guild = computed(
   () => chatState.getGuild(props.host, props.guildid),
   undefined
+);
+
+const iconSrc = computed(
+  () => guild.value.data?.picture ? parseHMC(guild.value.data.picture, props.host) : undefined,
 );
 </script>
 
@@ -25,7 +30,7 @@ const guild = computed(
     style="aspect-ratio: 1"
   >
     <HImg
-      :src="guild?.data?.picture"
+      :src="iconSrc"
       class="object-contain pointer-events-none"
       draggable="false"
       :alt="guild?.data?.name"
