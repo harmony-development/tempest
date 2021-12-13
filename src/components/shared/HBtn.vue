@@ -31,7 +31,7 @@ const buttonClasses = computed(() => ({
   color: inherit;
   @apply px-4 py-2 rounded transition duration-100 ease-in-out 
     inline-flex justify-center items-center 
-    cursor-pointer select-none;
+    cursor-pointer select-none no-underline;
 
   &.dense {
     @apply p-1;
