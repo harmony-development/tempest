@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
-import { IMessageData } from "../../../logic/store/chat";
+import { IMessageData, chatState } from '../../../logic/store/chat';
 import HBtn from "~/components/shared/HBtn.vue";
 import { session } from "../../../logic/store/session";
 import Avatar from "~/components/chat/Avatar.vue";
@@ -19,12 +19,17 @@ import PhotosMessage from './PhotosMessage.vue';
 const props = defineProps<{
   messageid: string;
   data: IMessageData;
-  hideAvatar?: boolean;
+  hideAvatar: boolean;
 }>();
+
 
 const { host, guild, channel } = useChatRoute()
 const optionsOpen = ref(false)
 const optionsDropdown = ref<HTMLElement | undefined>()
+
+const authorData = computed(() => host.value ? chatState.getUser(host.value, props.data.author) : undefined);
+
+const username = computed(() => props.data.override?.username || authorData.value?.username);
 
 onClickOutside(optionsDropdown, () => optionsOpen.value = false)
 
@@ -35,7 +40,6 @@ const content = computed(() => props.data.content?.content);
 const time = computed(() => {
   return dayjs(+props.data.createdAt * 1000).calendar()
 });
-
 const onDelete = async () => {
   await uiState.openConfirm("Are you sure?", "Are you sure you would like to delete this message?")
   await connectionManager.get(host.value!).chat.deleteMessage({
@@ -48,7 +52,10 @@ const onDelete = async () => {
 
 <template>
   <div class="flex gap-2 items-center messageContainer" :class="{ ownMessage: isOwnMessage }">
-    <Avatar :userid="data.author" class="h-8" :class="{ invisible: hideAvatar }" loading="lazy" />
+    <div :class="{ invisible: hideAvatar }" class="text-center overflow-hidden w-16">
+      <Avatar :userid="data.author" :override="data.override?.avatar" class="h-8" loading="lazy" />
+      <p class="mt-2 text-xs text-surface-300 overflow-ellipsis">{{ username }}</p>
+    </div>
     <div class="messageBody relative">
       <TextMessage
         v-if="content?.oneofKind === 'textMessage'"

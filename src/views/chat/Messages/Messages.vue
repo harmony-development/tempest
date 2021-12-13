@@ -32,6 +32,11 @@ watch(messageList, async () => {
     container.scrollTop = container.scrollHeight
   }
 }, { deep: true })
+watch([host, guild, channel], async () => {
+  const container = list.value!
+  await nextTick()
+  container.scrollTop = container.scrollHeight
+})
 
 watch(messageList, async () => {
   const container = list.value!
@@ -62,7 +67,7 @@ const isConsecutiveMessage = (i: number) => {
     currentMessageId!
   );
 
-  return currentMessage?.author === previousMessage?.author;
+  return currentMessage?.author === previousMessage?.author && currentMessage.override?.username === previousMessage.override?.username;
 };
 </script>
 

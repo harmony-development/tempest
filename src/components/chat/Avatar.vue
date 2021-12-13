@@ -9,18 +9,22 @@ const { host } = useChatRoute();
 
 const props = defineProps<{
   userid: string;
+  override?: string;
 }>();
 const profile = computed(
   () => chatState.getUser(host.value!, props.userid),
   undefined
 );
-const uri = computed(() => profile.value?.picture && host.value && parseHMC(profile.value?.picture, host.value));
+const uri = computed(() => {
+  if (props.override) return parseHMC(props.override, host.value!);
+  return profile.value?.picture && host.value && parseHMC(profile.value.picture, host.value)
+});
 </script>
 
 <template>
   <HImg
     :fallback="profile?.username[0] || userid[0]"
     :src="uri"
-    class="bg-primary-800 hover:bg-primary-900 rounded-xl square"
+    class="bg-primary-800 hover:bg-primary-900 rounded-xl square inline-flex"
   />
 </template>
