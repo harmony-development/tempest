@@ -84,7 +84,7 @@ const isConsecutiveMessage = (i: number) => {
 
 <template>
   <div
-    class="flex-1 flex justify-center bg-surface-800 p-3 gap-2 overflow-y-auto w-full compact-scrollbar"
+    class="flex-1 flex justify-center bg-surface-1000 p-3 gap-2 overflow-y-auto w-full compact-scrollbar"
     ref="list"
   >
     <div class="flex flex-col flex-1 gap-2">

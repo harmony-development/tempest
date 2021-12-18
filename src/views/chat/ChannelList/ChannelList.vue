@@ -17,11 +17,9 @@ watchEffect(() => chatState.getChannelList(host.value!, guild.value!));
 </script>
 
 <template>
-  <div class="w-48 bg-surface-800 border-l-3 border-surface-900 flex flex-col">
-    <div class="p-2 text-base bg-surface-900 flex items-center">
-      <p class="font-bold overflow-ellipsis overflow-hidden">
-        {{ data?.data?.name }}
-      </p>
+  <div class="w-48 bg-surface-900 border-l-3 border-surface-900 flex flex-col">
+    <div class="p-2 h-12 text-base bg-surface-700 flex items-center">
+      <p class="font-bold overflow-ellipsis truncate">{{ data?.data?.name }}</p>
       <div class="flex-1" />
       <h-btn
         icon
@@ -35,22 +33,15 @@ watchEffect(() => chatState.getChannelList(host.value!, guild.value!));
     </div>
     <div class="flex items-center justify-between p-2 text-xs">
       <p class="uppercase text-gray-400">channels</p>
-      <h-btn
-        icon
-        dense
-        @click="uiState.state.addChannelDialog = true"
-        aria-label="Add Channel"
-      >
+      <h-btn icon dense @click="uiState.state.addChannelDialog = true" aria-label="Add Channel">
         <mdi-plus />
       </h-btn>
     </div>
-    <div class="flex-1 bg-surface-700 text-xs overflow-auto compact-scrollbar">
+    <div
+      class="flex-1 bg-surface-900 text-xs overflow-auto compact-scrollbar border-r-2 border-surface-800"
+    >
       <ol>
-        <channel-item
-          v-for="c in data?.channelList"
-          :key="`${guild}${c}`"
-          :channelid="c"
-        />
+        <channel-item v-for="c in data?.channelList" :key="`${guild}${c}`" :channelid="c" />
       </ol>
     </div>
   </div>

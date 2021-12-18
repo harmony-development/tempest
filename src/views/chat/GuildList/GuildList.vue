@@ -48,7 +48,7 @@ const goToGuild = (host: string, guild: string) => {
 <template>
   <div class="list">
     <div
-      class="w-18 p-2 h-full overflow-y-scroll no-scrollbar z-1 relative bg-surface-800 flex flex-col gap-2"
+      class="w-18 p-2 h-full overflow-y-scroll no-scrollbar z-1 relative bg-surface-900 flex flex-col gap-2 border-r-2 border-surface-800"
     >
       <HBtn
         variant="filled"

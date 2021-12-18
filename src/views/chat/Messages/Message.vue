@@ -100,7 +100,7 @@ const onDelete = async () => {
 
 <style lang="postcss" scoped>
 .messageBody {
-  @apply bg-surface-700 bg-opacity-60
+  @apply bg-surface-800 bg-opacity-60
         p-3
         pb-2
         rounded-md
@@ -135,7 +135,7 @@ const onDelete = async () => {
     }
 
     & .messageBody {
-      @apply bg-surface-700;
+      @apply bg-surface-800;
     }
   }
 }

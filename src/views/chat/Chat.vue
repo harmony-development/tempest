@@ -76,7 +76,7 @@ watch(guild, () => {
       </div>
     </HDrawer>
     <div class="bg-surface-900 flex-1 flex flex-col">
-      <h-app-bar class="bg-surface-600">
+      <h-app-bar class="bg-surface-700 h-12">
         <h-btn
           variant="text"
           icon
