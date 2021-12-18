@@ -17,17 +17,18 @@ import AttachmentMessage from './AttachmentMessage.vue';
 import PhotosMessage from './PhotosMessage.vue';
 
 const props = defineProps<{
+  host: string;
+  guildid: string;
+  channelid: string;
   messageid: string;
   data: IMessageData;
   hideAvatar: boolean;
 }>();
 
-
-const { host, guild, channel } = useChatRoute()
 const optionsOpen = ref(false)
 const optionsDropdown = ref<HTMLElement | undefined>()
 
-const authorData = computed(() => host.value ? chatState.getUser(host.value, props.data.author) : undefined);
+const authorData = computed(() => props.host ? chatState.getUser(props.host, props.data.author) : undefined);
 
 const username = computed(() => props.data.override?.username || authorData.value?.username);
 
@@ -42,10 +43,10 @@ const time = computed(() => {
 });
 const onDelete = async () => {
   await uiState.openConfirm("Are you sure?", "Are you sure you would like to delete this message?")
-  await connectionManager.get(host.value!).chat.deleteMessage({
+  await connectionManager.get(props.host!).chat.deleteMessage({
     messageId: props.messageid,
-    guildId: guild.value!,
-    channelId: channel.value!,
+    guildId: props.guildid!,
+    channelId: props.channelid!,
   })
 }
 </script>

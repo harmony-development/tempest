@@ -95,6 +95,9 @@ const isConsecutiveMessage = (i: number) => {
         v-for="(m, i) in messageList"
         :key="`${host}/${guild}/${channel}/${m}`"
         :messageid="m"
+        :host="host!"
+        :guildid="guild!"
+        :channelid="channel!"
         :data="chatState.getMessage(host!, guild!, channel!, m)"
         :hide-avatar="isConsecutiveMessage(i)"
       />
