@@ -1,23 +1,30 @@
 <script lang="ts" setup>
 import { useChatRoute } from "../../../router";
-import { computed, nextTick, ref, watch } from 'vue';
+import { computed, nextTick, ref, toRefs, watch } from 'vue';
 import { chatState } from "../../../logic/store/chat";
 import Message from "./Message.vue";
 import { useIntersectionObserver } from "@vueuse/core";
 
+const props = defineProps<{
+  host: string;
+  guild: string;
+  channel: string;
+}>()
+
+const { host, guild, channel } = toRefs(props);
+
 const loader = ref<HTMLElement | undefined>();
 const list = ref<HTMLElement | undefined>(undefined)
-const { host, guild, channel } = useChatRoute();
 
 const filledViewport = ref(false);
 
-const reachedTop = computed(() => chatState.getChannel(host.value!, guild.value!, channel.value!).reachedTop)
+const reachedTop = computed(() => chatState.getChannel(host.value, guild.value, channel.value).reachedTop)
 
 const messageList = computed(() =>
-  host.value && guild.value && channel.value ? chatState.getMessageList(host.value!, guild.value!, channel.value!) : undefined
+  chatState.getMessageList(host.value, guild.value, channel.value)
 );
 
-const loadMoreMessages = () => chatState.fetchMessageList(host.value!, guild.value!, channel.value!, messageList.value?.[0])
+const loadMoreMessages = () => chatState.fetchMessageList(host.value, guild.value, channel.value, messageList.value?.[0])
 
 useIntersectionObserver(loader, async ([{ isIntersecting }]) => {
   if (!isIntersecting || reachedTop.value) return;
@@ -58,27 +65,20 @@ watch(messageList, async () => {
 }, { deep: true })
 
 const isConsecutiveMessage = (i: number) => {
-  const currentHost = host.value!;
-  const currentGuild = guild.value!;
-  const currentChannel = channel.value!;
-
-  const previousMessageId = messageList.value?.[i - 1];
-  const currentMessageId = messageList.value?.[i];
-
   const previousMessage = chatState.getMessage(
-    currentHost,
-    currentGuild,
-    currentChannel,
-    previousMessageId!
+    props.host,
+    props.guild,
+    props.channel,
+    messageList.value[i - 1]
   );
   const currentMessage = chatState.getMessage(
-    currentHost,
-    currentGuild,
-    currentChannel,
-    currentMessageId!
+    props.host,
+    props.guild,
+    props.channel,
+    messageList.value[i]
   );
 
-  return currentMessage?.author === previousMessage?.author && currentMessage.override?.username === previousMessage.override?.username;
+  return currentMessage?.author === previousMessage?.author && currentMessage?.override?.username === previousMessage?.override?.username;
 };
 </script>
 
@@ -98,7 +98,7 @@ const isConsecutiveMessage = (i: number) => {
         :host="host!"
         :guildid="guild!"
         :channelid="channel!"
-        :data="chatState.getMessage(host!, guild!, channel!, m)"
+        :data="chatState.getMessage(host, guild, channel, m)!"
         :hide-avatar="isConsecutiveMessage(i)"
       />
     </div>

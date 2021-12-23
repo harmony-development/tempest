@@ -40,7 +40,7 @@ export interface IChannelData {
 
 export interface IChannel {
   data?: IChannelData;
-  messages: Record<string, IMessageData>;
+  messages: Record<string, IMessageData | undefined>;
   messageList: string[];
   reachedTop?: boolean;
 }

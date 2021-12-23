@@ -101,8 +101,8 @@ watch(guild, () => {
           <mdi-account-multiple />
         </h-btn>
       </h-app-bar>
-      <template v-if="channel">
-        <Messages />
+      <template v-if="host && guild && channel">
+        <Messages :host="host" :guild="guild" :channel="channel" />
         <Composer />
       </template>
       <div class="flex-1 flex flex-col gap-4 justify-center items-center" v-else>
