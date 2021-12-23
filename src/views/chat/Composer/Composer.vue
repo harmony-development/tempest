@@ -43,6 +43,14 @@
       @keydown="onKeyDown"
     />
     <input type="file" ref="filePicker" class="hidden" multiple @change="onFilesSelected" />
+    <input
+      type="file"
+      ref="imagePicker"
+      class="hidden"
+      multiple
+      accept="image/*"
+      @change="onFilesSelected"
+    />
   </div>
 </template>
 
@@ -57,7 +65,7 @@ import { Attachment, FormattedText, Photo } from "@harmony-dev/harmony-web-sdk/d
 import HInput from "~/components/shared/HInput.vue";
 import { connectionManager } from "../../../logic/api/connections";
 import { useChatRoute } from "../../../router";
-import { ref, Ref } from 'vue';
+import { ref } from 'vue';
 import HBtn from "~/components/shared/HBtn.vue";
 import MessageTypePicker from "./MessageTypePicker.vue";
 import { onClickOutside, useEventListener } from '@vueuse/core';
@@ -68,6 +76,7 @@ const { host, guild, channel } = useChatRoute();
 const pickerOpen = ref(false)
 const messageTypePicker = ref<HTMLElement | undefined>()
 const filePicker = ref<HTMLInputElement | undefined>()
+const imagePicker = ref<HTMLInputElement | undefined>()
 const text = ref("");
 const uploadQueue = ref<{
   url: string;
@@ -103,6 +112,9 @@ const onMessageTypeChange = (value: string) => {
   switch (value) {
     case "file":
       filePicker.value?.click();
+      break;
+    case "image":
+      imagePicker.value?.click();
       break;
   }
   pickerOpen.value = false;
