@@ -4,6 +4,7 @@ import { chatState } from "../../../logic/store/chat";
 import { useChatRoute } from "../../../router";
 import MemberItem from "./MemberItem.vue";
 import { session } from '../../../logic/store/session';
+import { uiState } from '~/logic/store/ui';
 
 const { host, guild } = useChatRoute();
 const members = computed(
@@ -23,6 +24,10 @@ const ownUserID = computed(() => session.value?.userID);
         <MemberItem class="gap-2" v-for="m in members" :key="m" :userid="m" />
       </ol>
     </div>
-    <MemberItem class="gap-2" :userid="ownUserID!" />
+    <MemberItem
+      class="gap-2"
+      :userid="ownUserID!"
+      @click="uiState.state.userSettingsDialog = true"
+    />
   </div>
 </template>

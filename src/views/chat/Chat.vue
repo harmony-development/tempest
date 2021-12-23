@@ -17,6 +17,7 @@ import { chatState } from "../../logic/store/chat";
 import Messages from "./Messages/Messages.vue";
 import Composer from "./Composer/Composer.vue";
 import MemberList from "./MemberList/MemberList.vue";
+import UserSettings from "./Dialogs/UserSettings.vue";
 
 const AddGuild = defineAsyncComponent(() => import("./Dialogs/AddGuild.vue"));
 const AddChannel = defineAsyncComponent(
@@ -68,6 +69,9 @@ watch(guild, () => {
     </HDialog>
     <HDialog v-model="uiState.state.addChannelDialog">
       <AddChannel v-if="uiState.state.addChannelDialog" />
+    </HDialog>
+    <HDialog v-model="uiState.state.userSettingsDialog">
+      <UserSettings v-if="uiState.state.userSettingsDialog" />
     </HDialog>
     <HDrawer v-model="leftDrawer">
       <div class="flex h-full">

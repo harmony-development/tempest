@@ -15,9 +15,11 @@
     "focus-trap": "^6.7.1",
     "focus-trap-vue": "^3.2.1",
     "microtip": "^0.2.2",
+    "vee-validate": "^4.5.7",
     "vue": "3.2.22",
     "vue-router": "^4.0.12",
-    "vue-tippy": "^6.0.0-alpha.36"
+    "vue-tippy": "^6.0.0-alpha.36",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@iconify/json": "1.1.432",

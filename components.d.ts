@@ -14,6 +14,7 @@ declare module 'vue' {
     HDrawer: typeof import('./src/components/shared/HDrawer.vue')['default']
     HFile: typeof import('./src/components/shared/HFile.vue')['default']
     HForm: typeof import('./src/components/shared/HForm.vue')['default']
+    HFormInput: typeof import('./src/components/shared/HFormInput.vue')['default']
     HImg: typeof import('./src/components/shared/HImg.vue')['default']
     HInput: typeof import('./src/components/shared/HInput.vue')['default']
     HListIcon: typeof import('./src/components/shared/Lists/HListIcon.vue')['default']

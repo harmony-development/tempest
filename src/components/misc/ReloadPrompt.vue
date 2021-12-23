@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRegisterSW } from "virtual:pwa-register/vue";
-import HBtn from "../shared/HBtn.vue";
+import HBtn from '~/components/shared/HBtn.vue';
 
 const { offlineReady, needRefresh, updateServiceWorker } = useRegisterSW();
 
@@ -11,20 +11,18 @@ const close = async () => {
 </script>
 
 <template>
-  <div v-if="needRefresh" class="pwa-toast" role="alert">
+  <div class="pwa-toast" role="alert" v-if="needRefresh">
     <div class="message">
-      <span> New content available, click on reload button to update. </span>
+      <span>New content available, click on reload button to update.</span>
     </div>
-    <h-btn variant="text" v-if="needRefresh" @click="updateServiceWorker()"
-      >Reload</h-btn
-    >
-    <h-btn variant="text" @click="close">Close</h-btn>
+    <HBtn color="primary" variant="text" @click="updateServiceWorker()" v-if="needRefresh">Reload</HBtn>
+    <HBtn variant="text" @click="close">Close</HBtn>
   </div>
 </template>
 
 <style lang="postcss" scoped>
 .pwa-toast {
-  @apply bg-surface-900 fixed right-0 bottom-0 m-2 p-3 shadow-xl z-1 text-left;
+  @apply bg-surface-900 fixed right-0 bottom-0 m-2 p-3 shadow-xl z-100 text-left;
 }
 .pwa-toast .message {
   @apply mb-2;

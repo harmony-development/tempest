@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { useVModel } from "@vueuse/core";
 
-import { defineProps, ref, watch, onMounted } from "vue";
+import { defineProps } from "vue";
 import PlainInput from "./PlainInput.vue";
 
 const props = defineProps<{
   label?: string;
+  placeholder?: string;
   name?: string;
   noBorder?: boolean;
 }>();
@@ -16,9 +17,9 @@ const props = defineProps<{
       <slot name="pre-input" />
     </div>
     <PlainInput v-bind="$attrs" />
-    <label :for="props.name" class="input-label">{{ props.label }}</label>
+    <label :for="props.name" class="input-label">{{ props.placeholder || props.label }}</label>
     <fieldset v-if="!noBorder" :for="props.name" class="label-wrapper">
-      <legend class="label-text">{{ props.label }}</legend>
+      <legend class="label-text">{{ props.placeholder || props.label }}</legend>
     </fieldset>
   </div>
 </template>

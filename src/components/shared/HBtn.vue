@@ -8,6 +8,8 @@ const props = defineProps<{
   raised?: boolean;
   dense?: boolean;
   square?: boolean;
+  disabled?: boolean;
+  button?: boolean;
 }>();
 
 const buttonClasses = computed(() => ({
@@ -18,18 +20,19 @@ const buttonClasses = computed(() => ({
   raised: props.raised,
   dense: props.dense,
   square: props.square,
+  disabled: props.disabled,
 }));
 </script>
 <template>
-  <a v-wave :class="buttonClasses">
+  <component :is="button ? 'button' : 'a'" role="button" v-wave :class="buttonClasses">
     <slot />
-  </a>
+  </component>
 </template>
 
 <style lang="postcss" scoped>
 .btn {
   color: inherit;
-  @apply px-4 py-2 rounded transition duration-100 ease-in-out 
+  @apply px-4 py-2 rounded-sm transition duration-100 ease-in-out 
     inline-flex justify-center items-center 
     cursor-pointer select-none no-underline;
 
@@ -37,16 +40,16 @@ const buttonClasses = computed(() => ({
     @apply p-1;
   }
 
-  &:disabled {
-    @apply pointer-events-none;
+  &.disabled {
+    @apply pointer-events-none filter saturate-40 opacity-50;
   }
 
   &:focus-visible {
-    @apply ring ring-2 ring-primary-300;
+    @apply ring ring-1 ring-primary-300;
   }
 
   &:hover {
-    @apply ring ring-current ring-2;
+    @apply ring ring-current ring-1;
   }
 
   &:active {

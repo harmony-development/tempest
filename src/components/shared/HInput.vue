@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import OutlinedInput from './Inputs/OutlinedInput.vue';
 import PlainInput from './Inputs/PlainInput.vue';
+
 const props = defineProps<{
   plain?: boolean
   outlined?: boolean
