@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { Content_AttachmentContent } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
-import { useChatRoute } from '../../../router';
-import { parseHMC } from '../../../logic/parsing';
 import HBtn from "~/components/shared/HBtn.vue";
+import { parseHMC } from '../../../logic/parsing';
+import { useChatRoute } from '../../../router';
 
 const { host } = useChatRoute();
 
@@ -11,7 +11,7 @@ const props = defineProps<{
 }>();
 
 const hmc = (id: string) => parseHMC(id, host.value!);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          </script>
+</script>
 
 <template>
   <div>

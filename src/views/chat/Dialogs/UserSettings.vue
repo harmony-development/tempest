@@ -4,7 +4,6 @@
     v-slot="{ meta, handleReset, handleSubmit, submitCount }"
     :initial-values="defaultValues"
     @submit="onSubmit"
-    :validation-schema="schema"
   >
     {{ submitCount }}
     <Field name="avatar" v-slot="{ handleChange, handleBlur }">
@@ -31,7 +30,6 @@
         variant="outlined"
         color="primary"
         type="submit"
-        button
         :disabled="!meta.dirty || !meta.valid"
         @click="handleSubmit"
       >Save</HBtn>
@@ -40,15 +38,14 @@
 </template>
 
 <script lang="ts" setup>
-import { Form, Field } from 'vee-validate'
-import HFormInput from '~/components/shared/HFormInput.vue';
-import HBtn from '~/components/shared/HBtn.vue';
-import HImg from '~/components/shared/HImg.vue';
+import { Field, Form } from 'vee-validate';
 import { computed, ref } from 'vue';
-import { chatState } from '../../../logic/store/chat';
-import { session } from '~/logic/store/session';
-import { connectionManager } from '../../../logic/api/connections';
 import { object, string } from 'yup';
+import HBtn from '~/components/shared/HBtn.vue';
+import HFormInput from '~/components/shared/HFormInput.vue';
+import HImg from '~/components/shared/HImg.vue';
+import { session } from '~/logic/store/session';
+import { chatState } from '../../../logic/store/chat';
 
 const avatarInput = ref<HTMLInputElement | undefined>()
 

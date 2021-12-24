@@ -2,13 +2,11 @@ import {
   StreamEvent as StreamChatEvent,
   StreamEventsResponse,
 } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/stream";
-import { Handler } from "../util/oneof";
-import { chatState } from "../store/chat";
+import { ChatRoute, router } from "../../router";
 import { convertMessageV1 } from "../conversions/messages";
 import { parseHMC } from "../parsing";
-import { useChatRoute, router, ChatRoute } from "../../router";
-import { useRoute } from "vue-router";
-import { useParams } from "../routeParams";
+import { chatState } from "../store/chat";
+import { Handler } from "../util/oneof";
 
 let notifsGranted = false;
 
@@ -91,6 +89,7 @@ const chatEventsHandler = new Handler<StreamChatEvent["event"]>({
       body: text || "unknown message",
       icon: photo,
       timestamp: +msg.createdAt,
+      tag: `${host}-${sentMessage.guildId}-${sentMessage.channelId}`,
     });
   },
   deletedMessage(host, { deletedMessage }) {
