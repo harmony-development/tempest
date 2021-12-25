@@ -1,18 +1,19 @@
 <template>
-  <div v-if="uploadQueue.length > 0" class="bg-black p-3 flex gap-3 h-38 w-full overflow-scroll">
-    <div v-for="({ url, file }, i) in uploadQueue" :key="url" class="relative group rounded-sm overflow-hidden square">
-      <img v-if="file.type.startsWith('image/')" class="h-full" :src="url">
-      <div v-else class="p-3 bg-primary-600 rounded-sm h-full flexcol">
-        <h1 class="font-bold">
-          {{ file.name }}
-        </h1>
-        <div class="flex-1" />
-        <p class="text-xs">
-          {{ file.size }} Bytes
-        </p>
-      </div>
-      <div
-        class="
+  <div v-if="uploadQueue.length > 0" class="flex h-full overflow-hidden overflow-x-scroll bg-black h-38 w-full">
+    <div class="flex gap-3 p-3">
+      <div v-for="({ url, file }, i) in uploadQueue" :key="url" class="relative flex h-full group rounded-sm overflow-hidden square">
+        <img v-if="file.type.startsWith('image/')" class="h-full object-cover " :src="url">
+        <div v-else class="p-3 bg-primary-600 rounded-sm h-full flexcol w-full">
+          <h1 class="font-bold overflow-ellipsis overflow-hidden">
+            {{ file.name }}
+          </h1>
+          <div class="flex-1" />
+          <p class="text-xs">
+            {{ file.size }} Bytes
+          </p>
+        </div>
+        <div
+          class="
 					absolute
 					top-0
 					left-0
@@ -27,10 +28,11 @@
 					opacity-0
 					group-hover:opacity-100
 				"
-      >
-        <base-button icon @click="deleteFile(i)">
-          <mdi:delete />
-        </base-button>
+        >
+          <base-button icon @click="deleteFile(i)">
+            <mdi:delete />
+          </base-button>
+        </div>
       </div>
     </div>
   </div>

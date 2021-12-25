@@ -33,7 +33,7 @@ const setOpen = (val: boolean) => {
 
 <style lang="postcss" scoped>
 .overlay {
-	@apply fixed w-full h-full top-0 left-0 z-10 lg:z-auto bg-gray-500 bg-opacity-10 lg:hidden;
+	@apply fixed flex w-full h-full top-0 left-0 z-10 lg:z-auto bg-gray-500 bg-opacity-10 lg:hidden;
 }
 .drawer {
 	@apply h-full overflow-visible bg-surface-700 transform fixed lg:static ease-in-out transition duration-150 z-30 lg:z-auto;

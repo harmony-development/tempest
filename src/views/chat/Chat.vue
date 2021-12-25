@@ -73,7 +73,7 @@ watch(guild, () => {
         <channel-list v-if="guild" />
       </div>
     </base-drawer>
-    <div class="bg-surface-900 flex-1 flexcol">
+    <div class="bg-surface-900 flex-1 flexcol overflow-hidden">
       <base-app-bar class="bg-surface-700 h-12 text-sm font-semibold">
         <base-button
           variant="text"
