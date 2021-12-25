@@ -30,6 +30,8 @@ declare module 'vue' {
     'Mdi:picture': typeof import('~icons/mdi/picture')['default']
     MdiAccountMultiple: typeof import('~icons/mdi/account-multiple')['default']
     MdiAdd: typeof import('~icons/mdi/add')['default']
+    MdiAlert: typeof import('~icons/mdi/alert')['default']
+    MdiArrowLeft: typeof import('~icons/mdi/arrow-left')['default']
     MdiCog: typeof import('~icons/mdi/cog')['default']
     MdiDelete: typeof import('~icons/mdi/delete')['default']
     MdiDotsVertical: typeof import('~icons/mdi/dots-vertical')['default']

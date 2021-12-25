@@ -1,21 +1,23 @@
 <script lang="ts" setup>
-import { createPopper, Instance, PositioningStrategy } from "@popperjs/core";
-import { Placement } from "@popperjs/core/lib/enums";
-import { defineComponent, onMounted, Ref, ref, watch } from "vue";
+import type { Instance, PositioningStrategy } from "@popperjs/core";
+import { createPopper } from "@popperjs/core";
+import type { Placement } from "@popperjs/core/lib/enums";
+import type { Ref } from "vue";
+import { defineComponent, onMounted, ref, watch } from "vue";
 defineComponent({
 	inheritAttrs: false,
 });
 const props = defineProps<{
-	placement?: Placement;
-	strategy?: PositioningStrategy;
-	openOnHover?: boolean;
-	open?: boolean;
-	offsetX?: number;
-	offsetY?: number;
+	placement?: Placement
+	strategy?: PositioningStrategy
+	openOnHover?: boolean
+	open?: boolean
+	offsetX?: number
+	offsetY?: number
 }>();
-const target = <Ref<HTMLElement>>ref();
-const content = <Ref<HTMLElement>>ref();
-const instance = <Ref<Instance>>ref();
+const target = ref() as Ref<HTMLElement>;
+const content = ref() as Ref<HTMLElement>;
+const instance = ref() as Ref<Instance>;
 onMounted(() => {
 	instance.value = createPopper(target.value!, content.value!, {
 		strategy: props.strategy || "fixed",
@@ -34,14 +36,14 @@ watch(props, () => instance.value?.update());
 </script>
 
 <template>
-	<div ref="target" v-bind="$attrs" class="target">
-		<slot />
-	</div>
-	<div ref="content" class="content" :class="{ open, openOnHover }">
-		<div class="inner-box">
-			<slot name="content" />
-		</div>
-	</div>
+  <div ref="target" v-bind="$attrs" class="target">
+    <slot />
+  </div>
+  <div ref="content" class="content" :class="{ open, openOnHover }">
+    <div class="inner-box">
+      <slot name="content" />
+    </div>
+  </div>
 </template>
 
 <style lang="postcss" scoped>

@@ -5,9 +5,9 @@ defineComponent({
 	inheritAttrs: false,
 });
 const props = defineProps<{
-	modelValue: boolean;
-	mountPoint?: string;
-	right?: boolean;
+	modelValue: boolean
+	mountPoint?: string
+	right?: boolean
 }>();
 const emit = defineEmits(["update:modelValue"]);
 const open = useVModel(props, "modelValue", emit);
@@ -17,18 +17,18 @@ const setOpen = (val: boolean) => {
 </script>
 
 <template>
-	<div v-show="open" class="overlay" @click.self="setOpen(false)"></div>
-	<div
-		:class="{
-			drawer: true,
-			closed: !open,
-			right: right,
-			left: !right,
-		}"
-		v-bind="$attrs"
-	>
-		<slot />
-	</div>
+  <div v-show="open" class="overlay" @click.self="setOpen(false)" />
+  <div
+    :class="{
+      drawer: true,
+      closed: !open,
+      right: right,
+      left: !right,
+    }"
+    v-bind="$attrs"
+  >
+    <slot />
+  </div>
 </template>
 
 <style lang="postcss" scoped>

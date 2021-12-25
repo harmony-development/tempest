@@ -1,9 +1,9 @@
 import { StorageSerializers, useLocalStorage } from "@vueuse/core";
 
 interface ISession {
-	session: string;
-	host: string;
-	userID: string;
+	session: string
+	host: string
+	userID: string
 }
 
 // NOTE: apparently `undefined` breaks how things are represented in the

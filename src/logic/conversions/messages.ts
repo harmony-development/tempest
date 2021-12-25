@@ -1,5 +1,5 @@
-import { Message } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
-import { IMessageData } from "../store/chat";
+import type { Message } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
+import type { IMessageData } from "../store/chat";
 
 export const convertMessageV1 = (msg: Message): IMessageData => ({
 	author: msg.authorId,

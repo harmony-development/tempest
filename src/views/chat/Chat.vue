@@ -1,11 +1,6 @@
 <script lang="ts" setup>
 import { computed, defineAsyncComponent, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
-import BaseAppBar from "~/components/base/BaseAppBar.vue";
-import BaseButton from "~/components/base/BaseButton.vue";
-import BaseDialog from "~/components/base/BaseDialog.vue";
-import BaseDrawer from "~/components/base/BaseDrawer.vue";
-import { pubsub } from "~/logic/api/pubsub";
 import { connectionManager } from "../../logic/api/connections";
 import { chatState } from "../../logic/store/chat";
 import { session } from "../../logic/store/session";
@@ -18,6 +13,11 @@ import GuildList from "./GuildList/GuildList.vue";
 import MemberList from "./MemberList/MemberList.vue";
 import Messages from "./Messages/Messages.vue";
 import Splash from "./Splash.vue";
+import { pubsub } from "~/logic/api/pubsub";
+import BaseDrawer from "~/components/base/BaseDrawer.vue";
+import BaseDialog from "~/components/base/BaseDialog.vue";
+import BaseButton from "~/components/base/BaseButton.vue";
+import BaseAppBar from "~/components/base/BaseAppBar.vue";
 
 const AddGuild = defineAsyncComponent(() => import("./Dialogs/AddGuild.vue"));
 const AddChannel = defineAsyncComponent(() => import("./Dialogs/AddChannel.vue"));
@@ -30,7 +30,7 @@ const { host, guild, channel } = useChatRoute();
 
 const channelData = computed(() => chatState.getChannel(host.value!, guild.value!, channel.value!));
 
-onMounted(async () => {
+onMounted(async() => {
 	const [conn, stream] = connectionManager.create(session.value!.host, session.value!.session);
 	try {
 		await conn.auth.checkLoggedIn({});
@@ -43,7 +43,8 @@ onMounted(async () => {
 			},
 		});
 		stream.responses.onMessage(handler);
-	} catch (e) {
+	}
+	catch (e) {
 		router.push({ name: "serverselect" });
 	}
 });
@@ -55,53 +56,71 @@ watch(guild, () => {
 </script>
 
 <template>
-	<splash v-if="!sessionValidated" />
-	<div class="h-full w-full flex" v-else>
-		<base-dialog v-model="uiState.state.addGuildDialog">
-			<add-guild v-if="uiState.state.addGuildDialog" />
-		</base-dialog>
-		<base-dialog v-model="uiState.state.addChannelDialog">
-			<add-channel v-if="uiState.state.addChannelDialog" />
-		</base-dialog>
-		<base-dialog v-model="uiState.state.userSettingsDialog">
-			<user-settings v-if="uiState.state.userSettingsDialog" />
-		</base-dialog>
-		<base-drawer v-model="leftDrawer">
-			<div class="flex h-full">
-				<guild-list />
-				<channel-list v-if="guild" />
-			</div>
-		</base-drawer>
-		<div class="bg-surface-900 flex-1 flexcol">
-			<base-app-bar class="bg-surface-700 h-12 text-sm font-semibold">
-				<base-button variant="text" icon dense class="!lg:hidden mr-2" @click="leftDrawer = true" aria-label="Left Drawer">
-					<mdi-menu />
-				</base-button>
-				<mdi-pound class="text-lg mr-2 text-gray-400" />
-				{{ channelData.data?.name }}
-				<div class="flex-1" />
-				<base-button variant="text" icon dense class="!lg:hidden" @click="rightDrawer = true" aria-label="Right Drawer">
-					<mdi-account-multiple />
-				</base-button>
-			</base-app-bar>
-			<template v-if="host && guild && channel">
-				<messages :host="host" :guild="guild" :channel="channel" />
-				<composer />
-			</template>
-			<div class="flex-1 flexcol gap-4 justify-center items-center" v-else>
-				<div class="bg-surface-800 rounded-full p-2">
-					<mdi-pound class="text-5xl align-top text-gray-300" />
-				</div>
-				<div class="bg-surface-800 rounded-full p-2 px-4">
-					<p v-if="guild">Select a channel to start chatting</p>
-					<p v-else>Select a guild to get started</p>
-				</div>
-			</div>
-		</div>
-		<base-drawer v-model="rightDrawer" right>
-			<div class="flex h-full">
-				<member-list v-if="guild" />
-			</div>
-		</base-drawer>
-	</div>
+  <splash v-if="!sessionValidated" />
+  <div v-else class="h-full w-full flex">
+    <base-dialog v-model="uiState.state.addGuildDialog">
+      <add-guild v-if="uiState.state.addGuildDialog" />
+    </base-dialog>
+    <base-dialog v-model="uiState.state.addChannelDialog">
+      <add-channel v-if="uiState.state.addChannelDialog" />
+    </base-dialog>
+    <base-dialog v-model="uiState.state.userSettingsDialog">
+      <user-settings v-if="uiState.state.userSettingsDialog" />
+    </base-dialog>
+    <base-drawer v-model="leftDrawer">
+      <div class="flex h-full">
+        <guild-list />
+        <channel-list v-if="guild" />
+      </div>
+    </base-drawer>
+    <div class="bg-surface-900 flex-1 flexcol">
+      <base-app-bar class="bg-surface-700 h-12 text-sm font-semibold">
+        <base-button
+          variant="text"
+          icon
+          dense
+          class="!lg:hidden mr-2"
+          aria-label="Left Drawer"
+          @click="leftDrawer = true"
+        >
+          <mdi-menu />
+        </base-button>
+        <mdi-pound class="text-lg mr-2 text-gray-400" />
+        {{ channelData.data?.name }}
+        <div class="flex-1" />
+        <base-button
+          variant="text"
+          icon
+          dense
+          class="!lg:hidden"
+          aria-label="Right Drawer"
+          @click="rightDrawer = true"
+        >
+          <mdi-account-multiple />
+        </base-button>
+      </base-app-bar>
+      <template v-if="host && guild && channel">
+        <messages :host="host" :guild="guild" :channel="channel" />
+        <composer />
+      </template>
+      <div v-else class="flex-1 flexcol gap-4 justify-center items-center">
+        <div class="bg-surface-800 rounded-full p-2">
+          <mdi-pound class="text-5xl align-top text-gray-300" />
+        </div>
+        <div class="bg-surface-800 rounded-full p-2 px-4">
+          <p v-if="guild">
+            Select a channel to start chatting
+          </p>
+          <p v-else>
+            Select a guild to get started
+          </p>
+        </div>
+      </div>
+    </div>
+    <base-drawer v-model="rightDrawer" right>
+      <div class="flex h-full">
+        <member-list v-if="guild" />
+      </div>
+    </base-drawer>
+  </div>
 </template>

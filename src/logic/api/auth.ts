@@ -1,12 +1,12 @@
 import { Connection } from "@harmony-dev/harmony-web-sdk";
-import {
+import type {
 	AuthStep,
 	NextStepRequest,
 	NextStepRequest_FormFields,
 	StreamStepsRequest,
 	StreamStepsResponse,
 } from "@harmony-dev/harmony-web-sdk/dist/gen/auth/v1/auth";
-import { ServerStreamingCall } from "@protobuf-ts/runtime-rpc";
+import type { ServerStreamingCall } from "@protobuf-ts/runtime-rpc";
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { session } from "../store/session";
@@ -81,26 +81,26 @@ export const useAuthManager = (host: string) => {
 		});
 	};
 
-	const back = async () => {
+	const back = async() => {
 		goingBack.value = true;
 		try {
 			if (!canGoBack.value || currentStepType.value === "loading") goToServerSelect();
 			await authManager.sendBack();
-		} catch (e) {
+		}
+		catch (e) {
 			goToServerSelect();
 		}
 		goingBack.value = false;
 	};
 
 	const formatError = (e: any, fallback: string) => {
-		if (e instanceof Error) {
+		if (e instanceof Error)
 			return e.message;
-		} else {
+		else
 			return fallback;
-		}
 	};
 
-	const sendChoice = async (c: string) => {
+	const sendChoice = async(c: string) => {
 		try {
 			await authManager.nextStep({
 				oneofKind: "choice",
@@ -108,12 +108,13 @@ export const useAuthManager = (host: string) => {
 					choice: c,
 				},
 			});
-		} catch (e) {
+		}
+		catch (e) {
 			error.value = formatError(e, "entry.error.sending-choice");
 		}
 	};
 
-	const sendForm = async (values: string[]) => {
+	const sendForm = async(values: string[]) => {
 		try {
 			if (currentStep.value?.oneofKind !== "form") return;
 			await authManager.nextStep({
@@ -124,7 +125,8 @@ export const useAuthManager = (host: string) => {
 					})),
 				},
 			});
-		} catch (e) {
+		}
+		catch (e) {
 			error.value = formatError(e, "entry.error.sending-form");
 		}
 	};
@@ -149,12 +151,13 @@ export const useAuthManager = (host: string) => {
 		onStep(step.step);
 	};
 
-	onMounted(async () => {
+	onMounted(async() => {
 		try {
 			await authManager.start();
-			authManager.stream?.responses.onMessage((resp) => onStepOuter(resp.step!));
+			authManager.stream?.responses.onMessage(resp => onStepOuter(resp.step!));
 			onStepOuter((await authManager.nextStep({ oneofKind: undefined }).response).step!);
-		} catch (e) {
+		}
+		catch (e) {
 			console.warn(e);
 			currentStepType.value = "fatal";
 		}

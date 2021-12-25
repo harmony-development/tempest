@@ -1,16 +1,17 @@
-import { StreamEventsRequest, StreamEventsResponse } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/stream";
+import type { StreamEventsRequest, StreamEventsResponse } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/stream";
 import { Connection } from "@harmony-dev/harmony-web-sdk/dist/src/connection";
-import { DuplexStreamingCall } from "@protobuf-ts/runtime-rpc";
+import type { DuplexStreamingCall } from "@protobuf-ts/runtime-rpc";
 import { session } from "../store/session";
 
 type ChatStream = DuplexStreamingCall<StreamEventsRequest, StreamEventsResponse>;
 
 class ConnectionManager {
 	connections: {
-		[host: string]: Connection;
+		[host: string]: Connection
 	};
+
 	streams: {
-		[host: string]: ChatStream;
+		[host: string]: ChatStream
 	};
 
 	constructor() {

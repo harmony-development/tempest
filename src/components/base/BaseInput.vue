@@ -2,11 +2,11 @@
 import OutlinedInput from "../shared/Inputs/OutlinedInput.vue";
 import PlainInput from "../shared/Inputs/PlainInput.vue";
 defineProps<{
-	plain?: boolean;
-	outlined?: boolean;
+	plain?: boolean
+	outlined?: boolean
 }>();
 </script>
 <template>
-	<plain-input v-bind="$attrs" v-if="plain" />
-	<outlined-input v-bind="$attrs" v-else />
+  <plain-input v-if="plain" v-bind="$attrs" />
+  <outlined-input v-else v-bind="$attrs" />
 </template>

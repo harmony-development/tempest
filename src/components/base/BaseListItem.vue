@@ -1,23 +1,23 @@
 <script setup lang="ts">
 const props = defineProps<{
-	selected?: boolean;
-	dangerous?: boolean;
+	selected?: boolean
+	dangerous?: boolean
 }>();
 </script>
 
 <template>
-	<li
-		ref="item"
-		role="button"
-		class="list-item"
-		:class="{
-			selected: props.selected,
-			dangerous,
-		}"
-		tabindex="0"
-	>
-		<slot />
-	</li>
+  <li
+    ref="item"
+    role="button"
+    class="list-item"
+    :class="{
+      selected: props.selected,
+      dangerous,
+    }"
+    tabindex="0"
+  >
+    <slot />
+  </li>
 </template>
 
 <style lang="postcss" scoped>

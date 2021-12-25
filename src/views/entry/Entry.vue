@@ -1,11 +1,11 @@
 <script lang="ts" setup></script>
 
 <template>
-	<div class="background h-full w-full overflow-x-auto flexcol justify-center">
-		<div class="flexcol gap-2 bg-surface-900 p-3 w-11/12 sm:m-12 md:w-150">
-			<router-view />
-		</div>
-	</div>
+  <div class="background h-full w-full overflow-x-auto flexcol justify-center">
+    <div class="flexcol gap-2 bg-surface-900 p-3 w-11/12 sm:m-12 md:w-150">
+      <router-view />
+    </div>
+  </div>
 </template>
 
 <style lang="postcss" scoped>

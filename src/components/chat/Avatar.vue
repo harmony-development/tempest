@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { computed, Ref, ref } from "vue";
+import type { Ref } from "vue";
+import { computed, ref } from "vue";
 import { parseHMC } from "../../logic/parsing";
 import { chatState } from "../../logic/store/chat";
 import { useChatRoute } from "../../router";
@@ -7,11 +8,11 @@ import BaseImage from "../base/BaseImage.vue";
 
 const { host } = useChatRoute();
 
-const avatarInput = <Ref<HTMLInputElement>>ref();
+const avatarInput = ref() as Ref<HTMLInputElement>;
 const emit = defineEmits(["change", "blur"]);
 const props = defineProps<{
-	userid?: string;
-	override?: string;
+	userid?: string
+	override?: string
 }>();
 const avatar = ref();
 const profile = computed(() => (props.userid ? chatState.getUser(host.value!, props.userid) : undefined), undefined);
@@ -28,19 +29,11 @@ const onChange = (event: Event) => {
 </script>
 
 <template>
-	<input
-		ref="avatarInput"
-		accept="image/*"
-		class="hidden"
-		type="file"
-		@change="onChange"
-		@blur="(...args) => $emit('blur', ...args)"
-	/>
-	<base-image
-		:fallback="profile?.username[0] || userid?.[0] || '?'"
-		:src="uri"
-		@click="avatarInput.click()"
-		class="bg-primary-800 hover:bg-primary-900 rounded-full square inline-flex"
-		v-bind="$attrs"
-	/>
+  <base-image
+    :fallback="profile?.username[0] || userid?.[0] || '?'"
+    :src="uri"
+    class="bg-primary-800 hover:bg-primary-900 rounded-full square inline-flex"
+    v-bind="$attrs"
+    @click="avatarInput.click()"
+  />
 </template>

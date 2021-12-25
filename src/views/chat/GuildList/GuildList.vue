@@ -1,8 +1,6 @@
 <script lang="ts" setup>
 import { computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import BaseButton from "~/components/base/BaseButton.vue";
-import { convertGuildEntryV1 } from "~/logic/conversions/guilds";
 import { connectionManager } from "../../../logic/api/connections";
 import { chatState } from "../../../logic/store/chat";
 import { session } from "../../../logic/store/session";
@@ -10,14 +8,16 @@ import { uiState } from "../../../logic/store/ui";
 import { useChatRoute } from "../../../router";
 import AppSettings from "./AppSettings.vue";
 import GuildIcon from "./GuildIcon.vue";
+import { convertGuildEntryV1 } from "~/logic/conversions/guilds";
+import BaseButton from "~/components/base/BaseButton.vue";
 
 const { guild } = useChatRoute();
 const router = useRouter();
 
-onMounted(async () => {
+onMounted(async() => {
 	const conn = connectionManager.get(session.value!.host);
 	const { guilds } = await conn.chat.getGuildList({}).response;
-	guilds.forEach(async (entry) => {
+	guilds.forEach(async(entry) => {
 		connectionManager.getStream(entry.serverId).requests.send({
 			request: {
 				oneofKind: "subscribeToGuild",
@@ -27,7 +27,7 @@ onMounted(async () => {
 			},
 		});
 	});
-	chatState.state.guildList = guilds.map((guild) => convertGuildEntryV1(guild, session.value!.host));
+	chatState.state.guildList = guilds.map(guild => convertGuildEntryV1(guild, session.value!.host));
 });
 
 const guildList = computed(() => chatState.state.guildList);
@@ -46,9 +46,9 @@ const goToGuild = (host: string, guildId: string) => {
 </script>
 
 <template>
-	<div class="list">
-		<div
-			class="
+  <div class="list">
+    <div
+      class="
 				w-18
 				p-2
 				h-full
@@ -61,30 +61,30 @@ const goToGuild = (host: string, guildId: string) => {
 				gap-2
 				border-r-2 border-surface-800
 			"
-		>
-			<base-button
-				variant="filled"
-				color="primary"
-				square
-				@click="uiState.state.addGuildDialog = true"
-				aria-label="Create / Join Guild"
-			>
-				<mdi-plus />
-			</base-button>
-			<hr class="border-gray-500" />
-			<div class="flex-1 flexcol gap-2">
-				<guild-icon
-					v-for="{ host, guildID } in guildList"
-					:key="`${host}-${guildID}`"
-					:active="guildID === guild"
-					:host="host"
-					:guildid="guildID"
-					@click="goToGuild(host, guildID)"
-				/>
-			</div>
-			<app-settings />
-		</div>
-	</div>
+    >
+      <base-button
+        variant="filled"
+        color="primary"
+        square
+        aria-label="Create / Join Guild"
+        @click="uiState.state.addGuildDialog = true"
+      >
+        <mdi-plus />
+      </base-button>
+      <hr class="border-gray-500">
+      <div class="flex-1 flexcol gap-2">
+        <guild-icon
+          v-for="{ host, guildID } in guildList"
+          :key="`${host}-${guildID}`"
+          :active="guildID === guild"
+          :host="host"
+          :guildid="guildID"
+          @click="goToGuild(host, guildID)"
+        />
+      </div>
+      <app-settings />
+    </div>
+  </div>
 </template>
 
 <style lang="postcss" scoped>

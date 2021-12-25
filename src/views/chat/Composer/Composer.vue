@@ -1,14 +1,18 @@
 <template>
-	<div class="bg-black p-3 flex gap-3 h-38" v-if="uploadQueue.length > 0">
-		<div v-for="({ url, file }, i) in uploadQueue" :key="url" class="relative group rounded-sm overflow-hidden">
-			<img class="h-full" :src="url" v-if="file.type.startsWith('image/')" />
-			<div class="p-3 bg-primary-600 rounded-sm h-full flexcol" v-else>
-				<h1 class="font-bold">{{ file.name }}</h1>
-				<div class="flex-1" />
-				<p class="text-xs">{{ file.size }} Bytes</p>
-			</div>
-			<div
-				class="
+  <div v-if="uploadQueue.length > 0" class="bg-black p-3 flex gap-3 h-38">
+    <div v-for="({ url, file }, i) in uploadQueue" :key="url" class="relative group rounded-sm overflow-hidden">
+      <img v-if="file.type.startsWith('image/')" class="h-full" :src="url">
+      <div v-else class="p-3 bg-primary-600 rounded-sm h-full flexcol">
+        <h1 class="font-bold">
+          {{ file.name }}
+        </h1>
+        <div class="flex-1" />
+        <p class="text-xs">
+          {{ file.size }} Bytes
+        </p>
+      </div>
+      <div
+        class="
 					absolute
 					top-0
 					left-0
@@ -23,73 +27,75 @@
 					opacity-0
 					group-hover:opacity-100
 				"
-			>
-				<base-button icon @click="deleteFile(i)">
-					<mdi:delete />
-				</base-button>
-			</div>
-		</div>
-	</div>
-	<div class="flex items-center p-1 bg-surface-900">
-		<div class="relative">
-			<pop-in-transition>
-				<message-type-picker
-					class="absolute bottom-[120%] picker"
-					v-if="pickerOpen"
-					ref="messageTypePicker"
-					@sent="pickerOpen = false"
-					@update:message-type="onMessageTypeChange"
-				/>
-			</pop-in-transition>
-			<base-button variant="text" icon class="picker-button" @click="pickerOpen = true">
-				<mdi-add :class="{ pickerOpen }" class="transition-all duration-100" />
-			</base-button>
-		</div>
-		<base-input
-			plain
-			multiline
-			no-border
-			label="Write your message..."
-			name="message-input"
-			:rows="1"
-			class="!bg-transparent w-full"
-			v-model="text"
-			@keydown="onKeyDown"
-		/>
-		<input type="file" ref="filePicker" class="hidden" multiple @change="onFilesSelected" />
-		<input type="file" ref="imagePicker" class="hidden" multiple accept="image/*" @change="onFilesSelected" />
-	</div>
+      >
+        <base-button icon @click="deleteFile(i)">
+          <mdi:delete />
+        </base-button>
+      </div>
+    </div>
+  </div>
+  <div class="flex items-center p-1 bg-surface-900">
+    <div class="relative">
+      <pop-in-transition>
+        <message-type-picker
+          v-if="pickerOpen"
+          ref="messageTypePicker"
+          class="absolute bottom-[120%] picker"
+          @sent="pickerOpen = false"
+          @update:message-type="onMessageTypeChange"
+        />
+      </pop-in-transition>
+      <base-button variant="text" icon class="picker-button" @click="pickerOpen = true">
+        <mdi-add :class="{ pickerOpen }" class="transition-all duration-100" />
+      </base-button>
+    </div>
+    <base-input
+      v-model="text"
+      plain
+      multiline
+      no-border
+      label="Write your message..."
+      name="message-input"
+      :rows="1"
+      class="!bg-transparent w-full"
+      @keydown="onKeyDown"
+    />
+    <input ref="filePicker" type="file" class="hidden" multiple @change="onFilesSelected">
+    <input
+      ref="imagePicker"
+      type="file"
+      class="hidden"
+      multiple
+      accept="image/*"
+      @change="onFilesSelected"
+    >
+  </div>
 </template>
-
-<style lang="postcss" scoped>
-.pickerOpen {
-	@apply transform rotate-45;
-}
-</style>
 
 <script lang="ts" setup>
 import { Attachment, FormattedText, Photo } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
 import { onClickOutside, useEventListener } from "@vueuse/core";
-import { Ref, ref } from "vue";
-import BaseButton from "~/components/base/BaseButton.vue";
-import BaseInput from "~/components/base/BaseInput.vue";
-import PopInTransition from "~/components/transitions/PopInTransition.vue";
+import type { Ref } from "vue";
+import { ref } from "vue";
 import { connectionManager } from "../../../logic/api/connections";
 import { useChatRoute } from "../../../router";
 import MessageTypePicker from "./MessageTypePicker.vue";
+import BaseButton from "~/components/base/BaseButton.vue";
+import BaseInput from "~/components/base/BaseInput.vue";
+import PopInTransition from "~/components/transitions/PopInTransition.vue";
 
 const { host, guild, channel } = useChatRoute();
 
 const pickerOpen = ref(false);
-const messageTypePicker = <Ref<HTMLElement>>ref();
-const filePicker = <Ref<HTMLInputElement>>ref();
-const imagePicker = <Ref<HTMLInputElement>>ref();
+const messageTypePicker = ref() as Ref<HTMLElement>;
+const filePicker = ref() as Ref<HTMLInputElement>;
+const imagePicker = ref() as Ref<HTMLInputElement>;
 const text = ref("");
 const uploadQueue = ref<
-	{
-		url: string;
-		file: File;
-	}[]
+{
+	url: string
+	file: File
+}[]
 >([]);
 
 onClickOutside(messageTypePicker, () => (pickerOpen.value = false));
@@ -110,10 +116,10 @@ useEventListener("paste" as any, (ev: ClipboardEvent) => {
 const onFilesSelected = (ev: Event) => {
 	const files = (ev.target as HTMLInputElement).files!;
 	uploadQueue.value.push(
-		...Array.from(files).map((file) => ({
+		...Array.from(files).map(file => ({
 			file,
 			url: URL.createObjectURL(file),
-		}))
+		})),
 	);
 };
 
@@ -134,7 +140,7 @@ const onMessageTypeChange = (value: string) => {
 	pickerOpen.value = false;
 };
 
-const onKeyDown = async (ev: KeyboardEvent) => {
+const onKeyDown = async(ev: KeyboardEvent) => {
 	if (ev.key !== "Enter" || ev.shiftKey) return;
 	ev.preventDefault();
 	const content = text.value;
@@ -142,10 +148,10 @@ const onKeyDown = async (ev: KeyboardEvent) => {
 	text.value = "";
 	const conn = connectionManager.get(host.value!);
 	if (files.length > 0) {
-		const allFilesArePhotos = files.every((file) => file.type.startsWith("image/"));
+		const allFilesArePhotos = files.every(file => file.type.startsWith("image/"));
 		uploadQueue.value.forEach(({ url }) => URL.revokeObjectURL(url));
 		uploadQueue.value = [];
-		const uploaded = await Promise.all(files.map(async (f) => conn.uploadFile(f)));
+		const uploaded = await Promise.all(files.map(async f => conn.uploadFile(f)));
 		if (allFilesArePhotos) {
 			await conn.chat.sendMessage({
 				guildId: guild.value!,
@@ -154,16 +160,17 @@ const onKeyDown = async (ev: KeyboardEvent) => {
 					content: {
 						oneofKind: "photoMessage",
 						photoMessage: {
-							photos: uploaded.map((f) =>
+							photos: uploaded.map(f =>
 								Photo.create({
 									hmc: f.id,
-								})
+								}),
 							),
 						},
 					},
 				},
 			});
-		} else {
+		}
+		else {
 			await conn.chat.sendMessage({
 				guildId: guild.value!,
 				channelId: channel.value!,
@@ -171,10 +178,10 @@ const onKeyDown = async (ev: KeyboardEvent) => {
 					content: {
 						oneofKind: "attachmentMessage",
 						attachmentMessage: {
-							files: uploaded.map((f) =>
+							files: uploaded.map(f =>
 								Attachment.create({
 									id: f.id,
-								})
+								}),
 							),
 						},
 					},
@@ -198,3 +205,9 @@ const onKeyDown = async (ev: KeyboardEvent) => {
 	});
 };
 </script>
+
+<style lang="postcss" scoped>
+.pickerOpen {
+	@apply transform rotate-45;
+}
+</style>

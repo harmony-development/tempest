@@ -2,14 +2,14 @@
 import { computed } from "vue";
 
 const props = defineProps<{
-	variant?: "text" | "filled" | "outlined";
-	color?: "primary" | "secondary";
-	icon?: boolean;
-	raised?: boolean;
-	dense?: boolean;
-	square?: boolean;
-	disabled?: boolean;
-	button?: boolean;
+	variant?: "text" | "filled" | "outlined"
+	color?: "primary" | "secondary"
+	icon?: boolean
+	raised?: boolean
+	dense?: boolean
+	square?: boolean
+	disabled?: boolean
+	button?: boolean
 }>();
 
 const buttonClasses = computed(() => ({
@@ -24,16 +24,16 @@ const buttonClasses = computed(() => ({
 }));
 </script>
 <template>
-	<component :is="button ? 'button' : 'a'" role="button" v-wave :class="buttonClasses">
-		<slot />
-	</component>
+  <component :is="button ? 'button' : 'a'" v-wave role="button" :class="buttonClasses">
+    <slot />
+  </component>
 </template>
 
 <style lang="postcss" scoped>
 .btn {
 	color: inherit;
-	@apply px-4 py-2 rounded-sm transition duration-100 ease-in-out 
-    inline-flex justify-center items-center 
+	@apply px-4 py-2 rounded-sm transition duration-100 ease-in-out
+    inline-flex justify-center items-center
     cursor-pointer select-none no-underline;
 
 	&.dense {

@@ -1,24 +1,24 @@
 import { Store } from "./store";
 
 export interface IUIState {
-	addGuildDialog: boolean;
-	addChannelDialog: boolean;
-	guildSettingsDialog: boolean;
-	userSettingsDialog: boolean;
+	addGuildDialog: boolean
+	addChannelDialog: boolean
+	guildSettingsDialog: boolean
+	userSettingsDialog: boolean
 	confirmDialog: {
-		open: boolean;
-		title?: string;
-		description?: string;
-		resolve?: () => void;
-		reject?: () => void;
-	};
+		open: boolean
+		title?: string
+		description?: string
+		resolve?: () => void
+		reject?: () => void
+	}
 }
 
 class UIState extends Store<IUIState> {
 	openConfirm(title: string, description: string) {
-		const promise = new Promise<void>((res, rej) => {
-			this.state.confirmDialog.resolve = res;
-			this.state.confirmDialog.reject = rej;
+		const promise = new Promise<void>((resolve, reject) => {
+			this.state.confirmDialog.resolve = resolve;
+			this.state.confirmDialog.reject = reject;
 		});
 		this.state.confirmDialog.title = title;
 		this.state.confirmDialog.description = description;

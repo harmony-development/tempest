@@ -10,7 +10,7 @@ describe("nearest overlap calculation", () => {
 		},
 	];
 
-	test.each(cases)(`$formatters`, ({ formatters }) => {
+	test.each(cases)("$formatters", ({ formatters }) => {
 		expect(nearestOverlap(formatters[0], formatters.splice(0))).toBe(3);
 	});
 });

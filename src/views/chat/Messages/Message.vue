@@ -1,31 +1,33 @@
 <script lang="ts" setup>
 import { onClickOutside } from "@vueuse/core";
 import dayjs from "dayjs";
-import { computed, Ref, ref } from "vue";
-import BaseButton from "~/components/base/BaseButton.vue";
-import BaseListItem from "~/components/base/BaseListItem.vue";
-import Avatar from "~/components/chat/Avatar.vue";
-import PopInTransition from "~/components/transitions/PopInTransition.vue";
+import type { Ref } from "vue";
+import { computed, ref } from "vue";
 import { connectionManager } from "../../../logic/api/connections";
-import { chatState, IMessageData } from "../../../logic/store/chat";
+import type { IMessageData } from "../../../logic/store/chat";
+import { chatState } from "../../../logic/store/chat";
 import { session } from "../../../logic/store/session";
 import { uiState } from "../../../logic/store/ui";
 import AttachmentMessage from "./AttachmentMessage.vue";
 import EmbedMessage from "./EmbedMessage.vue";
 import PhotosMessage from "./PhotosMessage.vue";
 import TextMessage from "./TextMessage.vue";
+import PopInTransition from "~/components/transitions/PopInTransition.vue";
+import Avatar from "~/components/chat/Avatar.vue";
+import BaseListItem from "~/components/base/BaseListItem.vue";
+import BaseButton from "~/components/base/BaseButton.vue";
 
 const props = defineProps<{
-	host: string;
-	guildid: string;
-	channelid: string;
-	messageid: string;
-	data: IMessageData;
-	hideAvatar: boolean;
+	host: string
+	guildid: string
+	channelid: string
+	messageid: string
+	data: IMessageData
+	hideAvatar: boolean
 }>();
 
 const optionsOpen = ref(false);
-const optionsDropdown = <Ref<HTMLElement>>ref();
+const optionsDropdown = ref() as Ref<HTMLElement>;
 
 const authorData = computed(() => (props.host ? chatState.getUser(props.host, props.data.author) : undefined));
 
@@ -38,7 +40,7 @@ const content = computed(() => props.data.content?.content);
 const time = computed(() => {
 	return dayjs(+props.data.createdAt * 1000).calendar();
 });
-const onDelete = async () => {
+const onDelete = async() => {
 	await uiState.openConfirm("Are you sure?", "Are you sure you would like to delete this message?");
 	await connectionManager.get(props.host!).chat.deleteMessage({
 		messageId: props.messageid,
@@ -49,43 +51,45 @@ const onDelete = async () => {
 </script>
 
 <template>
-	<div class="flex gap-2 items-start messageContainer" :class="{ ownMessage: isOwnMessage }">
-		<div v-if="!hideAvatar" class="text-center overflow-hidden w-16">
-			<avatar :userid="data.author" :override="data.override?.avatar" class="h-8" loading="lazy" />
-			<p class="mt-2 text-xs text-surface-300 overflow-hidden">
-				{{ username }}
-			</p>
-		</div>
-		<div :class="hideAvatar && 'ml-18'" class="messageBody text-sm relative">
-			<text-message v-if="content?.oneofKind === 'textMessage'" :content="content.textMessage.content" />
-			<attachment-message
-				v-else-if="content?.oneofKind === 'attachmentMessage'"
-				:content="content.attachmentMessage.files"
-			/>
-			<photos-message v-else-if="content?.oneofKind === 'photoMessage'" :content="content.photoMessage.photos" />
-			<embed-message v-else-if="content?.oneofKind === 'embedMessage'" :content="content.embedMessage" />
-			<div v-else>
-				<mdi:alert class="text-4xl" />
-				<p>Unimplemented message type</p>
-			</div>
-			<div class="w-full mt-2">
-				<p class="time text-xs text-gray-400 float-right">{{ time }}</p>
-			</div>
-		</div>
-		<div class="h-full relative">
-			<pop-in-transition>
-				<div class="options-dropdown overflow-hidden" v-if="optionsOpen" ref="optionsDropdown">
-					<base-list-item dangerous @click="onDelete">
-						<mdi-delete class="mr-2" />
-						<span>Delete Message</span>
-					</base-list-item>
-				</div>
-			</pop-in-transition>
-			<base-button @click="optionsOpen = true" icon dense class="text-md messageOptions">
-				<mdi-dots-vertical />
-			</base-button>
-		</div>
-	</div>
+  <div class="flex gap-2 items-start messageContainer" :class="{ ownMessage: isOwnMessage }">
+    <div v-if="!hideAvatar" class="text-center overflow-hidden w-16">
+      <avatar :userid="data.author" :override="data.override?.avatar" class="h-8" loading="lazy" />
+      <p class="mt-2 text-xs text-surface-300 overflow-hidden">
+        {{ username }}
+      </p>
+    </div>
+    <div :class="hideAvatar && 'ml-18'" class="messageBody text-sm relative">
+      <text-message v-if="content?.oneofKind === 'textMessage'" :content="content.textMessage.content" />
+      <attachment-message
+        v-else-if="content?.oneofKind === 'attachmentMessage'"
+        :content="content.attachmentMessage.files"
+      />
+      <photos-message v-else-if="content?.oneofKind === 'photoMessage'" :content="content.photoMessage.photos" />
+      <embed-message v-else-if="content?.oneofKind === 'embedMessage'" :content="content.embedMessage" />
+      <div v-else>
+        <mdi:alert class="text-4xl" />
+        <p>Unimplemented message type</p>
+      </div>
+      <div class="w-full mt-2">
+        <p class="time text-xs text-gray-400 float-right">
+          {{ time }}
+        </p>
+      </div>
+    </div>
+    <div class="h-full relative">
+      <pop-in-transition>
+        <div v-if="optionsOpen" ref="optionsDropdown" class="options-dropdown overflow-hidden">
+          <base-list-item dangerous @click="onDelete">
+            <mdi-delete class="mr-2" />
+            <span>Delete Message</span>
+          </base-list-item>
+        </div>
+      </pop-in-transition>
+      <base-button icon dense class="text-md messageOptions" @click="optionsOpen = true">
+        <mdi-dots-vertical />
+      </base-button>
+    </div>
+  </div>
 </template>
 
 <style lang="postcss" scoped>

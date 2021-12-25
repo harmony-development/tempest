@@ -5,22 +5,24 @@ const updateType = (type: string) => emit("update:messageType", type);
 </script>
 
 <template>
-	<div class="bg-surface-1000 p-3 rounded-sm flexcol gap-3">
-		<p class="font-bold">Attachment Types</p>
-		<hr class="border-surface-600" />
-		<div class="grid grid-cols-3 gap-2 auto-cols-max w-max">
-			<message-type-button class="bg-purple-600" label="Photos" @click="updateType('image')">
-				<mdi:picture />
-			</message-type-button>
-			<message-type-button class="bg-emerald-600" label="Files" @click="updateType('file')">
-				<mdi:file />
-			</message-type-button>
-			<message-type-button class="bg-blue-600" label="Location" @click="updateType('location')">
-				<mdi:crosshairs-gps />
-			</message-type-button>
-			<message-type-button class="bg-blue-600" label="Woozy" @click="updateType('woozy')">
-				<twemoji:woozy-face />
-			</message-type-button>
-		</div>
-	</div>
+  <div class="bg-surface-1000 p-3 rounded-sm flexcol gap-3">
+    <p class="font-bold">
+      Attachment Types
+    </p>
+    <hr class="border-surface-600">
+    <div class="grid grid-cols-3 gap-2 auto-cols-max w-max">
+      <message-type-button styling="bg-purple-600" label="Photos" @click="updateType('image')">
+        <mdi:picture />
+      </message-type-button>
+      <message-type-button styling="bg-emerald-600" label="Files" @click="updateType('file')">
+        <mdi:file />
+      </message-type-button>
+      <message-type-button styling="bg-blue-600" label="Location" @click="updateType('location')">
+        <mdi:crosshairs-gps />
+      </message-type-button>
+      <message-type-button styling="bg-blue-600" label="Woozy" @click="updateType('woozy')">
+        <twemoji:woozy-face />
+      </message-type-button>
+    </div>
+  </div>
 </template>

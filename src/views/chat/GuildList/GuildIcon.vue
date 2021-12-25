@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 import { computed } from "vue";
-import BaseImage from "~/components/base/BaseImage.vue";
 import { parseHMC } from "../../../logic/parsing";
 import { chatState } from "../../../logic/store/chat";
+import BaseImage from "~/components/base/BaseImage.vue";
 
 const props = defineProps<{
-	active?: boolean;
-	host: string;
-	guildid: string;
+	active?: boolean
+	host: string
+	guildid: string
 }>();
 
 const guild = computed(() => chatState.getGuild(props.host, props.guildid), undefined);
@@ -15,15 +15,22 @@ const iconSrc = computed(() => (guild.value.data?.picture ? parseHMC(guild.value
 </script>
 
 <template>
-	<div v-bind="$attrs" role="button" v-wave class="icon" :class="{ active }" style="aspect-ratio: 1">
-		<base-image
-			:src="iconSrc"
-			class="object-contain pointer-events-none"
-			draggable="false"
-			:alt="guild?.data?.name"
-			:fallback="guild?.data?.name?.[0]"
-		/>
-	</div>
+  <div
+    v-wave
+    v-bind="$attrs"
+    role="button"
+    class="icon"
+    :class="{ active }"
+    style="aspect-ratio: 1"
+  >
+    <base-image
+      :src="iconSrc"
+      class="object-contain pointer-events-none"
+      draggable="false"
+      :alt="guild?.data?.name"
+      :fallback="guild?.data?.name?.[0]"
+    />
+  </div>
 </template>
 
 <style lang="postcss" scoped>

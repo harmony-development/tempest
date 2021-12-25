@@ -3,6 +3,20 @@ name: ci
 on: [push, pull_request]
 
 jobs:
+
+  lint-check:
+    name: "Lintcheck"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install gangster npm
+        run: "npm i pnpm -g"
+      - name: Install bloatware
+        run: "pnpm i"
+      - name: Check Blusk's grammar
+        run: "pnpm run lint"
+
   type-check:
     name: "Typecheck"
     runs-on: ubuntu-latest

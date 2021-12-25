@@ -7,7 +7,8 @@
 		"typecheck": "vue-tsc --noEmit",
 		"serve": "vite preview",
 		"test": "jest src",
-		"prettify": "npx prettier --write \"./**/*.ts\" && npx prettier --write \"./**/*.js\" && npx prettier --write \"./**/*.json\" && npx prettier --write \"./**/*.vue\""
+		"prettify": "eslint --fix \"**/*.{vue,ts,js}\"",
+		"lint": "eslint \"**/*.{vue,ts,js}\""
 	},
 	"dependencies": {
 		"@harmony-dev/harmony-web-sdk": "^0.0.2-alpha-3",
@@ -23,6 +24,7 @@
 		"yup": "^0.32.11"
 	},
 	"devDependencies": {
+		"@antfu/eslint-config": "^0.14.0",
 		"@iconify/json": "1.1.432",
 		"@protobuf-ts/runtime-rpc": "^2.1.0",
 		"@types/jest": "27.0.3",
@@ -32,7 +34,9 @@
 		"@vue/compiler-sfc": "^3.2.26",
 		"dayjs": "^1.10.7",
 		"esbuild-jest": "^0.5.0",
+		"eslint": "^8.5.0",
 		"jest": "^27.4.5",
+		"pnpm": "^6.24.2",
 		"rollup-plugin-visualizer": "^5.5.2",
 		"simple-git-hooks": "^2.7.0",
 		"tippy.js": "^6.3.7",

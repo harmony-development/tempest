@@ -1,3 +1,3 @@
 <template>
-	<gg-spinner class="animate-spin" />
+  <gg-spinner class="animate-spin" />
 </template>

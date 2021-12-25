@@ -1,15 +1,15 @@
 <script lang="ts" setup>
-import { Content_TextContent } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
+import type { Content_TextContent } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
 import FormattedText from "./FormattedText.vue";
 defineProps<{
-	content: Content_TextContent["content"];
+	content: Content_TextContent["content"]
 }>();
 </script>
 
 <template>
-	<p class="content-out whitespace-pre-wrap">
-		<formatted-text :content="content!" />
-	</p>
+  <p class="content-out whitespace-pre-wrap">
+    <formatted-text :content="content!" />
+  </p>
 </template>
 <style lang="postcss" scoped>
 p {

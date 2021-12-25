@@ -1,5 +1,6 @@
 import { computed } from "vue";
-import { createRouter, createWebHashHistory, RouteLocationNormalizedLoaded, RouteRecordRaw, useRoute } from "vue-router";
+import type { RouteLocationNormalizedLoaded, RouteRecordRaw } from "vue-router";
+import { createRouter, createWebHashHistory, useRoute } from "vue-router";
 import { session } from "./logic/store/session";
 
 const routes: RouteRecordRaw[] = [
@@ -38,20 +39,19 @@ export const router = createRouter({
 });
 
 router.beforeEach((to, _from, next) => {
-	if (to.meta.auth && !session.value) {
+	if (to.meta.auth && !session.value)
 		next({ name: "serverselect" });
-	} else {
+	else
 		next();
-	}
 });
 
 export interface ChatRoute extends RouteLocationNormalizedLoaded {
 	params: {
-		host?: string;
-		guild?: string;
-		channel?: string;
-		message?: string;
-	};
+		host?: string
+		guild?: string
+		channel?: string
+		message?: string
+	}
 }
 
 export const useChatRoute = () => {

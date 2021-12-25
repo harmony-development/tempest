@@ -1,11 +1,13 @@
-import { ChannelKind } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/channels";
-import {
+import type { ChannelKind } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/channels";
+import type {
 	Content,
-	GetChannelMessagesRequest_Direction,
 	Overrides,
 	Reaction,
 } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
-import { UserStatus } from "@harmony-dev/harmony-web-sdk/dist/gen/profile/v1/types";
+import {
+	GetChannelMessagesRequest_Direction,
+} from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
+import type { UserStatus } from "@harmony-dev/harmony-web-sdk/dist/gen/profile/v1/types";
 import { connectionManager } from "../api/connections";
 import { convertMessageV1 } from "../conversions/messages";
 import { AsyncLock } from "../util/asyncLock";
@@ -13,60 +15,60 @@ import { session } from "./session";
 import { Store } from "./store";
 
 export interface IGuildEntry {
-	host: string;
-	guildID: string;
+	host: string
+	guildID: string
 }
 
 interface IUserData {
-	username: string;
-	picture?: string;
-	status: UserStatus;
+	username: string
+	picture?: string
+	status: UserStatus
 }
 
 export interface IMessageData {
-	author: string;
-	inReplyTo?: string;
-	createdAt: string;
-	editedAt?: string;
-	content?: Content;
-	reactions?: Reaction[];
-	override?: Overrides;
+	author: string
+	inReplyTo?: string
+	createdAt: string
+	editedAt?: string
+	content?: Content
+	reactions?: Reaction[]
+	override?: Overrides
 }
 
 export interface IChannelData {
-	name: string;
-	kind: ChannelKind;
+	name: string
+	kind: ChannelKind
 }
 
 export interface IChannel {
-	data?: IChannelData;
-	messages: Record<string, IMessageData | undefined>;
-	messageList: string[];
-	reachedTop?: boolean;
+	data?: IChannelData
+	messages: Record<string, IMessageData | undefined>
+	messageList: string[]
+	reachedTop?: boolean
 }
 
 export interface IGuildData {
-	name: string;
-	owners: string[];
-	picture?: string;
+	name: string
+	owners: string[]
+	picture?: string
 }
 
 export interface IGuild {
-	data?: IGuildData;
-	channels: Record<string, IChannel>;
-	members: Set<string>;
-	channelList?: string[];
-	lastChannel?: string;
+	data?: IGuildData
+	channels: Record<string, IChannel>
+	members: Set<string>
+	channelList?: string[]
+	lastChannel?: string
 }
 
 export interface IHostData {
-	guilds: Record<string, IGuild>;
-	users: Record<string, IUserData>;
+	guilds: Record<string, IGuild>
+	users: Record<string, IUserData>
 }
 
 export interface IChatState {
-	guildList: IGuildEntry[];
-	hosts: Record<string, IHostData>;
+	guildList: IGuildEntry[]
+	hosts: Record<string, IHostData>
 }
 
 class ChatState extends Store<IChatState> {
@@ -79,37 +81,40 @@ class ChatState extends Store<IChatState> {
 
 	private ensureHost(host?: string) {
 		host = host || session.value!.host;
-		if (!this.state.hosts[host])
+		if (!this.state.hosts[host]) {
 			this.state.hosts[host] = {
 				guilds: {},
 				users: {},
 			};
+		}
 		return this.state.hosts[host];
 	}
 
 	private ensureGuild(host: string, guildID: string) {
 		const h = this.ensureHost(host);
-		if (!h.guilds[guildID])
+		if (!h.guilds[guildID]) {
 			h.guilds[guildID] = {
 				channels: {},
 				members: new Set(),
 			};
+		}
 		return h.guilds[guildID];
 	}
 
 	private ensureChannel(host: string, guildID: string, channelID: string) {
 		const g = this.ensureGuild(host, guildID);
-		if (!g.channels[channelID])
+		if (!g.channels[channelID]) {
 			g.channels[channelID] = {
 				messages: {},
 				messageList: [],
 			};
+		}
 		return g.channels[channelID];
 	}
 
 	getUser(host: string, userId: string) {
 		const h = this.ensureHost(host);
-		this.lock.run(async () => {
+		this.lock.run(async() => {
 			const { profile } = await connectionManager.get(host).profile.getProfile({
 				userId,
 			}).response;
@@ -124,10 +129,9 @@ class ChatState extends Store<IChatState> {
 
 	getGuild(host: string, guildId: string) {
 		const g = this.ensureGuild(host, guildId);
-		this.lock.run(async () => {
+		this.lock.run(async() => {
 			const conn = connectionManager.get(host);
 			const { guild } = await conn.chat.getGuild({ guildId }).response;
-			// console.log(guild);
 			g.data = {
 				name: guild!.name,
 				picture: guild?.picture,
@@ -139,10 +143,10 @@ class ChatState extends Store<IChatState> {
 
 	getMemberList(host: string, guildId: string) {
 		const g = this.ensureGuild(host, guildId);
-		this.lock.run(async () => {
+		this.lock.run(async() => {
 			const conn = connectionManager.get(host);
 			const { members } = await conn.chat.getGuildMembers({ guildId }).response;
-			members.forEach((m) => g.members.add(m));
+			members.forEach(m => g.members.add(m));
 		}, ["memberList", host, guildId]);
 		return g.members;
 	}
@@ -150,7 +154,7 @@ class ChatState extends Store<IChatState> {
 	getChannelList(host: string, guildId: string) {
 		const g = this.ensureGuild(host, guildId);
 
-		this.lock.run(async () => {
+		this.lock.run(async() => {
 			const { channels } = await connectionManager.get(host).chat.getGuildChannels({ guildId }).response;
 			for (const { channel, channelId } of channels) {
 				this.ensureChannel(host, guildId, channelId).data = {
@@ -158,7 +162,7 @@ class ChatState extends Store<IChatState> {
 					kind: channel!.kind,
 				};
 			}
-			g.channelList = channels.map((c) => c.channelId);
+			g.channelList = channels.map(c => c.channelId);
 		}, ["channelList", host, guildId]);
 
 		return g.channelList;
@@ -169,24 +173,25 @@ class ChatState extends Store<IChatState> {
 		guildId: string,
 		channelId: string,
 		messageId?: string,
-		direction?: GetChannelMessagesRequest_Direction
+		direction?: GetChannelMessagesRequest_Direction,
 	) {
 		const c = this.ensureChannel(host, guildId, channelId);
 
 		const { messages, reachedTop } = await connectionManager.get(host).chat.getChannelMessages({
 			guildId,
 			channelId,
-			messageId: messageId,
+			messageId,
 			direction,
 		}).response;
-		for (const { message, messageId } of messages) {
+		for (const { message, messageId } of messages)
 			c.messages[messageId] = convertMessageV1(message!);
-		}
-		if (messageId) {
-			c.messageList.unshift(...messages.map((m) => m.messageId).reverse());
-		} else {
-			c.messageList = messages.map((m) => m.messageId).reverse();
-		}
+
+		if (messageId)
+			c.messageList.unshift(...messages.map(m => m.messageId).reverse());
+
+		else
+			c.messageList = messages.map(m => m.messageId).reverse();
+
 		c.reachedTop = reachedTop;
 	}
 
@@ -195,7 +200,7 @@ class ChatState extends Store<IChatState> {
 		guildId: string,
 		channelId: string,
 		messageId?: string,
-		direction?: GetChannelMessagesRequest_Direction
+		direction?: GetChannelMessagesRequest_Direction,
 	) {
 		const c = this.ensureChannel(host, guildId, channelId);
 		this.lock.run(
@@ -205,9 +210,9 @@ class ChatState extends Store<IChatState> {
 					guildId,
 					channelId,
 					messageId,
-					direction || GetChannelMessagesRequest_Direction.BEFORE_UNSPECIFIED
+					direction || GetChannelMessagesRequest_Direction.BEFORE_UNSPECIFIED,
 				),
-			["messageList", host, guildId, channelId, messageId!]
+			["messageList", host, guildId, channelId, messageId!],
 		);
 		return c.messageList;
 	}
@@ -262,7 +267,7 @@ class ChatState extends Store<IChatState> {
 	deleteMessage(host: string, guildID: string, channelID: string, messageID: string) {
 		const c = this.ensureChannel(host, guildID, channelID);
 		delete c.messages[messageID];
-		c.messageList = c.messageList.filter((f) => f !== messageID);
+		c.messageList = c.messageList.filter(f => f !== messageID);
 	}
 
 	addChannel(host: string, guildID: string, channelID: string, data: IChannelData) {

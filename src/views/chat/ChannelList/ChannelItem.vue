@@ -2,15 +2,15 @@
 import { ChannelKind } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/channels";
 import { computed } from "vue";
 import { useRouter } from "vue-router";
-import BaseListItem from "~/components/base/BaseListItem.vue";
 import { chatState } from "../../../logic/store/chat";
 import { useChatRoute } from "../../../router";
+import BaseListItem from "~/components/base/BaseListItem.vue";
 const props = defineProps<{
-	channelid: string;
+	channelid: string
 }>();
 const router = useRouter();
 const { host, guild, channel } = useChatRoute();
-const data = computed(() => chatState.getChannel(host?.value!, guild?.value!, props.channelid));
+const data = computed(() => chatState.getChannel(host.value!, guild.value!, props.channelid));
 const goToChannel = () => {
 	chatState.getGuild(host.value!, guild.value!).lastChannel = props.channelid;
 	router.push({ params: { channel: props.channelid } });
@@ -18,9 +18,9 @@ const goToChannel = () => {
 </script>
 
 <template>
-	<base-list-item :selected="channel === channelid" @click="goToChannel">
-		<mdi-pound class="text-base text-gray-400" v-if="data.data?.kind === ChannelKind.TEXT_UNSPECIFIED" />
-		<mdi-volume class="text-base text-gray-400" v-else />
-		<span class="text-md ml-2">{{ data.data?.name }}</span>
-	</base-list-item>
+  <base-list-item :selected="channel === channelid" @click="goToChannel">
+    <mdi-pound v-if="data.data?.kind === ChannelKind.TEXT_UNSPECIFIED" class="text-base text-gray-400" />
+    <mdi-volume v-else class="text-base text-gray-400" />
+    <span class="text-md ml-2">{{ data.data?.name }}</span>
+  </base-list-item>
 </template>
