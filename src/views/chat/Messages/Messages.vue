@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useIntersectionObserver } from "@vueuse/core";
+import { onKeyPressed, onKeyStroke, useIntersectionObserver } from "@vueuse/core";
 import type { Ref } from "vue";
 import { computed, nextTick, ref, toRefs, watch } from "vue";
 import { chatState } from "../../../logic/store/chat";
@@ -20,6 +20,8 @@ const reachedTop = computed(() => chatState.getChannel(host.value, guild.value, 
 const messageList = computed(() => chatState.getMessageList(host.value, guild.value, channel.value));
 const loadMoreMessages = () => chatState.fetchMessageList(host.value, guild.value, channel.value, messageList.value?.[0]);
 const scrollToBottom = () => (list.value.scrollTop = list.value.scrollHeight);
+
+onKeyStroke("Escape", () => scrollToBottom());
 
 useIntersectionObserver(loader, async([{ isIntersecting }]) => {
 	if (!isIntersecting || reachedTop.value) return;
