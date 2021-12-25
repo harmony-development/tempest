@@ -118,7 +118,7 @@ const onDelete = async () => {
         @click="optionsOpen = true"
         icon
         dense
-        class="text-sm messageOptions"
+        class="text-md messageOptions"
       >
         <mdi-dots-vertical />
       </HBtn>
