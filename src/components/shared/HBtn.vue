@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, defineProps, toRefs } from "vue";
+import { computed, defineProps } from "vue";
 
 const props = defineProps<{
   variant?: "text" | "filled" | "outlined";
@@ -24,7 +24,12 @@ const buttonClasses = computed(() => ({
 }));
 </script>
 <template>
-  <component :is="button ? 'button' : 'a'" role="button" v-wave :class="buttonClasses">
+  <component
+    :is="button ? 'button' : 'a'"
+    role="button"
+    v-wave
+    :class="buttonClasses"
+  >
     <slot />
   </component>
 </template>

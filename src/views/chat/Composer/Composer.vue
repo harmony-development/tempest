@@ -3,10 +3,10 @@
     <div
       v-for="({ url, file }, i) in uploadQueue"
       :key="url"
-      class="relative group rounded-md overflow-hidden"
+      class="relative group rounded-sm overflow-hidden"
     >
       <img class="h-full" :src="url" v-if="file.type.startsWith('image/')" />
-      <div class="p-3 bg-primary-600 rounded-md h-full flexcol" v-else>
+      <div class="p-3 bg-primary-600 rounded-sm h-full flexcol" v-else>
         <h1 class="font-bold">{{ file.name }}</h1>
         <div class="flex-1" />
         <p class="text-xs">{{ file.size }} Bytes</p>

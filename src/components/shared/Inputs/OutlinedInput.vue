@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useVModel } from "@vueuse/core";
-
 import { defineProps } from "vue";
 import PlainInput from "./PlainInput.vue";
 
@@ -12,12 +10,24 @@ const props = defineProps<{
 }>();
 </script>
 <template>
-  <div class="flex items-center relative rounded transition duration-100 input-parent">
+  <div
+    class="
+      flex
+      items-center
+      relative
+      rounded
+      transition
+      duration-100
+      input-parent
+    "
+  >
     <div>
       <slot name="pre-input" />
     </div>
     <PlainInput v-bind="$attrs" />
-    <label :for="props.name" class="input-label">{{ props.placeholder || props.label }}</label>
+    <label :for="props.name" class="input-label">{{
+      props.placeholder || props.label
+    }}</label>
     <fieldset v-if="!noBorder" :for="props.name" class="label-wrapper">
       <legend class="label-text">{{ props.placeholder || props.label }}</legend>
     </fieldset>
@@ -26,7 +36,7 @@ const props = defineProps<{
 
 <style lang="postcss" scoped>
 .label-wrapper {
-  @apply absolute -top-[0.6em] left-0 right-0 bottom-0 border-surface-500 border-1 transition duration-100 rounded-md px-1.5 overflow-hidden;
+  @apply absolute -top-[0.6em] left-0 right-0 bottom-0 border-surface-500 border-1 transition duration-100 rounded-sm px-1.5 overflow-hidden;
 }
 
 .input-label {

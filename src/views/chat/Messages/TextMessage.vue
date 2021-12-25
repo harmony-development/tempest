@@ -16,7 +16,7 @@ p {
   @apply inline-block;
 }
 .content-out::v-deep(.codeblock) {
-  @apply w-full block break-all break-words whitespace-pre-wrap pr-3 rounded-md bg-black;
+  @apply w-full block break-all break-words whitespace-pre-wrap pr-3 rounded-sm bg-black;
 }
 .content-out ::v-deep(.codeblock > code) {
   @apply break-all w-full block p-3 pl-4 break-words whitespace-pre-wrap;

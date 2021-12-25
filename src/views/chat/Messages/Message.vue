@@ -131,7 +131,7 @@ const onDelete = async () => {
   @apply bg-surface-800 bg-opacity-60
         p-3
         pb-2
-        rounded-md
+        rounded-sm
         break-words
         whitespace-pre-wrap
         max-w-50ch
@@ -149,7 +149,7 @@ const onDelete = async () => {
 }
 
 .options-dropdown {
-  @apply bg-black rounded-md absolute left-[120%];
+  @apply bg-black rounded-sm absolute left-[120%];
 }
 
 .messageContainer {
