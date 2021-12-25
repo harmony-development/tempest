@@ -39,6 +39,7 @@ declare module 'vue' {
     MdiMenu: typeof import('~icons/mdi/menu')['default']
     MdiPlus: typeof import('~icons/mdi/plus')['default']
     MdiPound: typeof import('~icons/mdi/pound')['default']
+    MdiSend: typeof import('~icons/mdi/send')['default']
     MdiVolume: typeof import('~icons/mdi/volume')['default']
     OutlinedInput: typeof import('./src/components/shared/Inputs/OutlinedInput.vue')['default']
     PlainInput: typeof import('./src/components/shared/Inputs/PlainInput.vue')['default']

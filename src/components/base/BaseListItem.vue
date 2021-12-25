@@ -2,6 +2,7 @@
 const props = defineProps<{
 	selected?: boolean
 	dangerous?: boolean
+	compact?: boolean
 }>();
 </script>
 
@@ -13,6 +14,7 @@ const props = defineProps<{
     :class="{
       selected: props.selected,
       dangerous,
+      compact,
     }"
     tabindex="0"
   >
@@ -33,6 +35,9 @@ const props = defineProps<{
 	&:focus-visible {
 		@apply ring-3 ring-primary-300 ring-inset;
 	}
+}
+.compact {
+	@apply py-1 px-2;
 }
 .selected {
 	@apply  border-primary-500;

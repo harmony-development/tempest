@@ -25,7 +25,7 @@ const buttonClasses = computed(() => ({
 }));
 </script>
 <template>
-  <component :is="button ? 'button' : 'a'" v-wave :class="buttonClasses">
+  <button v-wave :class="buttonClasses" class="text-base">
     <slot />
     <span
       v-if="isLoading"
@@ -35,7 +35,7 @@ const buttonClasses = computed(() => ({
         class=" text-2xl animate-spin"
       />
     </span>
-  </component>
+  </button>
 </template>
 
 <style lang="postcss" scoped>
@@ -72,6 +72,7 @@ const buttonClasses = computed(() => ({
 }
 
 .icon {
+	aspect-ratio: 1;
 	@apply rounded-full p-3 w-auto;
 }
 

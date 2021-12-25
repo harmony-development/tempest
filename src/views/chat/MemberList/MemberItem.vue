@@ -12,7 +12,7 @@ const data = computed(() => chatState.getUser(host.value!, props.userid));
 </script>
 
 <template>
-  <base-list-item class="gap-4">
+  <base-list-item compact>
     <avatar :userid="userid" class="h-7 rounded-full" />
     <p class="text-xs overflow-ellipsis overflow-hidden">
       {{ data?.username || "Unknown User" }}

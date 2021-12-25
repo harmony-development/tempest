@@ -64,7 +64,7 @@ watch(guild, () => {
     <base-dialog v-model="uiState.state.addChannelDialog">
       <add-channel v-if="uiState.state.addChannelDialog" />
     </base-dialog>
-    <base-dialog v-model="uiState.state.userSettingsDialog">
+    <base-dialog v-model="uiState.state.userSettingsDialog" unsized>
       <user-settings v-if="uiState.state.userSettingsDialog" />
     </base-dialog>
     <base-drawer v-model="leftDrawer">

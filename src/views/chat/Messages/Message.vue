@@ -58,7 +58,7 @@ const onDelete = async() => {
         {{ username }}
       </p>
     </div>
-    <div :class="hideAvatar && 'ml-18'" class="messageBody text-sm relative">
+    <div :class="hideAvatar && 'hideAvatar'" class="messageBody text-sm relative">
       <text-message v-if="content?.oneofKind === 'textMessage'" :content="content.textMessage.content" />
       <attachment-message
         v-else-if="content?.oneofKind === 'attachmentMessage'"
@@ -122,6 +122,10 @@ const onDelete = async() => {
 	& .messageOptions {
 		@apply invisible;
 	}
+
+  &:not(.ownMessage) .messageBody.hideAvatar {
+    @apply ml-18;
+  }
 
 	&:hover {
 		& .messageOptions {

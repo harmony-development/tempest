@@ -10,8 +10,8 @@ a {
       overflow-hidden overflow-ellipsis select-none;
 }
 
-button {
-  @apply outline-none focus:outline-none focus-visible:outline-none;
+* {
+  @apply !!outline-none focus:outline-none focus-visible:outline-none;
 }
 
 @layer utilities {
@@ -33,7 +33,7 @@ button {
     scrollbar-width: none; /* Firefox */
   }
 
-  .compact-scrollbar {
+  .compact-scrollbar, * {
     &::-webkit-scrollbar {
       @apply w-1.5;
     }

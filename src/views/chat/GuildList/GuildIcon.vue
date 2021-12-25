@@ -15,7 +15,7 @@ const iconSrc = computed(() => (guild.value.data?.picture ? parseHMC(guild.value
 </script>
 
 <template>
-  <div
+  <button
     v-wave
     v-bind="$attrs"
     role="button"
@@ -30,7 +30,7 @@ const iconSrc = computed(() => (guild.value.data?.picture ? parseHMC(guild.value
       :alt="guild?.data?.name"
       :fallback="guild?.data?.name?.[0]"
     />
-  </div>
+  </button>
 </template>
 
 <style lang="postcss" scoped>
@@ -48,6 +48,9 @@ const iconSrc = computed(() => (guild.value.data?.picture ? parseHMC(guild.value
       border-0;
 	&:active {
 		@apply border-4 bg-surface-600;
+	}
+  &:focus {
+		@apply border-5;
 	}
 }
 

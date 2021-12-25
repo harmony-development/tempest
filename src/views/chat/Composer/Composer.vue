@@ -1,6 +1,6 @@
 <template>
-  <div v-if="uploadQueue.length > 0" class="bg-black p-3 flex gap-3 h-38">
-    <div v-for="({ url, file }, i) in uploadQueue" :key="url" class="relative group rounded-sm overflow-hidden">
+  <div v-if="uploadQueue.length > 0" class="bg-black p-3 flex gap-3 h-38 w-full overflow-scroll">
+    <div v-for="({ url, file }, i) in uploadQueue" :key="url" class="relative group rounded-sm overflow-hidden square">
       <img v-if="file.type.startsWith('image/')" class="h-full" :src="url">
       <div v-else class="p-3 bg-primary-600 rounded-sm h-full flexcol">
         <h1 class="font-bold">
@@ -34,7 +34,7 @@
       </div>
     </div>
   </div>
-  <div class="flex items-center p-1 bg-surface-900">
+  <div class="flex items-center px-3 py-1 bg-surface-900">
     <div class="relative">
       <pop-in-transition>
         <message-type-picker
@@ -45,7 +45,12 @@
           @update:message-type="onMessageTypeChange"
         />
       </pop-in-transition>
-      <base-button variant="text" icon class="picker-button" @click="pickerOpen = true">
+      <base-button
+        variant="text"
+        icon
+        class="picker-button"
+        @click="pickerOpen = true"
+      >
         <mdi-add :class="{ pickerOpen }" class="transition-all duration-100" />
       </base-button>
     </div>
@@ -60,6 +65,16 @@
       class="!bg-transparent w-full"
       @keydown="onKeyDown"
     />
+    <base-button
+      variant="text"
+      :disabled="uploadQueue.length === 0 && isTextEmpty"
+      icon
+      class="picker-button"
+      color="primary"
+      @click="sendMessage"
+    >
+      <mdi-send :class="{ pickerOpen }" class="transition-all duration-100" />
+    </base-button>
     <input ref="filePicker" type="file" class="hidden" multiple @change="onFilesSelected">
     <input
       ref="imagePicker"
@@ -76,7 +91,7 @@
 import { Attachment, FormattedText, Photo } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
 import { onClickOutside, useEventListener } from "@vueuse/core";
 import type { Ref } from "vue";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { connectionManager } from "../../../logic/api/connections";
 import { useChatRoute } from "../../../router";
 import MessageTypePicker from "./MessageTypePicker.vue";
@@ -97,6 +112,8 @@ const uploadQueue = ref<
 	file: File
 }[]
 >([]);
+
+const isTextEmpty = computed(() => text.value.replace(/\s/g, "").length === 0);
 
 onClickOutside(messageTypePicker, () => (pickerOpen.value = false));
 
@@ -140,10 +157,8 @@ const onMessageTypeChange = (value: string) => {
 	pickerOpen.value = false;
 };
 
-const onKeyDown = async(ev: KeyboardEvent) => {
-	if (ev.key !== "Enter" || ev.shiftKey) return;
-	ev.preventDefault();
-	const content = text.value;
+const sendMessage = async() => {
+	const content = text.value.replace(/\s\s+/g, " ");
 	const files = uploadQueue.value.map(({ file }) => file);
 	text.value = "";
 	const conn = connectionManager.get(host.value!);
@@ -203,6 +218,12 @@ const onKeyDown = async(ev: KeyboardEvent) => {
 			},
 		},
 	});
+};
+
+const onKeyDown = async(ev: KeyboardEvent) => {
+	if (ev.key !== "Enter" || ev.shiftKey) return;
+	ev.preventDefault();
+	sendMessage();
 };
 </script>
 

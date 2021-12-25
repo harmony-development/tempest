@@ -18,11 +18,11 @@ const ownUserID = computed(() => session.value?.userID);
         Members
       </h3>
     </div>
-    <div class="flex-1">
-      <ol class="overflow-hidden rounded-b-sm">
+    <div class="flex-1 h-full overflow-auto compact-scrollbar">
+      <ol class="rounded-b-sm">
         <member-item v-for="m in members" :key="m" class="gap-2" :userid="m" />
       </ol>
     </div>
-    <member-item class="gap-2" :userid="ownUserID!" @click="uiState.state.userSettingsDialog = true" />
+    <member-item class="gap-2 bg-surface-800 border-t-2 border-surface-300" :userid="ownUserID!" @click="uiState.state.userSettingsDialog = true" />
   </div>
 </template>

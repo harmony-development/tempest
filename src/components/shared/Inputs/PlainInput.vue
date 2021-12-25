@@ -74,6 +74,6 @@ watch(
 
 <style lang="postcss" scoped>
 .input-input {
-	@apply max-h-200 bg-transparent z-1 w-full p-4 block appearance-none focus:outline-none resize-none break-words;
+	@apply max-h-200 bg-transparent z-1 w-full px-3 py-4 block appearance-none focus:outline-none resize-none break-words;
 }
 </style>
