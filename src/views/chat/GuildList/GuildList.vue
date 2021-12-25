@@ -1,15 +1,15 @@
 <script lang="ts" setup>
 import { computed, onMounted } from "vue";
-import GuildIcon from "./GuildIcon.vue";
-import { connectionManager } from "../../../logic/api/connections";
-import { session } from "../../../logic/store/session";
-import { chatState } from "../../../logic/store/chat";
-import { convertGuildEntryV1 } from "~/logic/conversions/guilds";
 import { useRouter } from "vue-router";
 import HBtn from "~/components/shared/HBtn.vue";
-import { useChatRoute } from "../../../router";
+import { convertGuildEntryV1 } from "~/logic/conversions/guilds";
+import { connectionManager } from "../../../logic/api/connections";
+import { chatState } from "../../../logic/store/chat";
+import { session } from "../../../logic/store/session";
 import { uiState } from "../../../logic/store/ui";
+import { useChatRoute } from "../../../router";
 import AppSettings from "./AppSettings.vue";
+import GuildIcon from "./GuildIcon.vue";
 
 const { guild } = useChatRoute();
 const router = useRouter();
@@ -34,12 +34,14 @@ onMounted(async () => {
 
 const guildList = computed(() => chatState.state.guildList);
 
-const goToGuild = (host: string, guild: string) => {
+const goToGuild = (host: string, guildId: string) => {
+  const guildObject = chatState.getGuild(host, guildId);
   router.push({
     name: "chat",
     params: {
       host: host || session.value!.host,
-      guild,
+      guild: guildId,
+      channel: guildObject.lastChannel,
     },
   });
 };

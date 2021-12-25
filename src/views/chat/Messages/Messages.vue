@@ -1,9 +1,8 @@
 <script lang="ts" setup>
-import { useChatRoute } from "../../../router";
+import { useIntersectionObserver } from "@vueuse/core";
 import { computed, nextTick, ref, toRefs, watch } from 'vue';
 import { chatState } from "../../../logic/store/chat";
 import Message from "./Message.vue";
-import { useIntersectionObserver } from "@vueuse/core";
 
 const props = defineProps<{
   host: string;
@@ -16,8 +15,6 @@ const { host, guild, channel } = toRefs(props);
 const loader = ref<HTMLElement | undefined>();
 const list = ref<HTMLElement | undefined>(undefined)
 
-const filledViewport = ref(false);
-
 const reachedTop = computed(() => chatState.getChannel(host.value, guild.value, channel.value).reachedTop)
 
 const messageList = computed(() =>
@@ -25,6 +22,7 @@ const messageList = computed(() =>
 );
 
 const loadMoreMessages = () => chatState.fetchMessageList(host.value, guild.value, channel.value, messageList.value?.[0])
+const scrollToBottom = () => list.value!.scrollTop = list.value!.scrollHeight
 
 useIntersectionObserver(loader, async ([{ isIntersecting }]) => {
   if (!isIntersecting || reachedTop.value) return;
@@ -37,16 +35,17 @@ useIntersectionObserver(loader, async ([{ isIntersecting }]) => {
 watch(messageList, async () => {
   const container = list.value!
   if (container.scrollHeight - container.scrollTop <= container.clientHeight + 80) {
+    console.log("before2");
     await nextTick()
-    container.scrollTop = container.scrollHeight
+    console.log("after2");
+    scrollToBottom()
   }
 }, { deep: true })
 
-watch([host, guild, channel], async () => {
-  const container = list.value!
+watch(channel, async () => {
   await nextTick()
-  container.scrollTop = container.scrollHeight
-})
+  scrollToBottom()
+}, { immediate: true })
 
 watch(messageList, async () => {
   if (!messageList.value) return;
@@ -54,13 +53,8 @@ watch(messageList, async () => {
   // load more messages to fill viewport
   await nextTick()
   if (container.scrollHeight <= container.clientHeight && !reachedTop.value) {
-    filledViewport.value = false
     await loadMoreMessages()
     await nextTick()
-    container.scrollTop = container.scrollHeight
-  } else {
-    filledViewport.value = true
-    console.log('filled viewport, scrolling to bottom')
   }
 }, { deep: true })
 
@@ -95,9 +89,9 @@ const isConsecutiveMessage = (i: number) => {
         v-for="(m, i) in messageList"
         :key="`${host}/${guild}/${channel}/${m}`"
         :messageid="m"
-        :host="host!"
-        :guildid="guild!"
-        :channelid="channel!"
+        :host="host"
+        :guildid="guild"
+        :channelid="channel"
         :data="chatState.getMessage(host, guild, channel, m)!"
         :hide-avatar="isConsecutiveMessage(i)"
       />

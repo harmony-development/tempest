@@ -85,7 +85,7 @@ const chatEventsHandler = new Handler<StreamChatEvent["event"]>({
     ) {
       return;
     }
-    new Notification(title, {
+    const notif = new Notification(title, {
       body: text || "unknown message",
       icon: photo,
       timestamp: +msg.createdAt,
