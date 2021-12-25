@@ -8,30 +8,44 @@
 				<p class="text-xs">{{ file.size }} Bytes</p>
 			</div>
 			<div
-				class="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-60 transition duration-100 opacity-0 group-hover:opacity-100"
+				class="
+					absolute
+					top-0
+					left-0
+					w-full
+					h-full
+					flex
+					justify-center
+					items-center
+					bg-black bg-opacity-60
+					transition
+					duration-100
+					opacity-0
+					group-hover:opacity-100
+				"
 			>
-				<HBtn icon @click="deleteFile(i)">
+				<base-button icon @click="deleteFile(i)">
 					<mdi:delete />
-				</HBtn>
+				</base-button>
 			</div>
 		</div>
 	</div>
 	<div class="flex items-center p-1 bg-surface-900">
 		<div class="relative">
-			<PopInTransition>
-				<MessageTypePicker
+			<pop-in-transition>
+				<message-type-picker
 					class="absolute bottom-[120%] picker"
 					v-if="pickerOpen"
 					ref="messageTypePicker"
 					@sent="pickerOpen = false"
 					@update:message-type="onMessageTypeChange"
 				/>
-			</PopInTransition>
-			<HBtn variant="text" icon class="picker-button" @click="pickerOpen = true">
+			</pop-in-transition>
+			<base-button variant="text" icon class="picker-button" @click="pickerOpen = true">
 				<mdi-add :class="{ pickerOpen }" class="transition-all duration-100" />
-			</HBtn>
+			</base-button>
 		</div>
-		<HInput
+		<base-input
 			plain
 			multiline
 			no-border
@@ -57,8 +71,8 @@
 import { Attachment, FormattedText, Photo } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
 import { onClickOutside, useEventListener } from "@vueuse/core";
 import { Ref, ref } from "vue";
-import HBtn from "~/components/shared/HBtn.vue";
-import HInput from "~/components/shared/HInput.vue";
+import BaseButton from "~/components/base/BaseButton.vue";
+import BaseInput from "~/components/base/BaseInput.vue";
 import PopInTransition from "~/components/transitions/PopInTransition.vue";
 import { connectionManager } from "../../../logic/api/connections";
 import { useChatRoute } from "../../../router";

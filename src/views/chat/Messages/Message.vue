@@ -2,9 +2,9 @@
 import { onClickOutside } from "@vueuse/core";
 import dayjs from "dayjs";
 import { computed, Ref, ref } from "vue";
+import BaseButton from "~/components/base/BaseButton.vue";
+import BaseListItem from "~/components/base/BaseListItem.vue";
 import Avatar from "~/components/chat/Avatar.vue";
-import HBtn from "~/components/shared/HBtn.vue";
-import HListItem from "~/components/shared/Lists/HListItem.vue";
 import PopInTransition from "~/components/transitions/PopInTransition.vue";
 import { connectionManager } from "../../../logic/api/connections";
 import { chatState, IMessageData } from "../../../logic/store/chat";
@@ -51,19 +51,19 @@ const onDelete = async () => {
 <template>
 	<div class="flex gap-2 items-start messageContainer" :class="{ ownMessage: isOwnMessage }">
 		<div v-if="!hideAvatar" class="text-center overflow-hidden w-16">
-			<Avatar :userid="data.author" :override="data.override?.avatar" class="h-8" loading="lazy" />
+			<avatar :userid="data.author" :override="data.override?.avatar" class="h-8" loading="lazy" />
 			<p class="mt-2 text-xs text-surface-300 overflow-hidden">
 				{{ username }}
 			</p>
 		</div>
 		<div :class="hideAvatar && 'ml-18'" class="messageBody text-sm relative">
-			<TextMessage v-if="content?.oneofKind === 'textMessage'" :content="content.textMessage.content" />
-			<AttachmentMessage
+			<text-message v-if="content?.oneofKind === 'textMessage'" :content="content.textMessage.content" />
+			<attachment-message
 				v-else-if="content?.oneofKind === 'attachmentMessage'"
 				:content="content.attachmentMessage.files"
 			/>
-			<PhotosMessage v-else-if="content?.oneofKind === 'photoMessage'" :content="content.photoMessage.photos" />
-			<EmbedMessage v-else-if="content?.oneofKind === 'embedMessage'" :content="content.embedMessage" />
+			<photos-message v-else-if="content?.oneofKind === 'photoMessage'" :content="content.photoMessage.photos" />
+			<embed-message v-else-if="content?.oneofKind === 'embedMessage'" :content="content.embedMessage" />
 			<div v-else>
 				<mdi:alert class="text-4xl" />
 				<p>Unimplemented message type</p>
@@ -73,17 +73,17 @@ const onDelete = async () => {
 			</div>
 		</div>
 		<div class="h-full relative">
-			<PopInTransition>
+			<pop-in-transition>
 				<div class="options-dropdown overflow-hidden" v-if="optionsOpen" ref="optionsDropdown">
-					<HListItem dangerous @click="onDelete">
+					<base-list-item dangerous @click="onDelete">
 						<mdi-delete class="mr-2" />
 						<span>Delete Message</span>
-					</HListItem>
+					</base-list-item>
 				</div>
-			</PopInTransition>
-			<HBtn @click="optionsOpen = true" icon dense class="text-md messageOptions">
+			</pop-in-transition>
+			<base-button @click="optionsOpen = true" icon dense class="text-md messageOptions">
 				<mdi-dots-vertical />
-			</HBtn>
+			</base-button>
 		</div>
 	</div>
 </template>

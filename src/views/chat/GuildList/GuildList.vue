@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import HBtn from "~/components/shared/HBtn.vue";
+import BaseButton from "~/components/base/BaseButton.vue";
 import { convertGuildEntryV1 } from "~/logic/conversions/guilds";
 import { connectionManager } from "../../../logic/api/connections";
 import { chatState } from "../../../logic/store/chat";
@@ -48,9 +48,21 @@ const goToGuild = (host: string, guildId: string) => {
 <template>
 	<div class="list">
 		<div
-			class="w-18 p-2 h-full overflow-y-scroll no-scrollbar z-1 relative bg-surface-900 flexcol gap-2 border-r-2 border-surface-800"
+			class="
+				w-18
+				p-2
+				h-full
+				overflow-y-scroll
+				no-scrollbar
+				z-1
+				relative
+				bg-surface-900
+				flexcol
+				gap-2
+				border-r-2 border-surface-800
+			"
 		>
-			<HBtn
+			<base-button
 				variant="filled"
 				color="primary"
 				square
@@ -58,10 +70,10 @@ const goToGuild = (host: string, guildId: string) => {
 				aria-label="Create / Join Guild"
 			>
 				<mdi-plus />
-			</HBtn>
+			</base-button>
 			<hr class="border-gray-500" />
 			<div class="flex-1 flexcol gap-2">
-				<GuildIcon
+				<guild-icon
 					v-for="{ host, guildID } in guildList"
 					:key="`${host}-${guildID}`"
 					:active="guildID === guild"
@@ -70,7 +82,7 @@ const goToGuild = (host: string, guildId: string) => {
 					@click="goToGuild(host, guildID)"
 				/>
 			</div>
-			<AppSettings />
+			<app-settings />
 		</div>
 	</div>
 </template>

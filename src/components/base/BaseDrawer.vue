@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useVModel } from "@vueuse/core";
-import { defineComponent, defineProps } from "vue";
+import { defineComponent } from "vue";
 defineComponent({
 	inheritAttrs: false,
 });

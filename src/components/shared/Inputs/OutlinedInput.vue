@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { defineProps } from "vue";
 import PlainInput from "./PlainInput.vue";
 
 const props = defineProps<{
@@ -14,7 +13,7 @@ const props = defineProps<{
 		<div>
 			<slot name="pre-input" />
 		</div>
-		<PlainInput v-bind="$attrs" />
+		<plain-input v-bind="$attrs" />
 		<label :for="props.name" class="input-label">{{ props.placeholder || props.label }}</label>
 		<fieldset v-if="!noBorder" :for="props.name" class="label-wrapper">
 			<legend class="label-text">{{ props.placeholder || props.label }}</legend>

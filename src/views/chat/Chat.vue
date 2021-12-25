@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { computed, defineAsyncComponent, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
-import HAppBar from "~/components/shared/HAppBar.vue";
-import HBtn from "~/components/shared/HBtn.vue";
-import HDialog from "~/components/shared/HDialog.vue";
-import HDrawer from "~/components/shared/HDrawer.vue";
+import BaseAppBar from "~/components/base/BaseAppBar.vue";
+import BaseButton from "~/components/base/BaseButton.vue";
+import BaseDialog from "~/components/base/BaseDialog.vue";
+import BaseDrawer from "~/components/base/BaseDrawer.vue";
 import { pubsub } from "~/logic/api/pubsub";
 import { connectionManager } from "../../logic/api/connections";
 import { chatState } from "../../logic/store/chat";
@@ -55,38 +55,38 @@ watch(guild, () => {
 </script>
 
 <template>
-	<Splash v-if="!sessionValidated" />
+	<splash v-if="!sessionValidated" />
 	<div class="h-full w-full flex" v-else>
-		<HDialog v-model="uiState.state.addGuildDialog">
-			<AddGuild v-if="uiState.state.addGuildDialog" />
-		</HDialog>
-		<HDialog v-model="uiState.state.addChannelDialog">
-			<AddChannel v-if="uiState.state.addChannelDialog" />
-		</HDialog>
-		<HDialog v-model="uiState.state.userSettingsDialog">
-			<UserSettings v-if="uiState.state.userSettingsDialog" />
-		</HDialog>
-		<HDrawer v-model="leftDrawer">
+		<base-dialog v-model="uiState.state.addGuildDialog">
+			<add-guild v-if="uiState.state.addGuildDialog" />
+		</base-dialog>
+		<base-dialog v-model="uiState.state.addChannelDialog">
+			<add-channel v-if="uiState.state.addChannelDialog" />
+		</base-dialog>
+		<base-dialog v-model="uiState.state.userSettingsDialog">
+			<user-settings v-if="uiState.state.userSettingsDialog" />
+		</base-dialog>
+		<base-drawer v-model="leftDrawer">
 			<div class="flex h-full">
-				<GuildList />
-				<ChannelList v-if="guild" />
+				<guild-list />
+				<channel-list v-if="guild" />
 			</div>
-		</HDrawer>
+		</base-drawer>
 		<div class="bg-surface-900 flex-1 flexcol">
-			<h-app-bar class="bg-surface-700 h-12 text-sm font-semibold">
-				<h-btn variant="text" icon dense class="!lg:hidden mr-2" @click="leftDrawer = true" aria-label="Left Drawer">
+			<base-app-bar class="bg-surface-700 h-12 text-sm font-semibold">
+				<base-button variant="text" icon dense class="!lg:hidden mr-2" @click="leftDrawer = true" aria-label="Left Drawer">
 					<mdi-menu />
-				</h-btn>
+				</base-button>
 				<mdi-pound class="text-lg mr-2 text-gray-400" />
 				{{ channelData.data?.name }}
 				<div class="flex-1" />
-				<h-btn variant="text" icon dense class="!lg:hidden" @click="rightDrawer = true" aria-label="Right Drawer">
+				<base-button variant="text" icon dense class="!lg:hidden" @click="rightDrawer = true" aria-label="Right Drawer">
 					<mdi-account-multiple />
-				</h-btn>
-			</h-app-bar>
+				</base-button>
+			</base-app-bar>
 			<template v-if="host && guild && channel">
-				<Messages :host="host" :guild="guild" :channel="channel" />
-				<Composer />
+				<messages :host="host" :guild="guild" :channel="channel" />
+				<composer />
 			</template>
 			<div class="flex-1 flexcol gap-4 justify-center items-center" v-else>
 				<div class="bg-surface-800 rounded-full p-2">
@@ -98,10 +98,10 @@ watch(guild, () => {
 				</div>
 			</div>
 		</div>
-		<HDrawer v-model="rightDrawer" right>
+		<base-drawer v-model="rightDrawer" right>
 			<div class="flex h-full">
-				<MemberList v-if="guild" />
+				<member-list v-if="guild" />
 			</div>
-		</HDrawer>
+		</base-drawer>
 	</div>
 </template>

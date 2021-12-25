@@ -8,7 +8,7 @@ defineProps<{
 
 <template>
 	<p class="content-out whitespace-pre-wrap">
-		<FormattedText :content="content!" />
+		<formatted-text :content="content!" />
 	</p>
 </template>
 <style lang="postcss" scoped>

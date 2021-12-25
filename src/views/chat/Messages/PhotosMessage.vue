@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { Content_PhotoContent } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
 import { ref } from "vue";
-import HBtn from "~/components/shared/HBtn.vue";
+import BaseButton from "~/components/base/BaseButton.vue";
 import { parseHMC } from "../../../logic/parsing";
 import { useChatRoute } from "../../../router";
 
@@ -42,19 +42,28 @@ const getThumbnail = (data: Uint8Array) => URL.createObjectURL(new Blob([data], 
 				v-if="!loaded"
 			>
 				<div
-					class="w-full h-full absolute backdrop-filter backdrop-blur-md backdrop-brightness-50 flex items-center justify-center text-6xl"
+					class="
+						w-full
+						h-full
+						absolute
+						backdrop-filter backdrop-blur-md backdrop-brightness-50
+						flex
+						items-center
+						justify-center
+						text-6xl
+					"
 				>
 					<div v-if="error" class="w-full text-center">
 						<mdi:alert-circle-outline />
 						<p class="text-xl">Failed to load image</p>
-						<HBtn
+						<base-button
 							variant="outlined"
 							class="text-sm uppercase inline-block"
 							@click="
 								loaded = false;
 								error = false;
 							"
-							>Reload</HBtn
+							>Reload</base-button
 						>
 					</div>
 					<mdi:loading v-else class="animate-spin" />

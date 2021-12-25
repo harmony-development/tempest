@@ -1,11 +1,10 @@
 <script lang="ts" setup>
 import { ChannelKind } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/channels";
 import { ref } from "vue";
-import HInput from "~/components/shared/HInput.vue";
+import BaseInput from "~/components/base/BaseInput.vue";
 import { connectionManager } from "~/logic/api/connections";
 import { uiState } from "~/logic/store/ui";
 import { useChatRoute } from "../../../router";
-
 const { host, guild } = useChatRoute();
 const channelName = ref("");
 const error = ref();
@@ -29,10 +28,12 @@ const onCreateClicked = async () => {
 	<form class="flexcol gap-2" @submit.prevent>
 		<h1 class="text-xl">Add Channel</h1>
 		<span class="text-red-400">{{ error?.code || error }}</span>
-		<HInput label="Channel Name" v-model="channelName" />
+		<base-input label="Channel Name" v-model="channelName" />
 		<div class="flex justify-end gap-2">
-			<HBtn color="secondary" variant="text" type="button" @click="close">Cancel</HBtn>
-			<HBtn variant="text" color="primary" type="submit" @click="onCreateClicked" :disabled="!channelName">Create</HBtn>
+			<base-button color="secondary" variant="text" type="button" @click="close">Cancel</base-button>
+			<base-button variant="text" color="primary" type="submit" @click="onCreateClicked" :disabled="!channelName"
+				>Create</base-button
+			>
 		</div>
 	</form>
 </template>

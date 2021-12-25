@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import HBtn from "~/components/shared/HBtn.vue";
+import BaseButton from "~/components/base/BaseButton.vue";
 import { parseUserHost } from "~/logic/parsing";
 import AddServerDialog from "./AddServerDialog.vue";
 import { serverList } from "./serverlist";
@@ -35,10 +35,10 @@ const nextClicked = () => {
 	<add-server-dialog v-model="addingServer" @cancel="addingServer = false" @done="addServer" />
 	<h1 class="text-lg font-bold">Welcome to Tempest</h1>
 	<div class="text-sm w-full">
-		<h-btn variant="filled" color="primary" @click="addingServer = true">Add Server</h-btn>
+		<base-button variant="filled" color="primary" @click="addingServer = true">Add Server</base-button>
 	</div>
 	<ol class="bg-surface-800 rounded-sm overflow-hidden">
-		<h-list-item
+		<base-list-item
 			v-for="({ name, host }, i) in serverList"
 			:key="host"
 			:selected="i === selectedServer"
@@ -51,13 +51,18 @@ const nextClicked = () => {
 				<p class="text-gray-400">{{ host }}</p>
 			</div>
 			<div class="flex-1" />
-			<h-btn icon variant="text" @pointerdown.stop @click="deleteItem(i)" class="delete-button">
+			<base-button icon variant="text" @pointerdown.stop @click="deleteItem(i)" class="delete-button">
 				<mdi-delete />
-			</h-btn>
-		</h-list-item>
+			</base-button>
+		</base-list-item>
 	</ol>
-	<h-btn variant="filled" color="primary" class="w-min ml-auto" :disabled="!serverList[selectedServer]" @click="nextClicked"
-		>Next</h-btn
+	<base-button
+		variant="filled"
+		color="primary"
+		class="w-min ml-auto"
+		:disabled="!serverList[selectedServer]"
+		@click="nextClicked"
+		>Next</base-button
 	>
 </template>
 

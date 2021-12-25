@@ -3,7 +3,7 @@ import { computed, Ref, ref } from "vue";
 import { parseHMC } from "../../logic/parsing";
 import { chatState } from "../../logic/store/chat";
 import { useChatRoute } from "../../router";
-import HImg from "../shared/HImg.vue";
+import BaseImage from "../base/BaseImage.vue";
 
 const { host } = useChatRoute();
 
@@ -36,7 +36,7 @@ const onChange = (event: Event) => {
 		@change="onChange"
 		@blur="(...args) => $emit('blur', ...args)"
 	/>
-	<HImg
+	<base-image
 		:fallback="profile?.username[0] || userid?.[0] || '?'"
 		:src="uri"
 		@click="avatarInput.click()"

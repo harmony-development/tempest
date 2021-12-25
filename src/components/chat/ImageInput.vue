@@ -1,6 +1,6 @@
 <template>
 	<input type="file" ref="imageInput" class="hidden" multiple accept="image/*" @change="onChange" />
-	<HImg
+	<base-image
 		v-bind="$attrs"
 		class="w-32 h-32 bg-surface-500 text-5xl rounded-full cursor-pointer"
 		@click="imageInput.click()"
@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 import { onUnmounted, Ref, ref } from "vue";
-import HImg from "../shared/HImg.vue";
+import BaseImage from "../base/BaseImage.vue";
 
 const props = defineProps<{
 	modelValue?: File;

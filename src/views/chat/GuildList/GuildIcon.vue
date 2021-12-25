@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed } from "vue";
-import HImg from "~/components/shared/HImg.vue";
+import BaseImage from "~/components/base/BaseImage.vue";
 import { parseHMC } from "../../../logic/parsing";
 import { chatState } from "../../../logic/store/chat";
 
@@ -11,13 +11,12 @@ const props = defineProps<{
 }>();
 
 const guild = computed(() => chatState.getGuild(props.host, props.guildid), undefined);
-
 const iconSrc = computed(() => (guild.value.data?.picture ? parseHMC(guild.value.data.picture, props.host) : undefined));
 </script>
 
 <template>
 	<div v-bind="$attrs" role="button" v-wave class="icon" :class="{ active }" style="aspect-ratio: 1">
-		<HImg
+		<base-image
 			:src="iconSrc"
 			class="object-contain pointer-events-none"
 			draggable="false"
