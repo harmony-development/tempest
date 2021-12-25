@@ -1,47 +1,35 @@
 <script lang="ts" setup>
 import { computed } from "vue";
 import HImg from "~/components/shared/HImg.vue";
+import { parseHMC } from "../../../logic/parsing";
 import { chatState } from "../../../logic/store/chat";
-import { parseHMC } from '../../../logic/parsing';
 
 const props = defineProps<{
-  active?: boolean;
-  host: string;
-  guildid: string;
+	active?: boolean;
+	host: string;
+	guildid: string;
 }>();
 
-const guild = computed(
-  () => chatState.getGuild(props.host, props.guildid),
-  undefined
-);
+const guild = computed(() => chatState.getGuild(props.host, props.guildid), undefined);
 
-const iconSrc = computed(
-  () => guild.value.data?.picture ? parseHMC(guild.value.data.picture, props.host) : undefined,
-);
+const iconSrc = computed(() => (guild.value.data?.picture ? parseHMC(guild.value.data.picture, props.host) : undefined));
 </script>
 
 <template>
-  <div
-    v-bind="$attrs"
-    role="button"
-    v-wave
-    class="icon"
-    :class="{ active }"
-    style="aspect-ratio: 1"
-  >
-    <HImg
-      :src="iconSrc"
-      class="object-contain pointer-events-none"
-      draggable="false"
-      :alt="guild?.data?.name"
-      :fallback="guild?.data?.name?.[0]"
-    />
-  </div>
+	<div v-bind="$attrs" role="button" v-wave class="icon" :class="{ active }" style="aspect-ratio: 1">
+		<HImg
+			:src="iconSrc"
+			class="object-contain pointer-events-none"
+			draggable="false"
+			:alt="guild?.data?.name"
+			:fallback="guild?.data?.name?.[0]"
+		/>
+	</div>
 </template>
 
 <style lang="postcss" scoped>
 .icon {
-  @apply w-full
+	@apply w-full
       bg-surface-500
       rounded-full
       cursor-pointer
@@ -52,12 +40,12 @@ const iconSrc = computed(
       transition transition-all
       duration-100
       border-0;
-  &:active {
-    @apply border-4 bg-surface-600;
-  }
+	&:active {
+		@apply border-4 bg-surface-600;
+	}
 }
 
 .active {
-  @apply border-2;
+	@apply border-2;
 }
 </style>

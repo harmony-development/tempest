@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { onClickOutside } from "@vueuse/core";
 import dayjs from "dayjs";
-import { computed, ref } from "vue";
+import { computed, Ref, ref } from "vue";
 import Avatar from "~/components/chat/Avatar.vue";
 import HBtn from "~/components/shared/HBtn.vue";
 import HListItem from "~/components/shared/Lists/HListItem.vue";
@@ -16,119 +16,81 @@ import PhotosMessage from "./PhotosMessage.vue";
 import TextMessage from "./TextMessage.vue";
 
 const props = defineProps<{
-  host: string;
-  guildid: string;
-  channelid: string;
-  messageid: string;
-  data: IMessageData;
-  hideAvatar: boolean;
+	host: string;
+	guildid: string;
+	channelid: string;
+	messageid: string;
+	data: IMessageData;
+	hideAvatar: boolean;
 }>();
 
 const optionsOpen = ref(false);
-const optionsDropdown = ref<HTMLElement | undefined>();
+const optionsDropdown = <Ref<HTMLElement>>ref();
 
-const authorData = computed(() =>
-  props.host ? chatState.getUser(props.host, props.data.author) : undefined
-);
+const authorData = computed(() => (props.host ? chatState.getUser(props.host, props.data.author) : undefined));
 
-const username = computed(
-  () =>
-    props.data.override?.username ||
-    authorData.value?.username ||
-    "Unknown User"
-);
+const username = computed(() => props.data.override?.username || authorData.value?.username || "Unknown User");
 
 onClickOutside(optionsDropdown, () => (optionsOpen.value = false));
 
-const isOwnMessage = computed(
-  () => props.data?.author === session.value?.userID
-);
+const isOwnMessage = computed(() => props.data?.author === session.value?.userID);
 const content = computed(() => props.data.content?.content);
 const time = computed(() => {
-  return dayjs(+props.data.createdAt * 1000).calendar();
+	return dayjs(+props.data.createdAt * 1000).calendar();
 });
 const onDelete = async () => {
-  await uiState.openConfirm(
-    "Are you sure?",
-    "Are you sure you would like to delete this message?"
-  );
-  await connectionManager.get(props.host!).chat.deleteMessage({
-    messageId: props.messageid,
-    guildId: props.guildid!,
-    channelId: props.channelid!,
-  });
+	await uiState.openConfirm("Are you sure?", "Are you sure you would like to delete this message?");
+	await connectionManager.get(props.host!).chat.deleteMessage({
+		messageId: props.messageid,
+		guildId: props.guildid!,
+		channelId: props.channelid!,
+	});
 };
 </script>
 
 <template>
-  <div
-    class="flex gap-2 items-start messageContainer"
-    :class="{ ownMessage: isOwnMessage }"
-  >
-    <div v-if="!hideAvatar" class="text-center overflow-hidden w-16">
-      <Avatar
-        :userid="data.author"
-        :override="data.override?.avatar"
-        class="h-8"
-        loading="lazy"
-      />
-      <p class="mt-2 text-xs text-surface-300 overflow-hidden">
-        {{ username }}
-      </p>
-    </div>
-    <div :class="hideAvatar && 'ml-18'" class="messageBody text-sm relative">
-      <TextMessage
-        v-if="content?.oneofKind === 'textMessage'"
-        :content="content.textMessage.content"
-      />
-      <AttachmentMessage
-        v-else-if="content?.oneofKind === 'attachmentMessage'"
-        :content="content.attachmentMessage.files"
-      />
-      <PhotosMessage
-        v-else-if="content?.oneofKind === 'photoMessage'"
-        :content="content.photoMessage.photos"
-      />
-      <EmbedMessage
-        v-else-if="content?.oneofKind === 'embedMessage'"
-        :content="content.embedMessage"
-      />
-      <div v-else>
-        <mdi:alert class="text-4xl" />
-        <p>Unimplemented message type</p>
-      </div>
-      <div class="w-full mt-2">
-        <p class="time text-xs text-gray-400 float-right">{{ time }}</p>
-      </div>
-    </div>
-    <div class="h-full relative">
-      <PopInTransition>
-        <div
-          class="options-dropdown overflow-hidden"
-          v-if="optionsOpen"
-          ref="optionsDropdown"
-        >
-          <HListItem dangerous @click="onDelete">
-            <mdi-delete class="mr-2" />
-            <span>Delete Message</span>
-          </HListItem>
-        </div>
-      </PopInTransition>
-      <HBtn
-        @click="optionsOpen = true"
-        icon
-        dense
-        class="text-md messageOptions"
-      >
-        <mdi-dots-vertical />
-      </HBtn>
-    </div>
-  </div>
+	<div class="flex gap-2 items-start messageContainer" :class="{ ownMessage: isOwnMessage }">
+		<div v-if="!hideAvatar" class="text-center overflow-hidden w-16">
+			<Avatar :userid="data.author" :override="data.override?.avatar" class="h-8" loading="lazy" />
+			<p class="mt-2 text-xs text-surface-300 overflow-hidden">
+				{{ username }}
+			</p>
+		</div>
+		<div :class="hideAvatar && 'ml-18'" class="messageBody text-sm relative">
+			<TextMessage v-if="content?.oneofKind === 'textMessage'" :content="content.textMessage.content" />
+			<AttachmentMessage
+				v-else-if="content?.oneofKind === 'attachmentMessage'"
+				:content="content.attachmentMessage.files"
+			/>
+			<PhotosMessage v-else-if="content?.oneofKind === 'photoMessage'" :content="content.photoMessage.photos" />
+			<EmbedMessage v-else-if="content?.oneofKind === 'embedMessage'" :content="content.embedMessage" />
+			<div v-else>
+				<mdi:alert class="text-4xl" />
+				<p>Unimplemented message type</p>
+			</div>
+			<div class="w-full mt-2">
+				<p class="time text-xs text-gray-400 float-right">{{ time }}</p>
+			</div>
+		</div>
+		<div class="h-full relative">
+			<PopInTransition>
+				<div class="options-dropdown overflow-hidden" v-if="optionsOpen" ref="optionsDropdown">
+					<HListItem dangerous @click="onDelete">
+						<mdi-delete class="mr-2" />
+						<span>Delete Message</span>
+					</HListItem>
+				</div>
+			</PopInTransition>
+			<HBtn @click="optionsOpen = true" icon dense class="text-md messageOptions">
+				<mdi-dots-vertical />
+			</HBtn>
+		</div>
+	</div>
 </template>
 
 <style lang="postcss" scoped>
 .messageBody {
-  @apply bg-surface-800 bg-opacity-60
+	@apply bg-surface-800 bg-opacity-60
         p-3
         pb-2
         rounded-sm
@@ -137,34 +99,34 @@ const onDelete = async () => {
         max-w-50ch
         transition
         duration-75 break-all;
-  box-shadow: 0px 1px 1px #00000050;
+	box-shadow: 0px 1px 1px #00000050;
 }
 
 .ownMessage {
-  @apply flex-row-reverse;
+	@apply flex-row-reverse;
 
-  & .options-dropdown {
-    @apply transform -translate-x-full -left-2;
-  }
+	& .options-dropdown {
+		@apply transform -translate-x-full -left-2;
+	}
 }
 
 .options-dropdown {
-  @apply bg-black rounded-sm absolute left-[120%];
+	@apply bg-black rounded-sm absolute left-[120%];
 }
 
 .messageContainer {
-  & .messageOptions {
-    @apply invisible;
-  }
+	& .messageOptions {
+		@apply invisible;
+	}
 
-  &:hover {
-    & .messageOptions {
-      @apply visible;
-    }
+	&:hover {
+		& .messageOptions {
+			@apply visible;
+		}
 
-    & .messageBody {
-      @apply bg-surface-800;
-    }
-  }
+		& .messageBody {
+			@apply bg-surface-800;
+		}
+	}
 }
 </style>
