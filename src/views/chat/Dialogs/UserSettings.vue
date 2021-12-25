@@ -1,7 +1,7 @@
 <template>
 	<form class="p-2 flexcol gap-4" @submit.prevent="onSubmit">
 		<div class="flex justify-center">
-			<ImageInput
+			<image-input
 				:preview-src="profile?.picture"
 				v-model="changedValues.avatar"
 				:fallback="profile?.username.charAt(0) || '?'"
