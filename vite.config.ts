@@ -61,6 +61,7 @@ export default defineConfig({
 				short_name: "Tempest",
 				description: "Web frontend for the Harmony Protocol powered by Vue",
 				theme_color: "#818DF8",
+				background_color: "#181921",
 				icons: [
 					{
 						src: "/pwa/android-chrome-192x192.png",
