@@ -18,22 +18,22 @@ watchEffect(() => chatState.getChannelList(host.value!, guild.value!));
 
 <template>
   <div class="w-48 bg-surface-900 border-surface-900 flexcol">
-    <div class="p-2 h-12 text-base bg-surface-700 flex items-center">
-      <p class="font-bold text-sm overflow-ellipsis truncate">
+    <div class="p-2 h-12 text-base bg-surface-700 gap-1 flex items-center">
+      <p class="font-bold text-sm overflow-ellipsis overflow-hidden truncate">
         {{ data?.data?.name }}
       </p>
-      <div class="flex-1" />
       <h-btn
         icon
         dense
-        class="text-xs"
+        style="aspect-ratio: 1/1"
+        class="text-sm"
         @click="uiState.state.guildSettingsDialog = true"
         aria-label="Guild Settings"
       >
         <mdi-cog />
       </h-btn>
     </div>
-    <div class="flex items-center justify-between p-2 text-xs">
+    <div class="flex items-center justify-between p-2 text-sm">
       <p class="text-xs uppercase text-gray-400">channels</p>
       <h-btn
         icon
