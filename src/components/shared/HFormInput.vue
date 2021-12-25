@@ -1,20 +1,19 @@
 <script lang="ts" setup>
-import { useField } from 'vee-validate';
-import HInput from '~/components/shared/HInput.vue';
+import { useField } from "vee-validate";
+import HInput from "~/components/shared/HInput.vue";
 
 const props = defineProps<{
   name: string;
   value?: string;
-}>()
+}>();
 
-const {
-  value,
-  errorMessage,
-  handleBlur,
-  handleChange,
-} = useField(props.name, undefined, {
-  initialValue: props.value,
-})
+const { value, errorMessage, handleBlur, handleChange } = useField(
+  props.name,
+  undefined,
+  {
+    initialValue: props.value,
+  }
+);
 </script>
 <template>
   <HInput

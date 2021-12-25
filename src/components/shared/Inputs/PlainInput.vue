@@ -1,5 +1,6 @@
-<script lang="ts" setup>import { useVModel } from '@vueuse/core';
-import { ref, watch, onMounted } from 'vue';
+<script lang="ts" setup>
+import { useVModel } from "@vueuse/core";
+import { onMounted, Ref, ref, watch } from "vue";
 
 const emit = defineEmits(["update:modelValue"]);
 
@@ -18,7 +19,7 @@ const props = defineProps<{
 }>();
 
 const value = useVModel(props, "modelValue", emit);
-const input = ref<HTMLInputElement | undefined>(undefined);
+const input = <Ref<HTMLInputElement>>ref();
 
 const resizeInput = () => {
   if (!input.value) return;
@@ -29,14 +30,14 @@ const resizeInput = () => {
 if (props.multiline === true) watch(value, resizeInput);
 
 onMounted(() => {
-  if (props.focus) input.value?.focus();
+  if (props.focus) input.value.focus();
   if (props.multiline) resizeInput();
 });
 
 watch(
   () => props.focus,
   async () => {
-    input.value?.focus();
+    input.value.focus();
   }
 );
 </script>

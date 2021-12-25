@@ -1,34 +1,36 @@
 <script lang="ts" setup>
-import { createPopper, Instance, PositioningStrategy } from '@popperjs/core'
-import { ref, onMounted, watch, defineComponent, computed } from 'vue';
-import { Placement } from '@popperjs/core/lib/enums';
+import { createPopper, Instance, PositioningStrategy } from "@popperjs/core";
+import { Placement } from "@popperjs/core/lib/enums";
+import { defineComponent, onMounted, Ref, ref, watch } from "vue";
 defineComponent({
   inheritAttrs: false,
-})
+});
 const props = defineProps<{
-  placement?: Placement,
-  strategy?: PositioningStrategy,
-  openOnHover?: boolean
-  open?: boolean
-  offsetX?: number
-  offsetY?: number
-}>()
-const target = ref<HTMLElement | undefined>(undefined)
-const content = ref<HTMLElement | undefined>(undefined)
-const instance = ref<Instance | undefined>(undefined)
+  placement?: Placement;
+  strategy?: PositioningStrategy;
+  openOnHover?: boolean;
+  open?: boolean;
+  offsetX?: number;
+  offsetY?: number;
+}>();
+const target = <Ref<HTMLElement>>ref();
+const content = <Ref<HTMLElement>>ref();
+const instance = <Ref<Instance>>ref();
 onMounted(() => {
   instance.value = createPopper(target.value!, content.value!, {
     strategy: props.strategy || "fixed",
     placement: props.placement || "auto",
-    modifiers: [{
-      name: 'offset',
-      options: {
-        offset: [props.offsetX ?? 0, props.offsetY ?? 8],
-      }
-    }]
-  })
-})
-watch(props, () => instance.value?.update())
+    modifiers: [
+      {
+        name: "offset",
+        options: {
+          offset: [props.offsetX ?? 0, props.offsetY ?? 8],
+        },
+      },
+    ],
+  });
+});
+watch(props, () => instance.value?.update());
 </script>
 
 <template>

@@ -6,7 +6,7 @@ import { useChatRoute } from "../../../router";
 
 const { host } = useChatRoute();
 
-const props = defineProps<{
+defineProps<{
   content: Content_AttachmentContent["files"];
 }>();
 

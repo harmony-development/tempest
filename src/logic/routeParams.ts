@@ -1,4 +1,4 @@
-import { computed, Ref, toRefs } from "vue";
+import { computed } from "vue";
 import { RouteParams, useRoute } from "vue-router";
 
 export function useParams<T extends RouteParams>() {

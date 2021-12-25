@@ -22,14 +22,17 @@ const host = ref("");
       <h-input v-model="host" label="Server Host" />
 
       <div class="flex justify-end gap-1">
-        <h-btn type="button" variant="text" @click="$emit('cancel')">Cancel</h-btn>
+        <h-btn type="button" variant="text" @click="$emit('cancel')"
+          >Cancel</h-btn
+        >
         <h-btn
           type="submit"
           variant="text"
           color="primary"
           :disabled="!name || !host"
           @click="$emit('done', name, host)"
-        >Done</h-btn>
+          >Done</h-btn
+        >
       </div>
     </form>
   </h-dialog>

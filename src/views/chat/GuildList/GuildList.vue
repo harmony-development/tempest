@@ -50,7 +50,19 @@ const goToGuild = (host: string, guildId: string) => {
 <template>
   <div class="list">
     <div
-      class="w-18 p-2 h-full overflow-y-scroll no-scrollbar z-1 relative bg-surface-900 flexcol gap-2 border-r-2 border-surface-800"
+      class="
+        w-18
+        p-2
+        h-full
+        overflow-y-scroll
+        no-scrollbar
+        z-1
+        relative
+        bg-surface-900
+        flexcol
+        gap-2
+        border-r-2 border-surface-800
+      "
     >
       <HBtn
         variant="filled"

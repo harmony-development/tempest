@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { computed } from "vue";
 import HImg from "~/components/shared/HImg.vue";
+import { parseHMC } from "../../../logic/parsing";
 import { chatState } from "../../../logic/store/chat";
-import { parseHMC } from '../../../logic/parsing';
 
 const props = defineProps<{
   active?: boolean;
@@ -15,8 +15,10 @@ const guild = computed(
   undefined
 );
 
-const iconSrc = computed(
-  () => guild.value.data?.picture ? parseHMC(guild.value.data.picture, props.host) : undefined,
+const iconSrc = computed(() =>
+  guild.value.data?.picture
+    ? parseHMC(guild.value.data.picture, props.host)
+    : undefined
 );
 </script>
 

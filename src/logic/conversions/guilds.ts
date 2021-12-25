@@ -2,7 +2,7 @@ import {
   Guild,
   GuildListEntry,
 } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/guilds";
-import { IGuildEntry, IGuild, IGuildData } from "../store/chat";
+import { IGuildData, IGuildEntry } from "../store/chat";
 
 export const convertGuildEntryV1 = (
   entry: GuildListEntry,

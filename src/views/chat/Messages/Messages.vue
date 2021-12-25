@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useIntersectionObserver } from "@vueuse/core";
-import { computed, nextTick, ref, toRefs, watch } from "vue";
+import { computed, nextTick, Ref, ref, toRefs, watch } from "vue";
 import { chatState } from "../../../logic/store/chat";
 import Message from "./Message.vue";
 
@@ -12,8 +12,8 @@ const props = defineProps<{
 
 const { host, guild, channel } = toRefs(props);
 
-const loader = ref<HTMLElement | undefined>();
-const list = ref<HTMLElement | undefined>(undefined);
+const loader = <Ref<HTMLElement>>ref();
+const list = <Ref<HTMLElement>>ref();
 
 const reachedTop = computed(
   () => chatState.getChannel(host.value, guild.value, channel.value).reachedTop
@@ -30,20 +30,20 @@ const loadMoreMessages = () =>
     channel.value,
     messageList.value?.[0]
   );
-const scrollToBottom = () => (list.value!.scrollTop = list.value!.scrollHeight);
+const scrollToBottom = () => (list.value.scrollTop = list.value.scrollHeight);
 
 useIntersectionObserver(loader, async ([{ isIntersecting }]) => {
   if (!isIntersecting || reachedTop.value) return;
-  const oldPos = list.value!.scrollHeight - list.value!.scrollTop;
+  const oldPos = list.value.scrollHeight - list.value.scrollTop;
   await nextTick();
   await loadMoreMessages();
-  list.value!.scrollTop = list.value!.scrollHeight - oldPos;
+  list.value.scrollTop = list.value.scrollHeight - oldPos;
 });
 
 watch(
   messageList,
   async () => {
-    const container = list.value!;
+    const container = list.value;
     if (
       container.scrollHeight - container.scrollTop <=
       container.clientHeight + 80
@@ -70,7 +70,7 @@ watch(
   messageList,
   async () => {
     if (!messageList.value) return;
-    const container = list.value!;
+    const container = list.value;
     // load more messages to fill viewport
     await nextTick();
     if (container.scrollHeight <= container.clientHeight && !reachedTop.value) {

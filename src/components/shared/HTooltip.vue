@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import HPopover from './HPopover.vue';
+import HPopover from "./HPopover.vue";
 
 defineProps<{
-  content?: string
-}>()
+  content?: string;
+}>();
 </script>
 
 <template>

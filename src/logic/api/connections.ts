@@ -1,8 +1,8 @@
-import { Connection } from "@harmony-dev/harmony-web-sdk/dist/src/connection";
 import {
   StreamEventsRequest,
   StreamEventsResponse,
 } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/stream";
+import { Connection } from "@harmony-dev/harmony-web-sdk/dist/src/connection";
 import { DuplexStreamingCall } from "@protobuf-ts/runtime-rpc";
 import { session } from "../store/session";
 

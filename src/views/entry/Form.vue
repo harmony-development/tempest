@@ -20,7 +20,12 @@ const fieldValues = ref<string[]>(props.form.fields.map(() => ""));
   <span class="text-error">{{ props.error }}</span>
   <form class="flexcol gap-3" @submit.prevent>
     <template v-for="(f, i) in form.fields">
-      <h-input :label="f.name" :type="f.type" autocomplete="on" v-model="fieldValues[i]" />
+      <h-input
+        :label="f.name"
+        :type="f.type"
+        autocomplete="on"
+        v-model="fieldValues[i]"
+      />
     </template>
     <h-btn
       variant="outlined"
@@ -28,6 +33,7 @@ const fieldValues = ref<string[]>(props.form.fields.map(() => ""));
       color="primary"
       type="submit"
       @click="$emit('done', fieldValues)"
-    >Done</h-btn>
+      >Done</h-btn
+    >
   </form>
 </template>

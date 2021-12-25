@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { onClickOutside } from "@vueuse/core";
 import dayjs from "dayjs";
-import { computed, ref } from "vue";
+import { computed, Ref, ref } from "vue";
 import Avatar from "~/components/chat/Avatar.vue";
 import HBtn from "~/components/shared/HBtn.vue";
 import HListItem from "~/components/shared/Lists/HListItem.vue";
@@ -25,7 +25,7 @@ const props = defineProps<{
 }>();
 
 const optionsOpen = ref(false);
-const optionsDropdown = ref<HTMLElement | undefined>();
+const optionsDropdown = <Ref<HTMLElement>>ref();
 
 const authorData = computed(() =>
   props.host ? chatState.getUser(props.host, props.data.author) : undefined

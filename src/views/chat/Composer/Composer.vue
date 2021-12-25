@@ -96,7 +96,7 @@ import {
   Photo,
 } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
 import { onClickOutside, useEventListener } from "@vueuse/core";
-import { ref } from "vue";
+import { Ref, ref } from "vue";
 import HBtn from "~/components/shared/HBtn.vue";
 import HInput from "~/components/shared/HInput.vue";
 import PopInTransition from "~/components/transitions/PopInTransition.vue";
@@ -107,9 +107,9 @@ import MessageTypePicker from "./MessageTypePicker.vue";
 const { host, guild, channel } = useChatRoute();
 
 const pickerOpen = ref(false);
-const messageTypePicker = ref<HTMLElement | undefined>();
-const filePicker = ref<HTMLInputElement | undefined>();
-const imagePicker = ref<HTMLInputElement | undefined>();
+const messageTypePicker = <Ref<HTMLElement>>ref();
+const filePicker = <Ref<HTMLInputElement>>ref();
+const imagePicker = <Ref<HTMLInputElement>>ref();
 const text = ref("");
 const uploadQueue = ref<
   {
@@ -151,10 +151,10 @@ const deleteFile = (i: number) => {
 const onMessageTypeChange = (value: string) => {
   switch (value) {
     case "file":
-      filePicker.value?.click();
+      filePicker.value.click();
       break;
     case "image":
-      imagePicker.value?.click();
+      imagePicker.value.click();
       break;
   }
   pickerOpen.value = false;

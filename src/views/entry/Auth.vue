@@ -31,7 +31,10 @@ const { back, error, currentStepType, currentStep, sendChoice, sendForm } =
       @done="sendForm"
       :error="error"
     />
-    <div v-if="currentStepType === 'loading'" class="text-center flexcol items-center gap-3">
+    <div
+      v-if="currentStepType === 'loading'"
+      class="text-center flexcol items-center gap-3"
+    >
       <HSpinner class="text-4xl" />
       <span class="font-bold uppercase">Loading</span>
     </div>

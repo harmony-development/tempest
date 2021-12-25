@@ -31,14 +31,17 @@ const onCreateClicked = async () => {
     <span class="text-red-400">{{ error?.code || error }}</span>
     <HInput label="Channel Name" v-model="channelName" />
     <div class="flex justify-end gap-2">
-      <HBtn color="secondary" variant="text" type="button" @click="close">Cancel</HBtn>
+      <HBtn color="secondary" variant="text" type="button" @click="close"
+        >Cancel</HBtn
+      >
       <HBtn
         variant="text"
         color="primary"
         type="submit"
         @click="onCreateClicked"
         :disabled="!channelName"
-      >Create</HBtn>
+        >Create</HBtn
+      >
     </div>
   </form>
 </template>

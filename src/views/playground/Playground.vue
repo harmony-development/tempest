@@ -9,14 +9,15 @@
       type="submit"
       :disabled="!meta.dirty || !meta.valid"
       button
-    >Save</HBtn>
+      >Save</HBtn
+    >
   </Form>
 </template>
 <script lang="ts" setup>
-import { Field, Form } from 'vee-validate';
-import HBtn from '~/components/shared/HBtn.vue';
+import { Field, Form } from "vee-validate";
+import HBtn from "~/components/shared/HBtn.vue";
 
-function onSubmit(values) {
+function onSubmit(values: any) {
   // Submit values to API...
   alert(JSON.stringify(values, null, 2));
 }
