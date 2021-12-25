@@ -9,10 +9,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Install npm from the hood
+        run: "npm i pnpm -g"
       - name: Install bloatware
-        run: "npm i"
+        run: "pnpm i"
       - name: Check Blusk's false logic
-        run: "npm run typecheck"
+        run: "pnpm run typecheck"
 
   compile-check:
     name: Compile Typescript
@@ -20,7 +22,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Install npm from the hood
+        run: "npm i pnpm -g"
       - name: Install bloatware
-        run: "npm i"
+        run: "pnpm i"
       - name: Build the masterpiece
-        run: "npm run build"
+        run: "pnpm run build"

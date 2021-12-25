@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { defineProps, defineEmits } from "vue";
 import { onKeyStroke, useVModel } from "@vueuse/core";
-import { FocusTrap } from "focus-trap-vue";
+import { defineEmits, defineProps } from "vue";
 import PopInTransition from "~/components/transitions/PopInTransition.vue";
 const props = defineProps<{
   modelValue?: boolean;
@@ -34,7 +33,7 @@ onKeyStroke("Escape", () => (open.value = false));
         @mousedown="open = false"
       >
         <div
-          class="shadow-xl p-4 bg-surface-900"
+          class="shadow-xl p-4 bg-surface-900 rounded-sm"
           :class="{ sized: !unsized }"
           v-bind="$attrs"
           @mousedown.stop=""

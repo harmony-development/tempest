@@ -57,8 +57,9 @@ onMounted(async () => {
 
 watch(guild, () => {
   const guildObject = chatState.getGuild(host.value!, guild.value!);
-  guildObject.lastChannel && (router.push({ params: { channel: guildObject.lastChannel } }));
-})
+  guildObject.lastChannel &&
+    router.push({ params: { channel: guildObject.lastChannel } });
+});
 </script>
 
 <template>
@@ -80,7 +81,7 @@ watch(guild, () => {
       </div>
     </HDrawer>
     <div class="bg-surface-900 flex-1 flexcol">
-      <h-app-bar class="bg-surface-700 h-12">
+      <h-app-bar class="bg-surface-700 h-12 text-sm font-semibold">
         <h-btn
           variant="text"
           icon
@@ -91,7 +92,7 @@ watch(guild, () => {
         >
           <mdi-menu />
         </h-btn>
-        <mdi-pound class="text-lg mr-2 text-gray-300" />
+        <mdi-pound class="text-lg mr-2 text-gray-400" />
         {{ channelData.data?.name }}
         <div class="flex-1" />
         <h-btn

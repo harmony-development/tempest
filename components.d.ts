@@ -8,7 +8,7 @@ declare module 'vue' {
     ConfirmDialog: typeof import('./src/components/shared/ConfirmDialog.vue')['default']
     GgSpinner: typeof import('~icons/gg/spinner')['default']
     HAppBar: typeof import('./src/components/shared/HAppBar.vue')['default']
-    HBtn: typeof import('./src/components/shared/HBtn.vue')['default']
+    HBtn: typeof import('~icons/h/btn')['default']
     HDialog: typeof import('./src/components/shared/HDialog.vue')['default']
     HDIalog: typeof import('./src/components/shared/HDIalog.vue')['default']
     HDrawer: typeof import('./src/components/shared/HDrawer.vue')['default']

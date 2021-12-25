@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import HBtn from "~/components/shared/HBtn.vue";
 import { parseUserHost } from "~/logic/parsing";
@@ -43,7 +43,7 @@ const nextClicked = () => {
       >Add Server</h-btn
     >
   </div>
-  <ol class="bg-surface-800 rounded-md overflow-hidden">
+  <ol class="bg-surface-800 rounded-sm overflow-hidden">
     <h-list-item
       v-for="({ name, host }, i) in serverList"
       :key="host"
