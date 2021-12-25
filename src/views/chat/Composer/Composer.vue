@@ -4,7 +4,7 @@
       <div v-for="({ url, file }, i) in uploadQueue" :key="url" class="relative flex h-full group rounded-sm overflow-hidden square">
         <img v-if="file.type.startsWith('image/')" class="h-full object-cover " :src="url">
         <div v-else class="p-3 bg-primary-600 rounded-sm h-full flexcol w-full">
-          <h1 class="font-bold overflow-ellipsis overflow-hidden">
+          <h1 class="font-bold overflow-ellipsis overflow-hidden text-sm">
             {{ file.name }}
           </h1>
           <div class="flex-1" />

@@ -5,15 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
-    <link rel="mask-icon" href="/favicon.svg" color="#171717" />
-    <meta name="theme-color" content="#171717" />
+    <link rel="mask-icon" href="/favicon.svg" color="#818DF8" />
+    <meta name="theme-color" content="#818DF8" />
     <meta
       name="description"
       content="Web frontend for the Harmony Protocol powered by Vue"
     />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self' 'unsafe-inline'; connect-src * 'unsafe-inline'; img-src https: data blob:; child-src https:; script-src * 'unsafe-inline'; upgrade-insecure-requests; media-src https:"
+      content="
+        default-src 'self' 'unsafe-inline';
+        connect-src * 'unsafe-inline';
+        img-src https: data blob:;
+        child-src https:; 
+        script-src * 'unsafe-inline';
+        upgrade-insecure-requests;
+        media-src https:;
+        style-src https://* 'unsafe-inline';
+        font-src https://*;
+      "
     />
     <title>Tempest</title>
   </head>

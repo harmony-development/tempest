@@ -10,6 +10,8 @@ import WindiCSS from "vite-plugin-windicss";
 import Components from "unplugin-vue-components/vite";
 import IconsResolver from "unplugin-icons/resolver";
 import vueJsx from "@vitejs/plugin-vue-jsx";
+import ViteFonts from "vite-plugin-fonts";
+
 // loader helpers
 import { FileSystemIconLoader } from "unplugin-icons/loaders";
 
@@ -29,6 +31,11 @@ export default defineConfig({
 		vue(),
 		vueJsx(),
 		WindiCSS(),
+		ViteFonts({
+			google: {
+				families: ["Inter"],
+			},
+		}),
 		Icons({
 			compiler: "vue3",
 			defaultStyle: "",
