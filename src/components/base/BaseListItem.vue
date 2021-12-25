@@ -23,19 +23,19 @@ const props = defineProps<{
 <style lang="postcss" scoped>
 .list-item {
 	@apply w-full py-2 px-3 cursor-pointer select-none transition duration-100 whitespace-nowrap
-         flex align-middle items-center;
+         flex align-middle items-center border-4 border-transparent;
 	&:hover {
-		@apply bg-white bg-opacity-10;
+		@apply bg-white bg-opacity-5;
 	}
 	&:active {
-		@apply bg-white bg-opacity-15;
+		@apply bg-white bg-opacity-10;
 	}
 	&:focus-visible {
 		@apply ring-3 ring-primary-300 ring-inset;
 	}
 }
 .selected {
-	@apply bg-white bg-opacity-5 bg-opacity-5;
+	@apply  border-primary-500;
 }
 
 .dangerous {

@@ -72,6 +72,7 @@ export const useAuthManager = (host: string) => {
 	const goingBack = ref<boolean>(false);
 	const title = ref<string | undefined>(undefined);
 	const choices = ref<string[]>([]);
+	const isLoading = ref<boolean>(false);
 
 	const authManager = new AuthManager(host);
 
@@ -102,12 +103,14 @@ export const useAuthManager = (host: string) => {
 
 	const sendChoice = async(c: string) => {
 		try {
+			isLoading.value = true;
 			await authManager.nextStep({
 				oneofKind: "choice",
 				choice: {
 					choice: c,
 				},
 			});
+			isLoading.value = false;
 		}
 		catch (e) {
 			error.value = formatError(e, "entry.error.sending-choice");
@@ -117,6 +120,7 @@ export const useAuthManager = (host: string) => {
 	const sendForm = async(values: string[]) => {
 		try {
 			if (currentStep.value?.oneofKind !== "form") return;
+			isLoading.value = true;
 			await authManager.nextStep({
 				oneofKind: "form",
 				form: {
@@ -125,6 +129,7 @@ export const useAuthManager = (host: string) => {
 					})),
 				},
 			});
+			isLoading.value = false;
 		}
 		catch (e) {
 			error.value = formatError(e, "entry.error.sending-form");
@@ -173,5 +178,6 @@ export const useAuthManager = (host: string) => {
 		title,
 		choices,
 		error,
+		isLoading,
 	};
 };

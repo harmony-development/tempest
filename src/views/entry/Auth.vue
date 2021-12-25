@@ -6,7 +6,7 @@ import EntryForm from "./EntryForm.vue";
 import BaseSpinner from "~/components/base/BaseSpinner.vue";
 import BaseButton from "~/components/base/BaseButton.vue";
 const params = useAuthRoute();
-const { back, error, currentStepType, currentStep, sendChoice, sendForm } = useAuthManager(params.value.host);
+const { back, error, currentStepType, currentStep, sendChoice, sendForm, isLoading } = useAuthManager(params.value.host);
 </script>
 
 <template>
@@ -22,7 +22,7 @@ const { back, error, currentStepType, currentStep, sendChoice, sendForm } = useA
   </div>
   <div v-else class="p-2">
     <choices v-if="currentStep?.oneofKind === 'choice'" :choice="currentStep.choice" :error="error" @done="sendChoice" />
-    <entry-form v-else-if="currentStep?.oneofKind === 'form'" :form="currentStep.form" :error="error" @done="sendForm" />
+    <entry-form v-else-if="currentStep?.oneofKind === 'form'" :form="currentStep.form" :error="error" :is-loading="isLoading" @done="sendForm" />
     <div v-if="currentStepType === 'loading'" class="text-center flexcol items-center gap-3">
       <base-spinner class="text-4xl" />
       <span class="font-bold uppercase">Loading</span>

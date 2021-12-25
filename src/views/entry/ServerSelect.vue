@@ -5,6 +5,7 @@ import AddServerDialog from "./AddServerDialog.vue";
 import { serverList } from "./serverlist";
 import BaseButton from "~/components/base/BaseButton.vue";
 import { parseUserHost } from "~/logic/parsing";
+import BaseListItem from "~/components/base/BaseListItem.vue";
 
 const router = useRouter();
 const addingServer = ref(false);

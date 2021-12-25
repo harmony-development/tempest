@@ -6,16 +6,16 @@ import BaseInput from "~/components/base/BaseInput.vue";
 const props = defineProps<{
 	form: AuthStep_Form
 	error: unknown
+	isLoading: boolean
 }>();
 defineEmits<{
 	(event: "done", values: string[]): void
 }>();
-
 const fieldValues = ref<string[]>(props.form.fields.map(() => ""));
 </script>
 
 <template>
-  <p class="font-bold">
+  <p class="font-bold mb-3">
     {{ form.title }}
   </p>
   <span class="text-error">{{ props.error }}</span>
@@ -28,6 +28,7 @@ const fieldValues = ref<string[]>(props.form.fields.map(() => ""));
       class="w-min ml-auto"
       color="primary"
       type="submit"
+      :is-loading="isLoading"
       @click="$emit('done', fieldValues)"
     >
       Done

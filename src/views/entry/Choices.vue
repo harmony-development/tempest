@@ -12,11 +12,11 @@ defineEmits<{
 </script>
 
 <template>
-  <h1 class="font-bold">
+  <h1 class="font-bold mb-3">
     {{ choice.title }}
   </h1>
   <span class="text-error">{{ error }}</span>
-  <ol class="bg-surface-800 mt-3">
+  <ol class="bg-surface-800">
     <base-list-item v-for="opt in choice.options" :key="opt" @click="$emit('done', opt)">
       {{ opt }}
     </base-list-item>
