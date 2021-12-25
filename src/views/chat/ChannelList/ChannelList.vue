@@ -17,7 +17,7 @@ watchEffect(() => chatState.getChannelList(host.value!, guild.value!));
 </script>
 
 <template>
-  <div class="w-48 bg-surface-900 border-l-3 border-surface-900 flexcol">
+  <div class="w-48 bg-surface-900 border-surface-900 flexcol">
     <div class="p-2 h-12 text-base bg-surface-700 flex items-center">
       <p class="font-bold overflow-ellipsis truncate">{{ data?.data?.name }}</p>
       <div class="flex-1" />

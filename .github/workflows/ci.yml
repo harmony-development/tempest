@@ -1,0 +1,26 @@
+name: ci
+
+on: [push, pull_request]
+
+jobs:
+  type-check:
+    name: "Typecheck"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install bloatware
+        run: "npm i"
+      - name: Check Blusk's false logic
+        run: "npm run typecheck"
+
+  compile-check:
+    name: Compile Typescript
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install bloatware
+        run: "npm i"
+      - name: Build the masterpiece
+        run: "npm run build"

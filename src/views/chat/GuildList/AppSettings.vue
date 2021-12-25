@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-import HPopover from '~/components/shared/HPopover.vue';
-import { ref } from 'vue';
 import { onClickOutside } from '@vueuse/core';
+import { ref } from 'vue';
 
 const open = ref(false)
 const button = ref<HTMLElement | undefined>(undefined)
@@ -11,7 +10,7 @@ onClickOutside(button, () => {
 </script>
 
 <template>
-  <HBtn variant="outlined" color="primary" square aria-label="App Settings" @click="open = true">
+  <HBtn color="primary" square aria-label="App Settings" @click="open = true">
     <h-tempest class="text-2xl" />
   </HBtn>
 </template>

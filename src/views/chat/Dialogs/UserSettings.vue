@@ -2,7 +2,7 @@
   <form class="p-2 flexcol gap-4" @submit.prevent="onSubmit">
     <div class="flex justify-center">
       <ImageInput
-        :preview-src="displayValues.avatarPreview"
+        :preview-src="profile?.picture"
         v-model="changedValues.avatar"
         :fallback="profile?.username.charAt(0) || '?'"
       />
@@ -33,7 +33,6 @@ import { chatState } from '../../../logic/store/chat';
 
 interface ISettings {
   avatar?: File;
-  avatarPreview?: string;
   username?: string;
   [key: string]: any;
 }
@@ -57,11 +56,19 @@ const dirty = computed(() =>
     .every(([key, value]) => defaultValues.value[key] === value)
 )
 
-const onSubmit = () => {
+const onSubmit = async () => {
+  const { username, avatar } = changedValues.value
   const conn = connectionManager.get(session.value!.host);
-  conn.profile.updateProfile({
-    newUserName: changedValues.value.username
+  let newUserAvatar: string | undefined
+  if (avatar) {
+    const result = await conn.uploadFile(avatar)
+    newUserAvatar = result.id
+  }
+  await conn.profile.updateProfile({
+    newUserAvatar,
+    newUserName: username,
   })
+  handleReset()
 }
 
 const handleReset = () => {
