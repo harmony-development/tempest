@@ -10,8 +10,8 @@ const props = defineProps<{
   <li
     ref="item"
     role="button"
+    class="list-item"
     :class="{
-      'list-item': true,
       selected: props.selected,
       dangerous,
     }"

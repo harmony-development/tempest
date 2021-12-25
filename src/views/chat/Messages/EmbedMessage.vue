@@ -15,7 +15,7 @@ const embeds = computed(() => props.content.embeds!);
 
 <template>
   <div
-    class="border-l-2 p-3 bg-surface-800"
+    class="border-l-3 rounded-md p-3 bg-surface-800"
     :style="{ borderColor: toColor(embed.color!) }"
     v-for="embed in embeds"
     :key="embed.title"

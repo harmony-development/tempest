@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useIntersectionObserver } from "@vueuse/core";
-import { computed, nextTick, ref, toRefs, watch } from 'vue';
+import { computed, nextTick, ref, toRefs, watch } from "vue";
 import { chatState } from "../../../logic/store/chat";
 import Message from "./Message.vue";
 
@@ -8,55 +8,78 @@ const props = defineProps<{
   host: string;
   guild: string;
   channel: string;
-}>()
+}>();
 
 const { host, guild, channel } = toRefs(props);
 
 const loader = ref<HTMLElement | undefined>();
-const list = ref<HTMLElement | undefined>(undefined)
+const list = ref<HTMLElement | undefined>(undefined);
 
-const reachedTop = computed(() => chatState.getChannel(host.value, guild.value, channel.value).reachedTop)
+const reachedTop = computed(
+  () => chatState.getChannel(host.value, guild.value, channel.value).reachedTop
+);
 
 const messageList = computed(() =>
   chatState.getMessageList(host.value, guild.value, channel.value)
 );
 
-const loadMoreMessages = () => chatState.fetchMessageList(host.value, guild.value, channel.value, messageList.value?.[0])
-const scrollToBottom = () => list.value!.scrollTop = list.value!.scrollHeight
+const loadMoreMessages = () =>
+  chatState.fetchMessageList(
+    host.value,
+    guild.value,
+    channel.value,
+    messageList.value?.[0]
+  );
+const scrollToBottom = () => (list.value!.scrollTop = list.value!.scrollHeight);
 
 useIntersectionObserver(loader, async ([{ isIntersecting }]) => {
   if (!isIntersecting || reachedTop.value) return;
   const oldPos = list.value!.scrollHeight - list.value!.scrollTop;
-  await nextTick()
-  await loadMoreMessages()
+  await nextTick();
+  await loadMoreMessages();
   list.value!.scrollTop = list.value!.scrollHeight - oldPos;
 });
 
-watch(messageList, async () => {
-  const container = list.value!
-  if (container.scrollHeight - container.scrollTop <= container.clientHeight + 80) {
-    console.log("before2");
-    await nextTick()
-    console.log("after2");
-    scrollToBottom()
-  }
-}, { deep: true })
+watch(
+  messageList,
+  async () => {
+    const container = list.value!;
+    if (
+      container.scrollHeight - container.scrollTop <=
+      container.clientHeight + 80
+    ) {
+      console.log("before2");
+      await nextTick();
+      console.log("after2");
+      scrollToBottom();
+    }
+  },
+  { deep: true }
+);
 
-watch(channel, async () => {
-  await nextTick()
-  scrollToBottom()
-}, { immediate: true })
+watch(
+  channel,
+  async () => {
+    await nextTick();
+    scrollToBottom();
+  },
+  { immediate: true }
+);
 
-watch(messageList, async () => {
-  if (!messageList.value) return;
-  const container = list.value!
-  // load more messages to fill viewport
-  await nextTick()
-  if (container.scrollHeight <= container.clientHeight && !reachedTop.value) {
-    await loadMoreMessages()
-    await nextTick()
-  }
-}, { deep: true })
+watch(
+  messageList,
+  async () => {
+    if (!messageList.value) return;
+    const container = list.value!;
+    // load more messages to fill viewport
+    await nextTick();
+    if (container.scrollHeight <= container.clientHeight && !reachedTop.value) {
+      await loadMoreMessages();
+      await nextTick();
+    }
+  },
+  { deep: true }
+);
 
 const isConsecutiveMessage = (i: number) => {
   const previousMessage = chatState.getMessage(
@@ -72,13 +95,25 @@ const isConsecutiveMessage = (i: number) => {
     messageList.value[i]
   );
 
-  return currentMessage?.author === previousMessage?.author && currentMessage?.override?.username === previousMessage?.override?.username;
+  return (
+    currentMessage?.author === previousMessage?.author &&
+    currentMessage?.override?.username === previousMessage?.override?.username
+  );
 };
 </script>
 
 <template>
   <div
-    class="flex-1 flex justify-center bg-surface-1000 p-3 gap-2 overflow-y-auto w-full compact-scrollbar"
+    class="
+      flex-1 flex
+      justify-center
+      bg-surface-1000
+      p-3
+      gap-2
+      overflow-y-auto
+      w-full
+      compact-scrollbar
+    "
     ref="list"
   >
     <div class="flexcol flex-1 gap-2">

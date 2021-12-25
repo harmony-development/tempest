@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 import { Content_TextContent } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
 import FormattedText from "./FormattedText.vue";
-
-const props = defineProps<{
+defineProps<{
   content: Content_TextContent["content"];
 }>();
 </script>
@@ -20,7 +19,7 @@ p {
   @apply w-full block break-all break-words whitespace-pre-wrap pr-3 rounded-md bg-black;
 }
 .content-out ::v-deep(.codeblock > code) {
-  @apply break-all w-full block p-3 pl-4 break-all break-words whitespace-pre-wrap;
+  @apply break-all w-full block p-3 pl-4 break-words whitespace-pre-wrap;
 }
 .content-out ::v-deep(.msg-p) {
   margin-bottom: 0px;

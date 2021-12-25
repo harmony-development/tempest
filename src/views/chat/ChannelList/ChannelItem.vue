@@ -1,10 +1,10 @@
 <script lang="ts" setup>
+import { ChannelKind } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/channels";
 import { computed } from "vue";
+import { useRouter } from "vue-router";
 import HListItem from "~/components/shared/Lists/HListItem.vue";
 import { chatState } from "../../../logic/store/chat";
 import { useChatRoute } from "../../../router";
-import { ChannelKind } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/channels";
-import { useRouter } from "vue-router";
 
 const props = defineProps<{
   channelid: string;
@@ -19,7 +19,7 @@ const data = computed(() =>
 
 const goToChannel = () => {
   chatState.getGuild(host.value!, guild.value!).lastChannel = props.channelid;
-  router.push({ params: { channel: props.channelid } })
+  router.push({ params: { channel: props.channelid } });
 };
 </script>
 
@@ -29,7 +29,7 @@ const goToChannel = () => {
       class="text-base text-gray-400"
       v-if="data.data?.kind === ChannelKind.TEXT_UNSPECIFIED"
     />
-    <mdi-volume class="text-lg text-gray-400" v-else />
-    <span class="ml-2">{{ data.data?.name }}</span>
+    <mdi-volume class="text-base text-gray-400" v-else />
+    <span class="text-md ml-2">{{ data.data?.name }}</span>
   </h-list-item>
 </template>

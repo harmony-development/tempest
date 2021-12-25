@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { computed } from "vue";
+import Avatar from "~/components/chat/Avatar.vue";
+import HListItem from "~/components/shared/Lists/HListItem.vue";
 import { chatState } from "../../../logic/store/chat";
 import { useChatRoute } from "../../../router";
-import Avatar from "~/components/chat/Avatar.vue";
-
 const props = defineProps<{
   userid: string;
 }>();
@@ -17,8 +17,10 @@ const data = computed(() => {
 </script>
 
 <template>
-  <h-list-item class="gap-2">
+  <h-list-item class="gap-4">
     <Avatar :userid="userid" class="h-7 rounded-full" />
-    <p class="overflow-ellipsis overflow-hidden">{{ data?.username }}</p>
+    <p class="text-xs overflow-ellipsis overflow-hidden">
+      {{ data?.username || "Unknown User" }}
+    </p>
   </h-list-item>
 </template>
