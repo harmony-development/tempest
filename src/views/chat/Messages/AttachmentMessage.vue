@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { Content_AttachmentContent } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
-import HBtn from "~/components/shared/HBtn.vue";
+import BaseButton from "~/components/base/BaseButton.vue";
 import { parseHMC } from "../../../logic/parsing";
 import { useChatRoute } from "../../../router";
 
@@ -26,9 +26,9 @@ const hmc = (id: string) => parseHMC(id, host.value!);
 					<p class="text-xs text-gray-400">{{ file.size }} Bytes</p>
 					<div class="flex-1" />
 					<div>
-						<HBtn icon target="_blank" :href="hmc(file.id)">
+						<base-button icon target="_blank" :href="hmc(file.id)">
 							<mdi:download />
-						</HBtn>
+						</base-button>
 					</div>
 				</div>
 			</div>

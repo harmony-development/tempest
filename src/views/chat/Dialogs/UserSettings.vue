@@ -1,13 +1,13 @@
 <template>
 	<form class="p-2 flexcol gap-4" @submit.prevent="onSubmit">
 		<div class="flex justify-center">
-			<ImageInput
+			<image-input
 				:preview-src="profile?.picture"
 				v-model="changedValues.avatar"
 				:fallback="profile?.username.charAt(0) || '?'"
 			/>
 		</div>
-		<HInput
+		<base-input
 			name="username"
 			:type="'username'"
 			placeholder="Username"
@@ -15,8 +15,8 @@
 			@input="(event) => changedValues.username = (event.target as HTMLInputElement).value"
 		/>
 		<div class="flex justify-end gap-2">
-			<HBtn variant="outlined" type="reset" @click="handleReset" :disabled="dirty">Reset</HBtn>
-			<HBtn button variant="outlined" color="primary" type="submit" :disabled="dirty">Save</HBtn>
+			<base-button variant="outlined" type="reset" @click="handleReset" :disabled="dirty">Reset</base-button>
+			<base-button button variant="outlined" color="primary" type="submit" :disabled="dirty">Save</base-button>
 		</div>
 	</form>
 </template>
@@ -24,13 +24,12 @@
 <script lang="ts" setup>
 import { Form } from "vee-validate";
 import { computed, Ref, ref } from "vue";
+import BaseButton from "~/components/base/BaseButton.vue";
+import BaseInput from "~/components/base/BaseInput.vue";
 import ImageInput from "~/components/chat/ImageInput.vue";
-import HBtn from "~/components/shared/HBtn.vue";
-import HInput from "~/components/shared/HInput.vue";
 import { connectionManager } from "~/logic/api/connections";
 import { session } from "~/logic/store/session";
 import { chatState } from "../../../logic/store/chat";
-
 interface ISettings {
 	avatar?: File;
 	username?: string;

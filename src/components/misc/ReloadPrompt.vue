@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRegisterSW } from "virtual:pwa-register/vue";
-import HBtn from "~/components/shared/HBtn.vue";
+import BaseButton from "~/components/base/BaseButton.vue";
 
 const { offlineReady, needRefresh, updateServiceWorker } = useRegisterSW();
 
@@ -15,8 +15,8 @@ const close = async () => {
 		<div class="message">
 			<span>New content available, click on reload button to update.</span>
 		</div>
-		<HBtn color="primary" variant="text" @click="updateServiceWorker()" v-if="needRefresh">Reload</HBtn>
-		<HBtn variant="text" @click="close">Close</HBtn>
+		<base-button color="primary" variant="text" @click="updateServiceWorker()" v-if="needRefresh">Reload</base-button>
+		<base-button variant="text" @click="close">Close</base-button>
 	</div>
 </template>
 

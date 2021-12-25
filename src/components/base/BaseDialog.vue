@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onKeyStroke, useVModel } from "@vueuse/core";
-import { defineEmits, defineProps } from "vue";
 import PopInTransition from "~/components/transitions/PopInTransition.vue";
 const props = defineProps<{
 	modelValue?: boolean;
@@ -12,7 +11,7 @@ onKeyStroke("Escape", () => (open.value = false));
 </script>
 
 <template>
-	<Teleport to="#app">
+	<teleport to="#app">
 		<pop-in-transition>
 			<div
 				v-if="open"
@@ -29,7 +28,7 @@ onKeyStroke("Escape", () => (open.value = false));
 				</div>
 			</div>
 		</pop-in-transition>
-	</Teleport>
+	</teleport>
 </template>
 
 <style lang="postcss" scoped>

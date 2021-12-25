@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useField } from "vee-validate";
-import HInput from "~/components/shared/HInput.vue";
+import BaseInput from "./BaseInput.vue";
 
 const props = defineProps<{
 	name: string;
@@ -12,6 +12,6 @@ const { value, errorMessage, handleBlur, handleChange } = useField(props.name, u
 });
 </script>
 <template>
-	<HInput v-bind="$attrs" outlined :label="name" @input="handleChange" @blur="handleBlur" :modelValue="value"></HInput>
+	<base-input v-bind="$attrs" outlined :label="name" @input="handleChange" @blur="handleBlur" :modelValue="value" />
 	<p class="text-red-500" v-show="errorMessage">{{ errorMessage }}</p>
 </template>
