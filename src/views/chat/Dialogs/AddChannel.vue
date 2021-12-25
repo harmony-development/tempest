@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import HInput from "~/components/shared/HInput.vue";
+import { ChannelKind } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/channels";
 import { ref } from "vue";
-import { useChatRoute } from "../../../router";
+import HInput from "~/components/shared/HInput.vue";
 import { connectionManager } from "~/logic/api/connections";
 import { uiState } from "~/logic/store/ui";
-import { ChannelKind } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/channels";
+import { useChatRoute } from "../../../router";
 
 const { host, guild } = useChatRoute();
 const channelName = ref("");
@@ -26,7 +26,7 @@ const onCreateClicked = async () => {
 };
 </script>
 <template>
-  <form class="flex flex-col gap-2" @submit.prevent>
+  <form class="flexcol gap-2" @submit.prevent>
     <h1 class="text-xl">Add Channel</h1>
     <span class="text-red-400">{{ error?.code || error }}</span>
     <HInput label="Channel Name" v-model="channelName" />

@@ -81,7 +81,7 @@ const isConsecutiveMessage = (i: number) => {
     class="flex-1 flex justify-center bg-surface-1000 p-3 gap-2 overflow-y-auto w-full compact-scrollbar"
     ref="list"
   >
-    <div class="flex flex-col flex-1 gap-2">
+    <div class="flexcol flex-1 gap-2">
       <div ref="loader">
         <mdi-loading class="text-xl animate-spin" v-if="!reachedTop" />
       </div>

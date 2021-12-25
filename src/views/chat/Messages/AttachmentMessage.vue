@@ -21,7 +21,7 @@ const hmc = (id: string) => parseHMC(id, host.value!);
           class="absolute z-1 top-0 left-0 h-full w-1/2 bg-cover bg-no-repeat"
           :style="{ backgroundImage: `url(${hmc(file.id)})` }"
         />
-        <div class="relative p-3 h-full z-10 image-container text-right flex flex-col">
+        <div class="relative p-3 h-full z-10 image-container text-right flexcol">
           <p>{{ file.name }}</p>
           <p>{{ file.size }} Bytes</p>
           <div class="flex-1" />

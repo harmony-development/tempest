@@ -15,6 +15,10 @@ button {
 }
 
 @layer utilities {
+  .flexcol {
+    @apply flex flex-col;
+  }
+
   .square {
     aspect-ratio: 1;
   }

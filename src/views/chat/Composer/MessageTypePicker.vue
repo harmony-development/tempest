@@ -8,7 +8,7 @@ const updateType = (type: string) => emit('update:messageType', type);
 </script>
 
 <template>
-  <div class="bg-surface-1000 p-3 rounded-md flex flex-col gap-3">
+  <div class="bg-surface-1000 p-3 rounded-md flexcol gap-3">
     <p class="font-bold">Attachment Types</p>
     <hr class="border-surface-600" />
     <div class="grid grid-cols-3 gap-2 auto-cols-max w-max">

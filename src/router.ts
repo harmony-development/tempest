@@ -1,3 +1,4 @@
+import { computed } from "vue";
 import {
   createRouter,
   createWebHashHistory,
@@ -6,13 +7,15 @@ import {
   useRoute,
 } from "vue-router";
 import { session } from "./logic/store/session";
-import { computed } from "vue";
-import { toRefs } from "@vueuse/core";
 
 const routes: RouteRecordRaw[] = [
   {
     path: "/",
     redirect: "/entry/serverselect",
+  },
+  {
+    path: "/playground",
+    component: () => import("./views/playground/Playground.vue"),
   },
   {
     path: "/entry",

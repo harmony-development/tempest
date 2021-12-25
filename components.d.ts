@@ -24,6 +24,7 @@ declare module 'vue' {
     HSpinner: typeof import('./src/components/shared/HSpinner.vue')['default']
     HTempest: typeof import('~icons/h/tempest')['default']
     HTooltip: typeof import('./src/components/shared/HTooltip.vue')['default']
+    ImageInput: typeof import('./src/components/chat/ImageInput.vue')['default']
     'Mdi:alert': typeof import('~icons/mdi/alert')['default']
     'Mdi:alertCircleOutline': typeof import('~icons/mdi/alert-circle-outline')['default']
     'Mdi:crosshairsGps': typeof import('~icons/mdi/crosshairs-gps')['default']
@@ -56,6 +57,7 @@ declare module 'vue' {
     PopInTransition: typeof import('./src/components/transitions/PopInTransition.vue')['default']
     ReloadPrompt: typeof import('./src/components/misc/ReloadPrompt.vue')['default']
     'Twemoji:woozyFace': typeof import('~icons/twemoji/woozy-face')['default']
+    UserAvatar: typeof import('./src/components/chat/UserAvatar.vue')['default']
   }
 }
 

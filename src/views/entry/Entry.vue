@@ -1,21 +1,9 @@
 <script lang="ts" setup>
-import ServerSelect from "./ServerSelect.vue";
 </script>
 
 <template>
-  <div
-    class="
-      background
-      h-full
-      w-full
-      overflow-x-auto
-      flex flex-col
-      justify-center
-    "
-  >
-    <div
-      class="flex flex-col gap-2 bg-surface-900 p-3 w-11/12 sm:m-12 md:w-150"
-    >
+  <div class="background h-full w-full overflow-x-auto flexcol justify-center">
+    <div class="flexcol gap-2 bg-surface-900 p-3 w-11/12 sm:m-12 md:w-150">
       <router-view />
     </div>
   </div>

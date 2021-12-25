@@ -1,5 +1,3 @@
-import { Store } from "./store";
-import { session } from "./session";
 import { ChannelKind } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/channels";
 import {
   Content,
@@ -11,6 +9,8 @@ import { UserStatus } from "@harmony-dev/harmony-web-sdk/dist/gen/profile/v1/typ
 import { connectionManager } from "../api/connections";
 import { convertMessageV1 } from "../conversions/messages";
 import { AsyncLock } from "../util/asyncLock";
+import { session } from "./session";
+import { Store } from "./store";
 
 export interface IGuildEntry {
   host: string;

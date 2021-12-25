@@ -1,23 +1,23 @@
 <script lang="ts" setup>
-import { defineAsyncComponent, onMounted, ref, computed, watch } from "vue";
-import { session } from "../../logic/store/session";
-import { connectionManager } from "../../logic/api/connections";
+import { computed, defineAsyncComponent, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
-import Splash from "./Splash.vue";
-import GuildList from "./GuildList/GuildList.vue";
-import { pubsub } from "~/logic/api/pubsub";
 import HAppBar from "~/components/shared/HAppBar.vue";
 import HBtn from "~/components/shared/HBtn.vue";
-import ChannelList from "./ChannelList/ChannelList.vue";
-import HDrawer from "~/components/shared/HDrawer.vue";
-import { uiState } from "../../logic/store/ui";
 import HDialog from "~/components/shared/HDialog.vue";
-import { useChatRoute } from "../../router";
+import HDrawer from "~/components/shared/HDrawer.vue";
+import { pubsub } from "~/logic/api/pubsub";
+import { connectionManager } from "../../logic/api/connections";
 import { chatState } from "../../logic/store/chat";
-import Messages from "./Messages/Messages.vue";
+import { session } from "../../logic/store/session";
+import { uiState } from "../../logic/store/ui";
+import { useChatRoute } from "../../router";
+import ChannelList from "./ChannelList/ChannelList.vue";
 import Composer from "./Composer/Composer.vue";
-import MemberList from "./MemberList/MemberList.vue";
 import UserSettings from "./Dialogs/UserSettings.vue";
+import GuildList from "./GuildList/GuildList.vue";
+import MemberList from "./MemberList/MemberList.vue";
+import Messages from "./Messages/Messages.vue";
+import Splash from "./Splash.vue";
 
 const AddGuild = defineAsyncComponent(() => import("./Dialogs/AddGuild.vue"));
 const AddChannel = defineAsyncComponent(
@@ -79,7 +79,7 @@ watch(guild, () => {
         <ChannelList v-if="guild" />
       </div>
     </HDrawer>
-    <div class="bg-surface-900 flex-1 flex flex-col">
+    <div class="bg-surface-900 flex-1 flexcol">
       <h-app-bar class="bg-surface-700 h-12">
         <h-btn
           variant="text"
@@ -109,7 +109,7 @@ watch(guild, () => {
         <Messages :host="host" :guild="guild" :channel="channel" />
         <Composer />
       </template>
-      <div class="flex-1 flex flex-col gap-4 justify-center items-center" v-else>
+      <div class="flex-1 flexcol gap-4 justify-center items-center" v-else>
         <div class="bg-surface-800 rounded-full p-2">
           <mdi-pound class="text-5xl align-top text-gray-300" />
         </div>

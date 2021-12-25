@@ -1,70 +1,70 @@
 <template>
-  <Form
-    class="p-2 flex flex-col gap-4"
-    v-slot="{ meta, handleReset, handleSubmit, submitCount }"
-    :initial-values="defaultValues"
-    @submit="onSubmit"
-  >
-    {{ submitCount }}
-    <Field name="avatar" v-slot="{ handleChange, handleBlur }">
-      <input
-        ref="avatarInput"
-        accept="image/*"
-        class="hidden"
-        type="file"
-        @change="handleChange"
-        @blur="handleBlur"
+  <form class="p-2 flexcol gap-4" @submit.prevent="onSubmit">
+    <div class="flex justify-center">
+      <ImageInput
+        :preview-src="displayValues.avatarPreview"
+        v-model="changedValues.avatar"
+        :fallback="profile?.username.charAt(0) || '?'"
       />
-      <div class="flex justify-center">
-        <HImg
-          class="w-32 h-32 bg-surface-300 rounded-full cursor-pointer"
-          v-wave
-          @click="avatarInput?.click()"
-        />
-      </div>
-    </Field>
-    <HFormInput name="username" :type="'username'" placeholder="Username" />
-    <div class="flex justify-end gap-2">
-      <HBtn variant="outlined" type="reset" @click="handleReset" :disabled="!meta.dirty">Reset</HBtn>
-      <HBtn
-        variant="outlined"
-        color="primary"
-        type="submit"
-        :disabled="!meta.dirty || !meta.valid"
-        @click="handleSubmit"
-      >Save</HBtn>
     </div>
-  </Form>
+    <HInput
+      name="username"
+      :type="'username'"
+      placeholder="Username"
+      :model-value="displayValues.username"
+      @input="(event) => changedValues.username = (event.target as HTMLInputElement).value"
+    />
+    <div class="flex justify-end gap-2">
+      <HBtn variant="outlined" type="reset" @click="handleReset" :disabled="dirty">Reset</HBtn>
+      <HBtn button variant="outlined" color="primary" type="submit" :disabled="dirty">Save</HBtn>
+    </div>
+  </form>
 </template>
 
 <script lang="ts" setup>
-import { Field, Form } from 'vee-validate';
-import { computed, ref } from 'vue';
-import { object, string } from 'yup';
+import { Form } from 'vee-validate';
+import { computed, Ref, ref } from 'vue';
+import ImageInput from '~/components/chat/ImageInput.vue';
 import HBtn from '~/components/shared/HBtn.vue';
-import HFormInput from '~/components/shared/HFormInput.vue';
-import HImg from '~/components/shared/HImg.vue';
+import HInput from '~/components/shared/HInput.vue';
+import { connectionManager } from '~/logic/api/connections';
 import { session } from '~/logic/store/session';
 import { chatState } from '../../../logic/store/chat';
 
-const avatarInput = ref<HTMLInputElement | undefined>()
+interface ISettings {
+  avatar?: File;
+  avatarPreview?: string;
+  username?: string;
+  [key: string]: any;
+}
 
 const profile = computed(() => session.value ? chatState.getUser(session.value.host, session.value.userID) : undefined);
 
-const defaultValues = computed(() => ({
+const defaultValues = computed<ISettings>(() => ({
+  avatar: undefined,
+  avatarPreview: profile.value?.picture,
   username: profile.value?.username
 }))
+const changedValues = <Ref<typeof defaultValues.value>>ref({})
+const displayValues = computed(() => ({
+  ...defaultValues.value,
+  ...changedValues.value
+}))
 
-const schema = object({
-  username: string(),
-  avatar: string(),
-})
+const dirty = computed(() =>
+  Object
+    .entries(changedValues.value)
+    .every(([key, value]) => defaultValues.value[key] === value)
+)
 
-function onSubmit() {
-  alert("insane")
-  // const conn = connectionManager.get(session.value!.host);
-  // conn.profile.updateProfile({
-  //   username: 
-  // })
+const onSubmit = () => {
+  const conn = connectionManager.get(session.value!.host);
+  conn.profile.updateProfile({
+    newUserName: changedValues.value.username
+  })
+}
+
+const handleReset = () => {
+  changedValues.value = {}
 }
 </script>

@@ -1,10 +1,9 @@
 <script lang="ts" setup>
 import { Content_PhotoContent } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
-import FormattedText from "./FormattedText.vue";
-import { useChatRoute } from '../../../router';
-import { parseHMC } from '../../../logic/parsing';
 import { ref } from 'vue';
 import HBtn from "~/components/shared/HBtn.vue";
+import { parseHMC } from '../../../logic/parsing';
+import { useChatRoute } from '../../../router';
 
 const { host } = useChatRoute();
 
@@ -19,7 +18,7 @@ const getThumbnail = (data: Uint8Array) => URL.createObjectURL(new Blob([data], 
 </script>
 
 <template>
-  <div class="flex flex-col gap-2">
+  <div class="flexcol gap-2">
     <div v-for="file in content" :key="file.hmc" class="relative rounded-md overflow-hidden">
       <div
         :style="{ width: '400px', maxWidth: `${file.width}px`, paddingBottom: `calc(${file.height} / ${file.width} * 100%` }"

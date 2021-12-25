@@ -5,7 +5,7 @@ defineComponent({
 </script>
 
 <script lang="ts" setup>
-import { ref, defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 
 defineProps<{
   fallback?: string;
@@ -18,7 +18,7 @@ const loadFailure = ref(false);
 <template>
   <div
     v-if="loadFailure || !src"
-    class="flex justify-center h-full items-center"
+    class="flex justify-center h-full items-center select-none"
     :data-attempted="src"
     v-bind="$attrs"
   >

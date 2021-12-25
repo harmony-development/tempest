@@ -2,7 +2,7 @@
   <div class="bg-black p-3 flex gap-3 h-38" v-if="uploadQueue.length > 0">
     <div v-for="({ url, file }, i) in uploadQueue" :key="url" class="relative group">
       <img class="h-full" :src="url" v-if="file.type.startsWith('image/')" />
-      <div class="p-3 bg-primary-600 rounded-md h-full flex flex-col" v-else>
+      <div class="p-3 bg-primary-600 rounded-md h-full flexcol" v-else>
         <h1 class="font-bold">{{ file.name }}</h1>
         <div class="flex-1" />
         <p class="text-xs">{{ file.size }} Bytes</p>
@@ -62,14 +62,14 @@
 
 <script lang="ts" setup>
 import { Attachment, FormattedText, Photo } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
-import HInput from "~/components/shared/HInput.vue";
-import { connectionManager } from "../../../logic/api/connections";
-import { useChatRoute } from "../../../router";
+import { onClickOutside, useEventListener } from '@vueuse/core';
 import { ref } from 'vue';
 import HBtn from "~/components/shared/HBtn.vue";
-import MessageTypePicker from "./MessageTypePicker.vue";
-import { onClickOutside, useEventListener } from '@vueuse/core';
+import HInput from "~/components/shared/HInput.vue";
 import PopInTransition from "~/components/transitions/PopInTransition.vue";
+import { connectionManager } from "../../../logic/api/connections";
+import { useChatRoute } from "../../../router";
+import MessageTypePicker from "./MessageTypePicker.vue";
 
 const { host, guild, channel } = useChatRoute();
 

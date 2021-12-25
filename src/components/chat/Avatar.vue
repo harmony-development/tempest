@@ -1,30 +1,49 @@
 <script lang="ts" setup>
-import { computed } from "vue";
-import { chatState } from "../../logic/store/chat";
-import HImg from "../shared/HImg.vue";
-import { useChatRoute } from "../../router";
+import { computed, ref } from 'vue';
 import { parseHMC } from '../../logic/parsing';
+import { chatState } from "../../logic/store/chat";
+import { useChatRoute } from "../../router";
+import HImg from "../shared/HImg.vue";
 
 const { host } = useChatRoute();
 
+const avatarInput = ref<HTMLInputElement | undefined>(undefined)
+const emit = defineEmits(["change", "blur"])
 const props = defineProps<{
-  userid: string;
+  userid?: string;
   override?: string;
 }>();
+const avatar = ref()
 const profile = computed(
-  () => chatState.getUser(host.value!, props.userid),
+  () => props.userid ? chatState.getUser(host.value!, props.userid) : undefined,
   undefined
 );
 const uri = computed(() => {
   if (props.override) return parseHMC(props.override, host.value!);
   return profile.value?.picture && host.value && parseHMC(profile.value.picture, host.value)
 });
+
+const onChange = (event: Event) => {
+  const file = (event.target as HTMLInputElement).files![0]
+  avatar.value = URL.createObjectURL(file)
+  emit('change', file)
+}
 </script>
 
 <template>
+  <input
+    ref="avatarInput"
+    accept="image/*"
+    class="hidden"
+    type="file"
+    @change="onChange"
+    @blur="(...args) => $emit('blur', ...args)"
+  />
   <HImg
-    :fallback="profile?.username[0] || userid[0]"
+    :fallback="profile?.username[0] || userid?.[0] || '?'"
     :src="uri"
+    @click="avatarInput?.click()"
     class="bg-primary-800 hover:bg-primary-900 rounded-xl square inline-flex"
+    v-bind="$attrs"
   />
 </template>

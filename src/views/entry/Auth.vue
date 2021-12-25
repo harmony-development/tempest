@@ -1,8 +1,8 @@
 <script lang="ts" setup>
+import { useAuthManager } from "../../logic/api/auth";
 import { useAuthRoute } from "../../logic/routeParams";
 import Choices from "./Choices.vue";
 import Form from "./Form.vue";
-import { useAuthManager } from "../../logic/api/auth";
 
 const params = useAuthRoute();
 const { back, error, currentStepType, currentStep, sendChoice, sendForm } =
@@ -16,9 +16,7 @@ const { back, error, currentStepType, currentStep, sendChoice, sendForm } =
   <div class="text-center" v-if="currentStepType === 'fatal'">
     <mdi-alert class="text-3xl textgray-300" />
     <p>Failed to connect to server</p>
-    <p class="text-sm text-gray-400 italic">
-      {{ error }}
-    </p>
+    <p class="text-sm text-gray-400 italic">{{ error }}</p>
   </div>
   <div class="p-2" v-else>
     <Choices
@@ -33,10 +31,7 @@ const { back, error, currentStepType, currentStep, sendChoice, sendForm } =
       @done="sendForm"
       :error="error"
     />
-    <div
-      v-if="currentStepType === 'loading'"
-      class="text-center flex flex-col items-center gap-3"
-    >
+    <div v-if="currentStepType === 'loading'" class="text-center flexcol items-center gap-3">
       <HSpinner class="text-4xl" />
       <span class="font-bold uppercase">Loading</span>
     </div>
