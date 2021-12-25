@@ -11,83 +11,66 @@ const addingServer = ref(false);
 const selectedServer = ref(0);
 
 const deleteItem = (index: number) => {
-  serverList.value.splice(index, 1);
+	serverList.value.splice(index, 1);
 };
 
 const addServer = (name: string, host: string) => {
-  serverList.value.unshift({ name, host });
-  addingServer.value = false;
+	serverList.value.unshift({ name, host });
+	addingServer.value = false;
 };
 
 const nextClicked = () => {
-  const { host } = serverList.value[selectedServer.value];
-  if (!host) return;
-  router.push({
-    name: "auth",
-    params: {
-      host: parseUserHost(host),
-    },
-  });
+	const { host } = serverList.value[selectedServer.value];
+	if (!host) return;
+	router.push({
+		name: "auth",
+		params: {
+			host: parseUserHost(host),
+		},
+	});
 };
 </script>
 
 <template>
-  <add-server-dialog
-    v-model="addingServer"
-    @cancel="addingServer = false"
-    @done="addServer"
-  />
-  <h1 class="text-lg font-bold">Welcome to Tempest</h1>
-  <div class="text-sm w-full">
-    <h-btn variant="filled" color="primary" @click="addingServer = true"
-      >Add Server</h-btn
-    >
-  </div>
-  <ol class="bg-surface-800 rounded-sm overflow-hidden">
-    <h-list-item
-      v-for="({ name, host }, i) in serverList"
-      :key="host"
-      :selected="i === selectedServer"
-      @click="selectedServer = i"
-      @keydown.enter="selectedServer = i"
-      class="server-entry"
-    >
-      <div class="text-sm">
-        <p>{{ name }}</p>
-        <p class="text-gray-400">{{ host }}</p>
-      </div>
-      <div class="flex-1" />
-      <h-btn
-        icon
-        variant="text"
-        @pointerdown.stop
-        @click="deleteItem(i)"
-        class="delete-button"
-      >
-        <mdi-delete />
-      </h-btn>
-    </h-list-item>
-  </ol>
-  <h-btn
-    variant="filled"
-    color="primary"
-    class="w-min ml-auto"
-    :disabled="!serverList[selectedServer]"
-    @click="nextClicked"
-    >Next</h-btn
-  >
+	<add-server-dialog v-model="addingServer" @cancel="addingServer = false" @done="addServer" />
+	<h1 class="text-lg font-bold">Welcome to Tempest</h1>
+	<div class="text-sm w-full">
+		<h-btn variant="filled" color="primary" @click="addingServer = true">Add Server</h-btn>
+	</div>
+	<ol class="bg-surface-800 rounded-sm overflow-hidden">
+		<h-list-item
+			v-for="({ name, host }, i) in serverList"
+			:key="host"
+			:selected="i === selectedServer"
+			@click="selectedServer = i"
+			@keydown.enter="selectedServer = i"
+			class="server-entry"
+		>
+			<div class="text-sm">
+				<p>{{ name }}</p>
+				<p class="text-gray-400">{{ host }}</p>
+			</div>
+			<div class="flex-1" />
+			<h-btn icon variant="text" @pointerdown.stop @click="deleteItem(i)" class="delete-button">
+				<mdi-delete />
+			</h-btn>
+		</h-list-item>
+	</ol>
+	<h-btn variant="filled" color="primary" class="w-min ml-auto" :disabled="!serverList[selectedServer]" @click="nextClicked"
+		>Next</h-btn
+	>
 </template>
 
 <style lang="postcss" scoped>
 .server-entry {
-  .delete-button {
-    visibility: hidden;
-  }
-  &:hover,
-  &:focus-within {
-    .delete-button {
-      visibility: visible;
-    }
-  }
+	.delete-button {
+		visibility: hidden;
+	}
+	&:hover,
+	&:focus-within {
+		.delete-button {
+			visibility: visible;
+		}
+	}
 }
 </style>

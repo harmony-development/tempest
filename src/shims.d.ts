@@ -1,7 +1,7 @@
 declare module "vue3-popper" {
-  import { Component } from "vue";
+	import { Component } from "vue";
 
-  const file: Component;
+	const file: Component;
 
-  export default file;
+	export default file;
 }

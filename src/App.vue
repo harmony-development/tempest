@@ -4,9 +4,9 @@ import ConfirmDialog from "./components/shared/ConfirmDialog.vue";
 </script>
 
 <template>
-  <ReloadPrompt />
-  <ConfirmDialog />
-  <div class="h-100vh w-100vw bg-surface-800">
-    <router-view />
-  </div>
+	<ReloadPrompt />
+	<ConfirmDialog />
+	<div class="h-100vh w-100vw bg-surface-800">
+		<router-view />
+	</div>
 </template>
