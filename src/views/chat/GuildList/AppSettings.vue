@@ -13,6 +13,6 @@ onClickOutside(button, () => {
 
 <template>
   <base-button color="primary" square aria-label="App Settings" @click="open = true">
-    <h-tempest class="text-2xl" />
+    <h-tempest class="text-3xl" />
   </base-button>
 </template>

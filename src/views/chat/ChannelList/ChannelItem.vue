@@ -18,7 +18,7 @@ const goToChannel = () => {
 </script>
 
 <template>
-  <base-list-item :selected="channel === channelid" @click="goToChannel">
+  <base-list-item :selected="channel === channelid" variant="sided" @click="goToChannel">
     <mdi-pound v-if="data.data?.kind === ChannelKind.TEXT_UNSPECIFIED" class="text-base text-gray-400" />
     <mdi-volume v-else class="text-base text-gray-400" />
     <span class="text-md ml-2">{{ data.data?.name }}</span>

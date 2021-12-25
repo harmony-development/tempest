@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const props = defineProps<{
+	variant?: "outlined" | "sided"
 	selected?: boolean
 	dangerous?: boolean
 	compact?: boolean
@@ -15,6 +16,7 @@ const props = defineProps<{
       selected: props.selected,
       dangerous,
       compact,
+      [variant || 'outlined']: true,
     }"
     tabindex="0"
   >
@@ -25,7 +27,7 @@ const props = defineProps<{
 <style lang="postcss" scoped>
 .list-item {
 	@apply w-full py-2 px-3 cursor-pointer select-none transition duration-100 whitespace-nowrap
-         flex align-middle items-center border-4 border-transparent;
+         flex align-middle items-center;
 	&:hover {
 		@apply bg-white bg-opacity-5;
 	}
@@ -39,10 +41,20 @@ const props = defineProps<{
 .compact {
 	@apply py-1 px-2;
 }
-.selected {
-	@apply  border-primary-500;
+.outlined {
+	@apply border-4 border-transparent;
 }
-
+.sided {
+	@apply border-transparent border-l-4;
+}
+.selected {
+	&.outlined {
+		@apply border-primary-500;
+	}
+	&.sided {
+		@apply border-primary-500;
+	}
+}
 .dangerous {
 	@apply text-red-500;
 }

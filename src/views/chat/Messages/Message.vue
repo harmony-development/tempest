@@ -127,6 +127,10 @@ const onDelete = async() => {
     @apply ml-18;
   }
 
+  & .messageBody.hideAvatar {
+    @apply mr-18;
+  }
+
 	&:hover {
 		& .messageOptions {
 			@apply visible;
