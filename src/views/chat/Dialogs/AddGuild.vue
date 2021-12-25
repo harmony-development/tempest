@@ -51,7 +51,8 @@ const onCreateClicked = async () => {
         type="submit"
         @click="onJoinClicked"
         :disabled="!joinCode"
-      >Join</HBtn>
+        >Join</HBtn
+      >
     </div>
   </form>
   <form v-else class="flexcol gap-2" @submit.prevent>
@@ -60,14 +61,15 @@ const onCreateClicked = async () => {
     <HInput label="Guild Name" v-model="guildName" />
     <a @click="screen = 'join'">Join guild?</a>
     <div class="flex justify-end gap-2">
-      <HBtn color="secondary" variant="text" type="button" @click="close">Cancel</HBtn>
+      <HBtn variant="text" type="button" @click="close">Cancel</HBtn>
       <HBtn
         variant="text"
         color="primary"
         type="submit"
         @click="onCreateClicked"
         :disabled="!guildName"
-      >Create</HBtn>
+        >Create</HBtn
+      >
     </div>
   </form>
 </template>
