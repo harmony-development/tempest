@@ -1,6 +1,7 @@
 import type { StreamEventsRequest, StreamEventsResponse } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/stream";
 import { Connection } from "@harmony-dev/harmony-web-sdk/dist/src/connection";
 import type { DuplexStreamingCall } from "@protobuf-ts/runtime-rpc";
+import { errorState } from "../store/errors";
 import { session } from "../store/session";
 
 type ChatStream = DuplexStreamingCall<StreamEventsRequest, StreamEventsResponse>;
@@ -23,6 +24,11 @@ class ConnectionManager {
 		const conn = new Connection(host);
 		conn.setSession(session);
 		const stream = conn.chat.streamEvents();
+
+		stream.responses.onError((error) => {
+			errorState.handleError(error);
+			setTimeout(() => this.create(host, session), 3000);
+		});
 		this.connections[host] = conn;
 		this.streams[host] = stream;
 		return [conn, stream];

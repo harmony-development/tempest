@@ -2,6 +2,7 @@
 import { onClickOutside } from "@vueuse/core";
 import type { Ref } from "vue";
 import { ref } from "vue";
+import { errorState } from "../../../logic/store/errors";
 import BaseButton from "~/components/base/BaseButton.vue";
 
 const open = ref(false);
@@ -13,6 +14,6 @@ onClickOutside(button, () => {
 
 <template>
   <base-button color="primary" square aria-label="App Settings" @click="open = true">
-    <h-tempest class="text-3xl" />
+    <h-tempest class="text-primary text-3xl" />
   </base-button>
 </template>

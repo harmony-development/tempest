@@ -19,6 +19,7 @@ declare module 'vue' {
     ConfirmDialog: typeof import('./src/components/shared/ConfirmDialog.vue')['default']
     GgSpinner: typeof import('~icons/gg/spinner')['default']
     HTempest: typeof import('~icons/h/tempest')['default']
+    HTempestRaw: typeof import('~icons/h/tempest-raw')['default']
     ImageInput: typeof import('./src/components/chat/ImageInput.vue')['default']
     'Mdi:alert': typeof import('~icons/mdi/alert')['default']
     'Mdi:alertCircleOutline': typeof import('~icons/mdi/alert-circle-outline')['default']
