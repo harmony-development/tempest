@@ -10,4 +10,8 @@ You can try it out [here](https://tempest-bluskript.vercel.app) or at [tempest-b
 
 # 🧪 Features
 
-- Your Father
+- Upload queue
+- Performant
+- Mobile-friendly
+- PWA Support
+- Troll devs :trollface:
