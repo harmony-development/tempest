@@ -9,11 +9,21 @@ import { convertMessageV1 } from "../conversions/messages";
 import { parseHMC } from "../parsing";
 import { Handler } from "../util/oneof";
 import { chatState } from "../store/chat";
+import { connectionManager } from "./connections";
 
 const notifsGranted = false;
 
 const chatEventsHandler = new Handler<StreamChatEvent["event"]>({
-	guildAddedToList(_, { guildAddedToList: guild }) {
+	guildAddedToList(host, { guildAddedToList: guild }) {
+		connectionManager.getStream(guild.homeserver).requests.send({
+			request: {
+				oneofKind: "subscribeToGuild",
+				subscribeToGuild: {
+					guildId: guild.guildId,
+				},
+			},
+		});
+
 		chatState.state.guildList.push({
 			guildID: guild.guildId,
 			host: guild.homeserver,
