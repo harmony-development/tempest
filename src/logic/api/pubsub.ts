@@ -77,6 +77,8 @@ const chatEventsHandler = new Handler<StreamChatEvent["event"]>({
 				name: "chat",
 				params: {
 					host,
+					guild: sentMessage.guildId,
+					channel: sentMessage.channelId,
 				},
 			}),
 		);
