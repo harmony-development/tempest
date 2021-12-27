@@ -11,7 +11,10 @@ const { host, guild } = useChatRoute();
 
 const data = computed(() => chatState.getGuild(host.value!, guild.value!), undefined);
 
-watchEffect(() => chatState.getChannelList(host.value!, guild.value!));
+watchEffect(() => {
+	if (!host.value || !guild.value) return;
+	chatState.getChannelList(host.value, guild.value);
+});
 </script>
 
 <template>

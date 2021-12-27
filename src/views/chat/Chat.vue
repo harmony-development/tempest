@@ -50,7 +50,8 @@ onMounted(async() => {
 });
 
 watch(guild, () => {
-	const guildObject = chatState.getGuild(host.value!, guild.value!);
+	if (!guild.value || !host.value) return;
+	const guildObject = chatState.getGuild(host.value, guild.value);
 	guildObject.lastChannel && router.push({ params: { channel: guildObject.lastChannel } });
 });
 </script>

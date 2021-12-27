@@ -12,9 +12,8 @@
 </template>
 
 <script setup lang="ts">
-import { arrow, computePosition, offset, shift } from "@floating-ui/dom";
+import { arrow, computePosition, offset, shift, size } from "@floating-ui/dom";
 import type { BasePlacement } from "@floating-ui/core";
-import { limitShift } from "@floating-ui/core";
 import type { Ref } from "vue";
 import { computed, onMounted, ref } from "vue";
 const props = defineProps<{
@@ -24,6 +23,7 @@ const props = defineProps<{
 	placement?: BasePlacement
 	offset?: number
 	offsetHorizontally?: boolean
+	matchWidth?: boolean
 }>();
 
 const popover = ref() as Ref<HTMLElement>;
@@ -33,10 +33,19 @@ const target = computed(() => popover.value.previousElementSibling!);
 const middleware = computed(() => {
 	const enabled = [
 		offset(({ reference, floating, placement }) => ({
-			mainAxis: props.offset || 8,
+			mainAxis: props.offset === undefined ? 8 : props.offset,
 			crossAxis: props.offsetHorizontally ? (floating.width / 2 - reference.width / 2) : 0,
 		})),
 	];
+	if (props.matchWidth) {
+		enabled.push(size({
+			apply({ reference }) {
+				Object.assign(popover.value.style, {
+					width: `${reference.width}px`,
+				});
+			},
+		}));
+	}
 	if (props.arrow) enabled.push(arrow({ element: arrowElement.value }));
 	return enabled;
 });

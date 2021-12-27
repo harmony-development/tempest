@@ -14,6 +14,7 @@
       :model-value="displayValues.username"
       @input="(event) => changedValues.username = (event.target as HTMLInputElement).value"
     />
+    <base-checkbox :model-value="displayValues.bot" @input="(event) => changedValues.bot = (event.target as HTMLInputElement).value" />
     <div class="flex justify-end gap-2">
       <base-button variant="outlined" type="reset" :disabled="dirty" @click="handleReset">
         Reset
@@ -48,6 +49,7 @@ const defaultValues = computed<ISettings>(() => ({
 	avatar: undefined,
 	avatarPreview: profile.value?.picture,
 	username: profile.value?.username,
+	bot: false,
 }));
 const changedValues = ref({}) as Ref<typeof defaultValues.value>;
 const displayValues = computed(() => ({

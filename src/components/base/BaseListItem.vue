@@ -20,6 +20,7 @@ const props = defineProps<{
     }"
     tabindex="0"
   >
+    <slot name="icon" />
     <slot />
   </li>
 </template>
@@ -27,7 +28,7 @@ const props = defineProps<{
 <style lang="postcss" scoped>
 .list-item {
 	@apply w-full py-2 px-3 cursor-pointer select-none transition duration-100 whitespace-nowrap
-         flex align-middle items-center;
+         flex align-middle items-center gap-2;
 	&:hover {
 		@apply bg-white bg-opacity-5;
 	}
