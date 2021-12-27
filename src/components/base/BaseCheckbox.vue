@@ -22,7 +22,7 @@ const checked = useVModel(props, "modelValue", emits);
 </script>
 
 <style scoped lang="postcss">
-.check:checked + div {
+.check.active + div {
   @apply bg-primary-500 text-white border-3;
 }
 </style>
