@@ -98,7 +98,7 @@ import MessageTypePicker from "./MessageTypePicker.vue";
 import BaseButton from "~/components/base/BaseButton.vue";
 import BaseInput from "~/components/base/BaseInput.vue";
 import PopInTransition from "~/components/transitions/PopInTransition.vue";
-import BaseDropdown from "~/components/base/BaseDropdown.vue";
+import BaseDropdown from "~/components/base/BaseMenu.vue";
 import BasePopover from "~/components/base/BasePopover.vue";
 
 const { host, guild, channel } = useChatRoute();

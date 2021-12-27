@@ -14,7 +14,7 @@
       :model-value="displayValues.username"
       @input="(event) => changedValues.username = (event.target as HTMLInputElement).value"
     />
-    <base-checkbox :model-value="displayValues.bot" @input="(event) => changedValues.bot = (event.target as HTMLInputElement).value" />
+    <base-checkbox name="Bot" :model-value="displayValues.bot" @input="(event: Event) => changedValues.bot = (event.target as HTMLInputElement).checked" />
     <div class="flex justify-end gap-2">
       <base-button variant="outlined" type="reset" :disabled="dirty" @click="handleReset">
         Reset
@@ -66,7 +66,7 @@ const handleReset = () => {
 };
 
 const onSubmit = async() => {
-	const { username, avatar } = changedValues.value;
+	const { username, avatar, bot } = changedValues.value;
 	const conn = connectionManager.get(session.value!.host);
 	let newUserAvatar: string | undefined;
 	if (avatar) {
@@ -76,6 +76,7 @@ const onSubmit = async() => {
 	await conn.profile.updateProfile({
 		newUserAvatar,
 		newUserName: username,
+		newIsBot: bot.value,
 	});
 	handleReset();
 };

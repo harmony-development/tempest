@@ -6,15 +6,12 @@ import { session } from "../../../logic/store/session";
 import { useChatRoute } from "../../../router";
 import MemberItem from "./MemberItem.vue";
 import { uiState } from "~/logic/store/ui";
-import BasePopover from "~/components/base/BasePopover.vue";
 import BaseListItem from "~/components/base/BaseListItem.vue";
 
 const { host, guild } = useChatRoute();
 const router = useRouter();
 const members = computed(() => chatState.getMemberList(host.value!, guild.value!), undefined);
 const ownUserID = computed(() => session.value?.userID);
-
-const userDropdown = ref(false);
 
 const openDialog = () => uiState.state.userSettingsDialog = true;
 const logOut = async() => {
@@ -37,24 +34,28 @@ const logOut = async() => {
         <member-item v-for="m in members" :key="m" class="gap-2" :userid="m" />
       </ol>
     </div>
-    <base-popover :open="userDropdown" placement="top" match-width :offset="0">
-      <member-item class="gap-2 bg-surface-800 border-t-2 border-surface-300" :userid="ownUserID!" @click="userDropdown = true" />
-      <template #content>
-        <ul class="bg-surface-600">
-          <base-list-item @click="openDialog">
-            <template #icon>
-              <mdi-cog />
-            </template>
-            Settings
-          </base-list-item>
-          <base-list-item @click="logOut">
-            <template #icon>
-              <mdi-skull />
-            </template>
-            Log Out
-          </base-list-item>
-        </ul>
+    <base-menu v-if="ownUserID" placement="top" match-width :offset="0">
+      <template #activator="{activate}">
+        <member-item :userid="ownUserID" @click="activate" />
       </template>
-    </base-popover>
+      <!-- <mdi-chevron-down
+        class="transform transition duration-100"
+        :class="[open && 'rotate-180']"
+      /> -->
+      <ul class="bg-surface-600">
+        <base-list-item @click="openDialog">
+          <template #icon>
+            <mdi-cog />
+          </template>
+          Settings
+        </base-list-item>
+        <base-list-item @click="logOut">
+          <template #icon>
+            <mdi-skull />
+          </template>
+          Log Out
+        </base-list-item>
+      </ul>
+    </base-menu>
   </div>
 </template>

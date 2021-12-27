@@ -31,8 +31,9 @@ const { host, guild, channel } = useChatRoute();
 const channelData = computed(() => chatState.getChannel(host.value!, guild.value!, channel.value!));
 
 onMounted(async() => {
-	const [conn, stream] = connectionManager.create(session.value!.host, session.value!.session);
 	try {
+		if (!session.value) throw new Error("No session");
+		const [conn, stream] = connectionManager.create(session.value.host, session.value.session);
 		await conn.auth.checkLoggedIn({});
 		sessionValidated.value = true;
 		const handler = pubsub(session.value!.host);
