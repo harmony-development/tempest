@@ -9,6 +9,10 @@ const routes: RouteRecordRaw[] = [
 		redirect: "/entry/serverselect",
 	},
 	{
+		path: "/playground",
+		component: () => import("./views/playground/Playground.vue"),
+	},
+	{
 		path: "/entry",
 		redirect: "serverselect",
 		component: () => import("./views/entry/Entry.vue"),

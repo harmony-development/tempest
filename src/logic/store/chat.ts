@@ -23,6 +23,7 @@ interface IUserData {
 	username: string
 	picture?: string
 	status: UserStatus
+	isBot: boolean
 }
 
 export interface IMessageData {
@@ -120,8 +121,9 @@ class ChatState extends Store<IChatState> {
 			}).response;
 			h.users[userId] = {
 				username: profile!.userName,
-				picture: profile?.userAvatar,
+				picture: profile!.userAvatar,
 				status: profile!.userStatus,
+				isBot: profile!.isBot,
 			};
 		}, ["user", host, userId]);
 		return h.users[userId];

@@ -14,7 +14,11 @@
       :model-value="displayValues.username"
       @input="(event) => changedValues.username = (event.target as HTMLInputElement).value"
     />
-    <base-checkbox name="Bot" :model-value="displayValues.bot" @input="(event: Event) => changedValues.bot = (event.target as HTMLInputElement).checked" />
+    <base-checkbox
+      name="Bot"
+      :model-value="displayValues.bot"
+      @update:model-value="changedValues.bot = $event"
+    />
     <div class="flex justify-end gap-2">
       <base-button variant="outlined" type="reset" :disabled="dirty" @click="handleReset">
         Reset
@@ -37,6 +41,7 @@ import BaseInput from "~/components/base/BaseInput.vue";
 import ImageInput from "~/components/chat/ImageInput.vue";
 import { connectionManager } from "~/logic/api/connections";
 import { session } from "~/logic/store/session";
+import BaseCheckbox from "~/components/base/BaseCheckbox.vue";
 interface ISettings {
 	avatar?: File
 	username?: string
@@ -50,7 +55,7 @@ const defaultValues = computed<ISettings>(() => ({
 	avatar: undefined,
 	avatarPreview: profile.value?.picture,
 	username: profile.value?.username,
-	bot: false,
+	bot: profile.value?.isBot,
 }));
 const changedValues = ref({}) as Ref<typeof defaultValues.value>;
 const displayValues = computed(() => ({
