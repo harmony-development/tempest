@@ -40,6 +40,7 @@ import { session } from "~/logic/store/session";
 interface ISettings {
 	avatar?: File
 	username?: string
+	bot?: boolean
 	[key: string]: any
 }
 
@@ -76,7 +77,7 @@ const onSubmit = async() => {
 	await conn.profile.updateProfile({
 		newUserAvatar,
 		newUserName: username,
-		newIsBot: bot.value,
+		newIsBot: bot,
 	});
 	handleReset();
 };
