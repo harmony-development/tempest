@@ -1,72 +1,106 @@
-<script lang="ts" setup>
-import type { Instance, PositioningStrategy } from "@popperjs/core";
-import { createPopper } from "@popperjs/core";
-import type { Placement } from "@popperjs/core/lib/enums";
-import type { Ref } from "vue";
-import { defineComponent, onMounted, ref, watch } from "vue";
-defineComponent({
-	inheritAttrs: false,
-});
-const props = defineProps<{
-	placement?: Placement
-	strategy?: PositioningStrategy
-	openOnHover?: boolean
-	open?: boolean
-	offsetX?: number
-	offsetY?: number
-}>();
-const target = ref() as Ref<HTMLElement>;
-const content = ref() as Ref<HTMLElement>;
-const instance = ref() as Ref<Instance>;
-onMounted(() => {
-	instance.value = createPopper(target.value!, content.value!, {
-		strategy: props.strategy || "fixed",
-		placement: props.placement || "auto",
-		modifiers: [
-			{
-				name: "offset",
-				options: {
-					offset: [props.offsetX ?? 0, props.offsetY ?? 8],
-				},
-			},
-		],
-	});
-});
-watch(props, () => instance.value?.update());
-</script>
-
 <template>
-  <div ref="target" v-bind="$attrs" class="target">
-    <slot />
-  </div>
-  <div ref="content" class="content" :class="{ open, openOnHover }">
-    <div class="inner-box">
-      <slot name="content" />
-    </div>
+  <slot />
+  <div
+    ref="popover"
+    class="fixed popover z-1"
+    :class="{ openOnHover, open, [placement || 'bottom']: !open || openOnHover }"
+    v-bind="$attrs"
+  >
+    <div v-if="props.arrow" ref="arrowElement" class="arrow" />
+    <slot name="content" />
   </div>
 </template>
 
-<style lang="postcss" scoped>
-.content {
-	@apply invisible;
-	& > .inner-box {
-		@apply transition duration-300 transform -translate-x-1;
+<script setup lang="ts">
+import { arrow, computePosition, offset, shift } from "@floating-ui/dom";
+import type { BasePlacement } from "@floating-ui/core";
+import { limitShift } from "@floating-ui/core";
+import type { Ref } from "vue";
+import { computed, onMounted, ref } from "vue";
+const props = defineProps<{
+	open?: boolean
+	openOnHover?: boolean
+	arrow?: boolean
+	placement?: BasePlacement
+	offset?: number
+	offsetHorizontally?: boolean
+}>();
+
+const popover = ref() as Ref<HTMLElement>;
+const arrowElement = ref() as Ref<HTMLElement>;
+const target = computed(() => popover.value.previousElementSibling!);
+
+const middleware = computed(() => {
+	const enabled = [
+		offset(({ reference, floating, placement }) => ({
+			mainAxis: props.offset || 8,
+			crossAxis: props.offsetHorizontally ? (floating.width / 2 - reference.width / 2) : 0,
+		})),
+	];
+	if (props.arrow) enabled.push(arrow({ element: arrowElement.value }));
+	return enabled;
+});
+
+async function updatePosition() {
+	const { x, y, middlewareData, placement } = await computePosition(target.value, popover.value, {
+		placement: props.placement,
+		middleware: middleware.value,
+	});
+
+	Object.assign(popover.value.style, {
+		left: `${x}px`,
+		top: `${y}px`,
+	});
+
+	if (props.arrow) {
+		const staticSide = {
+			top: "bottom",
+			right: "left",
+			bottom: "top",
+			left: "right",
+		}[placement.split("-")[0]];
+		const { x: arrowX, y: arrowY } = middlewareData.arrow!;
+		Object.assign(arrowElement.value.style, {
+			left: arrowX != null ? `${arrowX}px` : "",
+			top: arrowY != null ? `${arrowY}px` : "",
+			right: "",
+			bottom: "",
+			[staticSide!]: "-0.25em",
+		});
 	}
 }
 
-.open {
-	@apply visible translate-x-0;
-	& > .inner-box {
-		@apply translate-x-0;
-	}
+onMounted(async() => {
+	target.value.classList.add("target");
+	updatePosition();
+});
+
+</script>
+
+<style scoped lang="postcss">
+
+.popover {
+  @apply rounded-4px transform text-sm text-white capitalize transition-all duration-100 ease-in-out;
+
+  &.openOnHover,
+  &:not(.open) {
+    @apply invisible opacity-0;
+    &.bottom {
+      @apply translate-y-2;
+    }
+    &.top {
+      @apply -translate-y-2;
+    }
+    &.left {
+      @apply -translate-x-2;
+    }
+    &.right {
+      @apply translate-x-2;
+    }
+  }
 }
 
-.target:hover {
-	& + .openOnHover {
-		@apply visible;
-		& > .inner-box {
-			@apply translate-x-0;
-		}
-	}
+.target:hover + .popover.openOnHover {
+  @apply visible translate-x-0 translate-y-0 opacity-100;
 }
 </style>

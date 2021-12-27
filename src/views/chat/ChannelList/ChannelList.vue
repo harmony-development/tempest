@@ -5,6 +5,7 @@ import { uiState } from "../../../logic/store/ui";
 import { useChatRoute } from "../../../router";
 import ChannelItem from "./ChannelItem.vue";
 import BaseButton from "~/components/base/BaseButton.vue";
+import BaseTooltip from "~/components/base/BaseTooltip.vue";
 
 const { host, guild } = useChatRoute();
 
@@ -19,22 +20,26 @@ watchEffect(() => chatState.getChannelList(host.value!, guild.value!));
       <p class="font-bold text-sm overflow-ellipsis overflow-hidden truncate w-full">
         {{ data?.data?.name }}
       </p>
-      <base-button
-        icon
-        dense
-        aria-label="Guild Settings"
-        @click="uiState.state.guildSettingsDialog = true"
-      >
-        <mdi-cog />
-      </base-button>
+      <base-tooltip text="Guild Settings">
+        <base-button
+          icon
+          dense
+          aria-label="Guild Settings"
+          @click="uiState.state.guildSettingsDialog = true"
+        >
+          <mdi-cog />
+        </base-button>
+      </base-tooltip>
     </div>
     <div class="flex items-center justify-between p-2 ">
       <p class="text-xs uppercase text-gray-400">
         channels
       </p>
-      <base-button icon dense aria-label="Add Channel" @click="uiState.state.addChannelDialog = true">
-        <mdi-plus />
-      </base-button>
+      <base-tooltip text="Add Channel">
+        <base-button icon dense aria-label="Add Channel" @click="uiState.state.addChannelDialog = true">
+          <mdi-plus />
+        </base-button>
+      </base-tooltip>
     </div>
     <div class="flex-1 bg-surface-900 text-xs border-r-2 border-surface-800">
       <ol class="overflow-hidden">

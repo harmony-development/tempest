@@ -12,6 +12,8 @@
 		"postinstall": "npx husky install"
 	},
 	"dependencies": {
+		"@floating-ui/core": "^0.2.2",
+		"@floating-ui/dom": "^0.1.8",
 		"@harmony-dev/harmony-web-sdk": "^0.0.2-alpha-3",
 		"@popperjs/core": "^2.11.0",
 		"@vueuse/core": "7.0.1",

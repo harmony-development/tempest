@@ -2,6 +2,8 @@ lockfileVersion: 5.3
 
 specifiers:
   '@antfu/eslint-config': ^0.14.0
+  '@floating-ui/core': ^0.2.2
+  '@floating-ui/dom': ^0.1.8
   '@harmony-dev/harmony-web-sdk': ^0.0.2-alpha-3
   '@iconify/json': 1.1.432
   '@popperjs/core': ^2.11.0
@@ -42,6 +44,8 @@ specifiers:
   yup: ^0.32.11
 
 dependencies:
+  '@floating-ui/core': 0.2.2
+  '@floating-ui/dom': 0.1.8
   '@harmony-dev/harmony-web-sdk': 0.0.2-alpha-3
   '@popperjs/core': 2.11.0
   '@vueuse/core': 7.0.1_vue@3.2.22
@@ -1429,6 +1433,16 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /@floating-ui/core/0.2.2:
+    resolution: {integrity: sha512-KxPG+g8f5cuFrljdjKnB0U/7PTtegWAEOuw2G8PKuveYAHxln8qpSCcv/AVpyqm6a55jXLSDrgHUJ7nbNp4zGA==}
+    dev: false
+
+  /@floating-ui/dom/0.1.8:
+    resolution: {integrity: sha512-Y2X4ukLxNcYPfdu94s03XYCIIUxBWJTA1M3NXu5akNrDGzD/61qKF56NhCZbzRMc+SSLX8Bga6cj7Sm8vPv79g==}
+    dependencies:
+      '@floating-ui/core': 0.2.2
+    dev: false
 
   /@harmony-dev/harmony-web-sdk/0.0.2-alpha-3:
     resolution: {integrity: sha512-BOaETp/9+Y1wjKmfh2RU37utjMFlPK6Vu3OYFJIf45/rm0qNkokg8614Gois0tnkxR8fd4Vdb6OkWnuzMdDepQ==}

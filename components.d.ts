@@ -9,6 +9,7 @@ declare module 'vue' {
     BaseButton: typeof import('./src/components/base/BaseButton.vue')['default']
     BaseDialog: typeof import('./src/components/base/BaseDialog.vue')['default']
     BaseDrawer: typeof import('./src/components/base/BaseDrawer.vue')['default']
+    BaseDropdown: typeof import('./src/components/base/BaseDropdown.vue')['default']
     BaseFormInput: typeof import('./src/components/base/BaseFormInput.vue')['default']
     BaseImage: typeof import('./src/components/base/BaseImage.vue')['default']
     BaseInput: typeof import('./src/components/base/BaseInput.vue')['default']
