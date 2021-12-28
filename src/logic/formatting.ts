@@ -4,6 +4,16 @@
 // 	underline: boolean
 // }
 
+/**
+ * Generates anchors for the text.
+ */
+export function linkify(text: string): string {
+	return text
+		.split(/\s/)
+		.map(word => word.startsWith("http") ? `<a target="_blank" href="${word}">${word}</a>` : word)
+		.join(" ");
+}
+
 export function nearestOverlap(f: number[], formats: number[][]) {
 	return Math.min(...formats.map(f2 => Math.max(f[0], f2[0])));
 }

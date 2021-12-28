@@ -101,9 +101,10 @@ const chatEventsHandler = new Handler<StreamChatEvent["event"]>({
 const profileEventsHandler = new Handler<StreamEvent["event"]>({
 	profileUpdated(host, { profileUpdated }) {
 		const user = chatState.getUser(host, profileUpdated.userId);
-		user.username = profileUpdated.newUsername || user.username;
-		user.picture = profileUpdated.newAvatar || user.picture;
-		user.status = profileUpdated.newStatus || user.status;
+		user.username = profileUpdated.newUsername ?? user.username;
+		user.picture = profileUpdated.newAvatar ?? user.picture;
+		user.status = profileUpdated.newStatus ?? user.status;
+		user.isBot = profileUpdated.newIsBot ?? user.isBot;
 	},
 });
 
