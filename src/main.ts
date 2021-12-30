@@ -5,7 +5,6 @@ import "~/assets/theme/default.css";
 import VWave from "v-wave";
 import dayjs from "dayjs";
 import calendar from "dayjs/plugin/calendar";
-import VueTippy from "vue-tippy";
 import { router } from "./router";
 import App from "./App.vue";
 import "tippy.js/dist/tippy.css";
@@ -17,9 +16,6 @@ createApp(App)
 		duration: 0.2,
 		initialOpacity: 0.4,
 		finalOpacity: 0.1,
-	})
-	.use(VueTippy, {
-		directive: "tippy",
 	})
 	.use(router)
 	.mount("#app");

@@ -8,6 +8,7 @@ import {
 	GetChannelMessagesRequest_Direction,
 } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
 import type { UserStatus } from "@harmony-dev/harmony-web-sdk/dist/gen/profile/v1/types";
+import { batchGetUsers } from "../api/batchHack";
 import { connectionManager } from "../api/connections";
 import { convertMessageV1 } from "../conversions/messages";
 import { AsyncLock } from "../util/asyncLock";
@@ -73,14 +74,14 @@ export interface IChatState {
 }
 
 class ChatState extends Store<IChatState> {
-	private lock: AsyncLock;
+	lock: AsyncLock;
 
 	constructor(data: IChatState) {
 		super(data);
 		this.lock = new AsyncLock();
 	}
 
-	private ensureHost(host?: string) {
+	ensureHost(host?: string) {
 		host = host || session.value!.host;
 		if (!this.state.hosts[host]) {
 			this.state.hosts[host] = {
@@ -91,7 +92,7 @@ class ChatState extends Store<IChatState> {
 		return this.state.hosts[host];
 	}
 
-	private ensureGuild(host: string, guildID: string) {
+	ensureGuild(host: string, guildID: string) {
 		const h = this.ensureHost(host);
 		if (!h.guilds[guildID]) {
 			h.guilds[guildID] = {
@@ -102,7 +103,7 @@ class ChatState extends Store<IChatState> {
 		return h.guilds[guildID];
 	}
 
-	private ensureChannel(host: string, guildID: string, channelID: string) {
+	ensureChannel(host: string, guildID: string, channelID: string) {
 		const g = this.ensureGuild(host, guildID);
 		if (!g.channels[channelID]) {
 			g.channels[channelID] = {
@@ -113,19 +114,22 @@ class ChatState extends Store<IChatState> {
 		return g.channels[channelID];
 	}
 
+	async fetchUser(host: string, userId: string) {
+		const h = this.ensureHost(host);
+		const { profile } = await connectionManager.get(host).profile.getProfile({
+			userId,
+		}).response;
+		h.users[userId] = {
+			username: profile!.userName,
+			picture: profile!.userAvatar,
+			status: profile!.userStatus,
+			isBot: profile!.isBot,
+		};
+	}
+
 	getUser(host: string, userId: string) {
 		const h = this.ensureHost(host);
-		this.lock.run(async() => {
-			const { profile } = await connectionManager.get(host).profile.getProfile({
-				userId,
-			}).response;
-			h.users[userId] = {
-				username: profile!.userName,
-				picture: profile!.userAvatar,
-				status: profile!.userStatus,
-				isBot: profile!.isBot,
-			};
-		}, ["user", host, userId]);
+		this.lock.run(() => this.fetchUser(host, userId), ["user", host, userId]);
 		return h.users[userId];
 	}
 
@@ -144,10 +148,19 @@ class ChatState extends Store<IChatState> {
 	}
 
 	getMemberList(host: string, guildId: string) {
+		const h = this.ensureHost(host);
 		const g = this.ensureGuild(host, guildId);
 		this.lock.run(async() => {
 			const conn = connectionManager.get(host);
 			const { members } = await conn.chat.getGuildMembers({ guildId }).response;
+			const profiles = await batchGetUsers(conn, members);
+			Object.assign(h.users, profiles.map(p => ({
+				username: p!.userName,
+				picture: p!.userAvatar,
+				status: p!.userStatus,
+				isBot: p!.isBot,
+			})));
+
 			members.forEach(m => g.members.add(m));
 		}, ["memberList", host, guildId]);
 		return g.members;
