@@ -31,15 +31,14 @@
 </template>
 
 <script lang="ts" setup>
-import { Form } from "vee-validate";
 import type { Ref } from "vue";
 import { computed, ref } from "vue";
 import { parseHMC } from "../../../logic/parsing";
 import { chatState } from "../../../logic/store/chat";
+import { useAPI } from "../../../services/api";
 import BaseButton from "~/components/base/BaseButton.vue";
 import BaseInput from "~/components/base/BaseInput.vue";
 import ImageInput from "~/components/chat/ImageInput.vue";
-import { connectionManager } from "~/logic/api/connections";
 import { session } from "~/logic/store/session";
 import BaseCheckbox from "~/components/base/BaseCheckbox.vue";
 interface ISettings {
@@ -49,7 +48,9 @@ interface ISettings {
 	[key: string]: any
 }
 
-const profile = computed(() => (session.value ? chatState.getUser(session.value.host, session.value.userID) : undefined));
+const api = useAPI();
+
+const profile = computed(() => (session.value ? chatState.getUser("", session.value.userID) : undefined));
 const avatarURL = computed(() => (session.value?.host && profile.value?.picture) ? parseHMC(profile.value.picture, session.value.host) : undefined);
 const defaultValues = computed<ISettings>(() => ({
 	avatar: undefined,
@@ -73,17 +74,7 @@ const handleReset = () => {
 
 const onSubmit = async() => {
 	const { username, avatar, bot } = changedValues.value;
-	const conn = connectionManager.get(session.value!.host);
-	let newUserAvatar: string | undefined;
-	if (avatar) {
-		const result = await conn.uploadFile(avatar);
-		newUserAvatar = result.id;
-	}
-	await conn.profile.updateProfile({
-		newUserAvatar,
-		newUserName: username,
-		newIsBot: bot,
-	});
+	await api.updateProfile(session.value!.host, username, avatar, bot);
 	handleReset();
 };
 

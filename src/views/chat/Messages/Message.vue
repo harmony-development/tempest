@@ -3,11 +3,11 @@ import { onClickOutside } from "@vueuse/core";
 import dayjs from "dayjs";
 import type { Ref } from "vue";
 import { computed, ref } from "vue";
-import { connectionManager } from "../../../logic/api/connections";
 import type { IMessageData } from "../../../logic/store/chat";
 import { chatState } from "../../../logic/store/chat";
 import { session } from "../../../logic/store/session";
 import { uiState } from "../../../logic/store/ui";
+import { useAPI } from "../../../services/api";
 import AttachmentMessage from "./AttachmentMessage.vue";
 import EmbedMessage from "./EmbedMessage.vue";
 import PhotosMessage from "./PhotosMessage.vue";
@@ -26,10 +26,12 @@ const props = defineProps<{
 	hideAvatar: boolean
 }>();
 
+const api = useAPI();
+
 const optionsOpen = ref(false);
 const optionsDropdown = ref() as Ref<HTMLElement>;
 
-const authorData = computed(() => (props.host ? chatState.getUser(props.host, props.data.author) : undefined));
+const authorData = computed(() => (chatState.getUser(props.host, props.data.author)));
 
 const username = computed(() => props.data.override?.username || authorData.value?.username || "Unknown User");
 
@@ -42,18 +44,14 @@ const time = computed(() => {
 });
 const onDelete = async() => {
 	await uiState.openConfirm("Are you sure?", "Are you sure you would like to delete this message?");
-	await connectionManager.get(props.host!).chat.deleteMessage({
-		messageId: props.messageid,
-		guildId: props.guildid!,
-		channelId: props.channelid!,
-	});
+	return api.deleteMessage(props.host, props.messageid, props.guildid!, props.channelid!);
 };
 </script>
 
 <template>
   <div class="flex gap-2 items-start messageContainer" :class="{ ownMessage: isOwnMessage }">
     <div v-if="!hideAvatar" class="text-center overflow-hidden w-16">
-      <avatar :userid="data.author" :override="data.override?.avatar" class="h-8" loading="lazy" />
+      <avatar :userid="data.author" :override="data.override?.avatar" class="h-7 w-7" loading="lazy" />
       <p class="mt-2 text-xs text-surface-300 overflow-hidden">
         {{ username }}
       </p>

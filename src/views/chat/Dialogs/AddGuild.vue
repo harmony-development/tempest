@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { ref } from "vue";
-import { connectionManager } from "../../../logic/api/connections";
 import { session } from "../../../logic/store/session";
 import { uiState } from "../../../logic/store/ui";
+import { useAPI } from "../../../services/api";
 import BaseInput from "~/components/base/BaseInput.vue";
 import BaseButton from "~/components/base/BaseButton.vue";
 
@@ -10,14 +10,13 @@ const screen = ref<"join" | "create">("join");
 const joinCode = ref("");
 const guildName = ref("");
 const error = ref<any>(undefined);
+const api = useAPI();
 
 const close = () => (uiState.state.addGuildDialog = false);
 
 const onJoinClicked = async() => {
 	try {
-		await connectionManager.get(session.value!.host).chat.joinGuild({
-			inviteId: joinCode.value,
-		});
+		await api.joinGuild(session.value!.host, joinCode.value);
 		close();
 	}
 	catch (e) {
@@ -27,10 +26,7 @@ const onJoinClicked = async() => {
 
 const onCreateClicked = async() => {
 	try {
-		await connectionManager.get(session.value!.host).chat.createGuild({
-			name: guildName.value,
-			picture: "",
-		});
+		await api.createGuild(session.value!.host, guildName.value);
 		close();
 	}
 	catch (e) {

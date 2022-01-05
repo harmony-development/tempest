@@ -37,7 +37,7 @@
     </div>
   </div>
   <div class="flex items-center px-3 py-1 bg-surface-900">
-    <base-popover :open="pickerOpen" placement="top" arrow offset-horizontally :offset="16">
+    <base-popover :open="pickerOpen" placement="top-start" arrow offset-horizontally :offset="16">
       <base-button
         variant="text"
         icon
@@ -92,8 +92,8 @@ import { Attachment, FormattedText, Photo } from "@harmony-dev/harmony-web-sdk/d
 import { onClickOutside, useEventListener } from "@vueuse/core";
 import type { Ref } from "vue";
 import { computed, ref } from "vue";
-import { connectionManager } from "../../../logic/api/connections";
 import { useChatRoute } from "../../../router";
+import { useAPI } from "../../../services/api";
 import MessageTypePicker from "./MessageTypePicker.vue";
 import BaseButton from "~/components/base/BaseButton.vue";
 import BaseInput from "~/components/base/BaseInput.vue";
@@ -102,6 +102,7 @@ import BaseDropdown from "~/components/base/BaseMenu.vue";
 import BasePopover from "~/components/base/BasePopover.vue";
 
 const { host, guild, channel } = useChatRoute();
+const api = useAPI();
 
 const pickerOpen = ref(false);
 const messageTypePicker = ref() as Ref<HTMLElement>;
@@ -163,63 +164,9 @@ const sendMessage = async() => {
 	const content = text.value.replace(/\s\s+/g, " ");
 	const files = uploadQueue.value.map(({ file }) => file);
 	text.value = "";
-	const conn = connectionManager.get(host.value!);
-	if (files.length > 0) {
-		const allFilesArePhotos = files.every(file => file.type.startsWith("image/"));
-		uploadQueue.value.forEach(({ url }) => URL.revokeObjectURL(url));
-		uploadQueue.value = [];
-		const uploaded = await Promise.all(files.map(async f => conn.uploadFile(f)));
-		if (allFilesArePhotos) {
-			await conn.chat.sendMessage({
-				guildId: guild.value!,
-				channelId: channel.value!,
-				content: {
-					content: {
-						oneofKind: "photoMessage",
-						photoMessage: {
-							photos: uploaded.map(f =>
-								Photo.create({
-									hmc: f.id,
-								}),
-							),
-						},
-					},
-				},
-			});
-		}
-		else {
-			await conn.chat.sendMessage({
-				guildId: guild.value!,
-				channelId: channel.value!,
-				content: {
-					content: {
-						oneofKind: "attachmentMessage",
-						attachmentMessage: {
-							files: uploaded.map(f =>
-								Attachment.create({
-									id: f.id,
-								}),
-							),
-						},
-					},
-				},
-			});
-		}
-	}
-	return conn.chat.sendMessage({
-		guildId: guild.value!,
-		channelId: channel.value!,
-		content: {
-			content: {
-				oneofKind: "textMessage",
-				textMessage: {
-					content: FormattedText.create({
-						text: content,
-					}),
-				},
-			},
-		},
-	});
+	await api.sendMessage(host.value!, guild.value!, channel.value!, content, files);
+	uploadQueue.value.forEach(({ url }) => URL.revokeObjectURL(url));
+	uploadQueue.value = [];
 };
 
 const onKeyDown = async(ev: KeyboardEvent) => {

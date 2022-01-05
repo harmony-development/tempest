@@ -1,59 +1,27 @@
 <script lang="ts" setup>
 import { computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { connectionManager } from "../../../logic/api/connections";
 import { chatState } from "../../../logic/store/chat";
 import { session } from "../../../logic/store/session";
 import { uiState } from "../../../logic/store/ui";
 import { useChatRoute } from "../../../router";
+import { useAPI } from "../../../services/api";
 import AppSettings from "./AppSettings.vue";
 import GuildIcon from "./GuildIcon.vue";
 import { convertGuildEntryV1, convertGuildV1 } from "~/logic/conversions/guilds";
 import BaseButton from "~/components/base/BaseButton.vue";
-import { batchGetGuild } from "~/logic/api/batchHack";
 
 const { guild } = useChatRoute();
 const router = useRouter();
+const api = useAPI();
 
 onMounted(async() => {
-	const conn = connectionManager.get(session.value!.host);
-	const { guilds } = await conn.chat.getGuildList({}).response;
-	guilds.forEach(async(entry) => {
-		connectionManager.getStream(entry.serverId).requests.send({
-			request: {
-				oneofKind: "subscribeToGuild",
-				subscribeToGuild: {
-					guildId: entry.guildId,
-				},
-			},
-		});
-	});
-
-	const collected = guilds.reduce<{
-		[host: string]: string[]
-	}>((acc, current) => {
-		if (!acc[current.serverId]) acc[current.serverId] = [];
-		acc[current.serverId].push(current.guildId);
-		return acc;
-	}, {});
-
-	await Promise.all(
-		Object.entries(collected).map(async([host, guildIds]) => {
-			const guilds = await batchGetGuild(connectionManager.get(host), guildIds);
-			const hostData = chatState.ensureHost(host);
-			guilds.forEach((guild, i) => {
-				const guildData = chatState.ensureGuild(host, guildIds[i]);
-				Object.assign(guildData, {
-					name: guild!.name,
-					picture: guild?.picture,
-					owners: guild!.ownerIds,
-				});
-				chatState.lock.add("guild", host, guildIds[i]);
-			});
-		}),
-	);
-
-	chatState.state.guildList = guilds.map(guild => convertGuildEntryV1(guild, session.value!.host));
+	const guilds = await api.fetchAllGuilds(session.value!.host);
+	for (const guild of guilds) {
+		const guildData = chatState.ensureGuild(guild.serverId, guild.guildId);
+		guildData.data = convertGuildV1(guild);
+	}
+	chatState.state.guildList = guilds.map(guild => convertGuildEntryV1(guild));
 });
 
 const guildList = computed(() => chatState.state.guildList);

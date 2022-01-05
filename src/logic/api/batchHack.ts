@@ -23,5 +23,5 @@ export async function batchGetGuild(conn: Connection, guildIds: string[]) {
 		GetGuildRequest,
 		GetGuildResponse,
 	);
-	return data.map(r => r.guild);
+	return data.map(r => r.guild!);
 }

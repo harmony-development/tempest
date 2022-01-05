@@ -13,16 +13,15 @@
 
 <script setup lang="ts">
 import { arrow, computePosition, offset, shift, size } from "@floating-ui/dom";
-import type { BasePlacement } from "@floating-ui/core";
+import type { Placement } from "@floating-ui/core";
 import type { Ref } from "vue";
 import { computed, onMounted, ref } from "vue";
 const props = defineProps<{
 	open?: boolean
 	openOnHover?: boolean
 	arrow?: boolean
-	placement?: BasePlacement
+	placement?: Placement
 	offset?: number
-	offsetHorizontally?: boolean
 	matchWidth?: boolean
 }>();
 
@@ -34,7 +33,7 @@ const middleware = computed(() => {
 	const enabled = [
 		offset(({ reference, floating, placement }) => ({
 			mainAxis: props.offset === undefined ? 8 : props.offset,
-			crossAxis: props.offsetHorizontally ? (floating.width / 2 - reference.width / 2) : 0,
+			crossAxis: 0,
 		})),
 	];
 	if (props.matchWidth) {
@@ -80,7 +79,7 @@ async function updatePosition() {
 }
 
 onMounted(async() => {
-	target.value.classList.add("target");
+	target.value.setAttribute("data-tooltiptarget", "");
 	updatePosition();
 });
 
@@ -109,7 +108,7 @@ onMounted(async() => {
   }
 }
 
-.target:hover + .popover.openOnHover {
+[data-tooltiptarget]:hover + .popover.openOnHover {
   @apply visible translate-x-0 translate-y-0 opacity-100;
 }
 </style>

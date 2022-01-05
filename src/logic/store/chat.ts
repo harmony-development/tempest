@@ -4,15 +4,8 @@ import type {
 	Overrides,
 	Reaction,
 } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
-import {
-	GetChannelMessagesRequest_Direction,
-} from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
 import type { UserStatus } from "@harmony-dev/harmony-web-sdk/dist/gen/profile/v1/types";
-import { batchGetUsers } from "../api/batchHack";
-import { connectionManager } from "../api/connections";
-import { convertMessageV1 } from "../conversions/messages";
 import { AsyncLock } from "../util/asyncLock";
-import { session } from "./session";
 import { Store } from "./store";
 
 export interface IGuildEntry {
@@ -81,8 +74,7 @@ class ChatState extends Store<IChatState> {
 		this.lock = new AsyncLock();
 	}
 
-	ensureHost(host?: string) {
-		host = host || session.value!.host;
+	ensureHost(host: string) {
 		if (!this.state.hosts[host]) {
 			this.state.hosts[host] = {
 				guilds: {},
@@ -114,127 +106,31 @@ class ChatState extends Store<IChatState> {
 		return g.channels[channelID];
 	}
 
-	async fetchUser(host: string, userId: string) {
-		const h = this.ensureHost(host);
-		const { profile } = await connectionManager.get(host).profile.getProfile({
-			userId,
-		}).response;
-		h.users[userId] = {
-			username: profile!.userName,
-			picture: profile!.userAvatar,
-			status: profile!.userStatus,
-			isBot: profile!.isBot,
-		};
-	}
-
-	getUser(host: string, userId: string) {
-		const h = this.ensureHost(host);
-		this.lock.run(() => this.fetchUser(host, userId), ["user", host, userId]);
-		return h.users[userId];
-	}
-
 	getGuild(host: string, guildId: string) {
-		const g = this.ensureGuild(host, guildId);
-		this.lock.run(async() => {
-			const conn = connectionManager.get(host);
-			const { guild } = await conn.chat.getGuild({ guildId }).response;
-			g.data = {
-				name: guild!.name,
-				picture: guild?.picture,
-				owners: guild!.ownerIds,
-			};
-		}, ["guild", host, guildId]);
-		return g;
-	}
-
-	getMemberList(host: string, guildId: string) {
-		const h = this.ensureHost(host);
-		const g = this.ensureGuild(host, guildId);
-		this.lock.run(async() => {
-			const conn = connectionManager.get(host);
-			const { members } = await conn.chat.getGuildMembers({ guildId }).response;
-			const profiles = await batchGetUsers(conn, members);
-			Object.assign(h.users, profiles.map(p => ({
-				username: p!.userName,
-				picture: p!.userAvatar,
-				status: p!.userStatus,
-				isBot: p!.isBot,
-			})));
-
-			members.forEach(m => g.members.add(m));
-		}, ["memberList", host, guildId]);
-		return g.members;
+		return this.ensureGuild(host, guildId);
 	}
 
 	getChannelList(host: string, guildId: string) {
-		const g = this.ensureGuild(host, guildId);
-
-		this.lock.run(async() => {
-			const { channels } = await connectionManager.get(host).chat.getGuildChannels({ guildId }).response;
-			for (const { channel, channelId } of channels) {
-				this.ensureChannel(host, guildId, channelId).data = {
-					name: channel!.channelName,
-					kind: channel!.kind,
-				};
-			}
-			g.channelList = channels.map(c => c.channelId);
-		}, ["channelList", host, guildId]);
-
-		return g.channelList;
-	}
-
-	async fetchMessageList(
-		host: string,
-		guildId: string,
-		channelId: string,
-		messageId?: string,
-		direction?: GetChannelMessagesRequest_Direction,
-	) {
-		const c = this.ensureChannel(host, guildId, channelId);
-
-		const { messages, reachedTop } = await connectionManager.get(host).chat.getChannelMessages({
-			guildId,
-			channelId,
-			messageId,
-			direction,
-		}).response;
-		for (const { message, messageId } of messages)
-			c.messages[messageId] = convertMessageV1(message!);
-
-		if (messageId)
-			c.messageList.unshift(...messages.map(m => m.messageId).reverse());
-
-		else
-			c.messageList = messages.map(m => m.messageId).reverse();
-
-		c.reachedTop = reachedTop;
-	}
-
-	getMessageList(
-		host: string,
-		guildId: string,
-		channelId: string,
-		messageId?: string,
-		direction?: GetChannelMessagesRequest_Direction,
-	) {
-		const c = this.ensureChannel(host, guildId, channelId);
-		this.lock.run(
-			() =>
-				this.fetchMessageList(
-					host,
-					guildId,
-					channelId,
-					messageId,
-					direction || GetChannelMessagesRequest_Direction.BEFORE_UNSPECIFIED,
-				),
-			["messageList", host, guildId, channelId, messageId!],
-		);
-		return c.messageList;
+		return this.ensureGuild(host, guildId).channelList;
 	}
 
 	getChannel(host: string, guildId: string, channelId: string) {
 		const c = this.ensureChannel(host, guildId, channelId);
 		return c;
+	}
+
+	getMemberList(host: string, guildId: string) {
+		const g = this.ensureGuild(host, guildId);
+		return g.members;
+	}
+
+	getUser(host: string, userId: string) {
+		const h = this.ensureHost(host);
+		return h.users[userId] as IUserData | undefined;
+	}
+
+	getMessageList(host: string, guildID: string, channelID: string) {
+		return this.ensureChannel(host, guildID, channelID).messageList;
 	}
 
 	getMessage(host: string, guildID: string, channelID: string, messageID: string) {
@@ -246,21 +142,21 @@ class ChatState extends Store<IChatState> {
 		g.channelList = channels;
 	}
 
-	setGuildData(host: string, guildID: string, data: Partial<IGuild>) {
+	setGuildData(host: string, guildID: string, data: IGuildData) {
 		const g = this.ensureGuild(host, guildID);
-		this.ensureHost(host).guilds[guildID] = {
-			...g,
+		g.data = data;
+	}
+
+	setChannelData(host: string, guildID: string, channelID: string, data: IChannelData) {
+		const c = this.ensureChannel(host, guildID, channelID);
+		c.data = {
+			...c.data,
 			...data,
 		};
 	}
 
-	setChannelData(host: string, guildID: string, channelID: string, data: Partial<IChannelData>) {
-		const g = this.ensureGuild(host, guildID);
-		const c = this.ensureChannel(host, guildID, channelID);
-		g.channels[channelID] = {
-			...c,
-			...data,
-		};
+	setReachedTop(host: string, guildId: string, channelId: string, value: boolean) {
+		this.ensureChannel(host, guildId, channelId).reachedTop = value;
 	}
 
 	setMessageData(host: string, guildID: string, channelID: string, messageID: string, data: IMessageData) {
@@ -268,9 +164,29 @@ class ChatState extends Store<IChatState> {
 		c.messages[messageID] = data;
 	}
 
-	setMessageList(host: string, guildID: string, channelID: string, messageList: string[]) {
+	setMessageList(host: string, guildID: string, channelID: string, messageList: string[], prepend?: boolean) {
 		const c = this.ensureChannel(host, guildID, channelID);
-		c.messageList = messageList;
+		if (prepend)
+			c.messageList.unshift(...messageList);
+
+		else
+			c.messageList = messageList.reverse();
+	}
+
+	setMembers(host: string, guildId: string, memberList: string[]) {
+		const g = this.ensureGuild(host, guildId);
+		g.members = new Set(memberList);
+	}
+
+	setUserData(host: string, userID: string, data: IUserData) {
+		const h = this.ensureHost(host);
+		h.users[userID] = data;
+	}
+
+	addChannel(host: string, guildId: string, channelId: string, data: IChannelData) {
+		const g = this.ensureGuild(host, guildId);
+		g.channelList?.push(channelId);
+		this.ensureChannel(host, guildId, channelId).data = data;
 	}
 
 	addMessage(host: string, guildID: string, channelID: string, messageID: string, data: IMessageData) {
@@ -283,13 +199,6 @@ class ChatState extends Store<IChatState> {
 		const c = this.ensureChannel(host, guildID, channelID);
 		delete c.messages[messageID];
 		c.messageList = c.messageList.filter(f => f !== messageID);
-	}
-
-	addChannel(host: string, guildID: string, channelID: string, data: IChannelData) {
-		const g = this.getGuild(host, guildID);
-		const c = this.ensureChannel(host, guildID, channelID);
-		c.data = data;
-		g.channelList?.push(channelID);
 	}
 }
 

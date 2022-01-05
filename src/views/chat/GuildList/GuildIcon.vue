@@ -4,6 +4,7 @@ import { parseHMC } from "../../../logic/parsing";
 import { chatState } from "../../../logic/store/chat";
 import BaseImage from "~/components/base/BaseImage.vue";
 import BaseTooltip from "~/components/base/BaseTooltip.vue";
+import BaseContextMenu from "~/components/base/BaseContextMenu.vue";
 
 const props = defineProps<{
 	active?: boolean
@@ -16,24 +17,26 @@ const iconSrc = computed(() => (guild.value.data?.picture ? parseHMC(guild.value
 </script>
 
 <template>
-  <base-tooltip :text="guild.data?.name" placement="right">
-    <button
-      v-wave
-      v-bind="$attrs"
-      role="button"
-      class="icon"
-      :class="{ active }"
-      style="aspect-ratio: 1"
-    >
-      <base-image
-        :src="iconSrc"
-        class="object-contain pointer-events-none"
-        draggable="false"
-        :alt="guild?.data?.name"
-        :fallback="guild?.data?.name?.[0]"
-      />
-    </button>
-  </base-tooltip>
+  <base-context-menu :items="[{text: 'Test'}]">
+    <base-tooltip :text="guild.data?.name" placement="right">
+      <button
+        v-wave
+        v-bind="$attrs"
+        role="button"
+        class="icon"
+        :class="{ active }"
+        style="aspect-ratio: 1"
+      >
+        <base-image
+          :src="iconSrc"
+          class="object-contain pointer-events-none"
+          draggable="false"
+          :alt="guild?.data?.name"
+          :fallback="guild?.data?.name?.[0]"
+        />
+      </button>
+    </base-tooltip>
+  </base-context-menu>
 </template>
 
 <style lang="postcss" scoped>

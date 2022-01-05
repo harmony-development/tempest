@@ -61,7 +61,7 @@ export interface ChatRoute extends RouteLocationNormalizedLoaded {
 export const useChatRoute = () => {
 	const route = useRoute() as ChatRoute;
 	return {
-		host: computed(() => route.params.host),
+		host: computed(() => route.params.host === session.value?.host ? "" : route.params.host),
 		guild: computed(() => route.params.guild),
 		channel: computed(() => route.params.channel),
 		message: computed(() => route.params.message),

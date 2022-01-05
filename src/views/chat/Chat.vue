@@ -1,23 +1,22 @@
 <script lang="ts" setup>
 import { computed, defineAsyncComponent, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
-import { connectionManager } from "../../logic/api/connections";
+import { useToast } from "vue-toastification";
+import type { MethodInfo, RpcError, RpcOptions } from "@protobuf-ts/runtime-rpc";
 import { chatState } from "../../logic/store/chat";
 import { session } from "../../logic/store/session";
 import { uiState } from "../../logic/store/ui";
 import { useChatRoute } from "../../router";
+import { useAPI } from "../../services/api";
 import ChannelList from "./ChannelList/ChannelList.vue";
-import Composer from "./Composer/Composer.vue";
 import UserSettings from "./Dialogs/UserSettings.vue";
 import GuildList from "./GuildList/GuildList.vue";
+import Splash from "./Splash.vue";
 import MemberList from "./MemberList/MemberList.vue";
 import Messages from "./Messages/Messages.vue";
-import Splash from "./Splash.vue";
+import Composer from "./Composer/Composer.vue";
 import { pubsub } from "~/logic/api/pubsub";
 import BaseDrawer from "~/components/base/BaseDrawer.vue";
-import BaseDialog from "~/components/base/BaseDialog.vue";
-import BaseButton from "~/components/base/BaseButton.vue";
-import BaseAppBar from "~/components/base/BaseAppBar.vue";
 
 const AddGuild = defineAsyncComponent(() => import("./Dialogs/AddGuild.vue"));
 const AddChannel = defineAsyncComponent(() => import("./Dialogs/AddChannel.vue"));
@@ -26,35 +25,47 @@ const sessionValidated = ref(false);
 const leftDrawer = ref(false);
 const rightDrawer = ref(false);
 const router = useRouter();
-const { host, guild, channel } = useChatRoute();
 
-const channelData = computed(() => chatState.getChannel(host.value!, guild.value!, channel.value!));
+const { host: selectedHost, guild: selectedGuild, channel: selectedChannel } = useChatRoute();
+
+const api = useAPI();
+const toast = useToast();
+session.value && api.setSession(session.value.host, session.value.session);
+
+api.on("invalidSession", () => router.push({ name: "serverselect" }));
+api.on("ratelimit", ({ error: _error, method, i, options }: {error: RpcError; method: MethodInfo<any, any>; i: object; options: RpcOptions}) => {
+	toast.error(`Rate limited while executing ${method.name}.`);
+});
+
+const channelData = computed(() => chatState.getChannel(selectedHost.value!, selectedGuild.value!, selectedChannel.value!));
 
 onMounted(async() => {
 	try {
 		if (!session.value) throw new Error("No session");
-		const [conn, stream] = connectionManager.create(session.value.host, session.value.session);
-		await conn.auth.checkLoggedIn({});
+		await api.checkLoggedIn(session.value.host, session.value.session);
 		sessionValidated.value = true;
-		const handler = pubsub(session.value!.host);
-		stream.requests.send({
-			request: {
-				oneofKind: "subscribeToHomeserverEvents",
-				subscribeToHomeserverEvents: {},
-			},
-		});
-		stream.responses.onMessage(handler);
+		const handler = pubsub("", api);
+		api.getStream(session.value.host).responses.onMessage(handler);
 	}
 	catch (e) {
 		router.push({ name: "serverselect" });
 	}
 });
 
-watch(guild, () => {
-	if (!guild.value || !host.value) return;
-	const guildObject = chatState.getGuild(host.value, guild.value);
+watch(selectedGuild, () => {
+	if (!selectedGuild.value || !selectedHost.value) return;
+	const guildObject = chatState.getGuild(selectedHost.value, selectedGuild.value);
 	guildObject.lastChannel && router.push({ params: { channel: guildObject.lastChannel } });
 });
+
+watch([selectedHost, selectedGuild], ([host, guild], [prevHost, prevGuild]) => {
+	if (host === prevHost && guild === prevGuild) return;
+	if (host == null || !guild) return;
+	Promise.all([
+		api.fetchMemberList(host, guild),
+		api.fetchChannelList(host, guild),
+	]);
+}, { immediate: true });
 </script>
 
 <template>
@@ -72,7 +83,7 @@ watch(guild, () => {
     <base-drawer v-model="leftDrawer">
       <div class="flex h-full">
         <guild-list />
-        <channel-list v-if="guild" />
+        <channel-list v-if="selectedGuild" />
       </div>
     </base-drawer>
     <div class="bg-surface-900 flex-1 flexcol overflow-hidden">
@@ -101,8 +112,8 @@ watch(guild, () => {
           <mdi-account-multiple />
         </base-button>
       </base-app-bar>
-      <template v-if="host && guild && channel">
-        <messages :host="host" :guild="guild" :channel="channel" />
+      <template v-if="selectedHost !== undefined && selectedGuild && selectedChannel">
+        <messages :host="selectedHost" :guild="selectedGuild" :channel="selectedChannel" />
         <composer />
       </template>
       <div v-else class="flex-1 flexcol gap-4 justify-center items-center">
@@ -110,7 +121,7 @@ watch(guild, () => {
           <mdi-pound class="text-5xl align-top text-gray-300" />
         </div>
         <div class="bg-surface-800 rounded-full p-2 px-4">
-          <p v-if="guild">
+          <p v-if="selectedGuild">
             Select a channel to start chatting
           </p>
           <p v-else>
@@ -121,7 +132,7 @@ watch(guild, () => {
     </div>
     <base-drawer v-model="rightDrawer" right>
       <div class="flex h-full">
-        <member-list v-if="guild" />
+        <member-list v-if="selectedGuild" />
       </div>
     </base-drawer>
   </div>

@@ -10,8 +10,7 @@ a {
   @apply text-primary-300
       hover:underline
       cursor-pointer
-      whitespace-nowrap
-      overflow-hidden overflow-ellipsis select-none;
+      overflow-hidden overflow-ellipsis;
 }
 
 * {

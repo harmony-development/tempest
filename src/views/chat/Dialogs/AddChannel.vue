@@ -3,9 +3,12 @@ import { ChannelKind } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/chann
 import { ref } from "vue";
 import { useChatRoute } from "../../../router";
 import BaseInput from "~/components/base/BaseInput.vue";
-import { connectionManager } from "~/logic/api/connections";
 import { uiState } from "~/logic/store/ui";
+import { useAPI } from "~/services/api";
+
 const { host, guild } = useChatRoute();
+const api = useAPI();
+
 const channelName = ref("");
 const error = ref();
 
@@ -13,11 +16,7 @@ const close = () => (uiState.state.addChannelDialog = false);
 
 const onCreateClicked = async() => {
 	try {
-		await connectionManager.get(host.value!).chat.createChannel({
-			guildId: guild.value!,
-			channelName: channelName.value,
-			kind: ChannelKind.TEXT_UNSPECIFIED,
-		});
+		api.createChannel(host.value!, guild.value!, channelName.value, ChannelKind.TEXT_UNSPECIFIED);
 		close();
 	}
 	catch (e) {

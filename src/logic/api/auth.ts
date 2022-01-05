@@ -110,11 +110,11 @@ export const useAuthManager = (host: string) => {
 					choice: c,
 				},
 			});
-			isLoading.value = false;
 		}
 		catch (e) {
 			error.value = formatError(e, "entry.error.sending-choice");
 		}
+		isLoading.value = false;
 	};
 
 	const sendForm = async(values: string[]) => {
@@ -129,22 +129,22 @@ export const useAuthManager = (host: string) => {
 					})),
 				},
 			});
-			isLoading.value = false;
 		}
 		catch (e) {
 			error.value = formatError(e, "entry.error.sending-form");
 		}
+		isLoading.value = false;
 	};
 
 	const onStep = (step: AuthStep["step"]) => {
 		if (step.oneofKind === "session") {
 			const { sessionToken, userId } = step.session;
+			router.push({ name: "chat" });
 			session.value = {
 				session: sessionToken,
 				userID: userId,
 				host,
 			};
-			return router.push({ name: "chat" });
 		}
 		error.value = undefined;
 		currentStepType.value = step.oneofKind;

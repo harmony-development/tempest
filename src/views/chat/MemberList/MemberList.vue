@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { chatState } from "../../../logic/store/chat";
 import { session } from "../../../logic/store/session";
@@ -8,7 +8,7 @@ import MemberItem from "./MemberItem.vue";
 import { uiState } from "~/logic/store/ui";
 import BaseListItem from "~/components/base/BaseListItem.vue";
 
-const { host, guild } = useChatRoute();
+const { host, guild, channel } = useChatRoute();
 const router = useRouter();
 const members = computed(() => chatState.getMemberList(host.value!, guild.value!), undefined);
 const ownUserID = computed(() => session.value?.userID);

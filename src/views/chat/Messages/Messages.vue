@@ -3,6 +3,7 @@ import { onKeyPressed, onKeyStroke, useIntersectionObserver } from "@vueuse/core
 import type { Ref } from "vue";
 import { computed, nextTick, ref, toRefs, watch } from "vue";
 import { chatState } from "../../../logic/store/chat";
+import { useAPI } from "../../../services/api";
 import Message from "./Message.vue";
 
 const props = defineProps<{
@@ -12,13 +13,16 @@ const props = defineProps<{
 }>();
 
 const { host, guild, channel } = toRefs(props);
+const api = useAPI();
 
 const loader = ref() as Ref<HTMLElement>;
 const list = ref() as Ref<HTMLElement>;
 
 const reachedTop = computed(() => chatState.getChannel(host.value, guild.value, channel.value).reachedTop);
 const messageList = computed(() => chatState.getMessageList(host.value, guild.value, channel.value));
-const loadMoreMessages = () => chatState.fetchMessageList(host.value, guild.value, channel.value, messageList.value?.[0]);
+const loadMoreMessages = () => api.fetchMessageList(host.value, guild.value, channel.value, {
+	messageId: messageList.value?.[0],
+});
 const scrollToBottom = () => (list.value.scrollTop = list.value.scrollHeight);
 
 onKeyStroke("Escape", () => scrollToBottom());

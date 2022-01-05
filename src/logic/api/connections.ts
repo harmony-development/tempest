@@ -1,23 +1,24 @@
 import type { StreamEventsRequest, StreamEventsResponse } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/stream";
 import { Connection } from "@harmony-dev/harmony-web-sdk/dist/src/connection";
-import type { DuplexStreamingCall } from "@protobuf-ts/runtime-rpc";
-import { errorState } from "../store/errors";
+import type { DuplexStreamingCall, RpcInterceptor } from "@protobuf-ts/runtime-rpc";
 import { session } from "../store/session";
 
 type ChatStream = DuplexStreamingCall<StreamEventsRequest, StreamEventsResponse>;
 
-class ConnectionManager {
+interface IConnection {
+	conn: Connection
+	stream?: ChatStream
+}
+
+export class ConnectionManager {
+	interceptors?: RpcInterceptor[];
 	connections: {
-		[host: string]: Connection
+		[host: string]: IConnection
 	};
 
-	streams: {
-		[host: string]: ChatStream
-	};
-
-	constructor() {
+	constructor(interceptors?: RpcInterceptor[]) {
 		this.connections = {};
-		this.streams = {};
+		this.interceptors = interceptors;
 	}
 
 	create(host: string, session: string): [Connection, ChatStream] {
@@ -25,32 +26,27 @@ class ConnectionManager {
 		conn.setSession(session);
 		const stream = conn.chat.streamEvents();
 
-		stream.responses.onError((error) => {
-			errorState.handleError(error);
-			setTimeout(() => this.create(host, session), 3000);
-		});
-		this.connections[host] = conn;
-		this.streams[host] = stream;
+		this.connections[host] = { conn, stream };
 		return [conn, stream];
 	}
 
 	get(host: string) {
 		host = host || session.value!.host;
 		if (!this.connections[host]) {
-			const conn = new Connection(host);
-			this.connections[host] = conn;
+			const conn = new Connection(host, {
+				interceptors: this.interceptors,
+			});
+			this.connections[host] = { conn };
 		}
 		return this.connections[host];
 	}
 
 	getStream(host: string) {
 		host = host || session.value!.host;
-		if (!this.streams[host]) {
-			const conn = this.get(host);
-			this.streams[host] = conn.chat.streamEvents();
+		if (!this.connections[host]?.stream) {
+			const { conn } = this.get(host);
+			this.connections[host].stream = conn.chat.streamEvents();
 		}
-		return this.streams[host];
+		return this.connections[host].stream!;
 	}
 }
-
-export const connectionManager = new ConnectionManager();

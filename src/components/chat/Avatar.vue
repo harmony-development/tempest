@@ -15,7 +15,7 @@ const props = defineProps<{
 const profile = computed(() => (props.userid ? chatState.getUser(host.value!, props.userid) : undefined), undefined);
 const uri = computed(() => {
 	if (props.override) return parseHMC(props.override, host.value!);
-	return profile.value?.picture && host.value && parseHMC(profile.value.picture, host.value);
+	return profile.value?.picture && host.value !== undefined && parseHMC(profile.value.picture, host.value);
 });
 </script>
 
