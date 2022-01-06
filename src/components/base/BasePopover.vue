@@ -1,19 +1,21 @@
 <template>
-  <slot />
-  <div
-    ref="popover"
-    class="fixed popover z-1"
-    :class="{ openOnHover, open, [placement || 'bottom']: !open || openOnHover }"
-    v-bind="$attrs"
-  >
-    <div v-if="props.arrow" ref="arrowElement" class="arrow" />
-    <slot name="content" />
+  <div ref="root">
+    <slot />
+    <div
+      ref="popover"
+      class="fixed popover z-1"
+      :class="{ openOnHover, open, [placement || 'bottom']: !open || openOnHover }"
+      v-bind="$attrs"
+    >
+      <div v-if="props.arrow" ref="arrowElement" class="arrow" />
+      <slot name="content" />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { arrow, computePosition, offset, shift, size } from "@floating-ui/dom";
-import type { Placement } from "@floating-ui/core";
+import type { ClientRectObject, Placement } from "@floating-ui/core";
 import type { Ref } from "vue";
 import { computed, onMounted, ref } from "vue";
 const props = defineProps<{
@@ -23,18 +25,39 @@ const props = defineProps<{
 	placement?: Placement
 	offset?: number
 	matchWidth?: boolean
+	customPosition?: {x: number; y: number}
 }>();
 
+const root = ref() as Ref<HTMLElement>;
 const popover = ref() as Ref<HTMLElement>;
 const arrowElement = ref() as Ref<HTMLElement>;
-const target = computed(() => popover.value.previousElementSibling!);
+const target = computed((): Element | {
+	getBoundingClientRect: () => ClientRectObject
+} => {
+	if (props.customPosition) {
+		const { x, y } = props.customPosition;
+		return {
+			getBoundingClientRect() {
+				return {
+					width: 0,
+					height: 0,
+					x,
+					y,
+					top: y,
+					left: x,
+					right: x,
+					bottom: y,
+				} as ClientRectObject;
+			},
+		};
+	}
+	return root.value.children[0];
+});
 
 const middleware = computed(() => {
 	const enabled = [
-		offset(({ reference, floating, placement }) => ({
-			mainAxis: props.offset === undefined ? 8 : props.offset,
-			crossAxis: 0,
-		})),
+		offset(8),
+		shift(),
 	];
 	if (props.matchWidth) {
 		enabled.push(size({
@@ -79,7 +102,7 @@ async function updatePosition() {
 }
 
 onMounted(async() => {
-	target.value.setAttribute("data-tooltiptarget", "");
+	target.value instanceof Element && target.value.setAttribute("data-poptarget", "");
 	updatePosition();
 });
 
@@ -108,7 +131,7 @@ onMounted(async() => {
   }
 }
 
-[data-tooltiptarget]:hover + .popover.openOnHover {
+[data-poptarget]:hover + .popover.openOnHover {
   @apply visible translate-x-0 translate-y-0 opacity-100;
 }
 </style>

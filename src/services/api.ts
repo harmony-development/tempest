@@ -219,6 +219,13 @@ export class API extends EventEmitter<{
 		});
 	}
 
+	leaveGuild(host: string, guildId: string) {
+		const { conn } = this.manager.get(host);
+		return conn.chat.leaveGuild({
+			guildId,
+		});
+	}
+
 	deleteMessage(host: string, guildId: string, channelId: string, messageId: string) {
 		const { conn } = this.manager.get(host);
 		conn.chat.deleteMessage({

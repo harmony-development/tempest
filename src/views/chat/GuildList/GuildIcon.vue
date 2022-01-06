@@ -2,9 +2,12 @@
 import { computed } from "vue";
 import { parseHMC } from "../../../logic/parsing";
 import { chatState } from "../../../logic/store/chat";
+import type { IMenuOption } from "../../../components/base/BaseMenu.vue";
+import { useAPI } from "../../../services/api";
 import BaseImage from "~/components/base/BaseImage.vue";
 import BaseTooltip from "~/components/base/BaseTooltip.vue";
-import BaseContextMenu from "~/components/base/BaseContextMenu.vue";
+import BaseMenu from "~/components/base/BaseMenu.vue";
+import { uiState } from "~/logic/store/ui";
 
 const props = defineProps<{
 	active?: boolean
@@ -12,31 +15,47 @@ const props = defineProps<{
 	guildid: string
 }>();
 
+const api = useAPI();
+
 const guild = computed(() => chatState.getGuild(props.host, props.guildid), undefined);
 const iconSrc = computed(() => (guild.value.data?.picture ? parseHMC(guild.value.data.picture, props.host) : undefined));
+
+const menuOptions: IMenuOption[] = [
+	{
+		text: "Leave Guild",
+		level: "danger",
+		async onClick() {
+			await uiState.openConfirm("Leave Guild", `Are you sure you would like to leave ${guild.value.data?.name}`);
+			await api.leaveGuild(props.host, props.guildid);
+		},
+	},
+];
 </script>
 
 <template>
-  <base-context-menu :items="[{text: 'Test'}]">
-    <base-tooltip :text="guild.data?.name" placement="right">
-      <button
-        v-wave
-        v-bind="$attrs"
-        role="button"
-        class="icon"
-        :class="{ active }"
-        style="aspect-ratio: 1"
-      >
-        <base-image
-          :src="iconSrc"
-          class="object-contain pointer-events-none"
-          draggable="false"
-          :alt="guild?.data?.name"
-          :fallback="guild?.data?.name?.[0]"
-        />
-      </button>
-    </base-tooltip>
-  </base-context-menu>
+  <base-menu :options="menuOptions">
+    <template #activator="{activate}">
+      <base-tooltip :text="guild.data?.name" placement="right">
+        <button
+          v-wave
+          v-bind="$attrs"
+          role="button"
+          class="icon"
+          :class="{ active }"
+          style="aspect-ratio: 1"
+          @contextmenu.prevent="activate"
+        >
+          <base-image
+            :src="iconSrc"
+            class="object-contain pointer-events-none"
+            draggable="false"
+            :alt="guild?.data?.name"
+            :fallback="guild?.data?.name?.[0]"
+          />
+        </button>
+      </base-tooltip>
+    </template>
+  </base-menu>
 </template>
 
 <style lang="postcss" scoped>
