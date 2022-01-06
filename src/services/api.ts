@@ -13,6 +13,7 @@ import { ConnectionManager } from "~/logic/api/connections";
 import { batchGetGuild, batchGetUsers } from "~/logic/api/batchHack";
 import { convertMessageV1 } from "~/logic/conversions/messages";
 import { convertGuildV1 } from "~/logic/conversions/guilds";
+import { sleep } from "~/logic/util/sleep";
 
 export class API extends EventEmitter<{
 	invalidSession: undefined
@@ -22,9 +23,14 @@ export class API extends EventEmitter<{
 
 	constructor() {
 		super();
-		const interceptors = [{
-			interceptUnary: this.errorInterceptor.bind(this),
-		}];
+		const interceptors = [
+			{
+				interceptUnary: this.errorInterceptor.bind(this),
+			},
+			{
+				interceptUnary: this.backoffInterceptor.bind(this),
+			},
+		];
 		(import.meta as any).env.DEV && interceptors.push({
 			interceptUnary: this.debugInterceptor.bind(this),
 		});
@@ -233,6 +239,34 @@ export class API extends EventEmitter<{
 			channelId,
 			messageId,
 		});
+	}
+
+	private backoffInterceptor(next: NextUnaryFn, method: MethodInfo<any, any>, i: object, options: RpcOptions) {
+		let retries = 0;
+		const maxRetries = 3;
+
+		let result = next(method, i, options);
+		const handledResponse = (async() => {
+			while (retries < maxRetries) {
+				try {
+					const resp = await result.response;
+					return resp;
+				}
+				catch (err) {
+					if (err instanceof RpcError && err.code === "hrpc.resource-exhausted") {
+						console.warn(`Ratelimited by server, retrying after 5s... (Retry ${retries + 1} of ${maxRetries})`);
+						this.emit("ratelimit", { error: err, method, i, options });
+						await sleep(5000);
+						result = next(method, i, options);
+					}
+					retries++;
+				}
+			}
+		})();
+		// cry about it
+		// @ts-ignore
+		result.response = handledResponse;
+		return result;
 	}
 
 	private errorInterceptor(next: NextUnaryFn, method: MethodInfo<any, any>, i: object, options: RpcOptions) {
