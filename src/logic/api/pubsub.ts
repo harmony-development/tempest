@@ -22,6 +22,12 @@ class HrpcHandler<T extends Oneof> extends Handler<T> {
 
 export function pubsub(host: string, api: API): (ev: StreamEventsResponse) => void {
 	const chatEventsHandler = new HrpcHandler<StreamChatEvent["event"]>({
+		editedGuild(host, { editedGuild: { guildId, newName, newPicture } }) {
+			chatState.updateGuildData(host, guildId, {
+				name: newName,
+				picture: newPicture,
+			});
+		},
 		guildAddedToList(host, { guildAddedToList: guild }) {
 			api.fetchGuild(host, guild.guildId);
 			chatState.state.guildList.push({

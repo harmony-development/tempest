@@ -15,6 +15,7 @@ import Splash from "./Splash.vue";
 import MemberList from "./MemberList/MemberList.vue";
 import Messages from "./Messages/Messages.vue";
 import Composer from "./Composer/Composer.vue";
+import GuildSettings from "./Dialogs/GuildSettings.vue";
 import { pubsub } from "~/logic/api/pubsub";
 import BaseDrawer from "~/components/base/BaseDrawer.vue";
 
@@ -79,6 +80,9 @@ watch([selectedHost, selectedGuild], ([host, guild], [prevHost, prevGuild]) => {
     </base-dialog>
     <base-dialog v-model="uiState.state.userSettingsDialog" unsized>
       <user-settings v-if="uiState.state.userSettingsDialog" />
+    </base-dialog>
+    <base-dialog v-model="uiState.state.guildSettingsDialog" unsized>
+      <guild-settings v-if="uiState.state.guildSettingsDialog" :guild-id="selectedGuild!" :host="selectedHost!" />
     </base-dialog>
     <base-drawer v-model="leftDrawer">
       <div class="flex h-full">

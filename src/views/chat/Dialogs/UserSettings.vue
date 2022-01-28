@@ -77,5 +77,4 @@ const onSubmit = async() => {
 	await api.updateProfile(session.value!.host, username, avatar, bot);
 	handleReset();
 };
-
 </script>

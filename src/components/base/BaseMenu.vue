@@ -27,7 +27,7 @@ const open = ref(false);
 
 onKeyStroke("Escape", () => (open.value = false));
 defineProps<{
-	options?: IMenuOption[]
+	options: IMenuOption[]
 	stayOpen?: boolean
 }>();
 </script>

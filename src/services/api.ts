@@ -225,6 +225,20 @@ export class API extends EventEmitter<{
 		});
 	}
 
+	async updateGuild(host: string, guildId: string, name?: string, picture?: File) {
+		const { conn } = this.manager.get(host);
+		let newPicture: string | undefined;
+		if (picture) {
+			const result = await conn.uploadFile(picture);
+			newPicture = result.id;
+		}
+		await conn.chat.updateGuildInformation({
+			guildId,
+			newName: name,
+			newPicture,
+		});
+	}
+
 	leaveGuild(host: string, guildId: string) {
 		const { conn } = this.manager.get(host);
 		return conn.chat.leaveGuild({

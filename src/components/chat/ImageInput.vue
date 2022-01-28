@@ -17,12 +17,13 @@
 
 <script setup lang="ts">
 import type { Ref } from "vue";
-import { computed, onUnmounted, ref } from "vue";
+import { computed, onUnmounted, ref, watch } from "vue";
 import BaseImage from "../base/BaseImage.vue";
 
 const props = defineProps<{
 	modelValue?: File
 	previewSrc?: string
+	change?: boolean
 }>();
 const emit = defineEmits(["update:modelValue"]);
 const imageInput = ref() as Ref<HTMLInputElement>;
@@ -30,6 +31,8 @@ const tmpImageURL = ref("");
 const imageURL = computed(() => props.modelValue ? tmpImageURL.value : props.previewSrc);
 
 onUnmounted(() => URL.revokeObjectURL(tmpImageURL.value!));
+
+watch(() => props.change, () => imageInput.value.click());
 
 const onChange = (event: Event) => {
 	const file = (event.target as HTMLInputElement).files![0];

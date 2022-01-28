@@ -5,6 +5,7 @@ import type {
 	Reaction,
 } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
 import type { UserStatus } from "@harmony-dev/harmony-web-sdk/dist/gen/profile/v1/types";
+import { assignDefined } from "../util/assignDefined";
 import { AsyncLock } from "../util/asyncLock";
 import { Store } from "./store";
 
@@ -145,6 +146,11 @@ class ChatState extends Store<IChatState> {
 	setGuildData(host: string, guildID: string, data: IGuildData) {
 		const g = this.ensureGuild(host, guildID);
 		g.data = data;
+	}
+
+	updateGuildData(host: string, guildID: string, data: Partial<IGuildData>) {
+		const g = this.ensureGuild(host, guildID);
+		assignDefined(g.data, data);
 	}
 
 	setChannelData(host: string, guildID: string, channelID: string, data: IChannelData) {
