@@ -1,0 +1,8 @@
+{
+  "chat": {
+    "typing": {
+      "users": "no users | {0} | {0} and {1} | {0}, {1} and {2} | Many people",
+      "suffix": "are typing | {0} is typing | {0} and {1} are typing | {0}, {1} and {2} are typing | are typing"
+    }
+  }
+}

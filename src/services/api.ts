@@ -248,10 +248,18 @@ export class API extends EventEmitter<{
 
 	deleteMessage(host: string, guildId: string, channelId: string, messageId: string) {
 		const { conn } = this.manager.get(host);
-		conn.chat.deleteMessage({
+		return conn.chat.deleteMessage({
 			guildId,
 			channelId,
 			messageId,
+		});
+	}
+
+	async sendTyping(host: string, guildId: string, channelId: string) {
+		const { conn } = this.manager.get(host);
+		return conn.chat.typing({
+			guildId,
+			channelId,
 		});
 	}
 

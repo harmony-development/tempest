@@ -40,6 +40,9 @@ export interface IChannel {
 	data?: IChannelData
 	messages: Record<string, IMessageData | undefined>
 	messageList: string[]
+	typers: {
+		[id: string]: number
+	}
 	reachedTop?: boolean
 }
 
@@ -102,6 +105,7 @@ class ChatState extends Store<IChatState> {
 			g.channels[channelID] = {
 				messages: {},
 				messageList: [],
+				typers: {},
 			};
 		}
 		return g.channels[channelID];
@@ -132,6 +136,10 @@ class ChatState extends Store<IChatState> {
 
 	getMessageList(host: string, guildID: string, channelID: string) {
 		return this.ensureChannel(host, guildID, channelID).messageList;
+	}
+
+	getTypers(host: string, guildID: string, channelID: string) {
+		return Object.keys(this.ensureChannel(host, guildID, channelID).typers);
 	}
 
 	getMessage(host: string, guildID: string, channelID: string, messageID: string) {
@@ -205,6 +213,16 @@ class ChatState extends Store<IChatState> {
 		const c = this.ensureChannel(host, guildID, channelID);
 		delete c.messages[messageID];
 		c.messageList = c.messageList.filter(f => f !== messageID);
+	}
+
+	addTyper(host: string, guildID: string, channelID: string, userID: string, timeout = 3000) {
+		const c = this.ensureChannel(host, guildID, channelID);
+		c.typers[userID] = Date.now();
+		setTimeout(() => {
+			const time = c.typers[userID];
+			if (time && time + timeout < Date.now())
+				delete c.typers[userID];
+		}, timeout * 2);
 	}
 }
 

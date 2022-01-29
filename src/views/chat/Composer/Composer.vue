@@ -36,16 +36,16 @@
       </div>
     </div>
   </div>
-  <div class="flex items-center px-3 py-1 bg-surface-900">
+  <div class="flex items-center mx-3 bg-surface-800 rounded-xl">
     <base-popover :open="pickerOpen" placement="top-start" arrow offset-horizontally :offset="16">
-      <base-button
+      <button
         variant="text"
         icon
-        class="picker-button"
+        class="picker-button pl-3 py-4 hover:text-gray-400"
         @click="pickerOpen = true"
       >
         <mdi-add :class="{ pickerOpen }" class="transition-all duration-100" />
-      </base-button>
+      </button>
       <template #content>
         <message-type-picker
           ref="messageTypePicker"
@@ -85,24 +85,36 @@
       @change="onFilesSelected"
     >
   </div>
+  <span class="my-auto mx-3 text-sm border-white" :class="{'invisible': typerNames.length === 0}">
+    <mdi:dots-horizontal class="inline animate-pulse text-xl mb-0.5" />
+    <strong>{{ t('chat.typing.users', typerNames, typerNames.length) }}</strong>
+    {{ t('chat.typing.suffix', typerNames.length) }}
+  </span>
 </template>
 
 <script lang="ts" setup>
 import { Attachment, FormattedText, Photo } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
 import { onClickOutside, useEventListener } from "@vueuse/core";
 import type { Ref } from "vue";
-import { computed, ref } from "vue";
-import { useChatRoute } from "../../../router";
+import { computed, ref, toRefs } from "vue";
+import { useI18n } from "vue-i18n";
 import { useAPI } from "../../../services/api";
+import { session } from "../../../logic/store/session";
 import MessageTypePicker from "./MessageTypePicker.vue";
 import BaseButton from "~/components/base/BaseButton.vue";
 import BaseInput from "~/components/base/BaseInput.vue";
-import PopInTransition from "~/components/transitions/PopInTransition.vue";
-import BaseDropdown from "~/components/base/BaseMenu.vue";
 import BasePopover from "~/components/base/BasePopover.vue";
+import { chatState } from "~/logic/store/chat";
 
-const { host, guild, channel } = useChatRoute();
+const props = defineProps<{
+	host: string
+	guild: string
+	channel: string
+}>();
+
+const { host, guild, channel } = toRefs(props);
 const api = useAPI();
+const { t } = useI18n();
 
 const pickerOpen = ref(false);
 const messageTypePicker = ref() as Ref<HTMLElement>;
@@ -116,6 +128,8 @@ const uploadQueue = ref<
 }[]
 >([]);
 
+const typers = computed(() => chatState.getTypers(host.value, guild.value, channel.value).filter(userID => userID !== session.value?.userID));
+const typerNames = computed(() => typers.value.map(user => chatState.getUser(host.value, user)?.username));
 const isTextEmpty = computed(() => text.value.replace(/\s/g, "").length === 0);
 
 onClickOutside(messageTypePicker, () => (pickerOpen.value = false));
@@ -164,12 +178,17 @@ const sendMessage = async() => {
 	const content = text.value.replace(/\s\s+/g, " ");
 	const files = uploadQueue.value.map(({ file }) => file);
 	text.value = "";
-	await api.sendMessage(host.value!, guild.value!, channel.value!, content, files);
+	await api.sendMessage(host.value, guild.value, channel.value, content, files);
 	uploadQueue.value.forEach(({ url }) => URL.revokeObjectURL(url));
 	uploadQueue.value = [];
 };
 
+let lastTyping = 0;
 const onKeyDown = async(ev: KeyboardEvent) => {
+	if (Date.now() - lastTyping > 2000) {
+		lastTyping = Date.now();
+		await api.sendTyping(host.value, guild.value, channel.value);
+	}
 	if (ev.key !== "Enter" || ev.shiftKey) return;
 	ev.preventDefault();
 	sendMessage();

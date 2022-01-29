@@ -2,6 +2,7 @@
 import { onKeyPressed, onKeyStroke, useIntersectionObserver } from "@vueuse/core";
 import type { Ref } from "vue";
 import { computed, nextTick, ref, toRefs, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { chatState } from "../../../logic/store/chat";
 import { useAPI } from "../../../services/api";
 import Message from "./Message.vue";
@@ -14,12 +15,14 @@ const props = defineProps<{
 
 const { host, guild, channel } = toRefs(props);
 const api = useAPI();
+const { t } = useI18n();
 
 const loader = ref() as Ref<HTMLElement>;
 const list = ref() as Ref<HTMLElement>;
 
 const reachedTop = computed(() => chatState.getChannel(host.value, guild.value, channel.value).reachedTop);
 const messageList = computed(() => chatState.getMessageList(host.value, guild.value, channel.value));
+
 const loadMoreMessages = () => api.fetchMessageList(host.value, guild.value, channel.value, {
 	messageId: messageList.value?.[0],
 });
@@ -83,7 +86,7 @@ const isConsecutiveMessage = (i: number) => {
 </script>
 
 <template>
-  <div ref="list" class="bg-surface-1000 p-3 gap-2 overflow-y-auto w-full compact-scrollbar flexcol flex-1">
+  <div ref="list" class="p-7 gap-2 overflow-y-auto w-full compact-scrollbar flexcol flex-1">
     <div class="flexcol flex-1 gap-2">
       <div ref="loader">
         <mdi-loading v-if="!reachedTop" class="text-xl animate-spin" />

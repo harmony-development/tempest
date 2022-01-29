@@ -11,6 +11,7 @@ import Components from "unplugin-vue-components/vite";
 import IconsResolver from "unplugin-icons/resolver";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import ViteFonts from "vite-plugin-fonts";
+import vueI18n from "@intlify/vite-plugin-vue-i18n";
 
 // loader helpers
 import { FileSystemIconLoader } from "unplugin-icons/loaders";
@@ -19,6 +20,7 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			"~/": `${path.resolve(__dirname, "src")}/`,
+			"vue-i18n": "vue-i18n/dist/vue-i18n.runtime.esm-bundler.js",
 		},
 	},
 	server: {
@@ -30,6 +32,11 @@ export default defineConfig({
 	plugins: [
 		vue(),
 		vueJsx(),
+		vueI18n({
+			include: path.resolve(__dirname, "src/locales/**"),
+			runtimeOnly: true,
+			compositionOnly: true,
+		}),
 		WindiCSS(),
 		ViteFonts({
 			google: {

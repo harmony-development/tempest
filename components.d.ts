@@ -30,6 +30,7 @@ declare module 'vue' {
     'Mdi:alertCircleOutline': typeof import('~icons/mdi/alert-circle-outline')['default']
     'Mdi:crosshairsGps': typeof import('~icons/mdi/crosshairs-gps')['default']
     'Mdi:delete': typeof import('~icons/mdi/delete')['default']
+    'Mdi:dotsHorizontal': typeof import('~icons/mdi/dots-horizontal')['default']
     'Mdi:download': typeof import('~icons/mdi/download')['default']
     'Mdi:file': typeof import('~icons/mdi/file')['default']
     'Mdi:loading': typeof import('~icons/mdi/loading')['default']

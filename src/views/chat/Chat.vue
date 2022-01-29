@@ -90,7 +90,7 @@ watch([selectedHost, selectedGuild], ([host, guild], [prevHost, prevGuild]) => {
         <channel-list v-if="selectedGuild" />
       </div>
     </base-drawer>
-    <div class="bg-surface-900 flex-1 flexcol overflow-hidden">
+    <div class="bg-surface-1000 flex-1 flexcol overflow-hidden">
       <base-app-bar class="bg-surface-700 h-12 text-sm font-semibold">
         <base-button
           variant="text"
@@ -118,7 +118,7 @@ watch([selectedHost, selectedGuild], ([host, guild], [prevHost, prevGuild]) => {
       </base-app-bar>
       <template v-if="selectedHost !== undefined && selectedGuild && selectedChannel">
         <messages :host="selectedHost" :guild="selectedGuild" :channel="selectedChannel" />
-        <composer />
+        <composer :host="selectedHost" :guild="selectedGuild" :channel="selectedChannel" />
       </template>
       <div v-else class="flex-1 flexcol gap-4 justify-center items-center">
         <div class="bg-surface-800 rounded-full p-2">

@@ -46,6 +46,9 @@ export function pubsub(host: string, api: API): (ev: StreamEventsResponse) => vo
 				kind: 0,
 			});
 		},
+		typing(host, { typing }) {
+			chatState.addTyper(host, typing.guildId, typing.channelId, typing.userId);
+		},
 		async sentMessage(host, { sentMessage }) {
 			chatState.addMessage(
 				host,
