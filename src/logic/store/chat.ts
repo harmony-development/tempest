@@ -4,6 +4,7 @@ import type {
 	Overrides,
 	Reaction,
 } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
+import type { FetchLinkMetadataResponse } from "@harmony-dev/harmony-web-sdk/dist/gen/mediaproxy/v1/mediaproxy";
 import type { UserStatus } from "@harmony-dev/harmony-web-sdk/dist/gen/profile/v1/types";
 import { assignDefined } from "../util/assignDefined";
 import { AsyncLock } from "../util/asyncLock";
@@ -64,6 +65,7 @@ export interface IGuild {
 export interface IHostData {
 	guilds: Record<string, IGuild>
 	users: Record<string, IUserData>
+	linkMetadata: Record<string, FetchLinkMetadataResponse["data"]>
 }
 
 export interface IChatState {
@@ -84,6 +86,7 @@ class ChatState extends Store<IChatState> {
 			this.state.hosts[host] = {
 				guilds: {},
 				users: {},
+				linkMetadata: {},
 			};
 		}
 		return this.state.hosts[host];
@@ -234,6 +237,15 @@ class ChatState extends Store<IChatState> {
 	clearReply(host: string, guildID: string, channelID: string) {
 		const c = this.ensureChannel(host, guildID, channelID);
 		c.replyTo = undefined;
+	}
+
+	setURLMetadata(host: string, url: string, metadata: FetchLinkMetadataResponse["data"]) {
+		const h = this.ensureHost(host);
+		h.linkMetadata[url] = metadata;
+	}
+
+	getURLMetadata(host: string, url: string) {
+		return this.ensureHost(host).linkMetadata[url];
 	}
 }
 

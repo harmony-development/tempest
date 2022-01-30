@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { linkify, nearestOverlap } from "../src/logic/formatting";
+import { getLinks, linkify, nearestOverlap } from "../src/logic/formatting";
 
 describe.concurrent("linkification", () => {
 	const cases = [
@@ -13,11 +13,7 @@ describe.concurrent("linkification", () => {
 		},
 		{
 			given: "fumo fumo\nhttp://example.com/foo mufo mufo",
-			expected: "fumo fumo <a target=\"_blank\" href=\"http://example.com/foo\">http://example.com/foo</a> mufo mufo",
-		},
-		{
-			given: "fumo fumo\nhttps://example.com/foo mufo mufo",
-			expected: "fumo fumo<a target=\"_blank\" href=\"https://example.com/foo\">https://example.com/foo</a> mufo mufo",
+			expected: "fumo fumo\n<a target=\"_blank\" href=\"http://example.com/foo\">http://example.com/foo</a> mufo mufo",
 		},
 	];
 
@@ -25,6 +21,12 @@ describe.concurrent("linkification", () => {
 		test(`${given} should format to ${expected}`, () => {
 			expect(linkify(given)).toEqual(expected);
 		});
+	});
+});
+
+describe.concurrent("get links", () => {
+	test("can find all the links", () => {
+		expect(getLinks("A https://example.com/foo Bsdf http://google.com")).toEqual(["https://example.com/foo", "http://google.com"]);
 	});
 });
 

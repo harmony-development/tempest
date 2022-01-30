@@ -264,6 +264,15 @@ export class API extends EventEmitter<{
 		});
 	}
 
+	async fetchMetadata(host: string, url: string) {
+		if (chatState.getURLMetadata(host, url)) return;
+		const { conn } = this.manager.get(host);
+		const { data } = await conn.mediaProxy.fetchLinkMetadata({
+			url,
+		}).response;
+		chatState.setURLMetadata(host, url, data);
+	}
+
 	private backoffInterceptor(next: NextUnaryFn, method: MethodInfo<any, any>, i: object, options: RpcOptions) {
 		let retries = 0;
 		const maxRetries = 3;

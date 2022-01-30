@@ -4,14 +4,17 @@
 // 	underline: boolean
 // }
 
+export function getLinks(text: string): string[] {
+	return text
+		.split(/\s/)
+		.filter(word => word.match(/^https?:\/\//));
+}
+
 /**
  * Generates anchors for the text.
  */
 export function linkify(text: string): string {
-	return text
-		.split(/\s/)
-		.map(word => word.startsWith("http") ? `<a target="_blank" href="${word}">${word}</a>` : word)
-		.join(" ");
+	return text.replaceAll(/(?:www|https?)[^\s]+/ig, "<a target=\"_blank\" href=\"$&\">$&</a>");
 }
 
 export function nearestOverlap(f: number[], formats: number[][]) {
