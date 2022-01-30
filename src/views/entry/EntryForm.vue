@@ -31,7 +31,7 @@ const fieldValues = ref<string[]>(props.form.fields.map(() => ""));
       :is-loading="isLoading"
       @click="$emit('done', fieldValues)"
     >
-      Done
+      {{ $t('done') }}
     </base-button>
   </form>
 </template>

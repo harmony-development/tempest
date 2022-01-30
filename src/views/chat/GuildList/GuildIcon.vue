@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { parseHMC } from "../../../logic/parsing";
 import { chatState } from "../../../logic/store/chat";
 import type { IMenuOption } from "../../../components/base/BaseMenu.vue";
@@ -16,16 +17,17 @@ const props = defineProps<{
 }>();
 
 const api = useAPI();
+const { t } = useI18n();
 
 const guild = computed(() => chatState.getGuild(props.host, props.guildid), undefined);
 const iconSrc = computed(() => (guild.value.data?.picture ? parseHMC(guild.value.data.picture, props.host) : undefined));
 
 const menuOptions: IMenuOption[] = [
 	{
-		text: "Leave Guild",
+		text: t("leave-guild"),
 		level: "danger",
 		async onClick() {
-			await uiState.openConfirm("Leave Guild", `Are you sure you would like to leave ${guild.value.data?.name}`);
+			await uiState.openConfirm(t("leave-guild-0"), t("are-you-sure-you-would-like-to-leave-guild-value-data-name", [guild.value.data?.name]));
 			await api.leaveGuild(props.host, props.guildid);
 		},
 	},

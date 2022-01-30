@@ -15,7 +15,7 @@ const { back, error, currentStepType, currentStep, sendChoice, sendForm, isLoadi
   </base-button>
   <div v-if="currentStepType === 'fatal'" class="text-center">
     <mdi-alert class="text-3xl textgray-300" />
-    <p>Failed to connect to server</p>
+    <p>{{ $t('failed-to-connect-to-server') }}</p>
     <p class="text-sm text-gray-400 italic">
       {{ error }}
     </p>
@@ -25,7 +25,7 @@ const { back, error, currentStepType, currentStep, sendChoice, sendForm, isLoadi
     <entry-form v-else-if="currentStep?.oneofKind === 'form'" :form="currentStep.form" :error="error" :is-loading="isLoading" @done="sendForm" />
     <div v-if="currentStepType === 'loading'" class="text-center flexcol items-center gap-3">
       <base-spinner class="text-4xl" />
-      <span class="font-bold uppercase">Loading</span>
+      <span class="font-bold uppercase">{{ $t('loading') }}</span>
     </div>
   </div>
 </template>

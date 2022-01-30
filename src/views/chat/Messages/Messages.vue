@@ -28,7 +28,7 @@ const loadMoreMessages = () => api.fetchMessageList(host.value, guild.value, cha
 });
 const scrollToBottom = () => (list.value.scrollTop = list.value.scrollHeight);
 
-onKeyStroke("Escape", () => scrollToBottom());
+onKeyStroke("escape", () => scrollToBottom());
 
 useIntersectionObserver(loader, async([{ isIntersecting }]) => {
 	if (!isIntersecting || reachedTop.value) return;

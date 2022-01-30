@@ -7,10 +7,10 @@ import BaseSpinner from "~/components/base/BaseSpinner.vue";
     <div class="flex gap-2 flex-col items-center">
       <base-spinner class="text-6xl" />
       <p class="uppercase font-bold text-lg">
-        connecting to server
+        {{ $t('connecting-to-server') }}
       </p>
-      <span class="text-gray-400">Issues connecting?</span>
-      <a class="text-primary-300" @click="$router.push({ name: 'serverselect' })">Return to main menu</a>
+      <span class="text-gray-400">{{ $t('issues-connecting') }}</span>
+      <a class="text-primary-300" @click="$router.push({ name: 'serverselect' })">{{ $t('return-to-main-menu') }}</a>
     </div>
   </div>
 </template>

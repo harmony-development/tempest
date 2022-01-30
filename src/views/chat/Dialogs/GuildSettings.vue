@@ -50,23 +50,23 @@ const save = async() => {
 <template>
   <form class="flexcol gap-8 w-90vw md:w-140" @submit.prevent>
     <h1 class="text-2xl">
-      Guild Settings
+      {{ $t('guild-settings') }}
     </h1>
     <div class="flexcol gap-8 md:flex-row w-full justify-center">
       <div class="flexcol items-center gap-2">
         <image-input v-model="changedValues.picture" class="border-primary-400 border-3" :preview-src="pictureURL" :change="changePicture" />
-        <a class="uppercase" @click="changePicture = !changePicture">Change Picture</a>
+        <a class="uppercase" @click="changePicture = !changePicture">{{ $t('change-picture') }}</a>
       </div>
       <div>
-        <base-input :model-value="displayValues.name" outlined placeholder="Guild Name" @input="(event) => changedValues.name = (event.target as HTMLInputElement).value" />
+        <base-input :model-value="displayValues.name" outlined :placeholder="$t('guild-name')" @input="(event) => changedValues.name = (event.target as HTMLInputElement).value" />
       </div>
     </div>
     <div class="flex justify-end gap-2">
       <base-button variant="text" type="button" @click="close">
-        Cancel
+        {{ $t('cancel') }}
       </base-button>
       <base-button variant="text" type="button" @click="reset">
-        Reset
+        {{ $t('reset') }}
       </base-button>
       <base-button
         variant="text"
@@ -75,7 +75,7 @@ const save = async() => {
         :disabled="isDirty"
         @click="save"
       >
-        Save
+        {{ $t('save') }}
       </base-button>
     </div>
   </form>

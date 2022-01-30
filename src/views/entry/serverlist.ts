@@ -6,4 +6,4 @@ interface IServerEntry {
 	host: string
 }
 
-export const serverList = useLocalStorage<IServerEntry[]>("serverList", [{ name: "Default", host: "chat.harmonyapp.io" }]);
+export const serverList = useLocalStorage<IServerEntry[]>("serverList", [{ name: "default", host: "chat.harmonyapp.io" }]);

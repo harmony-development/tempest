@@ -28,7 +28,7 @@ const logOut = async() => {
   <div class="w-48 flexcol bg-surface-900 border-l-2 border-surface-800">
     <div class="h-12 flex items-center p-3">
       <h3 class="text-xs uppercase text-gray-400">
-        Members
+        {{ $t('members') }}
       </h3>
     </div>
     <div class="flex-1 h-full overflow-auto compact-scrollbar">

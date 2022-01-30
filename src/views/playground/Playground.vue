@@ -1,7 +1,7 @@
 <template>
   <div>
     <base-button @click="mom = false">
-      Reset
+      {{ $t('reset') }}
     </base-button>
     <base-checkbox :checked="mom" name="Your Father?" @change="mom = $event.target.checked" />
   </div>

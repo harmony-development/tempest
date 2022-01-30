@@ -17,15 +17,15 @@ const host = ref("");
   <base-dialog v-bind="$attrs">
     <form class="flexcol gap-3" @submit.prevent>
       <h1 class="font-bold">
-        Add Server
+        {{ $t('add-server') }}
       </h1>
 
-      <base-input v-model="name" label="Server Name" />
-      <base-input v-model="host" label="Server Host" />
+      <base-input v-model="name" :label="$t('server-name')" />
+      <base-input v-model="host" :label="$t('server-host')" />
 
       <div class="flex justify-end gap-1">
         <base-button type="button" variant="text" @click="$emit('cancel')">
-          Cancel
+          {{ $t('cancel') }}
         </base-button>
         <base-button
           type="submit"
@@ -34,7 +34,7 @@ const host = ref("");
           :disabled="!name || !host"
           @click="$emit('done', name, host)"
         >
-          Done
+          {{ $t('done') }}
         </base-button>
       </div>
     </form>

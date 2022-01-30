@@ -7,7 +7,7 @@
     <div class="relative p-3 h-full z-10 image-container text-right flexcol">
       <p>{{ name }}</p>
       <p v-if="size" class="text-xs text-gray-400">
-        {{ size }} Bytes
+        {{ $t('size-bytes', [size]) }}
       </p>
       <div class="flex-1" />
       <div>

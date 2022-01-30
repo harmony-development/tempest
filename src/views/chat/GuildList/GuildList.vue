@@ -60,7 +60,7 @@ const goToGuild = (host: string, guildId: string) => {
         variant="filled"
         color="primary"
         square
-        aria-label="Create / Join Guild"
+        :aria-label="$t('create-join-guild')"
         @click="uiState.state.addGuildDialog = true"
       >
         <mdi-plus />

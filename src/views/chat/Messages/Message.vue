@@ -3,6 +3,7 @@ import { onClickOutside } from "@vueuse/core";
 import dayjs from "dayjs";
 import type { Ref } from "vue";
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import type { IMessageData } from "../../../logic/store/chat";
 import { chatState } from "../../../logic/store/chat";
 import { session } from "../../../logic/store/session";
@@ -28,12 +29,13 @@ const props = defineProps<{
 }>();
 
 const api = useAPI();
+const { t } = useI18n();
 
 const optionsOpen = ref(false);
 const optionsDropdown = ref() as Ref<HTMLElement>;
 
 const authorData = computed(() => (chatState.getUser(props.host, props.data.author)));
-const username = computed(() => props.data.override?.username || authorData.value?.username || "Unknown User");
+const username = computed(() => props.data.override?.username || authorData.value?.username || t("unknown-user"));
 
 const replyMessage = computed(() => props.data.inReplyTo ? chatState.getMessage(props.host, props.guildid, props.channelid, props.data.inReplyTo) : undefined);
 
@@ -45,7 +47,7 @@ const time = computed(() => {
 	return dayjs(+props.data.createdAt * 1000).calendar();
 });
 const onDelete = async() => {
-	await uiState.openConfirm("Are you sure?", "Are you sure you would like to delete this message?");
+	await uiState.openConfirm(t("are-you-sure"), t("are-you-sure-you-would-like-to-delete-this-message"));
 	return api.deleteMessage(props.host, props.messageid, props.guildid!, props.channelid!);
 };
 const onReply = () => {
@@ -72,7 +74,7 @@ const onReply = () => {
       <embed-message v-else-if="content?.oneofKind === 'embedMessage'" :content="content.embedMessage" />
       <div v-else>
         <mdi:alert class="text-4xl" />
-        <p>Unimplemented message type</p>
+        <p>{{ $t('unimplemented-message-type') }}</p>
       </div>
       <div class="w-full mt-2">
         <p class="time text-xs text-gray-400 float-right">
@@ -85,11 +87,11 @@ const onReply = () => {
         <div v-if="optionsOpen" ref="optionsDropdown" class="options-dropdown overflow-hidden">
           <base-list-item compact plain @click="onReply">
             <mdi-reply class="mr-2" />
-            <span>Reply</span>
+            <span>{{ $t('reply') }}</span>
           </base-list-item>
           <base-list-item compact dangerous @click="onDelete">
             <mdi-delete class="mr-2" />
-            <span>Delete Message</span>
+            <span>{{ $t('delete-message') }}</span>
           </base-list-item>
         </div>
       </pop-in-transition>

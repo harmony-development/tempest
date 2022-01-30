@@ -35,11 +35,11 @@ const nextClicked = () => {
 <template>
   <add-server-dialog v-model="addingServer" @cancel="addingServer = false" @done="addServer" />
   <h1 class="text-lg font-bold">
-    Welcome to Tempest
+    {{ $t('welcome-to-tempest') }}
   </h1>
   <div class="text-sm w-full">
     <base-button variant="filled" color="primary" @click="addingServer = true">
-      Add Server
+      {{ $t('add-server') }}
     </base-button>
   </div>
   <ol class="bg-surface-800 rounded-sm overflow-hidden">
@@ -70,7 +70,7 @@ const nextClicked = () => {
     :disabled="!serverList[selectedServer]"
     @click="nextClicked"
   >
-    Next
+    {{ $t('next') }}
   </base-button>
 </template>
 

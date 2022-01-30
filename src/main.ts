@@ -35,6 +35,7 @@ createApp(App)
 	.use(createI18n({
 		locale: "en",
 		legacy: false,
+		globalInjection: true,
 		messages,
 	}))
 	.mount("#app");

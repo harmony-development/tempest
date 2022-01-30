@@ -3,6 +3,7 @@ import { computed, defineAsyncComponent, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 import type { MethodInfo, RpcError, RpcOptions } from "@protobuf-ts/runtime-rpc";
+import { useI18n } from "vue-i18n";
 import { chatState } from "../../logic/store/chat";
 import { session } from "../../logic/store/session";
 import { uiState } from "../../logic/store/ui";
@@ -31,18 +32,19 @@ const { host: selectedHost, guild: selectedGuild, channel: selectedChannel } = u
 
 const api = useAPI();
 const toast = useToast();
+const { t } = useI18n();
 session.value && api.setSession(session.value.host, session.value.session);
 
 api.on("invalidSession", () => router.push({ name: "serverselect" }));
 api.on("ratelimit", ({ error: _error, method, i, options }: {error: RpcError; method: MethodInfo<any, any>; i: object; options: RpcOptions}) => {
-	toast.error(`Rate limited while executing ${method.name}.`);
+	toast.error(t("rate-limited-while-executing-method-name", [method.name]));
 });
 
 const channelData = computed(() => chatState.getChannel(selectedHost.value!, selectedGuild.value!, selectedChannel.value!));
 
 onMounted(async() => {
 	try {
-		if (!session.value) throw new Error("No session");
+		if (!session.value) throw new Error(t("no-session"));
 		await api.checkLoggedIn(session.value.host, session.value.session);
 		sessionValidated.value = true;
 		const handler = pubsub("", api);
@@ -97,7 +99,7 @@ watch([selectedHost, selectedGuild], ([host, guild], [prevHost, prevGuild]) => {
           icon
           dense
           class="!lg:hidden mr-2"
-          aria-label="Left Drawer"
+          :aria-label="$t('left-drawer')"
           @click="leftDrawer = true"
         >
           <mdi-menu />
@@ -110,7 +112,7 @@ watch([selectedHost, selectedGuild], ([host, guild], [prevHost, prevGuild]) => {
           icon
           dense
           class="!lg:hidden"
-          aria-label="Right Drawer"
+          :aria-label="$t('right-drawer')"
           @click="rightDrawer = true"
         >
           <mdi-account-multiple />
@@ -126,10 +128,10 @@ watch([selectedHost, selectedGuild], ([host, guild], [prevHost, prevGuild]) => {
         </div>
         <div class="bg-surface-800 rounded-full p-2 px-4">
           <p v-if="selectedGuild">
-            Select a channel to start chatting
+            {{ $t('select-a-channel-to-start-chatting') }}
           </p>
           <p v-else>
-            Select a guild to get started
+            {{ $t('select-a-guild-to-get-started') }}
           </p>
         </div>
       </div>

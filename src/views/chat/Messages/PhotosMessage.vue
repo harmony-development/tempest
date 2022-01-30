@@ -56,7 +56,7 @@ const getThumbnail = (data: Uint8Array) => URL.createObjectURL(new Blob([data], 
           <div v-if="error" class="w-full text-center">
             <mdi:alert-circle-outline />
             <p class="text-xl">
-              Failed to load image
+              {{ $t('failed-to-load-image') }}
             </p>
             <base-button
               variant="outlined"
@@ -66,7 +66,7 @@ const getThumbnail = (data: Uint8Array) => URL.createObjectURL(new Blob([data], 
                 error = false;
               "
             >
-              Reload
+              {{ $t('reload') }}
             </base-button>
           </div>
           <mdi:loading v-else class="animate-spin" />

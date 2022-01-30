@@ -27,13 +27,13 @@ const onCreateClicked = async() => {
 <template>
   <form class="flexcol gap-2" @submit.prevent>
     <h1 class="text-xl">
-      Add Channel
+      {{ $t('add-channel') }}
     </h1>
     <span class="text-red-400">{{ error?.code || error }}</span>
-    <base-input v-model="channelName" label="Channel Name" />
+    <base-input v-model="channelName" :label="$t('channel-name')" />
     <div class="flex justify-end gap-2">
       <base-button color="secondary" variant="text" type="button" @click="close">
-        Cancel
+        {{ $t('cancel') }}
       </base-button>
       <base-button
         variant="text"
@@ -42,7 +42,7 @@ const onCreateClicked = async() => {
         :disabled="!channelName"
         @click="onCreateClicked"
       >
-        Create
+        {{ $t('create') }}
       </base-button>
     </div>
   </form>

@@ -30,7 +30,7 @@ watch([selectedHost, selectedGuild], ([host, guild], [prevHost, prevGuild]) => {
         <base-button
           icon
           dense
-          aria-label="Guild Settings"
+          :aria-label="$t('guild-settings')"
           @click="uiState.state.guildSettingsDialog = true"
         >
           <mdi-cog />
@@ -42,7 +42,7 @@ watch([selectedHost, selectedGuild], ([host, guild], [prevHost, prevGuild]) => {
         channels
       </p>
       <base-tooltip text="Add Channel">
-        <base-button icon dense aria-label="Add Channel" @click="uiState.state.addChannelDialog = true">
+        <base-button icon dense :aria-label="$t('add-channel')" @click="uiState.state.addChannelDialog = true">
           <mdi-plus />
         </base-button>
       </base-tooltip>

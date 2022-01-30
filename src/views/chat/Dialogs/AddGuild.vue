@@ -38,14 +38,14 @@ const onCreateClicked = async() => {
 <template>
   <form v-if="screen === 'join'" class="flexcol gap-2" @submit.prevent>
     <h1 class="text-xl">
-      Join Guild
+      {{ $t('join-guild') }}
     </h1>
     <span class="text-red-400">{{ error?.code }}</span>
-    <base-input v-model="joinCode" label="Join Code" />
-    <a @click="screen = 'create'">Create guild?</a>
+    <base-input v-model="joinCode" :label="$t('join-code')" />
+    <a @click="screen = 'create'">{{ $t('create-guild') }}</a>
     <div class="flex justify-end gap-2">
       <base-button variant="text" type="button" @click="close">
-        Cancel
+        {{ $t('cancel') }}
       </base-button>
       <base-button
         variant="text"
@@ -54,20 +54,20 @@ const onCreateClicked = async() => {
         :disabled="!joinCode"
         @click="onJoinClicked"
       >
-        Join
+        {{ $t('join') }}
       </base-button>
     </div>
   </form>
   <form v-else class="flexcol gap-2" @submit.prevent>
     <h1 class="text-xl">
-      Create Guild
+      {{ $t('create-guild-0') }}
     </h1>
     <span class="text-red-400">{{ error?.code }}</span>
-    <base-input v-model="guildName" label="Guild Name" />
-    <a @click="screen = 'join'">Join guild?</a>
+    <base-input v-model="guildName" :label="$t('guild-name')" />
+    <a @click="screen = 'join'">{{ $t('join-guild-0') }}</a>
     <div class="flex justify-end gap-2">
       <base-button variant="text" type="button" @click="close">
-        Cancel
+        {{ $t('cancel') }}
       </base-button>
       <base-button
         variant="text"
@@ -76,7 +76,7 @@ const onCreateClicked = async() => {
         :disabled="!guildName"
         @click="onCreateClicked"
       >
-        Create
+        {{ $t('create') }}
       </base-button>
     </div>
   </form>

@@ -10,7 +10,7 @@
     <base-input
       name="username"
       :type="'username'"
-      placeholder="Username"
+      :placeholder="$t('username')"
       :model-value="displayValues.username"
       @input="(event) => changedValues.username = (event.target as HTMLInputElement).value"
     />
@@ -21,10 +21,10 @@
     />
     <div class="flex justify-end gap-2">
       <base-button variant="outlined" type="reset" :disabled="dirty" @click="handleReset">
-        Reset
+        {{ $t('reset') }}
       </base-button>
       <base-button button variant="outlined" color="primary" type="submit" :disabled="dirty">
-        Save
+        {{ $t('save') }}
       </base-button>
     </div>
   </form>

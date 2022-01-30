@@ -9,7 +9,7 @@
           </h1>
           <div class="flex-1" />
           <p class="text-xs">
-            {{ file.size }} Bytes
+            {{ $t('file-size-bytes', [file.size]) }}
           </p>
         </div>
         <div
@@ -39,7 +39,7 @@
   <div class="mx-3 bg-surface-800 rounded-xl">
     <div v-show="replyTo" class="bg-surface-900 flex justify-center items-center rounded-t-xl relative py-1 px-2 overflow-hidden">
       <span class="w-full mr-auto">
-        Replying to <strong>{{ replyTo?.username }}</strong>
+        {{ $t('replying-to') }} <strong>{{ replyTo?.username }}</strong>
       </span>
       <button class="absolute bg-surface-800 hover:bg-surface-600 h-full right-0 top-0 square flex items-center justify-center" @click="clearReply">
         <mdi:close />
@@ -68,7 +68,7 @@
         plain
         multiline
         no-border
-        label="Write your message..."
+        :label="$t('write-your-message')"
         name="message-input"
         :rows="1"
         class="!bg-transparent w-full"
@@ -211,7 +211,7 @@ const onKeyDown = async(ev: KeyboardEvent) => {
 		lastTyping = Date.now();
 		api.sendTyping(host.value, guild.value, channel.value);
 	}
-	if (ev.key !== "Enter" || ev.shiftKey) return;
+	if (ev.key !== this.$t("enter") || ev.shiftKey) return;
 	ev.preventDefault();
 	sendMessage();
 };
