@@ -8,6 +8,7 @@ import { chatState } from "../../../logic/store/chat";
 import { session } from "../../../logic/store/session";
 import { uiState } from "../../../logic/store/ui";
 import { useAPI } from "../../../services/api";
+import { getMessageText } from "../../../logic/conversions/messages";
 import AttachmentMessage from "./AttachmentMessage.vue";
 import EmbedMessage from "./EmbedMessage.vue";
 import PhotosMessage from "./PhotosMessage.vue";
@@ -32,8 +33,9 @@ const optionsOpen = ref(false);
 const optionsDropdown = ref() as Ref<HTMLElement>;
 
 const authorData = computed(() => (chatState.getUser(props.host, props.data.author)));
-
 const username = computed(() => props.data.override?.username || authorData.value?.username || "Unknown User");
+
+const replyMessage = computed(() => props.data.inReplyTo ? chatState.getMessage(props.host, props.guildid, props.channelid, props.data.inReplyTo) : undefined);
 
 onClickOutside(optionsDropdown, () => (optionsOpen.value = false));
 
@@ -45,6 +47,10 @@ const time = computed(() => {
 const onDelete = async() => {
 	await uiState.openConfirm("Are you sure?", "Are you sure you would like to delete this message?");
 	return api.deleteMessage(props.host, props.messageid, props.guildid!, props.channelid!);
+};
+const onReply = () => {
+	chatState.setReplyTo(props.host, props.guildid, props.channelid, props.messageid);
+	optionsOpen.value = false;
 };
 </script>
 
@@ -77,7 +83,11 @@ const onDelete = async() => {
     <div class="h-full relative">
       <pop-in-transition>
         <div v-if="optionsOpen" ref="optionsDropdown" class="options-dropdown overflow-hidden">
-          <base-list-item dangerous @click="onDelete">
+          <base-list-item compact plain @click="onReply">
+            <mdi-reply class="mr-2" />
+            <span>Reply</span>
+          </base-list-item>
+          <base-list-item compact dangerous @click="onDelete">
             <mdi-delete class="mr-2" />
             <span>Delete Message</span>
           </base-list-item>
@@ -86,6 +96,10 @@ const onDelete = async() => {
       <base-button icon dense class="text-md messageOptions" @click="optionsOpen = true">
         <mdi-dots-vertical />
       </base-button>
+    </div>
+    <div v-if="replyMessage" class="text-xs text-gray-400 hover:text-white flex items-center gap-2 py-1">
+      <avatar :userid="replyMessage.author" class="w-4" />
+      {{ getMessageText(replyMessage) }}
     </div>
   </div>
 </template>

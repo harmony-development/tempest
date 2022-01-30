@@ -21,11 +21,12 @@ const props = defineProps<{
 
 const value = useVModel(props, "modelValue", emit);
 const input = ref() as Ref<HTMLInputElement>;
+const inputHeight = ref(0);
 
 const resizeInput = () => {
 	if (!input.value) return;
 	input.value.style.height = "5px";
-	input.value.style.height = `${Math.min(input.value.scrollHeight, 200)}px`;
+	inputHeight.value = Math.min(input.value.scrollHeight, 200);
 };
 
 if (props.multiline === true) watch(value, resizeInput);
@@ -56,6 +57,7 @@ watch(
     :placeholder="props.noBorder ? props.label : ''"
     :autocomplete="autocomplete"
     multiline
+    :style="{ height: `${inputHeight}px` }"
     wrap="hard"
   />
   <input
@@ -74,6 +76,6 @@ watch(
 
 <style lang="postcss" scoped>
 .input-input {
-	@apply max-h-200 bg-transparent z-1 w-full px-3 py-4 block appearance-none focus:outline-none resize-none break-words;
+	@apply max-h-200 bg-transparent z-1 w-full px-3 py-2 block appearance-none focus:outline-none resize-none break-words;
 }
 </style>

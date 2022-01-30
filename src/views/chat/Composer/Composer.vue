@@ -36,54 +36,64 @@
       </div>
     </div>
   </div>
-  <div class="flex items-center mx-3 bg-surface-800 rounded-xl">
-    <base-popover :open="pickerOpen" placement="top-start" arrow offset-horizontally :offset="16">
-      <button
-        variant="text"
-        icon
-        class="picker-button pl-3 py-4 hover:text-gray-400"
-        @click="pickerOpen = true"
-      >
-        <mdi-add :class="{ pickerOpen }" class="transition-all duration-100" />
+  <div class="mx-3 bg-surface-800 rounded-xl">
+    <div v-show="replyTo" class="bg-surface-900 flex justify-center items-center rounded-t-xl relative py-1 px-2 overflow-hidden">
+      <span class="w-full mr-auto">
+        Replying to <strong>{{ replyTo?.username }}</strong>
+      </span>
+      <button class="absolute bg-surface-800 hover:bg-surface-600 h-full right-0 top-0 square flex items-center justify-center" @click="clearReply">
+        <mdi:close />
       </button>
-      <template #content>
-        <message-type-picker
-          ref="messageTypePicker"
-          @sent="pickerOpen = false"
-          @update:message-type="onMessageTypeChange"
-        />
-      </template>
-    </base-popover>
-    <base-input
-      v-model="text"
-      plain
-      multiline
-      no-border
-      label="Write your message..."
-      name="message-input"
-      :rows="1"
-      class="!bg-transparent w-full"
-      @keydown="onKeyDown"
-    />
-    <base-button
-      variant="text"
-      :disabled="uploadQueue.length === 0 && isTextEmpty"
-      icon
-      class="picker-button"
-      color="primary"
-      @click="sendMessage"
-    >
-      <mdi-send :class="{ pickerOpen }" class="transition-all duration-100" />
-    </base-button>
-    <input ref="filePicker" type="file" class="hidden" multiple @change="onFilesSelected">
-    <input
-      ref="imagePicker"
-      type="file"
-      class="hidden"
-      multiple
-      accept="image/*"
-      @change="onFilesSelected"
-    >
+    </div>
+    <div class="flex items-center">
+      <base-popover :open="pickerOpen" placement="top-start" arrow offset-horizontally :offset="16">
+        <button
+          variant="text"
+          icon
+          class="picker-button pl-3 py-4 hover:text-gray-400"
+          @click="pickerOpen = true"
+        >
+          <mdi-add :class="{ pickerOpen }" class="transition-all duration-100" />
+        </button>
+        <template #content>
+          <message-type-picker
+            ref="messageTypePicker"
+            @sent="pickerOpen = false"
+            @update:message-type="onMessageTypeChange"
+          />
+        </template>
+      </base-popover>
+      <base-input
+        v-model="text"
+        plain
+        multiline
+        no-border
+        label="Write your message..."
+        name="message-input"
+        :rows="1"
+        class="!bg-transparent w-full"
+        @keydown="onKeyDown"
+      />
+      <base-button
+        variant="text"
+        :disabled="uploadQueue.length === 0 && isTextEmpty"
+        icon
+        class="picker-button"
+        color="primary"
+        @click="sendMessage"
+      >
+        <mdi-send :class="{ pickerOpen }" class="transition-all duration-100" />
+      </base-button>
+      <input ref="filePicker" type="file" class="hidden" multiple @change="onFilesSelected">
+      <input
+        ref="imagePicker"
+        type="file"
+        class="hidden"
+        multiple
+        accept="image/*"
+        @change="onFilesSelected"
+      >
+    </div>
   </div>
   <span class="my-auto mx-3 text-sm border-white" :class="{'invisible': typerNames.length === 0}">
     <mdi:dots-horizontal class="inline animate-pulse text-xl mb-0.5" />
@@ -93,7 +103,6 @@
 </template>
 
 <script lang="ts" setup>
-import { Attachment, FormattedText, Photo } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
 import { onClickOutside, useEventListener } from "@vueuse/core";
 import type { Ref } from "vue";
 import { computed, ref, toRefs } from "vue";
@@ -131,6 +140,16 @@ const uploadQueue = ref<
 const typers = computed(() => chatState.getTypers(host.value, guild.value, channel.value).filter(userID => userID !== session.value?.userID));
 const typerNames = computed(() => typers.value.map(user => chatState.getUser(host.value, user)?.username));
 const isTextEmpty = computed(() => text.value.replace(/\s/g, "").length === 0);
+const replyTo = computed(() => {
+	const replyTo = chatState.ensureChannel(host.value, guild.value, channel.value)?.replyTo;
+	if (!replyTo) return;
+	const message = chatState.getMessage(host.value, guild.value, channel.value, replyTo);
+	if (!message) return;
+	return {
+		replyTo,
+		username: chatState.getUser(host.value, message.author)?.username,
+	};
+});
 
 onClickOutside(messageTypePicker, () => (pickerOpen.value = false));
 
@@ -146,6 +165,8 @@ useEventListener("paste" as any, (ev: ClipboardEvent) => {
 		});
 	}
 });
+
+const clearReply = () => chatState.clearReply(host.value, guild.value, channel.value);
 
 const onFilesSelected = (ev: Event) => {
 	const files = (ev.target as HTMLInputElement).files!;
@@ -178,16 +199,17 @@ const sendMessage = async() => {
 	const content = text.value.replace(/\s\s+/g, " ");
 	const files = uploadQueue.value.map(({ file }) => file);
 	text.value = "";
-	await api.sendMessage(host.value, guild.value, channel.value, content, files);
+	await api.sendMessage(host.value, guild.value, channel.value, content, files, replyTo.value?.replyTo);
 	uploadQueue.value.forEach(({ url }) => URL.revokeObjectURL(url));
 	uploadQueue.value = [];
+	chatState.clearReply(host.value, guild.value, channel.value);
 };
 
 let lastTyping = 0;
 const onKeyDown = async(ev: KeyboardEvent) => {
 	if (Date.now() - lastTyping > 2000) {
 		lastTyping = Date.now();
-		await api.sendTyping(host.value, guild.value, channel.value);
+		api.sendTyping(host.value, guild.value, channel.value);
 	}
 	if (ev.key !== "Enter" || ev.shiftKey) return;
 	ev.preventDefault();

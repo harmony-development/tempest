@@ -40,6 +40,7 @@ export interface IChannel {
 	data?: IChannelData
 	messages: Record<string, IMessageData | undefined>
 	messageList: string[]
+	replyTo?: string
 	typers: {
 		[id: string]: number
 	}
@@ -223,6 +224,16 @@ class ChatState extends Store<IChatState> {
 			if (time && time + timeout < Date.now())
 				delete c.typers[userID];
 		}, timeout * 2);
+	}
+
+	setReplyTo(host: string, guildID: string, channelID: string, messageID: string) {
+		const c = this.ensureChannel(host, guildID, channelID);
+		c.replyTo = messageID;
+	}
+
+	clearReply(host: string, guildID: string, channelID: string) {
+		const c = this.ensureChannel(host, guildID, channelID);
+		c.replyTo = undefined;
 	}
 }
 

@@ -52,11 +52,12 @@ export class API extends EventEmitter<{
 		return conn.auth.checkLoggedIn({});
 	}
 
-	async sendMessage(host: string, guildId: string, channelId: string, text: string, files: File[]) {
+	async sendMessage(host: string, guildId: string, channelId: string, text: string, files: File[], inReplyTo?: string) {
 		const { conn } = this.manager.get(host);
 		const send = (content: Content["content"]) => conn.chat.sendMessage({
 			guildId,
 			channelId,
+			inReplyTo,
 			content: {
 				content,
 			},
