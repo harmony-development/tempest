@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { getLinks, linkify, nearestOverlap } from "../src/logic/formatting";
+import { getLinks, linkify } from "../src/logic/formatting";
 
 describe.concurrent("linkification", () => {
 	const cases = [

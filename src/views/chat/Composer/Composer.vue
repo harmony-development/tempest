@@ -211,7 +211,7 @@ const onKeyDown = async(ev: KeyboardEvent) => {
 		lastTyping = Date.now();
 		api.sendTyping(host.value, guild.value, channel.value);
 	}
-	if (ev.key !== this.$t("enter") || ev.shiftKey) return;
+	if (ev.key !== "Enter" || ev.shiftKey) return;
 	ev.preventDefault();
 	sendMessage();
 };
