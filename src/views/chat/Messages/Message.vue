@@ -18,6 +18,7 @@ import PopInTransition from "~/components/transitions/PopInTransition.vue";
 import Avatar from "~/components/chat/Avatar.vue";
 import BaseListItem from "~/components/base/BaseListItem.vue";
 import BaseButton from "~/components/base/BaseButton.vue";
+import BasePopover from "~/components/base/BasePopover.vue";
 
 const props = defineProps<{
 	host: string
@@ -58,7 +59,7 @@ const onReply = () => {
 
 <template>
   <div class="flex gap-2 items-start messageContainer" :class="{ ownMessage: isOwnMessage }">
-    <div v-if="!hideAvatar" class="text-center overflow-hidden w-16">
+    <div v-if="!hideAvatar" class="text-center overflow-hidden w-16 flex-shrink-0">
       <avatar :userid="data.author" :override="data.override?.avatar" class="h-7 w-7" loading="lazy" />
       <p class="mt-2 text-xs text-surface-300 overflow-hidden">
         {{ username }}
@@ -82,9 +83,12 @@ const onReply = () => {
         </p>
       </div>
     </div>
-    <div class="h-full relative">
-      <pop-in-transition>
-        <div v-if="optionsOpen" ref="optionsDropdown" class="options-dropdown overflow-hidden">
+    <base-popover :open="optionsOpen" placement="right-start">
+      <base-button icon dense class="text-md messageOptions" @click="optionsOpen = true">
+        <mdi-dots-vertical />
+      </base-button>
+      <template #content>
+        <div ref="optionsDropdown" class="bg-surface-600 rounded-lg overflow-hidden">
           <base-list-item compact plain @click="onReply">
             <mdi-reply class="mr-2" />
             <span>{{ $t('reply') }}</span>
@@ -94,12 +98,9 @@ const onReply = () => {
             <span>{{ $t('delete-message') }}</span>
           </base-list-item>
         </div>
-      </pop-in-transition>
-      <base-button icon dense class="text-md messageOptions" @click="optionsOpen = true">
-        <mdi-dots-vertical />
-      </base-button>
-    </div>
-    <div v-if="replyMessage" class="text-xs text-gray-400 hover:text-white flex items-center gap-2 py-1">
+      </template>
+    </base-popover>
+    <div v-if="replyMessage" class="text-xs text-gray-400 hover:text-white flex items-center gap-2 py-1 overflow-hidden overflow-ellipsis break-words whitespace-pre">
       <avatar :userid="replyMessage.author" class="w-4" />
       {{ getMessageText(replyMessage) }}
     </div>
@@ -112,24 +113,19 @@ const onReply = () => {
         p-3
         pb-2
         rounded-sm
-        break-words
-        whitespace-pre-wrap
-        max-w-50ch
+        max-w-full
+        sm:max-w-50ch
         transition
-        duration-75 break-all;
+        duration-75;
 	box-shadow: 0px 1px 1px #00000050;
+  & ::v-deep(a) {
+    @apply break-all;
+    word-break: break-word;
+  }
 }
 
 .ownMessage {
 	@apply flex-row-reverse;
-
-	& .options-dropdown {
-		@apply transform -translate-x-full -left-2;
-	}
-}
-
-.options-dropdown {
-	@apply bg-black rounded-sm absolute left-[120%];
 }
 
 .messageContainer {

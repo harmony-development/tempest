@@ -14,10 +14,10 @@
 </template>
 
 <script setup lang="ts">
-import { arrow, computePosition, offset, shift, size } from "@floating-ui/dom";
+import { arrow, computePosition, flip, offset, shift, size } from "@floating-ui/dom";
 import type { ClientRectObject, Placement } from "@floating-ui/core";
 import type { Ref } from "vue";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 const props = defineProps<{
 	open?: boolean
 	openOnHover?: boolean
@@ -28,6 +28,7 @@ const props = defineProps<{
 	customPosition?: {x: number; y: number}
 }>();
 
+const open = computed(() => props.open);
 const root = ref() as Ref<HTMLElement>;
 const popover = ref() as Ref<HTMLElement>;
 const arrowElement = ref() as Ref<HTMLElement>;
@@ -57,6 +58,7 @@ const target = computed((): Element | {
 const middleware = computed(() => {
 	const enabled = [
 		offset(8),
+		flip(),
 		shift(),
 	];
 	if (props.matchWidth) {
@@ -101,9 +103,17 @@ async function updatePosition() {
 	}
 }
 
+watch(open, () => updatePosition());
+
 onMounted(async() => {
-	target.value instanceof Element && target.value.setAttribute("data-poptarget", "");
 	updatePosition();
+	if (!(target.value instanceof HTMLElement)) return;
+	target.value.setAttribute("data-poptarget", "");
+	if (props.openOnHover) {
+		target.value.addEventListener("mouseenter", () => {
+			updatePosition();
+		});
+	}
 });
 
 </script>

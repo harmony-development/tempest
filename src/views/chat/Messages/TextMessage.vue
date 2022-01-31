@@ -34,7 +34,7 @@ watch(urls, async() => {
 </script>
 
 <template>
-  <div class="content-out whitespace-pre-wrap">
+  <div class="content-out">
     <formatted-text :content="content!" />
     <div v-for="(metadata, i) of metadatas" :key="urls?.[i]" class="p-3 flexcol gap-2 mt-2 bg-surface-900">
       <template v-if="metadata?.oneofKind === 'isSite'">
@@ -57,10 +57,10 @@ p {
 	@apply inline-block;
 }
 .content-out::v-deep(.codeblock) {
-	@apply w-full block break-all break-words whitespace-pre-wrap pr-3 rounded-sm bg-black;
+	@apply w-full block pr-3 rounded-sm bg-black;
 }
 .content-out ::v-deep(.codeblock > code) {
-	@apply break-all w-full block p-3 pl-4 break-words whitespace-pre-wrap;
+	@apply break-all w-full block p-3 pl-4;
 }
 .content-out ::v-deep(.msg-p) {
 	margin-bottom: 0px;
