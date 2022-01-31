@@ -145,6 +145,20 @@ export class API extends EventEmitter<{
 		chatState.setMessageList(host, guildId, channelId, messageList, messageId !== undefined);
 	}
 
+	async fetchUser(host: string, userId: string) {
+		const { conn } = this.manager.get(host);
+		const { profile } = await conn.profile.getProfile({
+			userId,
+		}).response;
+		if (!profile) return;
+		chatState.setUserData(host, userId, {
+			username: profile.userName,
+			status: profile.userStatus,
+			isBot: profile.isBot,
+			picture: profile.userAvatar,
+		});
+	}
+
 	async fetchMemberList(host: string, guildId: string) {
 		const { conn } = this.manager.get(host);
 		const { members } = await conn.chat.getGuildMembers({

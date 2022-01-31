@@ -17,6 +17,7 @@ import MemberList from "./MemberList/MemberList.vue";
 import Messages from "./Messages/Messages.vue";
 import Composer from "./Composer/Composer.vue";
 import GuildSettings from "./Dialogs/GuildSettings.vue";
+import MemberItem from "./MemberList/MemberItem.vue";
 import { pubsub } from "~/logic/api/pubsub";
 import BaseDrawer from "~/components/base/BaseDrawer.vue";
 
@@ -33,6 +34,8 @@ const { host: selectedHost, guild: selectedGuild, channel: selectedChannel } = u
 const api = useAPI();
 const toast = useToast();
 const { t } = useI18n();
+const ownUserID = computed(() => session.value?.userID);
+const host = computed(() => session.value?.host);
 session.value && api.setSession(session.value.host, session.value.session);
 
 api.on("invalidSession", () => router.push({ name: "serverselect" }));
@@ -42,6 +45,14 @@ api.on("ratelimit", ({ error: _error, method, i, options }: {error: RpcError; me
 
 const channelData = computed(() => chatState.getChannel(selectedHost.value!, selectedGuild.value!, selectedChannel.value!));
 
+const openUserSettings = () => uiState.state.userSettingsDialog = true;
+const logOut = async() => {
+	await router.push({
+		name: "serverselect",
+	});
+	session.value = undefined;
+};
+
 onMounted(async() => {
 	try {
 		if (!session.value) throw new Error(t("no-session"));
@@ -49,6 +60,7 @@ onMounted(async() => {
 		sessionValidated.value = true;
 		const handler = pubsub("", api);
 		api.getStream(session.value.host).responses.onMessage(handler);
+		await api.fetchUser("", session.value.userID);
 	}
 	catch (e) {
 		router.push({ name: "serverselect" });
@@ -138,7 +150,21 @@ watch([selectedHost, selectedGuild], ([host, guild], [prevHost, prevGuild]) => {
     </div>
     <base-drawer v-model="rightDrawer" right>
       <div class="flex h-full">
-        <member-list v-if="selectedGuild" />
+        <div class="w-48 flexcol bg-surface-900 border-l-2 border-surface-800">
+          <div class="h-12 flex items-center p-3">
+            <h3 class="text-xs uppercase text-gray-400">
+              {{ $t('members') }}
+            </h3>
+          </div>
+          <div class="flex-1 h-full overflow-auto compact-scrollbar">
+            <member-list v-if="selectedGuild" />
+          </div>
+          <base-menu v-if="ownUserID" placement="top" match-width :offset="0" :options="[{text: 'Settings', level: 'plain', onClick: openUserSettings}, {text: 'Log Out', level: 'plain', onClick: logOut}]">
+            <template #activator="{activate}">
+              <member-item :userid="ownUserID" :host="''" @click="activate" />
+            </template>
+          </base-menu>
+        </div>
       </div>
     </base-drawer>
   </div>

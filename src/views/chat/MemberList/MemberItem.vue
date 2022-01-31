@@ -1,14 +1,13 @@
 <script lang="ts" setup>
 import { computed } from "vue";
 import { chatState } from "../../../logic/store/chat";
-import { useChatRoute } from "../../../router";
 import BaseListItem from "~/components/base/BaseListItem.vue";
 import Avatar from "~/components/chat/Avatar.vue";
 const props = defineProps<{
 	userid: string
+	host: string
 }>();
-const { host } = useChatRoute();
-const data = computed(() => chatState.getUser(host.value!, props.userid));
+const data = computed(() => chatState.getUser(props.host, props.userid));
 </script>
 
 <template>

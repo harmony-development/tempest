@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
+import { session } from "../../logic/store/session";
 import AddServerDialog from "./AddServerDialog.vue";
 import { serverList } from "./serverlist";
 import BaseButton from "~/components/base/BaseButton.vue";
@@ -30,6 +31,10 @@ const nextClicked = () => {
 		},
 	});
 };
+
+onMounted(() => {
+	if (session.value) router.push({ name: "chat" });
+});
 </script>
 
 <template>
