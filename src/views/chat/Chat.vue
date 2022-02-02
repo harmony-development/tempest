@@ -63,6 +63,7 @@ onMounted(async() => {
 		await api.fetchUser("", session.value.userID);
 	}
 	catch (e) {
+		session.value = undefined;
 		router.push({ name: "serverselect" });
 	}
 });
