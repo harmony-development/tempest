@@ -8,7 +8,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <li
+  <span
     ref="item"
     role="button"
     class="list-item"
@@ -22,7 +22,7 @@ const props = defineProps<{
   >
     <slot name="icon" />
     <slot />
-  </li>
+  </span>
 </template>
 
 <style lang="postcss" scoped>
