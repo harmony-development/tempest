@@ -45,7 +45,7 @@ onClickOutside(optionsDropdown, () => (optionsOpen.value = false));
 const isOwnMessage = computed(() => props.data?.author === session.value?.userID);
 const content = computed(() => props.data.content?.content);
 const time = computed(() => {
-	return dayjs(+props.data.createdAt * 1000).calendar();
+	return dayjs(+props.data.createdAt).calendar();
 });
 const onDelete = async() => {
 	await uiState.openConfirm(t("are-you-sure"), t("are-you-sure-you-would-like-to-delete-this-message"));
