@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useVModel } from "@vueuse/core";
 import type { Ref } from "vue";
-import { onMounted, ref, watch } from "vue";
+import { defineComponent, onMounted, ref, watch } from "vue";
 
 const emit = defineEmits(["update:modelValue"]);
 
@@ -44,6 +44,12 @@ watch(
 );
 </script>
 
+<script lang="ts">
+export default defineComponent({
+	inheritAttrs: false,
+});
+</script>
+
 <template>
   <textarea
     v-if="multiline"
@@ -58,12 +64,14 @@ watch(
     :autocomplete="autocomplete"
     multiline
     :style="{ height: `${inputHeight}px` }"
+    v-bind="$attrs"
     wrap="hard"
   />
   <input
     v-else
     :id="props.name"
     ref="input"
+    v-bind="$attrs"
     v-model="value"
     :type="props.type"
     :required="props.required"

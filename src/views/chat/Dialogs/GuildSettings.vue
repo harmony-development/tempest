@@ -65,7 +65,7 @@ const save = async() => {
       <base-button variant="text" type="button" @click="close">
         {{ $t('cancel') }}
       </base-button>
-      <base-button variant="text" type="button" @click="reset">
+      <base-button variant="text" type="button" :disabled="isDirty" @click="reset">
         {{ $t('reset') }}
       </base-button>
       <base-button

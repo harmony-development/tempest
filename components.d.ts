@@ -34,6 +34,8 @@ declare module 'vue' {
     'Mdi:dotsHorizontal': typeof import('~icons/mdi/dots-horizontal')['default']
     'Mdi:download': typeof import('~icons/mdi/download')['default']
     'Mdi:file': typeof import('~icons/mdi/file')['default']
+    'Mdi:help': typeof import('~icons/mdi/help')['default']
+    'Mdi:helpCircleOutline': typeof import('~icons/mdi/help-circle-outline')['default']
     'Mdi:loading': typeof import('~icons/mdi/loading')['default']
     'Mdi:picture': typeof import('~icons/mdi/picture')['default']
     MdiAccountMultiple: typeof import('~icons/mdi/account-multiple')['default']
