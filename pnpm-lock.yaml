@@ -4,7 +4,7 @@ specifiers:
   '@antfu/eslint-config': ^0.14.2
   '@floating-ui/core': ^0.2.2
   '@floating-ui/dom': ^0.1.10
-  '@harmony-dev/harmony-web-sdk': ^0.0.3-alpha.2
+  '@harmony-dev/harmony-web-sdk': ^0.0.3-alpha.3
   '@iconify/json': 1.1.432
   '@intlify/vite-plugin-vue-i18n': ^3.3.0
   '@popperjs/core': ^2.11.2
@@ -49,7 +49,7 @@ specifiers:
 dependencies:
   '@floating-ui/core': 0.2.2
   '@floating-ui/dom': 0.1.10
-  '@harmony-dev/harmony-web-sdk': 0.0.3-alpha.2
+  '@harmony-dev/harmony-web-sdk': 0.0.3-alpha.3
   '@intlify/vite-plugin-vue-i18n': 3.3.0_19e39cef116c9b5d38ed330e8b3a57ba
   '@popperjs/core': 2.11.2
   '@vueuse/core': 7.0.1_vue@3.2.22
@@ -1468,8 +1468,8 @@ packages:
       '@floating-ui/core': 0.3.1
     dev: false
 
-  /@harmony-dev/harmony-web-sdk/0.0.3-alpha.2:
-    resolution: {integrity: sha512-C5SItD+TPxk5m7NUvLGuWeSOWJEqhbCZjSW2UVP1CaC/HGpq5unfKiXwvT/2Sbd5CrjQW7pWlBo+3pRK6oW3/g==}
+  /@harmony-dev/harmony-web-sdk/0.0.3-alpha.3:
+    resolution: {integrity: sha512-qt3vfAAEJa/UD/HliE3uAweYDs7ZFhk2FW/vFWFxAKw0tOWXUHrldu943IRuk/lmdUotv1UMgGkDwOJ80H+uxg==}
     dependencies:
       '@harmony-dev/transport-hrpc': 1.0.9
       '@protobuf-ts/runtime': 2.2.2

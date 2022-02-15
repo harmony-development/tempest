@@ -18,7 +18,8 @@ const profile = computed(() => {
 });
 const uri = computed(() => {
 	if (props.override) return parseHMC(props.override, host.value!);
-	return profile.value?.picture && host.value !== undefined && parseHMC(profile.value.picture, host.value);
+	if (!profile.value?.picture || !host.value) return;
+	return parseHMC(profile.value.picture, host.value);
 });
 </script>
 

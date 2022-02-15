@@ -15,7 +15,7 @@
 	"dependencies": {
 		"@floating-ui/core": "^0.2.2",
 		"@floating-ui/dom": "^0.1.10",
-		"@harmony-dev/harmony-web-sdk": "^0.0.3-alpha.2",
+		"@harmony-dev/harmony-web-sdk": "^0.0.3-alpha.3",
 		"@intlify/vite-plugin-vue-i18n": "^3.3.0",
 		"@popperjs/core": "^2.11.2",
 		"@vueuse/core": "7.0.1",

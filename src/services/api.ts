@@ -14,6 +14,7 @@ import { ConnectionManager } from "~/logic/api/connections";
 import { convertMessageV1 } from "~/logic/conversions/messages";
 import { convertGuildV1 } from "~/logic/conversions/guilds";
 import { sleep } from "~/logic/util/sleep";
+import { objectMap } from "~/logic/util/objectMap";
 
 export class API extends EventEmitter<{
 	invalidSession: undefined
@@ -190,23 +191,16 @@ export class API extends EventEmitter<{
 			return acc;
 		}, {});
 
-		const result = (await Promise.all(
-			Object.entries(collected).map(async([host, guildIds]) => {
-				const { conn } = this.manager.get(host);
-				const { guild } = await conn.chat.getGuild({
-					guildIds,
-				}).response;
-				return Object.fromEntries(Object.entries(guild).map(([guildId, guild]) => [
-					[guildId, {
-						...guild,
-						guildId,
-						serverId: host,
-					}],
-				]));
-			}),
-		)).flat();
-
-		return result;
+		return (await Promise.all(
+			Object.entries(collected).map(async([host, guildIds]) => this.manager.get(host).conn.chat.getGuild({
+				guildIds,
+			}).response.then(({ guild }) =>
+				Object.values(objectMap(guild, (guild, guildId) => ({
+					...guild,
+					guildId: guildId as string,
+					serverId: host,
+				}))),
+			)))).flat();
 	}
 
 	async updateProfile(host: string, username?: string, avatar?: File, bot?: boolean) {
@@ -267,7 +261,8 @@ export class API extends EventEmitter<{
 		const { metadata } = await conn.mediaProxy.fetchLinkMetadata({ // TODO: add error handling here
 			url: unfetched,
 		}).response;
-		chatState.setURLMetadata(host, metadata);
+
+		chatState.setURLMetadata(host, objectMap(metadata, metadata => metadata.data));
 	}
 
 	private backoffInterceptor(next: NextUnaryFn, method: MethodInfo<any, any>, i: object, options: RpcOptions) {

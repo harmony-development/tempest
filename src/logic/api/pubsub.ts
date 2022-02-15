@@ -60,32 +60,19 @@ export function pubsub(host: string, api: API): (ev: StreamEventsResponse) => vo
 			const guild = chatState.getGuild(host, sentMessage.guildId);
 			const channel = chatState.getChannel(host, sentMessage.guildId, sentMessage.channelId);
 			const msg = sentMessage.message!;
-			const content = msg.content?.content;
 			const user = chatState.getUser(host, msg.authorId);
 			const photoSource = msg.overrides?.avatar || user?.picture;
 
 			const title = `${user?.username} in #${channel.data?.name || "unknown-channel"} (${guild.data?.name})`;
 
-			let text: string | undefined;
 			const photo = photoSource ? parseHMC(photoSource, host) : undefined;
-			switch (content?.oneofKind) {
-				case "textMessage":
-					text = content.textMessage.content?.text;
-					break;
-				case "photoMessage":
-					text = `Uploaded ${content.photoMessage.photos.map(p => p.name).join(", ")}`;
-					break;
-				case "attachmentMessage":
-					text = `Uploaded ${content.attachmentMessage.files.map(p => p.name).join(", ")}`;
-					break;
-			}
 			if (!notifsGranted) await Notification.requestPermission();
 
 			const { params } = router.currentRoute.value as ChatRoute;
 			if (params.host === host && params.guild === sentMessage.guildId && params.channel === sentMessage.channelId) return;
 
 			const notif = new Notification(title, {
-				body: text || "unknown message",
+				body: `${msg.content?.text} ${msg.content?.attachments.map(a => a.name).join(", ")}`,
 				icon: photo,
 				timestamp: +msg.createdAt,
 				tag: `${host}-${sentMessage.guildId}-${sentMessage.channelId}`,
@@ -114,7 +101,7 @@ export function pubsub(host: string, api: API): (ev: StreamEventsResponse) => vo
 				username: profileUpdated.newUsername ?? user?.username,
 				picture: profileUpdated.newAvatar ?? user?.picture,
 				status: profileUpdated.newStatus ?? user?.status,
-				isBot: profileUpdated.newIsBot ?? user?.isBot,
+				kind: profileUpdated.newAccountKind ?? user?.kind,
 			});
 		},
 	});

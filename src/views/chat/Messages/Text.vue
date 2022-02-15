@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import { computed, watch } from "vue";
+import type { Content } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
+import type { MediaMetadata } from "@harmony-dev/harmony-web-sdk/dist/gen/mediaproxy/v1/mediaproxy";
 import { useAPI } from "../../../services/api";
 import { chatState } from "../../../logic/store/chat";
 import { useChatRoute } from "../../../router";
-import type { Content } from "../../../../../harmony-web-sdk/gen/chat/v1/messages";
 import FormattedText from "./FormattedText.vue";
 import Attachment from "./Attachment.vue";
 import { getLinks } from "~/logic/formatting";
@@ -23,6 +24,11 @@ const urls = computed(() => {
 const metadatas = computed(() => {
 	if (!urls.value) return;
 	return urls.value.map(url => chatState.getURLMetadata(host.value!, url));
+});
+
+const metaToAttachment = (metadata: MediaMetadata) => ({
+	...metadata,
+	size: metadata.size || 0,
 });
 
 watch(urls, async() => {
@@ -47,7 +53,7 @@ watch(urls, async() => {
         </template>
       </template>
       <template v-else-if="metadata?.oneofKind === 'isMedia'">
-        <attachment :id="urls![i]" :host="host!" :mimetype="metadata.isMedia.mimetype" :name="metadata.isMedia.filename" />
+        <attachment :id="urls![i]" :host="host!" :attachment="metaToAttachment(metadata.isMedia)" />
       </template>
     </div>
   </div>

@@ -33,6 +33,7 @@
 <script lang="ts" setup>
 import type { Ref } from "vue";
 import { computed, ref } from "vue";
+import { AccountKind } from "@harmony-dev/harmony-web-sdk/dist/gen/profile/v1/types";
 import { parseHMC } from "../../../logic/parsing";
 import { chatState } from "../../../logic/store/chat";
 import { useAPI } from "../../../services/api";
@@ -56,7 +57,7 @@ const defaultValues = computed<ISettings>(() => ({
 	avatar: undefined,
 	avatarPreview: profile.value?.picture,
 	username: profile.value?.username,
-	bot: profile.value?.isBot,
+	bot: profile.value?.kind === AccountKind.BOT,
 }));
 const changedValues = ref({}) as Ref<typeof defaultValues.value>;
 const displayValues = computed(() => ({

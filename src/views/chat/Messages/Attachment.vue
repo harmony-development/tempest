@@ -15,7 +15,7 @@ const props = defineProps<{
 }>();
 
 const { id, mimetype, info, name, size } = toRefs(props.attachment);
-const imageInfo = computed(() => info.value.oneofKind === "photo" ? info.value.photo : undefined);
+const imageInfo = computed(() => info.value.oneofKind === "image" ? info.value.image : undefined);
 const thumbnail = computed(() => {
 	if (!imageInfo.value?.minithumbnail) return;
 	return URL.createObjectURL(new Blob([imageInfo.value.minithumbnail.data], { type: "image/jpeg" }));
