@@ -1,16 +1,16 @@
 <script lang="ts" setup>
 import type { FormattedText } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
 import { computed } from "vue";
+import type { Format } from "../../../../../harmony-web-sdk/gen/chat/v1/messages";
 import { linkify } from "~/logic/formatting";
 
 const props = defineProps<{
-	content: FormattedText
+	text: string
+	formats: Format[]
 }>();
 
 const content = computed(() => {
-	const { content } = props;
-
-	return linkify(content.text);
+	return linkify(props.text);
 });
 </script>
 

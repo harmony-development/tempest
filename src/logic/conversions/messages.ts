@@ -11,22 +11,4 @@ export const convertMessageV1 = (msg: Message): IMessageData => ({
 	inReplyTo: msg.inReplyTo,
 });
 
-export const getMessageText = ({ content: contentOuter }: IMessageData): string | undefined => {
-	const content = contentOuter?.content;
-	let formatted: string | undefined;
-	switch (content?.oneofKind) {
-		case "textMessage": {
-			formatted = content.textMessage.content?.text;
-			break;
-		}
-		case "attachmentMessage": {
-			formatted = "[Attachment]";
-			break;
-		}
-		case "photoMessage": {
-			formatted = "[Photo]";
-			break;
-		}
-	}
-	return formatted;
-};
+export const getMessageText = (content: IMessageData) => content.content?.text;

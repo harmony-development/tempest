@@ -4,21 +4,19 @@ import dayjs from "dayjs";
 import type { Ref } from "vue";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { getMessageText } from "../../../logic/conversions/messages";
 import type { IMessageData } from "../../../logic/store/chat";
 import { chatState } from "../../../logic/store/chat";
 import { session } from "../../../logic/store/session";
 import { uiState } from "../../../logic/store/ui";
 import { useAPI } from "../../../services/api";
-import { getMessageText } from "../../../logic/conversions/messages";
-import AttachmentMessage from "./AttachmentMessage.vue";
-import EmbedMessage from "./EmbedMessage.vue";
-import PhotosMessage from "./PhotosMessage.vue";
-import TextMessage from "./TextMessage.vue";
-import PopInTransition from "~/components/transitions/PopInTransition.vue";
+import Text from "./Text.vue";
+import Attachment from "./Attachment.vue";
+import BaseEmbed from "./BaseEmbed.vue";
 import Avatar from "~/components/chat/Avatar.vue";
+import BasePopover from "~/components/base/BasePopover.vue";
 import BaseListItem from "~/components/base/BaseListItem.vue";
 import BaseButton from "~/components/base/BaseButton.vue";
-import BasePopover from "~/components/base/BasePopover.vue";
 
 const props = defineProps<{
 	host: string
@@ -43,7 +41,10 @@ const replyMessage = computed(() => props.data.inReplyTo ? chatState.getMessage(
 onClickOutside(optionsDropdown, () => (optionsOpen.value = false));
 
 const isOwnMessage = computed(() => props.data?.author === session.value?.userID);
-const content = computed(() => props.data.content?.content);
+const content = computed(() => props.data.content);
+const text = computed(() => content.value?.text);
+const attachments = computed(() => content.value?.attachments);
+const embeds = computed(() => content.value?.embeds);
 const time = computed(() => {
 	return dayjs(+props.data.createdAt).calendar();
 });
@@ -66,16 +67,16 @@ const onReply = () => {
       </p>
     </div>
     <div :class="hideAvatar && 'hideAvatar'" class="messageBody text-sm relative">
-      <text-message v-if="content?.oneofKind === 'textMessage'" :content="content.textMessage.content" />
-      <attachment-message
-        v-else-if="content?.oneofKind === 'attachmentMessage'"
-        :content="content.attachmentMessage.files"
-      />
-      <photos-message v-else-if="content?.oneofKind === 'photoMessage'" :content="content.photoMessage.photos" />
-      <embed-message v-else-if="content?.oneofKind === 'embedMessage'" :content="content.embedMessage" />
+      <text v-if="content" :content="content" />
+      <template v-if="attachments">
+        <attachment v-for="attachment in attachments" :key="attachment.id" :host="host" :attachment="attachment" />
+      </template>
+      <template v-if="embeds">
+        <base-embed v-for="embed in embeds" :key="embed.title" :embed="embed" />
+      </template>
       <div v-else>
         <mdi:alert class="text-4xl" />
-        <p>{{ $t('unimplemented-message-type') }}</p>
+        <p>{{ $t('missing-content') }}</p>
       </div>
       <div class="w-full mt-2">
         <p class="time text-xs text-gray-400 float-right">

@@ -1,16 +1,15 @@
 <script lang="ts" setup>
-import type { Content_TextContent } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
 import { computed, watch } from "vue";
 import { useAPI } from "../../../services/api";
 import { chatState } from "../../../logic/store/chat";
 import { useChatRoute } from "../../../router";
+import type { Content } from "../../../../../harmony-web-sdk/gen/chat/v1/messages";
 import FormattedText from "./FormattedText.vue";
 import Attachment from "./Attachment.vue";
 import { getLinks } from "~/logic/formatting";
-import BaseImage from "~/components/base/BaseImage.vue";
 import { parseHMC } from "~/logic/parsing";
 const props = defineProps<{
-	content: Content_TextContent["content"]
+	content: Content
 }>();
 
 const { host } = useChatRoute();
@@ -28,14 +27,13 @@ const metadatas = computed(() => {
 
 watch(urls, async() => {
 	if (!urls.value) return;
-	for (const url of urls.value)
-		await api.fetchMetadata(host.value!, url);
+	await api.fetchMetadata(host.value!, urls.value);
 }, { immediate: true });
 </script>
 
 <template>
   <div class="content-out">
-    <formatted-text :content="content!" />
+    <formatted-text :text="content.text" :formats="content.textFormats" />
     <div v-for="(metadata, i) of metadatas" :key="urls?.[i]" class="p-3 flexcol gap-2 mt-2 bg-surface-900">
       <template v-if="metadata?.oneofKind === 'isSite'">
         <a class="font-bold" :href="metadata.isSite.url" target="_blank">
@@ -44,7 +42,9 @@ watch(urls, async() => {
         <span class="text-gray-500">
           {{ metadata.isSite.description }}
         </span>
-        <img v-if="metadata.isSite.image" :src="parseHMC(metadata.isSite.image, host!)">
+        <template v-for="thumbnail of metadata.isSite.thumbnail" :key="thumbnail.url">
+          <img :src="parseHMC(thumbnail.url, host!)" :width="thumbnail.info?.width" :height="thumbnail.info?.height">
+        </template>
       </template>
       <template v-else-if="metadata?.oneofKind === 'isMedia'">
         <attachment :id="urls![i]" :host="host!" :mimetype="metadata.isMedia.mimetype" :name="metadata.isMedia.filename" />

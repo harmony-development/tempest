@@ -4,8 +4,8 @@ import type {
 	Overrides,
 	Reaction,
 } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
-import type { FetchLinkMetadataResponse } from "@harmony-dev/harmony-web-sdk/dist/gen/mediaproxy/v1/mediaproxy";
-import type { UserStatus } from "@harmony-dev/harmony-web-sdk/dist/gen/profile/v1/types";
+import type { FetchLinkMetadataResponse_Metadata } from "@harmony-dev/harmony-web-sdk/dist/gen/mediaproxy/v1/mediaproxy";
+import type { AccountKind, UserStatus } from "@harmony-dev/harmony-web-sdk/dist/gen/profile/v1/types";
 import { assignDefined } from "../util/assignDefined";
 import { AsyncLock } from "../util/asyncLock";
 import { Store } from "./store";
@@ -19,7 +19,7 @@ interface IUserData {
 	username: string
 	picture?: string
 	status: UserStatus
-	isBot: boolean
+	kind: AccountKind
 }
 
 export interface IMessageData {
@@ -65,7 +65,7 @@ export interface IGuild {
 export interface IHostData {
 	guilds: Record<string, IGuild>
 	users: Record<string, IUserData>
-	linkMetadata: Record<string, FetchLinkMetadataResponse["data"]>
+	linkMetadata: Record<string, FetchLinkMetadataResponse_Metadata["data"]>
 }
 
 export interface IChatState {
@@ -239,9 +239,12 @@ class ChatState extends Store<IChatState> {
 		c.replyTo = undefined;
 	}
 
-	setURLMetadata(host: string, url: string, metadata: FetchLinkMetadataResponse["data"]) {
+	setURLMetadata(host: string, metadata: Record<string, FetchLinkMetadataResponse_Metadata["data"]>) {
 		const h = this.ensureHost(host);
-		h.linkMetadata[url] = metadata;
+		h.linkMetadata = {
+			...h.linkMetadata,
+			...metadata,
+		};
 	}
 
 	getURLMetadata(host: string, url: string) {

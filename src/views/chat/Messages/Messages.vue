@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onKeyPressed, onKeyStroke, useIntersectionObserver } from "@vueuse/core";
+import { onKeyStroke, useIntersectionObserver } from "@vueuse/core";
 import type { Ref } from "vue";
 import { computed, nextTick, ref, toRefs, watch } from "vue";
 import { useI18n } from "vue-i18n";

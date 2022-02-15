@@ -4,13 +4,13 @@ import type { MethodInfo, NextUnaryFn, RpcOptions } from "@protobuf-ts/runtime-r
 import type { HrpcOptions } from "@harmony-dev/transport-hrpc/build/types/src/transport";
 import { EventEmitter } from "eventemitter3";
 import { RpcError } from "@protobuf-ts/runtime-rpc";
-import type { Content } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
-import { Attachment, FormattedText, GetChannelMessagesRequest_Direction, Photo } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
+import type { SendMessageRequest_Content } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
+import { GetChannelMessagesRequest_Direction, SendMessageRequest_Attachment } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
 import type { ChannelKind } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/channels";
+import type { UploadedFile } from "@harmony-dev/harmony-web-sdk";
 import { chatState } from "../logic/store/chat";
 import { convertChannelV1 } from "../logic/conversions/channels";
 import { ConnectionManager } from "~/logic/api/connections";
-import { batchGetGuild, batchGetUsers } from "~/logic/api/batchHack";
 import { convertMessageV1 } from "~/logic/conversions/messages";
 import { convertGuildV1 } from "~/logic/conversions/guilds";
 import { sleep } from "~/logic/util/sleep";
@@ -54,48 +54,25 @@ export class API extends EventEmitter<{
 
 	async sendMessage(host: string, guildId: string, channelId: string, text: string, files: File[], inReplyTo?: string) {
 		const { conn } = this.manager.get(host);
-		const send = (content: Content["content"]) => conn.chat.sendMessage({
+		const send = (content: SendMessageRequest_Content) => conn.chat.sendMessage({
 			guildId,
 			channelId,
 			inReplyTo,
-			content: {
-				content,
+			content,
+		});
+		let uploaded: UploadedFile[] = [];
+		if (files.length > 0)
+			uploaded = await Promise.all(files.map(f => conn.uploadFile(f)));
+		send({
+			text,
+			textFormats: [],
+			extra: {
+				oneofKind: "attachments",
+				attachments: {
+					attachments: uploaded.map(u => SendMessageRequest_Attachment.create(u)),
+				},
 			},
 		});
-		if (files.length > 0) {
-			const allFilesArePhotos = files.every(file => file.type.startsWith("image/") && file.type !== "image/svg");
-			const uploaded = await Promise.all(files.map(f => conn.uploadFile(f)));
-			if (allFilesArePhotos) {
-				return send({
-					oneofKind: "photoMessage",
-					photoMessage: {
-						photos: uploaded.map(f =>
-							Photo.create({
-								hmc: f.id,
-							}),
-						),
-					},
-				});
-			}
-			else {
-				return send({
-					oneofKind: "attachmentMessage",
-					attachmentMessage: {
-						files: uploaded.map(f => Attachment.create({
-							id: f.id,
-						})),
-					},
-				});
-			}
-		}
-		else {
-			return send({
-				oneofKind: "textMessage",
-				textMessage: {
-					content: FormattedText.create({ text }),
-				},
-			});
-		}
 	}
 
 	joinGuild(host: string, inviteId: string) {
@@ -148,14 +125,14 @@ export class API extends EventEmitter<{
 	async fetchUser(host: string, userId: string) {
 		const { conn } = this.manager.get(host);
 		const { profile } = await conn.profile.getProfile({
-			userId,
+			userId: [userId],
 		}).response;
-		if (!profile) return;
+		const user = profile[userId];
 		chatState.setUserData(host, userId, {
-			username: profile.userName,
-			status: profile.userStatus,
-			isBot: profile.isBot,
-			picture: profile.userAvatar,
+			username: user.userName,
+			status: user.userStatus,
+			picture: user.userAvatar,
+			kind: user.accountKind,
 		});
 	}
 
@@ -164,15 +141,16 @@ export class API extends EventEmitter<{
 		const { members } = await conn.chat.getGuildMembers({
 			guildId,
 		}).response;
-		const profiles = await batchGetUsers(conn, members);
-		for (let i = 0; i < profiles.length; i++) {
-			const profile = profiles[i]!;
-			const userId = members[i];
+		const profiles = (await conn.profile.getProfile({
+			userId: members,
+		}).response).profile;
+		for (const userId in profiles) {
+			const profile = profiles[userId];
 			chatState.setUserData(host, userId, {
 				username: profile.userName,
 				status: profile.userStatus,
-				isBot: profile.isBot,
 				picture: profile.userAvatar,
+				kind: profile.accountKind,
 			});
 		}
 		chatState.setMembers(host, guildId, members);
@@ -192,9 +170,9 @@ export class API extends EventEmitter<{
 
 	async fetchGuild(host: string, guildId: string): Promise<Guild> {
 		const { conn } = this.manager.get(host);
-		const { guild } = await conn.chat.getGuild({
-			guildId,
-		}).response;
+		const guild = (await conn.chat.getGuild({
+			guildIds: [guildId],
+		}).response).guild[guildId];
 		chatState.setGuildData(host, guildId, convertGuildV1(guild!));
 		return guild!;
 	}
@@ -214,12 +192,17 @@ export class API extends EventEmitter<{
 
 		const result = (await Promise.all(
 			Object.entries(collected).map(async([host, guildIds]) => {
-				const guilds = await batchGetGuild(this.manager.get(host).conn, guildIds);
-				return guilds.map((g, i) => ({
-					...g,
-					guildId: guildIds[i],
-					serverId: host,
-				}));
+				const { conn } = this.manager.get(host);
+				const { guild } = await conn.chat.getGuild({
+					guildIds,
+				}).response;
+				return Object.fromEntries(Object.entries(guild).map(([guildId, guild]) => [
+					[guildId, {
+						...guild,
+						guildId,
+						serverId: host,
+					}],
+				]));
 			}),
 		)).flat();
 
@@ -278,13 +261,13 @@ export class API extends EventEmitter<{
 		});
 	}
 
-	async fetchMetadata(host: string, url: string) {
-		if (chatState.getURLMetadata(host, url)) return;
+	async fetchMetadata(host: string, urls: string[]) {
+		const unfetched = urls.filter(url => chatState.getURLMetadata(host, url) === undefined);
 		const { conn } = this.manager.get(host);
-		const { data } = await conn.mediaProxy.fetchLinkMetadata({
-			url,
+		const { metadata } = await conn.mediaProxy.fetchLinkMetadata({ // TODO: add error handling here
+			url: unfetched,
 		}).response;
-		chatState.setURLMetadata(host, url, data);
+		chatState.setURLMetadata(host, metadata);
 	}
 
 	private backoffInterceptor(next: NextUnaryFn, method: MethodInfo<any, any>, i: object, options: RpcOptions) {
@@ -310,7 +293,7 @@ export class API extends EventEmitter<{
 			}
 		})();
 		// cry about it
-		// @ts-ignore
+		// @ts-expect-error its read only but actually...
 		result.response = handledResponse;
 		return result;
 	}
