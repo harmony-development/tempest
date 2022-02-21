@@ -16,12 +16,12 @@ const router = useRouter();
 const api = useAPI();
 
 onMounted(async() => {
-	const guilds = await api.fetchAllGuilds(session.value!.host);
+	const [guilds, guildList] = await api.fetchAllGuilds(session.value!.host);
 	for (const guild of guilds) {
 		const guildData = chatState.ensureGuild(guild.serverId, guild.guildId);
 		guildData.data = convertGuildV1(guild);
 	}
-	chatState.state.guildList = guilds.map(guild => convertGuildEntryV1(guild));
+	chatState.state.guildList = guildList.map(e => ({ guildID: e.guildId, host: e.serverId }));
 });
 
 const guildList = computed(() => chatState.state.guildList);

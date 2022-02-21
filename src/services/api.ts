@@ -1,5 +1,5 @@
 import { inject } from "vue";
-import type { Guild } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/guilds";
+import type { Guild, GuildListEntry } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/guilds";
 import type { MethodInfo, NextUnaryFn, RpcOptions } from "@protobuf-ts/runtime-rpc";
 import type { HrpcOptions } from "@harmony-dev/transport-hrpc/build/types/src/transport";
 import { EventEmitter } from "eventemitter3";
@@ -178,10 +178,9 @@ export class API extends EventEmitter<{
 		return guild!;
 	}
 
-	async fetchAllGuilds(host: string): Promise<(Guild & {guildId: string; serverId: string})[]> {
+	async fetchAllGuilds(host: string): Promise<[(Guild & {guildId: string; serverId: string})[], GuildListEntry[]]> {
 		const { conn } = this.manager.get(host);
 		const { guilds } = await conn.chat.getGuildList({}).response;
-
 		const collected = guilds.reduce<{
 			[host: string]: string[]
 		}>((acc, current) => {
@@ -191,7 +190,7 @@ export class API extends EventEmitter<{
 			return acc;
 		}, {});
 
-		return (await Promise.all(
+		return [(await Promise.all(
 			Object.entries(collected).map(async([host, guildIds]) => this.manager.get(host).conn.chat.getGuild({
 				guildIds,
 			}).response.then(({ guild }) =>
@@ -200,7 +199,7 @@ export class API extends EventEmitter<{
 					guildId: guildId as string,
 					serverId: host,
 				}))),
-			)))).flat();
+			)))).flat(), guilds];
 	}
 
 	async updateProfile(host: string, username?: string, avatar?: File, bot?: boolean) {
