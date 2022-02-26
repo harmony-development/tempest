@@ -4,8 +4,8 @@ import { computed } from "vue";
 import { linkify } from "~/logic/formatting";
 
 const props = defineProps<{
-	text: string
-	formats: Format[]
+	text: string;
+	formats: Format[];
 }>();
 
 const content = computed(() => {
@@ -14,5 +14,5 @@ const content = computed(() => {
 </script>
 
 <template>
-  <p v-html="content" />
+	<p v-html="content" />
 </template>

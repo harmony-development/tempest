@@ -12,7 +12,7 @@ onClickOutside(button, () => {
 </script>
 
 <template>
-  <base-button color="primary" square :aria-label="$t('app-settings')" @click="open = true">
-    <h-tempest class="text-primary text-3xl" />
-  </base-button>
+	<base-button color="primary" square :aria-label="$t('app-settings')" @click="open = true">
+		<h-tempest class="text-primary text-3xl" />
+	</base-button>
 </template>

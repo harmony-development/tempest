@@ -8,27 +8,27 @@ import { useChatRoute } from "../../../router";
 import { useAPI } from "../../../services/api";
 import AppSettings from "./AppSettings.vue";
 import GuildIcon from "./GuildIcon.vue";
-import { convertGuildEntryV1, convertGuildV1 } from "~/logic/conversions/guilds";
+import { convertGuildV1 } from "~/logic/conversions/guilds";
 import BaseButton from "~/components/base/BaseButton.vue";
 
 const { guild } = useChatRoute();
 const router = useRouter();
 const api = useAPI();
 
-onMounted(async() => {
+onMounted(async () => {
 	const [guilds, guildList] = await api.fetchAllGuilds(session.value!.host);
 	for (const guild of guilds) {
 		const guildData = chatState.ensureGuild(guild.serverId, guild.guildId);
 		guildData.data = convertGuildV1(guild);
 	}
-	chatState.state.guildList = guildList.map(e => ({ guildID: e.guildId, host: e.serverId }));
+	chatState.state.guildList = guildList.map((e) => ({ guildID: e.guildId, host: e.serverId }));
 });
 
 const guildList = computed(() => chatState.state.guildList);
 
-const goToGuild = (host: string, guildId: string) => {
+const goToGuild = async (host: string, guildId: string) => {
 	const guildObject = chatState.getGuild(host, guildId);
-	router.push({
+	await router.push({
 		name: "chat",
 		params: {
 			host: host || session.value!.host,
@@ -40,45 +40,25 @@ const goToGuild = (host: string, guildId: string) => {
 </script>
 
 <template>
-  <div class="list">
-    <div
-      class="
-				w-18
-				p-2
-				h-full
-				overflow-y-scroll
-				no-scrollbar
-				z-1
-				relative
-				bg-surface-900
-				flexcol
-				gap-2
-				border-r-2 border-surface-800
-			"
-    >
-      <base-button
-        variant="filled"
-        color="primary"
-        square
-        :aria-label="$t('create-join-guild')"
-        @click="uiState.state.addGuildDialog = true"
-      >
-        <mdi-plus />
-      </base-button>
-      <hr class="border-gray-500">
-      <div class="flex-1 flexcol gap-2">
-        <guild-icon
-          v-for="{ host, guildID } in guildList"
-          :key="`${host}-${guildID}`"
-          :active="guildID === guild"
-          :host="host"
-          :guildid="guildID"
-          @click="goToGuild(host, guildID)"
-        />
-      </div>
-      <app-settings />
-    </div>
-  </div>
+	<div class="list">
+		<div class="w-18 p-2 h-full overflow-y-scroll no-scrollbar z-1 relative bg-surface-900 flexcol gap-2 border-r-2 border-surface-800">
+			<base-button variant="filled" color="primary" square :aria-label="$t('create-join-guild')" @click="uiState.state.addGuildDialog = true">
+				<mdi-plus />
+			</base-button>
+			<hr class="border-gray-500" />
+			<div class="flex-1 flexcol gap-2">
+				<guild-icon
+					v-for="{ host, guildID } in guildList"
+					:key="`${host}-${guildID}`"
+					:active="guildID === guild"
+					:host="host"
+					:guildid="guildID"
+					@click="goToGuild(host, guildID)"
+				/>
+			</div>
+			<app-settings />
+		</div>
+	</div>
 </template>
 
 <style lang="postcss" scoped>

@@ -77,31 +77,28 @@ export const useAuthManager = (host: string) => {
 	const authManager = new AuthManager(host);
 
 	const goToServerSelect = () => {
-		router.push({
+		return router.push({
 			name: "serverselect",
 		});
 	};
 
-	const back = async() => {
+	const back = async () => {
 		goingBack.value = true;
 		try {
-			if (!canGoBack.value || currentStepType.value === "loading") goToServerSelect();
+			if (!canGoBack.value || currentStepType.value === "loading") await goToServerSelect();
 			await authManager.sendBack();
-		}
-		catch (e) {
-			goToServerSelect();
+		} catch (e) {
+			await goToServerSelect();
 		}
 		goingBack.value = false;
 	};
 
 	const formatError = (e: any, fallback: string) => {
-		if (e instanceof Error)
-			return e.message;
-		else
-			return fallback;
+		if (e instanceof Error) return e.message;
+		else return fallback;
 	};
 
-	const sendChoice = async(c: string) => {
+	const sendChoice = async (c: string) => {
 		try {
 			isLoading.value = true;
 			await authManager.nextStep({
@@ -110,14 +107,13 @@ export const useAuthManager = (host: string) => {
 					choice: c,
 				},
 			});
-		}
-		catch (e) {
+		} catch (e) {
 			error.value = formatError(e, "entry.error.sending-choice");
 		}
 		isLoading.value = false;
 	};
 
-	const sendForm = async(values: string[]) => {
+	const sendForm = async (values: string[]) => {
 		try {
 			if (currentStep.value?.oneofKind !== "form") return;
 			isLoading.value = true;
@@ -129,17 +125,16 @@ export const useAuthManager = (host: string) => {
 					})),
 				},
 			});
-		}
-		catch (e) {
+		} catch (e) {
 			error.value = formatError(e, "entry.error.sending-form");
 		}
 		isLoading.value = false;
 	};
 
-	const onStep = (step: AuthStep["step"]) => {
+	const onStep = async (step: AuthStep["step"]) => {
 		if (step.oneofKind === "session") {
 			const { sessionToken, userId } = step.session;
-			router.push({ name: "chat" });
+			await router.push({ name: "chat" });
 			session.value = {
 				session: sessionToken,
 				userID: userId,
@@ -153,16 +148,15 @@ export const useAuthManager = (host: string) => {
 
 	const onStepOuter = (step: AuthStep) => {
 		canGoBack.value = step.canGoBack;
-		onStep(step.step);
+		return onStep(step.step);
 	};
 
-	onMounted(async() => {
+	onMounted(async () => {
 		try {
 			await authManager.start();
-			authManager.stream?.responses.onMessage(resp => onStepOuter(resp.step!));
-			onStepOuter((await authManager.nextStep({ oneofKind: undefined }).response).step!);
-		}
-		catch (e) {
+			authManager.stream?.responses.onMessage((resp) => onStepOuter(resp.step!));
+			await onStepOuter((await authManager.nextStep({ oneofKind: undefined }).response).step!);
+		} catch (e) {
 			console.warn(e);
 			currentStepType.value = "fatal";
 		}

@@ -11,9 +11,9 @@ import BaseMenu from "~/components/base/BaseMenu.vue";
 import { uiState } from "~/logic/store/ui";
 
 const props = defineProps<{
-	active?: boolean
-	host: string
-	guildid: string
+	active?: boolean;
+	host: string;
+	guildid: string;
 }>();
 
 const api = useAPI();
@@ -35,29 +35,15 @@ const menuOptions: IMenuOption[] = [
 </script>
 
 <template>
-  <base-menu :options="menuOptions">
-    <template #activator="{activate}">
-      <base-tooltip :text="guild.data?.name" placement="right">
-        <button
-          v-wave
-          v-bind="$attrs"
-          role="button"
-          class="icon"
-          :class="{ active }"
-          style="aspect-ratio: 1"
-          @contextmenu.prevent="activate"
-        >
-          <base-image
-            :src="iconSrc"
-            class="object-contain pointer-events-none"
-            draggable="false"
-            :alt="guild?.data?.name"
-            :fallback="guild?.data?.name?.[0]"
-          />
-        </button>
-      </base-tooltip>
-    </template>
-  </base-menu>
+	<base-menu :options="menuOptions">
+		<template #activator="{ activate }">
+			<base-tooltip :text="guild.data?.name" placement="right">
+				<button v-wave v-bind="$attrs" role="button" class="icon" :class="{ active }" style="aspect-ratio: 1" @contextmenu.prevent="activate">
+					<base-image :src="iconSrc" class="object-contain pointer-events-none" draggable="false" :alt="guild?.data?.name" :fallback="guild?.data?.name?.[0]" />
+				</button>
+			</base-tooltip>
+		</template>
+	</base-menu>
 </template>
 
 <style lang="postcss" scoped>
@@ -76,7 +62,7 @@ const menuOptions: IMenuOption[] = [
 	&:active {
 		@apply border-4 bg-surface-600;
 	}
-  &:focus {
+	&:focus {
 		@apply border-5;
 	}
 }

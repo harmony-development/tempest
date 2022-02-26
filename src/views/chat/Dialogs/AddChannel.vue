@@ -14,36 +14,29 @@ const error = ref();
 
 const close = () => (uiState.state.addChannelDialog = false);
 
-const onCreateClicked = async() => {
+const onCreateClicked = async () => {
 	try {
-		api.createChannel(host.value!, guild.value!, channelName.value, ChannelKind.TEXT_UNSPECIFIED);
+		await api.createChannel(host.value!, guild.value!, channelName.value, ChannelKind.TEXT_UNSPECIFIED);
 		close();
-	}
-	catch (e) {
+	} catch (e) {
 		error.value = e;
 	}
 };
 </script>
 <template>
-  <form class="flexcol gap-2" @submit.prevent>
-    <h1 class="text-xl">
-      {{ $t('add-channel') }}
-    </h1>
-    <span class="text-red-400">{{ error?.code || error }}</span>
-    <base-input v-model="channelName" :label="$t('channel-name')" />
-    <div class="flex justify-end gap-2">
-      <base-button color="secondary" variant="text" type="button" @click="close">
-        {{ $t('cancel') }}
-      </base-button>
-      <base-button
-        variant="text"
-        color="primary"
-        type="submit"
-        :disabled="!channelName"
-        @click="onCreateClicked"
-      >
-        {{ $t('create') }}
-      </base-button>
-    </div>
-  </form>
+	<form class="flexcol gap-2" @submit.prevent>
+		<h1 class="text-xl">
+			{{ $t("add-channel") }}
+		</h1>
+		<span class="text-red-400">{{ error?.code || error }}</span>
+		<base-input v-model="channelName" :label="$t('channel-name')" />
+		<div class="flex justify-end gap-2">
+			<base-button color="secondary" variant="text" type="button" @click="close">
+				{{ $t("cancel") }}
+			</base-button>
+			<base-button variant="text" color="primary" type="submit" :disabled="!channelName" @click="onCreateClicked">
+				{{ $t("create") }}
+			</base-button>
+		</div>
+	</form>
 </template>

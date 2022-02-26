@@ -1,17 +1,17 @@
 import { Store } from "./store";
 
 export interface IUIState {
-	addGuildDialog: boolean
-	addChannelDialog: boolean
-	guildSettingsDialog: boolean
-	userSettingsDialog: boolean
+	addGuildDialog: boolean;
+	addChannelDialog: boolean;
+	guildSettingsDialog: boolean;
+	userSettingsDialog: boolean;
 	confirmDialog: {
-		open: boolean
-		title?: string
-		description?: string
-		resolve?: () => void
-		reject?: () => void
-	}
+		open: boolean;
+		title?: string;
+		description?: string;
+		resolve?: () => void;
+		reject?: () => void;
+	};
 }
 
 class UIState extends Store<IUIState> {

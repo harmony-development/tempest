@@ -10,22 +10,22 @@ const { back, error, currentStepType, currentStep, sendChoice, sendForm, isLoadi
 </script>
 
 <template>
-  <base-button class="w-min" square variant="outlined" @click="back">
-    <mdi-arrow-left />
-  </base-button>
-  <div v-if="currentStepType === 'fatal'" class="text-center">
-    <mdi-alert class="text-3xl textgray-300" />
-    <p>{{ $t('failed-to-connect-to-server') }}</p>
-    <p class="text-sm text-gray-400 italic">
-      {{ error }}
-    </p>
-  </div>
-  <div v-else class="p-2">
-    <choices v-if="currentStep?.oneofKind === 'choice'" :choice="currentStep.choice" :error="error" @done="sendChoice" />
-    <entry-form v-else-if="currentStep?.oneofKind === 'form'" :form="currentStep.form" :error="error" :is-loading="isLoading" @done="sendForm" />
-    <div v-if="currentStepType === 'loading'" class="text-center flexcol items-center gap-3">
-      <base-spinner class="text-4xl" />
-      <span class="font-bold uppercase">{{ $t('loading') }}</span>
-    </div>
-  </div>
+	<base-button class="w-min" square variant="outlined" @click="back">
+		<mdi-arrow-left />
+	</base-button>
+	<div v-if="currentStepType === 'fatal'" class="text-center">
+		<mdi-alert class="text-3xl textgray-300" />
+		<p>{{ $t("failed-to-connect-to-server") }}</p>
+		<p class="text-sm text-gray-400 italic">
+			{{ error }}
+		</p>
+	</div>
+	<div v-else class="p-2">
+		<choices v-if="currentStep?.oneofKind === 'choice'" :choice="currentStep.choice" :error="error" @done="sendChoice" />
+		<entry-form v-else-if="currentStep?.oneofKind === 'form'" :form="currentStep.form" :error="error" :is-loading="isLoading" @done="sendForm" />
+		<div v-if="currentStepType === 'loading'" class="text-center flexcol items-center gap-3">
+			<base-spinner class="text-4xl" />
+			<span class="font-bold uppercase">{{ $t("loading") }}</span>
+		</div>
+	</div>
 </template>

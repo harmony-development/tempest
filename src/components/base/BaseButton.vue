@@ -2,15 +2,15 @@
 import { computed } from "vue";
 
 const props = defineProps<{
-	variant?: "text" | "filled" | "outlined"
-	color?: "primary" | "secondary"
-	icon?: boolean
-	raised?: boolean
-	dense?: boolean
-	square?: boolean
-	disabled?: boolean
-	button?: boolean
-	isLoading?: boolean
+	variant?: "text" | "filled" | "outlined";
+	color?: "primary" | "secondary";
+	icon?: boolean;
+	raised?: boolean;
+	dense?: boolean;
+	square?: boolean;
+	disabled?: boolean;
+	button?: boolean;
+	isLoading?: boolean;
 }>();
 
 const buttonClasses = computed(() => ({
@@ -25,17 +25,12 @@ const buttonClasses = computed(() => ({
 }));
 </script>
 <template>
-  <button v-wave :class="buttonClasses" class="text-base">
-    <slot />
-    <span
-      v-if="isLoading"
-      class="absolute transform -translate-x-1/2 -translate-y-1/2  top-1/2 left-1/2 flexcol"
-    >
-      <mdi-loading
-        class=" text-2xl animate-spin"
-      />
-    </span>
-  </button>
+	<button v-wave :class="buttonClasses" class="text-base">
+		<slot />
+		<span v-if="isLoading" class="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 flexcol">
+			<mdi-loading class="text-2xl animate-spin" />
+		</span>
+	</button>
 </template>
 
 <style lang="postcss" scoped>

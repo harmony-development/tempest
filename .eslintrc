@@ -1,13 +1,31 @@
 {
-	"extends": ["@antfu"],
+	"root": true,
+	"extends": ["@antfu", "plugin:prettier/recommended"],
+	"plugins": ["unused-imports"],
+	"env": {
+		"node": true
+	},
+	"ignorePatterns": "node_modules",
+	"parser": "vue-eslint-parser",
+	"parserOptions": {
+		"parser": "@typescript-eslint/parser",
+		"project": "./tsconfig.json",
+		"extraFileExtensions": [".vue"]
+	},
 	"rules": {
-		"no-tabs": "off",
-		"indent": "off",
-		"@typescript-eslint/indent": ["error", "tab"],
-		"quotes": ["error", "double"],
-		"@typescript-eslint/quotes": ["error", "double"],
+		"no-void": "off",
+		"sort-imports": "off",
+		"import/order": "off",
+		"no-console": "warn",
+		"@typescript-eslint/no-floating-promises": ["error"],
+		"@typescript-eslint/brace-style": ["error", "1tbs"],
+		"@typescript-eslint/prefer-readonly": ["error"],
 		"semi": ["error", "always"],
 		"@typescript-eslint/semi": ["error", "always"],
+		"no-unused-vars": "off",
 		"no-restricted-syntax": "off",
+		"@typescript-eslint/no-unused-vars": "off",
+		"unused-imports/no-unused-imports": "error",
+		"unused-imports/no-unused-vars": ["warn", { "vars": "all", "varsIgnorePattern": "^_", "args": "after-used", "argsIgnorePattern": "^_" }]
 	}
 }

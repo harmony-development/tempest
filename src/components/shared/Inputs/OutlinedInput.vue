@@ -2,26 +2,26 @@
 import PlainInput from "./PlainInput.vue";
 
 const props = defineProps<{
-	label?: string
-	placeholder?: string
-	name?: string
-	noBorder?: boolean
+	label?: string;
+	placeholder?: string;
+	name?: string;
+	noBorder?: boolean;
 }>();
 </script>
 <template>
-  <div class="flex items-center relative rounded transition duration-100 input-parent">
-    <div>
-      <slot name="pre-input" />
-    </div>
-    <plain-input v-bind="$attrs" />
-    <label :for="props.name" class="input-label">{{ props.placeholder || props.label }}</label>
-    <fieldset v-if="!noBorder" :for="props.name" class="label-wrapper">
-      <legend class="label-text">
-        {{ props.placeholder || props.label }}
-      </legend>
-    </fieldset>
-    <mdi:help-circle-outline />
-  </div>
+	<div class="flex items-center relative rounded transition duration-100 input-parent">
+		<div>
+			<slot name="pre-input" />
+		</div>
+		<plain-input v-bind="$attrs" />
+		<label :for="props.name" class="input-label">{{ props.placeholder || props.label }}</label>
+		<fieldset v-if="!noBorder" :for="props.name" class="label-wrapper">
+			<legend class="label-text">
+				{{ props.placeholder || props.label }}
+			</legend>
+		</fieldset>
+		<mdi:help-circle-outline />
+	</div>
 </template>
 
 <style lang="postcss" scoped>

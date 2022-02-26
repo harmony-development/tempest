@@ -43,25 +43,23 @@ export const router = createRouter({
 });
 
 router.beforeEach((to, _from, next) => {
-	if (to.meta.auth && !session.value)
-		next({ name: "serverselect" });
-	else
-		next();
+	if (to.meta.auth && !session.value) next({ name: "serverselect" });
+	else next();
 });
 
 export interface ChatRoute extends RouteLocationNormalizedLoaded {
 	params: {
-		host?: string
-		guild?: string
-		channel?: string
-		message?: string
-	}
+		host?: string;
+		guild?: string;
+		channel?: string;
+		message?: string;
+	};
 }
 
 export const useChatRoute = () => {
 	const route = useRoute() as ChatRoute;
 	return {
-		host: computed(() => route.params.host === session.value?.host ? "" : route.params.host),
+		host: computed(() => (route.params.host === session.value?.host ? "" : route.params.host)),
 		guild: computed(() => route.params.guild),
 		channel: computed(() => route.params.channel),
 		message: computed(() => route.params.message),

@@ -5,22 +5,20 @@
 // }
 
 export function getLinks(text: string): string[] {
-	return text
-		.split(/\s/)
-		.filter(word => word.match(/^https?:\/\//));
+	return text.split(/\s/).filter((word) => word.match(/^https?:\/\//));
 }
 
 /**
  * Generates anchors for the text.
  */
 export function linkify(text: string): string {
-	return text.replaceAll(/(?:www|https?)[^\s]+/ig, "<a target=\"_blank\" href=\"$&\">$&</a>");
+	return text.replaceAll(/(?:www|https?)[^\s]+/gi, '<a target="_blank" href="$&">$&</a>');
 }
 
 interface IRange {
-	start: number
-	end: number
-	traits: string[]
+	start: number;
+	end: number;
+	traits: string[];
 }
 
 function sortRange(lhs: IRange, rhs: IRange): number {
@@ -48,8 +46,7 @@ export function merge(ranges: IRange[]): Array<IRange> {
 					|---top---|
 					|----against----|
 			*/
-		}
-		else if (top.start === against.start && top.end < against.end) {
+		} else if (top.start === against.start && top.end < against.end) {
 			s.pop();
 			s.push({
 				start: top.start,
@@ -65,8 +62,7 @@ export function merge(ranges: IRange[]): Array<IRange> {
 					|---top---|
 									|---against---|
 			 */
-		}
-		else if (top.end < against.end) {
+		} else if (top.end < against.end) {
 			s.pop();
 			s.push({
 				start: top.start,
@@ -87,8 +83,7 @@ export function merge(ranges: IRange[]): Array<IRange> {
 					|--------top--------|
 							|---against---|
 			 */
-		}
-		else if (top.start < against.start && top.end > against.end) {
+		} else if (top.start < against.start && top.end > against.end) {
 			s.pop();
 			s.push({
 				start: top.start,
@@ -105,8 +100,7 @@ export function merge(ranges: IRange[]): Array<IRange> {
 				end: top.end,
 				traits: top.traits,
 			});
-		}
-		else {
+		} else {
 			console.warn(top, against);
 			throw new Error("unhandled case");
 		}

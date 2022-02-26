@@ -6,14 +6,14 @@ import { session } from "../store/session";
 type ChatStream = DuplexStreamingCall<StreamEventsRequest, StreamEventsResponse>;
 
 interface IConnection {
-	conn: Connection
-	stream?: ChatStream
+	conn: Connection;
+	stream?: ChatStream;
 }
 
 export class ConnectionManager {
 	interceptors?: RpcInterceptor[];
 	connections: {
-		[host: string]: IConnection
+		[host: string]: IConnection;
 	};
 
 	constructor(interceptors?: RpcInterceptor[]) {

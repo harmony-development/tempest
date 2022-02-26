@@ -10,7 +10,7 @@ import Attachment from "./Attachment.vue";
 import { getLinks } from "~/logic/formatting";
 import { parseHMC } from "~/logic/parsing";
 const props = defineProps<{
-	content: Content
+	content: Content;
 }>();
 
 const { host } = useChatRoute();
@@ -23,7 +23,7 @@ const urls = computed(() => {
 });
 const metadatas = computed(() => {
 	if (!urls.value) return;
-	return urls.value.map(url => chatState.getURLMetadata(host.value!, url));
+	return urls.value.map((url) => chatState.getURLMetadata(host.value!, url));
 });
 
 const metaToAttachment = (metadata: MediaMetadata) => ({
@@ -31,32 +31,36 @@ const metaToAttachment = (metadata: MediaMetadata) => ({
 	size: metadata.size || 0,
 });
 
-watch(urls, async() => {
-	if (!urls.value) return;
-	await api.fetchMetadata(host.value!, urls.value);
-}, { immediate: true });
+watch(
+	urls,
+	async () => {
+		if (!urls.value) return;
+		await api.fetchMetadata(host.value!, urls.value);
+	},
+	{ immediate: true }
+);
 </script>
 
 <template>
-  <div class="content-out">
-    <formatted-text :text="content.text" :formats="content.textFormats" />
-    <div v-for="(metadata, i) of metadatas" :key="urls?.[i]" class="p-3 flexcol gap-2 mt-2 bg-surface-900">
-      <template v-if="metadata?.oneofKind === 'isSite'">
-        <a class="font-bold" :href="metadata.isSite.url" target="_blank">
-          {{ metadata.isSite.pageTitle }}
-        </a>
-        <span class="text-gray-500">
-          {{ metadata.isSite.description }}
-        </span>
-        <template v-for="thumbnail of metadata.isSite.thumbnail" :key="thumbnail.url">
-          <img :src="parseHMC(thumbnail.url, host!)" :width="thumbnail.info?.width" :height="thumbnail.info?.height">
-        </template>
-      </template>
-      <template v-else-if="metadata?.oneofKind === 'isMedia'">
-        <attachment :id="urls![i]" :host="host!" :attachment="metaToAttachment(metadata.isMedia)" />
-      </template>
-    </div>
-  </div>
+	<div class="content-out">
+		<formatted-text :text="content.text" :formats="content.textFormats" />
+		<div v-for="(metadata, i) of metadatas" :key="urls?.[i]" class="p-3 flexcol gap-2 mt-2 bg-surface-900">
+			<template v-if="metadata?.oneofKind === 'isSite'">
+				<a class="font-bold" :href="metadata.isSite.url" target="_blank">
+					{{ metadata.isSite.pageTitle }}
+				</a>
+				<span class="text-gray-500">
+					{{ metadata.isSite.description }}
+				</span>
+				<template v-for="thumbnail of metadata.isSite.thumbnail" :key="thumbnail.url">
+					<img :src="parseHMC(thumbnail.url, host!)" :width="thumbnail.info?.width" :height="thumbnail.info?.height" />
+				</template>
+			</template>
+			<template v-else-if="metadata?.oneofKind === 'isMedia'">
+				<attachment :id="urls![i]" :host="host!" :attachment="metaToAttachment(metadata.isMedia)" />
+			</template>
+		</div>
+	</div>
 </template>
 <style lang="postcss" scoped>
 p {

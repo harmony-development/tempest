@@ -21,10 +21,10 @@ const addServer = (name: string, host: string) => {
 	addingServer.value = false;
 };
 
-const nextClicked = () => {
+const nextClicked = async () => {
 	const { host } = serverList.value[selectedServer.value];
 	if (!host) return;
-	router.push({
+	await router.push({
 		name: "auth",
 		params: {
 			host: parseUserHost(host),
@@ -32,51 +32,45 @@ const nextClicked = () => {
 	});
 };
 
-onMounted(() => {
-	if (session.value) router.push({ name: "chat" });
+onMounted(async () => {
+	if (session.value) await router.push({ name: "chat" });
 });
 </script>
 
 <template>
-  <add-server-dialog v-model="addingServer" @cancel="addingServer = false" @done="addServer" />
-  <h1 class="text-lg font-bold">
-    {{ $t('welcome-to-tempest') }}
-  </h1>
-  <div class="text-sm w-full">
-    <base-button variant="filled" color="primary" @click="addingServer = true">
-      {{ $t('add-server') }}
-    </base-button>
-  </div>
-  <ol class="bg-surface-800 rounded-sm overflow-hidden">
-    <base-list-item
-      v-for="({ name, host }, i) in serverList"
-      :key="host"
-      :selected="i === selectedServer"
-      class="server-entry"
-      @click="selectedServer = i"
-      @keydown.enter="selectedServer = i"
-    >
-      <div class="text-sm">
-        <p>{{ name }}</p>
-        <p class="text-gray-400">
-          {{ host }}
-        </p>
-      </div>
-      <div class="flex-1" />
-      <base-button icon variant="text" class="delete-button" @pointerdown.stop @click="deleteItem(i)">
-        <mdi-delete />
-      </base-button>
-    </base-list-item>
-  </ol>
-  <base-button
-    variant="filled"
-    color="primary"
-    class="w-min ml-auto"
-    :disabled="!serverList[selectedServer]"
-    @click="nextClicked"
-  >
-    {{ $t('next') }}
-  </base-button>
+	<add-server-dialog v-model="addingServer" @cancel="addingServer = false" @done="addServer" />
+	<h1 class="text-lg font-bold">
+		{{ $t("welcome-to-tempest") }}
+	</h1>
+	<div class="text-sm w-full">
+		<base-button variant="filled" color="primary" @click="addingServer = true">
+			{{ $t("add-server") }}
+		</base-button>
+	</div>
+	<ol class="bg-surface-800 rounded-sm overflow-hidden">
+		<base-list-item
+			v-for="({ name, host }, i) in serverList"
+			:key="host"
+			:selected="i === selectedServer"
+			class="server-entry"
+			@click="selectedServer = i"
+			@keydown.enter="selectedServer = i"
+		>
+			<div class="text-sm">
+				<p>{{ name }}</p>
+				<p class="text-gray-400">
+					{{ host }}
+				</p>
+			</div>
+			<div class="flex-1" />
+			<base-button icon variant="text" class="delete-button" @pointerdown.stop @click="deleteItem(i)">
+				<mdi-delete />
+			</base-button>
+		</base-list-item>
+	</ol>
+	<base-button variant="filled" color="primary" class="w-min ml-auto" :disabled="!serverList[selectedServer]" @click="nextClicked">
+		{{ $t("next") }}
+	</base-button>
 </template>
 
 <style lang="postcss" scoped>

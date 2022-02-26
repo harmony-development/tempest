@@ -1,26 +1,25 @@
-import { inject } from "vue";
+import type { UploadedFile } from "@harmony-dev/harmony-web-sdk";
+import type { ChannelKind } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/channels";
 import type { Guild, GuildListEntry } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/guilds";
-import type { MethodInfo, NextUnaryFn, RpcOptions } from "@protobuf-ts/runtime-rpc";
-import type { HrpcOptions } from "@harmony-dev/transport-hrpc/build/types/src/transport";
-import { EventEmitter } from "eventemitter3";
-import { RpcError } from "@protobuf-ts/runtime-rpc";
 import type { SendMessageRequest_Content } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
 import { GetChannelMessagesRequest_Direction, SendMessageRequest_Attachment } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
-import type { ChannelKind } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/channels";
-import type { UploadedFile } from "@harmony-dev/harmony-web-sdk";
-import { chatState } from "../logic/store/chat";
-import { convertChannelV1 } from "../logic/conversions/channels";
+import type { HrpcOptions } from "@harmony-dev/transport-hrpc/build/types/src/transport";
+import type { MethodInfo, NextUnaryFn, RpcOptions } from "@protobuf-ts/runtime-rpc";
+import { RpcError } from "@protobuf-ts/runtime-rpc";
+import { EventEmitter } from "eventemitter3";
+import { inject } from "vue";
 import { ConnectionManager } from "~/logic/api/connections";
-import { convertMessageV1 } from "~/logic/conversions/messages";
 import { convertGuildV1 } from "~/logic/conversions/guilds";
-import { sleep } from "~/logic/util/sleep";
+import { convertMessageV1 } from "~/logic/conversions/messages";
 import { objectMap } from "~/logic/util/objectMap";
-
+import { sleep } from "~/logic/util/sleep";
+import { convertChannelV1 } from "../logic/conversions/channels";
+import { chatState } from "../logic/store/chat";
 export class API extends EventEmitter<{
-	invalidSession: undefined
-	ratelimit: {error: RpcError; method: MethodInfo<any, any>; i: object; options: RpcOptions}
+	invalidSession: undefined;
+	ratelimit: { error: RpcError; method: MethodInfo<any, any>; i: object; options: RpcOptions };
 }> {
-	private manager: ConnectionManager;
+	private readonly manager: ConnectionManager;
 
 	constructor() {
 		super();
@@ -32,9 +31,10 @@ export class API extends EventEmitter<{
 				interceptUnary: this.backoffInterceptor.bind(this),
 			},
 		];
-		(import.meta as any).env.DEV && interceptors.push({
-			interceptUnary: this.debugInterceptor.bind(this),
-		});
+		(import.meta as any).env.DEV &&
+			interceptors.push({
+				interceptUnary: this.debugInterceptor.bind(this),
+			});
 		this.manager = new ConnectionManager(interceptors);
 	}
 
@@ -55,22 +55,22 @@ export class API extends EventEmitter<{
 
 	async sendMessage(host: string, guildId: string, channelId: string, text: string, files: File[], inReplyTo?: string) {
 		const { conn } = this.manager.get(host);
-		const send = (content: SendMessageRequest_Content) => conn.chat.sendMessage({
-			guildId,
-			channelId,
-			inReplyTo,
-			content,
-		});
+		const send = (content: SendMessageRequest_Content) =>
+			conn.chat.sendMessage({
+				guildId,
+				channelId,
+				inReplyTo,
+				content,
+			});
 		let uploaded: UploadedFile[] = [];
-		if (files.length > 0)
-			uploaded = await Promise.all(files.map(f => conn.uploadFile(f)));
-		send({
+		if (files.length > 0) uploaded = await Promise.all(files.map((f) => conn.uploadFile(f)));
+		return send({
 			text,
 			textFormats: [],
 			extra: {
 				oneofKind: "attachments",
 				attachments: {
-					attachments: uploaded.map(u => SendMessageRequest_Attachment.create(u)),
+					attachments: uploaded.map((u) => SendMessageRequest_Attachment.create(u)),
 				},
 			},
 		});
@@ -100,10 +100,15 @@ export class API extends EventEmitter<{
 		});
 	}
 
-	async fetchMessageList(host: string, guildId: string, channelId: string, options: {
-		messageId?: string
-		direction?: GetChannelMessagesRequest_Direction
-	} = {}) {
+	async fetchMessageList(
+		host: string,
+		guildId: string,
+		channelId: string,
+		options: {
+			messageId?: string;
+			direction?: GetChannelMessagesRequest_Direction;
+		} = {}
+	) {
 		const { messageId, direction } = options;
 		const { conn } = this.manager.get(host);
 		const { messages, reachedTop } = await conn.chat.getChannelMessages({
@@ -113,13 +118,11 @@ export class API extends EventEmitter<{
 			messageId,
 		}).response;
 
-		if (reachedTop)
-			chatState.setReachedTop(host, guildId, channelId, true);
+		if (reachedTop) chatState.setReachedTop(host, guildId, channelId, true);
 
-		for (const { message, messageId } of messages)
-			chatState.setMessageData(host, guildId, channelId, messageId, convertMessageV1(message!));
+		for (const { message, messageId } of messages) chatState.setMessageData(host, guildId, channelId, messageId, convertMessageV1(message!));
 
-		const messageList = messages.map(m => m.messageId);
+		const messageList = messages.map((m) => m.messageId);
 		chatState.setMessageList(host, guildId, channelId, messageList, messageId !== undefined);
 	}
 
@@ -142,9 +145,11 @@ export class API extends EventEmitter<{
 		const { members } = await conn.chat.getGuildMembers({
 			guildId,
 		}).response;
-		const profiles = (await conn.profile.getProfile({
-			userId: members,
-		}).response).profile;
+		const profiles = (
+			await conn.profile.getProfile({
+				userId: members,
+			}).response
+		).profile;
 		for (const userId in profiles) {
 			const profile = profiles[userId];
 			chatState.setUserData(host, userId, {
@@ -162,27 +167,28 @@ export class API extends EventEmitter<{
 		const { channels } = await conn.chat.getGuildChannels({
 			guildId,
 		}).response;
-		for (const { channelId, channel } of channels)
-			chatState.setChannelData(host, guildId, channelId, convertChannelV1(channel!));
+		for (const { channelId, channel } of channels) chatState.setChannelData(host, guildId, channelId, convertChannelV1(channel!));
 
-		const channelList = channels.map(c => c.channelId);
+		const channelList = channels.map((c) => c.channelId);
 		chatState.setGuildChannels(host, guildId, channelList);
 	}
 
 	async fetchGuild(host: string, guildId: string): Promise<Guild> {
 		const { conn } = this.manager.get(host);
-		const guild = (await conn.chat.getGuild({
-			guildIds: [guildId],
-		}).response).guild[guildId];
+		const guild = (
+			await conn.chat.getGuild({
+				guildIds: [guildId],
+			}).response
+		).guild[guildId];
 		chatState.setGuildData(host, guildId, convertGuildV1(guild!));
 		return guild!;
 	}
 
-	async fetchAllGuilds(host: string): Promise<[(Guild & {guildId: string; serverId: string})[], GuildListEntry[]]> {
+	async fetchAllGuilds(host: string): Promise<[(Guild & { guildId: string; serverId: string })[], GuildListEntry[]]> {
 		const { conn } = this.manager.get(host);
 		const { guilds } = await conn.chat.getGuildList({}).response;
 		const collected = guilds.reduce<{
-			[host: string]: string[]
+			[host: string]: string[];
 		}>((acc, current) => {
 			const serverId = current.serverId;
 			if (!acc[serverId]) acc[serverId] = [];
@@ -190,16 +196,29 @@ export class API extends EventEmitter<{
 			return acc;
 		}, {});
 
-		return [(await Promise.all(
-			Object.entries(collected).map(async([host, guildIds]) => this.manager.get(host).conn.chat.getGuild({
-				guildIds,
-			}).response.then(({ guild }) =>
-				Object.values(objectMap(guild, (guild, guildId) => ({
-					...guild,
-					guildId: guildId as string,
-					serverId: host,
-				}))),
-			)))).flat(), guilds];
+		return [
+			(
+				await Promise.all(
+					Object.entries(collected).map(async ([host, guildIds]) =>
+						this.manager
+							.get(host)
+							.conn.chat.getGuild({
+								guildIds,
+							})
+							.response.then(({ guild }) =>
+								Object.values(
+									objectMap(guild, (guild, guildId) => ({
+										...guild,
+										guildId: guildId as string,
+										serverId: host,
+									}))
+								)
+							)
+					)
+				)
+			).flat(),
+			guilds,
+		];
 	}
 
 	async updateProfile(host: string, username?: string, avatar?: File, bot?: boolean) {
@@ -255,13 +274,17 @@ export class API extends EventEmitter<{
 	}
 
 	async fetchMetadata(host: string, urls: string[]) {
-		const unfetched = urls.filter(url => chatState.getURLMetadata(host, url) === undefined);
+		const unfetched = urls.filter((url) => chatState.getURLMetadata(host, url) === undefined);
 		const { conn } = this.manager.get(host);
-		const { metadata } = await conn.mediaProxy.fetchLinkMetadata({ // TODO: add error handling here
+		const { metadata } = await conn.mediaProxy.fetchLinkMetadata({
+			// TODO: add error handling here
 			url: unfetched,
 		}).response;
 
-		chatState.setURLMetadata(host, objectMap(metadata, metadata => metadata.data));
+		chatState.setURLMetadata(
+			host,
+			objectMap(metadata, (metadata) => metadata.data)
+		);
 	}
 
 	private backoffInterceptor(next: NextUnaryFn, method: MethodInfo<any, any>, i: object, options: RpcOptions) {
@@ -269,13 +292,12 @@ export class API extends EventEmitter<{
 		const maxRetries = 3;
 
 		let result = next(method, i, options);
-		const handledResponse = (async() => {
+		const handledResponse = (async () => {
 			while (retries < maxRetries) {
 				try {
 					const resp = await result.response;
 					return resp;
-				}
-				catch (err) {
+				} catch (err) {
 					if (err instanceof RpcError && err.code === "hrpc.resource-exhausted") {
 						console.warn(`Ratelimited by server, retrying after 5s... (Retry ${retries + 1} of ${maxRetries})`);
 						this.emit("ratelimit", { error: err, method, i, options });
@@ -317,17 +339,24 @@ export class API extends EventEmitter<{
 		const call = next(method, i, options);
 		const logRequest = () => console.log("Request(%s):", method.I.typeName.split(".").pop(), Object.assign(i));
 		const start = window.performance.now();
-		call.response.then((res) => {
-			const duration = window.performance.now() - start;
-			console.groupCollapsed(`%c[API]%c: ${hrpcOpts.baseUrl} -> ${method.service.typeName} -> ${method.name} %c[took ${~~duration}ms]`, "color: #5978ff", "color: #fff", "color: #614ef2");
-			logRequest();
-			console.log("Response(%s)", method.O.typeName.split(".").pop(), Object.fromEntries(Object.entries(res)));
-			console.groupEnd();
-		}).catch((err) => {
-			console.groupCollapsed(`%c[API FAIL]%c: ${hrpcOpts.baseUrl} -> ${method.service.typeName} -> ${method.name}`, "color: #ff4000", "color: #fff");
-			logRequest();
-			console.log("%cError: %c", "color: #ff4000", "color: #fff", JSON.parse(JSON.stringify(err)));
-		});
+		call.response
+			.then((res) => {
+				const duration = window.performance.now() - start;
+				console.groupCollapsed(
+					`%c[API]%c: ${hrpcOpts.baseUrl} -> ${method.service.typeName} -> ${method.name} %c[took ${~~duration}ms]`,
+					"color: #5978ff",
+					"color: #fff",
+					"color: #614ef2"
+				);
+				logRequest();
+				console.log("Response(%s)", method.O.typeName.split(".").pop(), Object.fromEntries(Object.entries(res)));
+				console.groupEnd();
+			})
+			.catch((err) => {
+				console.groupCollapsed(`%c[API FAIL]%c: ${hrpcOpts.baseUrl} -> ${method.service.typeName} -> ${method.name}`, "color: #ff4000", "color: #fff");
+				logRequest();
+				console.log("%cError: %c", "color: #ff4000", "color: #fff", JSON.parse(JSON.stringify(err)));
+			});
 		return call;
 	}
 	/* eslint-enable no-console */

@@ -1,28 +1,28 @@
 <script setup lang="ts">
 const props = defineProps<{
-	variant?: "outlined" | "sided"
-	selected?: boolean
-	dangerous?: boolean
-	compact?: boolean
+	variant?: "outlined" | "sided";
+	selected?: boolean;
+	dangerous?: boolean;
+	compact?: boolean;
 }>();
 </script>
 
 <template>
-  <li
-    ref="item"
-    role="button"
-    class="list-item"
-    :class="{
-      selected: props.selected,
-      dangerous,
-      compact,
-      [variant || 'outlined']: true,
-    }"
-    tabindex="0"
-  >
-    <slot name="icon" />
-    <slot />
-  </li>
+	<li
+		ref="item"
+		role="button"
+		class="list-item"
+		:class="{
+			selected: props.selected,
+			dangerous,
+			compact,
+			[variant || 'outlined']: true,
+		}"
+		tabindex="0"
+	>
+		<slot name="icon" />
+		<slot />
+	</li>
 </template>
 
 <style lang="postcss" scoped>
