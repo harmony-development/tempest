@@ -134,12 +134,12 @@ export const useAuthManager = (host: string) => {
 	const onStep = async (step: AuthStep["step"]) => {
 		if (step.oneofKind === "session") {
 			const { sessionToken, userId } = step.session;
-			await router.push({ name: "chat" });
 			session.value = {
 				session: sessionToken,
 				userID: userId,
 				host,
 			};
+			await router.push({ name: "chat" });
 		}
 		error.value = undefined;
 		currentStepType.value = step.oneofKind;

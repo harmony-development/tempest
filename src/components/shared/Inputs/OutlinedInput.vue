@@ -20,7 +20,6 @@ const props = defineProps<{
 				{{ props.placeholder || props.label }}
 			</legend>
 		</fieldset>
-		<mdi:help-circle-outline />
 	</div>
 </template>
 

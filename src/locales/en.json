@@ -61,6 +61,7 @@
   "missing-content": "Message content is missing",
   "unknown-user": "Unknown User",
   "username": "Username",
+  "email": "Email",
   "welcome-to-tempest": "Welcome to Tempest",
   "woozy": "Woozy",
   "write-your-message": "Write your message..."
