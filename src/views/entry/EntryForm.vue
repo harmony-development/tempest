@@ -4,7 +4,7 @@ import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import BaseButton from "~/components/base/BaseButton.vue";
 import BaseInput from "~/components/base/BaseInput.vue";
-import NewPasswordInput from "~/components/chat/NewPasswordInput.vue";
+import NewPasswordInput from "~/views/entry/NewPasswordInput.vue";
 const props = defineProps<{
 	form: AuthStep_Form;
 	error: unknown;
@@ -26,7 +26,7 @@ const fieldValues = ref<string[]>(props.form.fields.map(() => ""));
 	<span class="text-error">{{ props.error }}</span>
 	<form class="flexcol gap-3" @submit.prevent>
 		<template v-for="(f, i) in form.fields" :key="f.name">
-			<new-password-input v-if="f.type === 'new-password'" v-model="fieldValues[i]" autocomplete="on" />
+			<new-password-input v-if="f.type === 'new-password'" v-model="fieldValues[i]" />
 			<base-input v-else v-model="fieldValues[i]" :label="t(f.name)" :type="f.type" autocomplete="on" />
 		</template>
 		<base-button variant="outlined" class="w-min ml-auto" color="primary" type="submit" :is-loading="isLoading" @click="$emit('done', fieldValues)">

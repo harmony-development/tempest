@@ -2,7 +2,7 @@
 
 <template>
 	<div class="background h-full w-full overflow-x-auto items-center justify-center flex flex-row">
-		<div class="flexcol gap-2 bg-surface-900 h-min p-3 w-11/12 sm:m-12 md:w-150">
+		<div class="flexcol gap-2 bg-surface-900 h-min p-3 w-11/12 sm:m-12 md:w-150 relative">
 			<router-view />
 		</div>
 		<svg width="768" height="768" viewBox="0 0 281 281" fill="none" xmlns="http://www.w3.org/2000/svg" class="hidden md:block">

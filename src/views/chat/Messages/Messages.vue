@@ -82,21 +82,20 @@ const isConsecutiveMessage = (i: number) => {
 </script>
 
 <template>
-	<div ref="list" class="p-2 sm:p-7 gap-2 overflow-y-auto w-full compact-scrollbar flexcol flex-1">
-		<div class="flexcol flex-1 gap-2">
-			<div ref="loader">
-				<mdi-loading v-if="!reachedTop" class="text-xl animate-spin" />
-			</div>
-			<Message
-				v-for="(m, i) in messageList"
-				:key="`${host}/${guild}/${channel}/${m}`"
-				:messageid="m"
-				:host="host"
-				:guildid="guild"
-				:channelid="channel"
-				:data="chatState.getMessage(host, guild, channel, m)!"
-				:hide-avatar="isConsecutiveMessage(i)"
-			/>
+	<div ref="list" class="p-2 sm:px-7 gap-2 overflow-y-auto w-full compact-scrollbar flexcol flex-1">
+		<div ref="loader" class="flexcol flex-1 gap-2 items-center">
+			<p class="text-gray-300">LOADING MESSAGES</p>
+			<mdi-loading v-if="!reachedTop" class="text-xl animate-spin" />
 		</div>
+		<Message
+			v-for="(m, i) in messageList"
+			:key="`${host}/${guild}/${channel}/${m}`"
+			:messageid="m"
+			:host="host"
+			:guildid="guild"
+			:channelid="channel"
+			:data="chatState.getMessage(host, guild, channel, m)!"
+			:hide-avatar="isConsecutiveMessage(i)"
+		/>
 	</div>
 </template>

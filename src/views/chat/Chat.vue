@@ -1,25 +1,25 @@
 <script lang="ts" setup>
+import type { MethodInfo, RpcError, RpcOptions } from "@protobuf-ts/runtime-rpc";
 import { computed, defineAsyncComponent, onMounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
-import type { MethodInfo, RpcError, RpcOptions } from "@protobuf-ts/runtime-rpc";
-import { useI18n } from "vue-i18n";
+import BaseDrawer from "~/components/base/BaseDrawer.vue";
+import { pubsub } from "~/logic/api/pubsub";
 import { chatState } from "../../logic/store/chat";
 import { session } from "../../logic/store/session";
 import { uiState } from "../../logic/store/ui";
 import { useChatRoute } from "../../router";
 import { useAPI } from "../../services/api";
 import ChannelList from "./ChannelList/ChannelList.vue";
-import UserSettings from "./Dialogs/UserSettings.vue";
-import GuildList from "./GuildList/GuildList.vue";
-import Splash from "./Splash.vue";
-import MemberList from "./MemberList/MemberList.vue";
-import Messages from "./Messages/Messages.vue";
 import Composer from "./Composer/Composer.vue";
 import GuildSettings from "./Dialogs/GuildSettings.vue";
+import UserSettings from "./Dialogs/UserSettings.vue";
+import GuildList from "./GuildList/GuildList.vue";
 import MemberItem from "./MemberList/MemberItem.vue";
-import { pubsub } from "~/logic/api/pubsub";
-import BaseDrawer from "~/components/base/BaseDrawer.vue";
+import MemberList from "./MemberList/MemberList.vue";
+import Messages from "./Messages/Messages.vue";
+import Splash from "./Splash.vue";
 
 const AddGuild = defineAsyncComponent(() => import("./Dialogs/AddGuild.vue"));
 const AddChannel = defineAsyncComponent(() => import("./Dialogs/AddChannel.vue"));
@@ -87,7 +87,7 @@ watch(
 <template>
 	<splash v-if="!sessionValidated" />
 	<div v-else class="h-full w-full flex">
-		<base-dialog v-model="uiState.state.addGuildDialog">
+		<base-dialog v-model="uiState.state.addGuildDialog" unsized>
 			<add-guild v-if="uiState.state.addGuildDialog" />
 		</base-dialog>
 		<base-dialog v-model="uiState.state.addChannelDialog">

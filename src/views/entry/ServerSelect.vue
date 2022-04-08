@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
+import BaseButton from "~/components/base/BaseButton.vue";
+import BaseListItem from "~/components/base/BaseListItem.vue";
+import { parseUserHost } from "~/logic/parsing";
 import { session } from "../../logic/store/session";
 import AddServerDialog from "./AddServerDialog.vue";
 import { serverList } from "./serverlist";
-import BaseButton from "~/components/base/BaseButton.vue";
-import { parseUserHost } from "~/logic/parsing";
-import BaseListItem from "~/components/base/BaseListItem.vue";
 
 const router = useRouter();
 const addingServer = ref(false);
@@ -47,7 +47,7 @@ onMounted(async () => {
 			{{ $t("add-server") }}
 		</base-button>
 	</div>
-	<ol class="bg-surface-800 rounded-sm overflow-hidden">
+	<TransitionGroup tag="ol" name="sl" class="bg-surface-800 rounded-sm">
 		<base-list-item
 			v-for="({ name, host }, i) in serverList"
 			:key="host"
@@ -67,7 +67,7 @@ onMounted(async () => {
 				<mdi-delete />
 			</base-button>
 		</base-list-item>
-	</ol>
+	</TransitionGroup>
 	<base-button variant="filled" color="primary" class="w-min ml-auto" :disabled="!serverList[selectedServer]" @click="nextClicked">
 		{{ $t("next") }}
 	</base-button>
@@ -84,5 +84,25 @@ onMounted(async () => {
 			visibility: visible;
 		}
 	}
+}
+
+/* 1. declare transition */
+.sl-move,
+.sl-enter-active,
+.sl-leave-active {
+	transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+/* 2. declare enter from and leave to state */
+.sl-enter-from,
+.sl-leave-to {
+	opacity: 0;
+	transform: scaleY(0.01) translate(30px, 0);
+}
+
+/* 3. ensure leaving items are taken out of layout flow so that moving
+      animations can be calculated correctly. */
+.sl-leave-active {
+	position: absolute;
 }
 </style>

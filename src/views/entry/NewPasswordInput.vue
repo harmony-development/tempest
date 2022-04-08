@@ -1,11 +1,11 @@
 <template>
-	<base-input v-model="input1" type="password" label="Password" />
-	<base-input v-model="input2" type="password" label="Confirm Password" />
+	<base-input v-model="input1" autocomplete="current-password" type="password" label="Password" />
+	<base-input v-model="input2" autocomplete="new-password" type="password" label="Confirm Password" />
 </template>
 
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import BaseInput from "../base/BaseInput.vue";
+import BaseInput from "../../components/base/BaseInput.vue";
 
 defineProps<{
 	modelValue: string;

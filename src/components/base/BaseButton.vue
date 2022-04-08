@@ -11,6 +11,7 @@ const props = defineProps<{
 	disabled?: boolean;
 	button?: boolean;
 	isLoading?: boolean;
+	raw?: boolean;
 }>();
 
 const buttonClasses = computed(() => ({
@@ -22,6 +23,7 @@ const buttonClasses = computed(() => ({
 	dense: props.dense,
 	square: props.square,
 	disabled: props.disabled || props.isLoading,
+	raw: props.raw,
 }));
 </script>
 <template>
@@ -36,9 +38,13 @@ const buttonClasses = computed(() => ({
 <style lang="postcss" scoped>
 .btn {
 	color: inherit;
-	@apply px-4 py-2 rounded-sm transition duration-100 ease-in-out
+	@apply transition duration-100 ease-in-out
     inline-flex justify-center items-center
     cursor-pointer select-none no-underline relative;
+
+	&:not(.raw) {
+		@apply px-4 py-2 rounded-sm;
+	}
 
 	&.dense {
 		@apply p-1;
@@ -48,12 +54,9 @@ const buttonClasses = computed(() => ({
 		@apply pointer-events-none filter saturate-40 opacity-50;
 	}
 
+	&:hover,
 	&:focus-visible {
-		@apply ring ring-1 ring-primary-300;
-	}
-
-	&:hover {
-		@apply ring ring-current ring-1;
+		@apply outline outline-2 outline-offset-2 outline-primary-300/50;
 	}
 
 	&:active {
@@ -86,7 +89,7 @@ const buttonClasses = computed(() => ({
 }
 
 .outlined {
-	@apply border-2;
+	@apply border-2 bg-surface-500;
 }
 
 .primary {
