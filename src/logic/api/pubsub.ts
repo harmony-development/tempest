@@ -30,11 +30,11 @@ export function pubsub(host: string, api: API): (ev: StreamEventsResponse) => vo
 				void api.fetchGuild(host, guild.guildId); // TODO: handle errors properly
 				chatState.state.guildList.push({
 					guildID: guild.guildId,
-					host: guild.homeserver,
+					host: guild.serverId || "",
 				});
 			},
 			guildRemovedFromList(_, { guildRemovedFromList: guild }) {
-				chatState.state.guildList = chatState.state.guildList.filter((g) => g.guildID !== guild.guildId || g.host !== guild.homeserver);
+				chatState.state.guildList = chatState.state.guildList.filter((g) => g.guildID !== guild.guildId || g.host !== (guild.serverId || ""));
 			},
 			createdChannel(host, { createdChannel }) {
 				chatState.addChannel(host, createdChannel.guildId, createdChannel.channelId, {

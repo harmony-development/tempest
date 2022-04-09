@@ -77,7 +77,7 @@ watch(
 	[selectedHost, selectedGuild],
 	async ([host, guild], [prevHost, prevGuild]) => {
 		if (host === prevHost && guild === prevGuild) return;
-		if (host == null || !guild) return;
+		if (!host || !guild) return;
 		await Promise.all([api.fetchMemberList(host, guild), api.fetchChannelList(host, guild)]); // TODO: handle fetch errors
 	},
 	{ immediate: true }

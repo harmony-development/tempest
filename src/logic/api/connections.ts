@@ -30,8 +30,8 @@ export class ConnectionManager {
 		return [conn, stream];
 	}
 
-	get(host: string) {
-		host = host || session.value!.host;
+	get(host_: string) {
+		const host = host_ || session.value!.host;
 		if (!this.connections[host]) {
 			const conn = new Connection(host, {
 				interceptors: this.interceptors,

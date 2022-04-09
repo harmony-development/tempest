@@ -21,7 +21,7 @@ onMounted(async () => {
 		const guildData = chatState.ensureGuild(guild.serverId, guild.guildId);
 		guildData.data = convertGuildV1(guild);
 	}
-	chatState.state.guildList = guildList.map((e) => ({ guildID: e.guildId, host: e.serverId }));
+	chatState.state.guildList = guildList.map((e) => ({ guildID: e.guildId, host: e.serverId || "" }));
 });
 
 const guildList = computed(() => chatState.state.guildList);

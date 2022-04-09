@@ -4,6 +4,10 @@ import dayjs from "dayjs";
 import type { Ref } from "vue";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import BaseButton from "~/components/base/BaseButton.vue";
+import BaseListItem from "~/components/base/BaseListItem.vue";
+import BasePopover from "~/components/base/BasePopover.vue";
+import Avatar from "~/components/chat/Avatar.vue";
 import { getMessageText } from "../../../logic/conversions/messages";
 import type { IMessageData } from "../../../logic/store/chat";
 import { chatState } from "../../../logic/store/chat";
@@ -12,10 +16,7 @@ import { uiState } from "../../../logic/store/ui";
 import { useAPI } from "../../../services/api";
 import Attachment from "./Attachment.vue";
 import BaseEmbed from "./BaseEmbed.vue";
-import Avatar from "~/components/chat/Avatar.vue";
-import BasePopover from "~/components/base/BasePopover.vue";
-import BaseListItem from "~/components/base/BaseListItem.vue";
-import BaseButton from "~/components/base/BaseButton.vue";
+import TextVue from "./Text.vue";
 
 const props = defineProps<{
 	host: string;
@@ -67,7 +68,7 @@ const onReply = () => {
 			</p>
 		</div>
 		<div :class="hideAvatar && 'hideAvatar'" class="messageBody text-sm relative">
-			<text v-if="content" :content="content" />
+			<text-vue v-if="content" :content="content" />
 			<template v-if="attachments">
 				<attachment v-for="attachment in attachments" :key="attachment.id" :host="host" :attachment="attachment" />
 			</template>
@@ -84,7 +85,7 @@ const onReply = () => {
 				</p>
 			</div>
 		</div>
-		<base-popover :open="optionsOpen" placement="right-start">
+		<base-popover :open="optionsOpen" :placement="isOwnMessage ? 'left-start' : 'right-start'">
 			<base-button icon dense class="text-md messageOptions" @click="optionsOpen = true">
 				<mdi-dots-vertical />
 			</base-button>

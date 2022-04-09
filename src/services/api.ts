@@ -61,18 +61,15 @@ export class API extends EventEmitter<{
 				channelId,
 				inReplyTo,
 				content,
+				actions: [],
 			});
 		let uploaded: UploadedFile[] = [];
 		if (files.length > 0) uploaded = await Promise.all(files.map((f) => conn.uploadFile(f)));
 		return send({
 			text,
 			textFormats: [],
-			extra: {
-				oneofKind: "attachments",
-				attachments: {
-					attachments: uploaded.map((u) => SendMessageRequest_Attachment.create(u)),
-				},
-			},
+			embeds: [],
+			attachments: uploaded.map((u) => SendMessageRequest_Attachment.create(u)),
 		});
 	}
 
@@ -134,7 +131,7 @@ export class API extends EventEmitter<{
 		const user = profile[userId];
 		chatState.setUserData(host, userId, {
 			username: user.userName,
-			status: user.userStatus,
+			status: user.userStatus!, // server will never return undefined
 			picture: user.userAvatar,
 			kind: user.accountKind,
 		});
@@ -154,7 +151,7 @@ export class API extends EventEmitter<{
 			const profile = profiles[userId];
 			chatState.setUserData(host, userId, {
 				username: profile.userName,
-				status: profile.userStatus,
+				status: profile.userStatus!, // server will never return undefined
 				picture: profile.userAvatar,
 				kind: profile.accountKind,
 			});
@@ -190,7 +187,7 @@ export class API extends EventEmitter<{
 		const collected = guilds.reduce<{
 			[host: string]: string[];
 		}>((acc, current) => {
-			const serverId = current.serverId;
+			const serverId = current.serverId || "";
 			if (!acc[serverId]) acc[serverId] = [];
 			acc[serverId].push(current.guildId);
 			return acc;
@@ -221,7 +218,7 @@ export class API extends EventEmitter<{
 		];
 	}
 
-	async updateProfile(host: string, username?: string, avatar?: File, bot?: boolean) {
+	async updateProfile(host: string, username?: string, avatar?: File) {
 		const { conn } = this.manager.get(host);
 		let newUserAvatar: string | undefined;
 		if (avatar) {
@@ -231,7 +228,6 @@ export class API extends EventEmitter<{
 		await conn.profile.updateProfile({
 			newUserAvatar,
 			newUserName: username,
-			newIsBot: bot,
 		});
 	}
 

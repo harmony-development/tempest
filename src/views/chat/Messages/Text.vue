@@ -1,14 +1,14 @@
 <script lang="ts" setup>
-import { computed, watch } from "vue";
 import type { Content } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
 import type { MediaMetadata } from "@harmony-dev/harmony-web-sdk/dist/gen/mediaproxy/v1/mediaproxy";
-import { useAPI } from "../../../services/api";
-import { chatState } from "../../../logic/store/chat";
-import { useChatRoute } from "../../../router";
-import FormattedText from "./FormattedText.vue";
-import Attachment from "./Attachment.vue";
+import { computed, watch } from "vue";
 import { getLinks } from "~/logic/formatting";
 import { parseHMC } from "~/logic/parsing";
+import { chatState } from "../../../logic/store/chat";
+import { useChatRoute } from "../../../router";
+import { useAPI } from "../../../services/api";
+import Attachment from "./Attachment.vue";
+import FormattedText from "./FormattedText.vue";
 const props = defineProps<{
 	content: Content;
 }>();
@@ -53,7 +53,7 @@ watch(
 					{{ metadata.isSite.description }}
 				</span>
 				<template v-for="thumbnail of metadata.isSite.thumbnail" :key="thumbnail.url">
-					<img :src="parseHMC(thumbnail.url, host!)" :width="thumbnail.info?.width" :height="thumbnail.info?.height" />
+					<img :src="parseHMC(thumbnail.url, host!)" :width="thumbnail.width" :height="thumbnail.height" />
 				</template>
 			</template>
 			<template v-else-if="metadata?.oneofKind === 'isMedia'">

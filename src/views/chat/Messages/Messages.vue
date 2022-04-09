@@ -84,8 +84,10 @@ const isConsecutiveMessage = (i: number) => {
 <template>
 	<div ref="list" class="p-2 sm:px-7 gap-2 overflow-y-auto w-full compact-scrollbar flexcol flex-1">
 		<div ref="loader" class="flexcol flex-1 gap-2 items-center">
-			<p class="text-gray-300">LOADING MESSAGES</p>
-			<mdi-loading v-if="!reachedTop" class="text-xl animate-spin" />
+			<template v-if="!reachedTop">
+				<p class="text-gray-300">LOADING MESSAGES</p>
+				<mdi-loading class="text-xl animate-spin" />
+			</template>
 		</div>
 		<Message
 			v-for="(m, i) in messageList"

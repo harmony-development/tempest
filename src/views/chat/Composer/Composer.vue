@@ -37,7 +37,7 @@
 					<mdi-add :class="{ pickerOpen }" class="transition-all duration-100" />
 				</button>
 				<template #content>
-					<message-type-picker ref="messageTypePicker" @sent="pickerOpen = false" @update:message-type="onMessageTypeChange" />
+					<MessageTypePicker ref="messageTypePicker" @sent="pickerOpen = false" @update:message-type="onMessageTypeChange" />
 				</template>
 			</base-popover>
 			<base-input
@@ -70,12 +70,13 @@ import { onClickOutside, useEventListener } from "@vueuse/core";
 import type { Ref } from "vue";
 import { computed, ref, toRefs } from "vue";
 import { useI18n } from "vue-i18n";
-import { useAPI } from "../../../services/api";
-import { session } from "../../../logic/store/session";
 import BaseButton from "~/components/base/BaseButton.vue";
 import BaseInput from "~/components/base/BaseInput.vue";
 import BasePopover from "~/components/base/BasePopover.vue";
 import { chatState } from "~/logic/store/chat";
+import { session } from "../../../logic/store/session";
+import { useAPI } from "../../../services/api";
+import MessageTypePicker from "./MessageTypePicker.vue";
 
 const props = defineProps<{
 	host: string;
