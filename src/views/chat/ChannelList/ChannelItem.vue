@@ -4,9 +4,8 @@ import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { chatState } from "../../../logic/store/chat";
 import { useChatRoute } from "../../../router";
-import BaseListItem from "~/components/base/BaseListItem.vue";
 const props = defineProps<{
-	channelid: string
+	channelid: string;
 }>();
 const router = useRouter();
 const { host, guild, channel: selectedChannel } = useChatRoute();
@@ -14,14 +13,24 @@ const channel = computed(() => chatState.getChannel(host.value!, guild.value!, p
 const data = computed(() => channel.value.data);
 const goToChannel = () => {
 	chatState.getGuild(host.value!, guild.value!).lastChannel = props.channelid;
-	router.push({ params: { channel: props.channelid } });
+	return router.push({ params: { channel: props.channelid } });
 };
 </script>
 
 <template>
-  <base-list-item :selected="selectedChannel === channelid" variant="sided" @click="goToChannel">
-    <mdi-pound v-if="data?.kind === ChannelKind.TEXT_UNSPECIFIED" class="text-base text-gray-400" />
-    <mdi-volume v-else class="text-base text-gray-400" />
-    <span class="text-md ml-2">{{ data?.name }}</span>
-  </base-list-item>
+	<li class="channel-item" :class="{ selected: selectedChannel === channelid }" variant="sided" @click="goToChannel">
+		<mdi-pound v-if="data?.kind === ChannelKind.TEXT_UNSPECIFIED" class="text-base text-gray-400" />
+		<mdi-volume v-else class="text-base text-gray-400" />
+		<span class="text-md ml-2">{{ data?.name }}</span>
+	</li>
 </template>
+
+<style lang="postcss" scoped>
+.channel-item {
+	@apply flex items-center gap-2 cursor-pointer py-2 px-3 select-none hover:bg-surface-500 transition duration-200 border-l-0 border-white;
+}
+
+.selected {
+	@apply bg-surface-500 border-l-4 border-primary-300;
+}
+</style>

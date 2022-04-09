@@ -3,11 +3,9 @@ import typography from "windicss/plugin/typography";
 
 function cssVarRgbHelper(cssVariable: string) {
 	return ({ opacityVariable, opacityValue }: { opacityVariable: string; opacityValue: number }) => {
-		if (opacityValue !== undefined)
-			return `rgba(var(--${cssVariable}), ${opacityValue})`;
+		if (opacityValue !== undefined) return `rgba(var(--${cssVariable}), ${opacityValue})`;
 
-		if (opacityVariable !== undefined)
-			return `rgba(var(--${cssVariable}), var(${opacityVariable}, 1))`;
+		if (opacityVariable !== undefined) return `rgba(var(--${cssVariable}), var(${opacityVariable}, 1))`;
 
 		return `rgb(var(--${cssVariable}))`;
 	};

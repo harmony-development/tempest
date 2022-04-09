@@ -55,6 +55,7 @@ declare module 'vue' {
     MdiSend: typeof import('~icons/mdi/send')['default']
     MdiSkull: typeof import('~icons/mdi/skull')['default']
     MdiVolume: typeof import('~icons/mdi/volume')['default']
+    NewPasswordInput: typeof import('./src/components/chat/NewPasswordInput.vue')['default']
     OutlinedInput: typeof import('./src/components/shared/Inputs/OutlinedInput.vue')['default']
     PlainInput: typeof import('./src/components/shared/Inputs/PlainInput.vue')['default']
     PopInTransition: typeof import('./src/components/transitions/PopInTransition.vue')['default']

@@ -1,3 +1,5 @@
+/// <reference types="vite/client" />
+
 declare module "vue3-popper" {
 	import type { Component } from "vue";
 

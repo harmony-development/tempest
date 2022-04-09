@@ -5,15 +5,15 @@ describe.concurrent("linkification", () => {
 	const cases = [
 		{
 			given: "http://example.com",
-			expected: "<a target=\"_blank\" href=\"http://example.com\">http://example.com</a>",
+			expected: '<a target="_blank" href="http://example.com">http://example.com</a>',
 		},
 		{
 			given: "fumo fumo http://example.com/foo mufo mufo",
-			expected: "fumo fumo <a target=\"_blank\" href=\"http://example.com/foo\">http://example.com/foo</a> mufo mufo",
+			expected: 'fumo fumo <a target="_blank" href="http://example.com/foo">http://example.com/foo</a> mufo mufo',
 		},
 		{
 			given: "fumo fumo\nhttp://example.com/foo mufo mufo",
-			expected: "fumo fumo\n<a target=\"_blank\" href=\"http://example.com/foo\">http://example.com/foo</a> mufo mufo",
+			expected: 'fumo fumo\n<a target="_blank" href="http://example.com/foo">http://example.com/foo</a> mufo mufo',
 		},
 	];
 

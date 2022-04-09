@@ -2,8 +2,9 @@
 	"prettier.enable": false,
 	"editor.formatOnSave": false,
 	"editor.codeActionsOnSave": {
+		"source.format": false,
 		"source.fixAll.eslint": true,
-		"source.organizeImports": false,
+		"source.organizeImports": true
 	},
 	"files.associations": {
 		"*.css": "postcss"

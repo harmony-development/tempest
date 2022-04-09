@@ -1,5 +1,5 @@
 export class AsyncLock {
-	private lock: Set<string>;
+	private readonly lock: Set<string>;
 
 	constructor() {
 		this.lock = new Set();
@@ -22,8 +22,7 @@ export class AsyncLock {
 	}
 
 	async run<T>(fn: () => Promise<T>, path: string[]) {
-		if (this.has(...path))
-			return;
+		if (this.has(...path)) return;
 
 		this.add(...path);
 		const res = await fn();

@@ -1,7 +1,7 @@
 <template>
-  <transition name="pop-in">
-    <slot />
-  </transition>
+	<transition name="pop-in">
+		<slot />
+	</transition>
 </template>
 
 <style lang="postcss" scoped>

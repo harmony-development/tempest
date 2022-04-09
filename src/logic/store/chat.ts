@@ -1,76 +1,72 @@
 import type { ChannelKind } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/channels";
-import type {
-	Content,
-	Overrides,
-	Reaction,
-} from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
-import type { FetchLinkMetadataResponse } from "@harmony-dev/harmony-web-sdk/dist/gen/mediaproxy/v1/mediaproxy";
-import type { UserStatus } from "@harmony-dev/harmony-web-sdk/dist/gen/profile/v1/types";
+import type { Content, Overrides, Reaction } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
+import type { FetchLinkMetadataResponse_Metadata } from "@harmony-dev/harmony-web-sdk/dist/gen/mediaproxy/v1/mediaproxy";
+import type { AccountKind, UserStatus } from "@harmony-dev/harmony-web-sdk/dist/gen/profile/v1/types";
 import { assignDefined } from "../util/assignDefined";
 import { AsyncLock } from "../util/asyncLock";
 import { Store } from "./store";
 
 export interface IGuildEntry {
-	host: string
-	guildID: string
+	host: string;
+	guildID: string;
 }
 
 interface IUserData {
-	username: string
-	picture?: string
-	status: UserStatus
-	isBot: boolean
+	username: string;
+	picture?: string;
+	status: UserStatus;
+	kind: AccountKind;
 }
 
 export interface IMessageData {
-	author: string
-	inReplyTo?: string
-	createdAt: string
-	editedAt?: string
-	content?: Content
-	reactions?: Reaction[]
-	override?: Overrides
+	author: string;
+	inReplyTo?: string;
+	createdAt: string;
+	editedAt?: string;
+	content?: Content;
+	reactions?: Reaction[];
+	override?: Overrides;
 }
 
 export interface IChannelData {
-	name: string
-	kind: ChannelKind
+	name: string;
+	kind: ChannelKind;
 }
 
 export interface IChannel {
-	data?: IChannelData
-	messages: Record<string, IMessageData | undefined>
-	messageList: string[]
-	replyTo?: string
+	data?: IChannelData;
+	messages: Record<string, IMessageData | undefined>;
+	messageList: string[];
+	replyTo?: string;
 	typers: {
-		[id: string]: number
-	}
-	reachedTop?: boolean
+		[id: string]: number;
+	};
+	reachedTop?: boolean;
 }
 
 export interface IGuildData {
-	name: string
-	owners: string[]
-	picture?: string
+	name: string;
+	owners: string[];
+	picture?: string;
 }
 
 export interface IGuild {
-	data?: IGuildData
-	channels: Record<string, IChannel>
-	members: Set<string>
-	channelList?: string[]
-	lastChannel?: string
+	data?: IGuildData;
+	channels: Record<string, IChannel>;
+	members: Set<string>;
+	channelList?: string[];
+	lastChannel?: string;
 }
 
 export interface IHostData {
-	guilds: Record<string, IGuild>
-	users: Record<string, IUserData>
-	linkMetadata: Record<string, FetchLinkMetadataResponse["data"]>
+	guilds: Record<string, IGuild>;
+	users: Record<string, IUserData>;
+	linkMetadata: Record<string, FetchLinkMetadataResponse_Metadata["data"]>;
 }
 
 export interface IChatState {
-	guildList: IGuildEntry[]
-	hosts: Record<string, IHostData>
+	guildList: IGuildEntry[];
+	hosts: Record<string, IHostData>;
 }
 
 class ChatState extends Store<IChatState> {
@@ -184,11 +180,8 @@ class ChatState extends Store<IChatState> {
 
 	setMessageList(host: string, guildID: string, channelID: string, messageList: string[], prepend?: boolean) {
 		const c = this.ensureChannel(host, guildID, channelID);
-		if (prepend)
-			c.messageList.unshift(...messageList);
-
-		else
-			c.messageList = messageList.reverse();
+		if (prepend) c.messageList.unshift(...messageList);
+		else c.messageList = messageList.reverse();
 	}
 
 	setMembers(host: string, guildId: string, memberList: string[]) {
@@ -216,7 +209,7 @@ class ChatState extends Store<IChatState> {
 	deleteMessage(host: string, guildID: string, channelID: string, messageID: string) {
 		const c = this.ensureChannel(host, guildID, channelID);
 		delete c.messages[messageID];
-		c.messageList = c.messageList.filter(f => f !== messageID);
+		c.messageList = c.messageList.filter((f) => f !== messageID);
 	}
 
 	addTyper(host: string, guildID: string, channelID: string, userID: string, timeout = 3000) {
@@ -224,8 +217,7 @@ class ChatState extends Store<IChatState> {
 		c.typers[userID] = Date.now();
 		setTimeout(() => {
 			const time = c.typers[userID];
-			if (time && time + timeout < Date.now())
-				delete c.typers[userID];
+			if (time && time + timeout < Date.now()) delete c.typers[userID];
 		}, timeout * 2);
 	}
 
@@ -239,9 +231,12 @@ class ChatState extends Store<IChatState> {
 		c.replyTo = undefined;
 	}
 
-	setURLMetadata(host: string, url: string, metadata: FetchLinkMetadataResponse["data"]) {
+	setURLMetadata(host: string, metadata: Record<string, FetchLinkMetadataResponse_Metadata["data"]>) {
 		const h = this.ensureHost(host);
-		h.linkMetadata[url] = metadata;
+		h.linkMetadata = {
+			...h.linkMetadata,
+			...metadata,
+		};
 	}
 
 	getURLMetadata(host: string, url: string) {

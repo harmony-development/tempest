@@ -1,41 +1,30 @@
 <template>
-  <div v-if="mimetype.startsWith('image/')" class="w-full overflow-hidden sm:w-100 h-36 relative">
-    <div
-      class="absolute z-1 top-0 left-0 h-full w-1/2 bg-cover bg-no-repeat"
-      :style="{ backgroundImage: `url(${hmc(id)})` }"
-    />
-    <div class="relative h-full z-10 image-container text-right flexcol break-all">
-      <span>
-        {{ name }}
-      </span>
-      <span v-if="size" class="text-xs text-gray-400">
-        {{ $t('size-bytes', [size]) }}
-      </span>
-      <div class="flex-1" />
-      <div>
-        <base-button icon target="_blank" :href="hmc(id)">
-          <mdi:download />
-        </base-button>
-      </div>
-    </div>
-  </div>
-  <audio v-else-if="mimetype.startsWith('audio/')" controls :src="hmc(id)" />
-  <a v-else :href="hmc(id)">{{ name }}</a>
+	<img
+		v-if="imageInfo"
+		:style="{ background: `url(${thumbnail}) no-repeat` }"
+		:src="parseHMC(id, host)"
+		:width="imageInfo.width"
+		:height="imageInfo.height"
+		border="0"
+	/>
+	<audio v-else-if="mimetype.startsWith('audio/')" controls :src="parseHMC(id, host)" />
+	<a v-else :href="parseHMC(id, host)" target="_blank">{{ name }}</a>
 </template>
 
-<script setup lang="ts">import { parseHMC } from "~/logic/parsing";
+<script setup lang="ts">
+import type { Attachment } from "@harmony-dev/harmony-web-sdk/dist/gen/chat/v1/messages";
+import { computed, toRefs } from "vue";
+import { parseHMC } from "~/logic/parsing";
 
 const props = defineProps<{
-	host: string
-	mimetype: string
-	id: string
-	name: string
-	size?: number
+	host: string;
+	attachment: Attachment;
 }>();
 
-const hmc = (id: string) => parseHMC(id, props.host!);
+const { id, mimetype, info, name } = toRefs(props.attachment);
+const imageInfo = computed(() => (info.value.oneofKind === "image" ? info.value.image : undefined));
+const thumbnail = computed(() => {
+	if (!imageInfo.value?.minithumbnail) return;
+	return URL.createObjectURL(new Blob([imageInfo.value.minithumbnail.data], { type: "image/jpeg" }));
+});
 </script>
-
-<style scoped lang="postcss">
-
-</style>

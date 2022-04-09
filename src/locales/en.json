@@ -58,9 +58,10 @@
   "server-host": "Server Host",
   "server-name": "Server Name",
   "size-bytes": "{0} Bytes",
-  "unimplemented-message-type": "Unimplemented message type",
+  "missing-content": "Message content is missing",
   "unknown-user": "Unknown User",
   "username": "Username",
+  "email": "Email",
   "welcome-to-tempest": "Welcome to Tempest",
   "woozy": "Woozy",
   "write-your-message": "Write your message..."

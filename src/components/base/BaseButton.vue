@@ -2,15 +2,16 @@
 import { computed } from "vue";
 
 const props = defineProps<{
-	variant?: "text" | "filled" | "outlined"
-	color?: "primary" | "secondary"
-	icon?: boolean
-	raised?: boolean
-	dense?: boolean
-	square?: boolean
-	disabled?: boolean
-	button?: boolean
-	isLoading?: boolean
+	variant?: "text" | "filled" | "outlined";
+	color?: "primary" | "secondary";
+	icon?: boolean;
+	raised?: boolean;
+	dense?: boolean;
+	square?: boolean;
+	disabled?: boolean;
+	button?: boolean;
+	isLoading?: boolean;
+	raw?: boolean;
 }>();
 
 const buttonClasses = computed(() => ({
@@ -22,28 +23,28 @@ const buttonClasses = computed(() => ({
 	dense: props.dense,
 	square: props.square,
 	disabled: props.disabled || props.isLoading,
+	raw: props.raw,
 }));
 </script>
 <template>
-  <button v-wave :class="buttonClasses" class="text-base">
-    <slot />
-    <span
-      v-if="isLoading"
-      class="absolute transform -translate-x-1/2 -translate-y-1/2  top-1/2 left-1/2 flexcol"
-    >
-      <mdi-loading
-        class=" text-2xl animate-spin"
-      />
-    </span>
-  </button>
+	<button v-wave :class="buttonClasses" class="text-base">
+		<slot />
+		<span v-if="isLoading" class="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 flexcol">
+			<mdi-loading class="text-2xl animate-spin" />
+		</span>
+	</button>
 </template>
 
 <style lang="postcss" scoped>
 .btn {
 	color: inherit;
-	@apply px-4 py-2 rounded-sm transition duration-100 ease-in-out
+	@apply transition duration-100 ease-in-out
     inline-flex justify-center items-center
     cursor-pointer select-none no-underline relative;
+
+	&:not(.raw) {
+		@apply px-4 py-2 rounded-sm;
+	}
 
 	&.dense {
 		@apply p-1;
@@ -53,12 +54,9 @@ const buttonClasses = computed(() => ({
 		@apply pointer-events-none filter saturate-40 opacity-50;
 	}
 
+	&:hover,
 	&:focus-visible {
-		@apply ring ring-1 ring-primary-300;
-	}
-
-	&:hover {
-		@apply ring ring-current ring-1;
+		@apply outline outline-2 outline-offset-2 outline-primary-300/50;
 	}
 
 	&:active {
@@ -91,7 +89,7 @@ const buttonClasses = computed(() => ({
 }
 
 .outlined {
-	@apply border-2;
+	@apply border-2 bg-surface-500;
 }
 
 .primary {

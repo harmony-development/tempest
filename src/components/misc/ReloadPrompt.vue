@@ -4,24 +4,20 @@ import BaseButton from "~/components/base/BaseButton.vue";
 
 const { offlineReady, needRefresh, updateServiceWorker } = useRegisterSW();
 
-const close = async() => {
+const close = async () => {
 	offlineReady.value = false;
 	needRefresh.value = false;
 };
 </script>
 
 <template>
-  <div v-if="needRefresh" class="pwa-toast" role="alert">
-    <div class="message">
-      <span>New content available, click on reload button to update.</span>
-    </div>
-    <base-button v-if="needRefresh" color="primary" variant="text" @click="updateServiceWorker()">
-      Reload
-    </base-button>
-    <base-button variant="text" @click="close">
-      Close
-    </base-button>
-  </div>
+	<div v-if="needRefresh" class="pwa-toast" role="alert">
+		<div class="message">
+			<span>New content available, click on reload button to update.</span>
+		</div>
+		<base-button v-if="needRefresh" color="primary" variant="text" @click="updateServiceWorker()"> Reload </base-button>
+		<base-button variant="text" @click="close"> Close </base-button>
+	</div>
 </template>
 
 <style lang="postcss" scoped>

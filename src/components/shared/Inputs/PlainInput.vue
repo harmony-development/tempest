@@ -6,17 +6,17 @@ import { defineComponent, onMounted, ref, watch } from "vue";
 const emit = defineEmits(["update:modelValue"]);
 
 const props = defineProps<{
-	label?: string
-	name?: string
-	type?: string
-	rows?: number
-	modelValue?: string
-	focus?: boolean
-	multiline?: boolean
-	noBorder?: boolean
-	dense?: boolean
-	required?: boolean
-	autocomplete?: string
+	label?: string;
+	name?: string;
+	type?: string;
+	rows?: number;
+	modelValue?: string;
+	focus?: boolean;
+	multiline?: boolean;
+	noBorder?: boolean;
+	dense?: boolean;
+	required?: boolean;
+	autocomplete?: string;
 }>();
 
 const value = useVModel(props, "modelValue", emit);
@@ -38,9 +38,9 @@ onMounted(() => {
 
 watch(
 	() => props.focus,
-	async() => {
+	async () => {
 		input.value.focus();
-	},
+	}
 );
 </script>
 
@@ -51,35 +51,35 @@ export default defineComponent({
 </script>
 
 <template>
-  <textarea
-    v-if="multiline"
-    :id="props.name"
-    ref="input"
-    v-model="value"
-    :type="props.type"
-    :rows="props.rows"
-    :required="props.required"
-    class="input-input overflow-hidden"
-    :placeholder="props.noBorder ? props.label : ''"
-    :autocomplete="autocomplete"
-    multiline
-    :style="{ height: `${inputHeight}px` }"
-    v-bind="$attrs"
-    wrap="hard"
-  />
-  <input
-    v-else
-    :id="props.name"
-    ref="input"
-    v-bind="$attrs"
-    v-model="value"
-    :type="props.type"
-    :required="props.required"
-    class="input-input"
-    :class="{ dense }"
-    :autocomplete="autocomplete"
-    :placeholder="props.noBorder ? props.label : ' '"
-  >
+	<textarea
+		v-if="multiline"
+		:id="props.name"
+		ref="input"
+		v-model="value"
+		:type="props.type"
+		:rows="props.rows"
+		:required="props.required"
+		class="input-input overflow-hidden"
+		:placeholder="props.noBorder ? props.label : ''"
+		:autocomplete="autocomplete"
+		multiline
+		:style="{ height: `${inputHeight}px` }"
+		v-bind="$attrs"
+		wrap="hard"
+	/>
+	<input
+		v-else
+		:id="props.name"
+		ref="input"
+		v-bind="$attrs"
+		v-model="value"
+		:type="props.type"
+		:required="props.required"
+		class="input-input"
+		:class="{ dense }"
+		:autocomplete="autocomplete"
+		:placeholder="props.noBorder ? props.label : ' '"
+	/>
 </template>
 
 <style lang="postcss" scoped>
